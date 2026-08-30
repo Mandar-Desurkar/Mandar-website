@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import styles from "./Dock.module.css";
 import { Smile, FileText, Rocket, GraduationCap, Mail, Settings, Trash2, AlertTriangle } from "lucide-react";
+import { FaLinkedin } from "react-icons/fa";
 
 export default function Dock() {
   const [popupMessage, setPopupMessage] = useState<{title: string, body: string} | null>(null);
@@ -91,6 +92,14 @@ export default function Dock() {
             <span className={styles.tooltip}>Contact</span>
             <div className={`${styles.iconBg} ${styles.mail}`}>
               <Mail size={28} color="white" />
+            </div>
+            <div className={styles.dot}></div>
+          </div>
+
+          <div className={styles.dockItem} onClick={() => window.open('https://www.linkedin.com/in/mandar-desurkar/', '_blank')}>
+            <span className={styles.tooltip}>LinkedIn</span>
+            <div className={`${styles.iconBg} ${styles.linkedin}`}>
+              <FaLinkedin size={28} color="white" />
             </div>
             <div className={styles.dot}></div>
           </div>

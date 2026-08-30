@@ -1,8 +1,8 @@
 "use client";
 
 import styles from "./Contact.module.css";
-import { Mail } from "lucide-react";
-import { FaLinkedin, FaTwitter } from "react-icons/fa";
+import { Mail, Phone } from "lucide-react";
+import { FaLinkedin } from "react-icons/fa";
 
 export default function Contact() {
   return (
@@ -20,15 +20,20 @@ export default function Contact() {
             Looking to launch a new product, scale an existing one, or just chat about strategy? Drop me a line!
           </p>
           
+          <div style={{ margin: '1.5rem 0', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', fontSize: '1rem' }}>
+            <p style={{ margin: '0.5rem 0' }}><strong>Email:</strong> mandardesurkar3@gmail.com</p>
+            <p style={{ margin: '0.5rem 0' }}><strong>Phone:</strong> +91 8073118693</p>
+          </div>
+          
           <div className={styles.socials}>
-            <a href="mailto:hello@example.com" className="os-btn">
-              <Mail size={16} style={{ verticalAlign: 'middle', marginRight: '5px' }}/> MAILTO:
+            <a href="mailto:mandardesurkar3@gmail.com" className="os-btn">
+              <Mail size={16} style={{ verticalAlign: 'middle', marginRight: '5px' }}/> EMAIL
             </a>
-            <a href="#" className="os-btn">
+            <a href="https://www.linkedin.com/in/mandar-desurkar/" target="_blank" rel="noopener noreferrer" className="os-btn">
               <FaLinkedin size={16} style={{ verticalAlign: 'middle', marginRight: '5px' }}/> LINKEDIN
             </a>
-            <a href="#" className="os-btn">
-              <FaTwitter size={16} style={{ verticalAlign: 'middle', marginRight: '5px' }}/> TWITTER
+            <a href="tel:+918073118693" className="os-btn">
+              <Phone size={16} style={{ verticalAlign: 'middle', marginRight: '5px' }}/> CALL
             </a>
           </div>
           
