@@ -32,7 +32,7 @@ body {
   background: radial-gradient(circle at 50% 0%, #4686e9 0%, #1a4c8a 60%, #0d2951 100%);
   min-height: 100vh;
   color: var(--os-text);
-  font-family: 'Lucida Grande', 'Trebuchet MS', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   scroll-behavior: smooth;
 }
 
@@ -160,7 +160,7 @@ a {
   display: flex;
   justify-content: center; /* Title in center for Mac */
   align-items: center;
-  font-family: 'Lucida Grande', 'Trebuchet MS', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-size: 1rem;
   font-weight: bold;
   border-top-left-radius: 6px;
@@ -183,7 +183,7 @@ a {
   border: 1px solid #999;
   border-radius: 12px; /* Pill shaped for Mac */
   box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-  font-family: 'Lucida Grande', 'Trebuchet MS', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   padding: 0.35rem 1.2rem;
   color: #333;
   font-size: 1rem;
@@ -214,7 +214,7 @@ a {
 .traffic-light::before {
   content: "";
   display: none;
-  font-family: 'Lucida Grande', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-size: 10px;
   font-weight: bold;
   line-height: 1;
@@ -258,7 +258,7 @@ a {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  font-family: 'Lucida Grande', 'Trebuchet MS', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 .popup-header {
