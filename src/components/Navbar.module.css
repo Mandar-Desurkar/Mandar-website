@@ -5,9 +5,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 1rem;
-  font-family: 'Trebuchet MS', var(--font-system), sans-serif;
-  font-size: 0.95rem;
+  padding: 0 0.75rem;
+  font-family: 'Lucida Grande', 'Trebuchet MS', var(--font-system), sans-serif;
+  font-size: 0.9rem;
   color: #000;
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   position: fixed;
@@ -19,52 +19,160 @@
 .nav {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  overflow-x: auto;
-  -ms-overflow-style: none;  
-  scrollbar-width: none;  
+  position: relative;
 }
 
-.nav::-webkit-scrollbar {
-  display: none;
-}
-
-.brandGroup {
+.appleMenuBtn {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-right: 1rem;
+  gap: 0.4rem;
+  background: transparent;
+  border: none;
+  padding: 0.2rem 0.5rem;
+  cursor: pointer;
+  border-radius: 4px;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.appleMenuBtn:hover,
+.menuOpen {
+  background: #316ac5; /* Classic Mac/XP selection blue */
+  color: white !important;
+}
+
+.appleMenuBtn:hover .appleMenu,
+.menuOpen .appleMenu {
+  color: white;
+  text-shadow: none;
 }
 
 .appleMenu {
   font-size: 1.1rem;
   color: #0055ff;
   text-shadow: 0 1px 0 rgba(255,255,255,0.8);
+  display: inline-block;
+  line-height: 1;
+}
+
+.brandTitle {
+  font-weight: 700;
+}
+
+.mobileHamburger {
+  display: flex;
+  align-items: center;
+  margin-left: 0.2rem;
+  opacity: 0.75;
+}
+
+@media (min-width: 768px) {
+  .mobileHamburger {
+    display: none;
+  }
+}
+
+.desktopLinks {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .desktopLinks {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-left: 0.5rem;
+  }
 }
 
 .menuItem {
   padding: 0.2rem 0.6rem;
   cursor: pointer;
   border-radius: 4px;
+  color: #000;
 }
 
 .menuItem:hover {
-  background: #316ac5; /* Classic XP selection blue */
+  background: #316ac5;
+  color: white;
+}
+
+/* Retro Mac OS Aqua System Dropdown */
+.osDropdown {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  min-width: 180px;
+  background: rgba(245, 245, 245, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid #aaa;
+  border-radius: 0 0 6px 6px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+  padding: 0.4rem 0;
+  display: flex;
+  flex-direction: column;
+  z-index: 1001;
+  animation: dropdownPop 0.15s ease-out;
+}
+
+@keyframes dropdownPop {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdownHeader {
+  padding: 0.3rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.dropdownDivider {
+  height: 1px;
+  background: #ddd;
+  margin: 0.3rem 0;
+}
+
+.dropdownItem {
+  padding: 0.5rem 1rem;
+  color: #222;
+  font-weight: 500;
+  display: block;
+  transition: all 0.1s ease;
+}
+
+.dropdownItem:hover {
+  background: #316ac5;
   color: white;
 }
 
 .systemTray {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 0.75rem;
   height: 100%;
+  font-size: 0.85rem;
 }
 
 .trayItem {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.3rem;
   font-weight: 500;
+}
+
+.batteryText {
+  display: inline;
 }
 
 .date {
@@ -72,6 +180,10 @@
 }
 
 @media (min-width: 768px) {
+  .systemTray {
+    gap: 1.5rem;
+    font-size: 0.95rem;
+  }
   .date {
     display: inline;
     margin-right: 0.5rem;
