@@ -1,9 +1,15 @@
 .heroSection {
-  min-height: calc(100vh - 8rem);
+  min-height: auto;
   display: flex;
   align-items: center;
   padding-top: calc(var(--line-height) * 2);
   padding-bottom: calc(var(--line-height) * 2);
+}
+
+@media (min-width: 768px) {
+  .heroSection {
+    min-height: calc(100vh - 8rem);
+  }
 }
 
 .heroContainer {
