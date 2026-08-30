@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import styles from "./Navbar.module.css";
 import Link from "next/link";
-import { BatteryMedium, Menu, X } from "lucide-react";
+import { BatteryMedium, Menu, X, Bluetooth, Wifi, Search, SlidersHorizontal } from "lucide-react";
 
 export default function Navbar() {
   const [currentTime, setCurrentTime] = useState<Date | null>(null);
@@ -81,9 +81,24 @@ export default function Navbar() {
       </nav>
       
       <div className={styles.systemTray}>
+        <div className={styles.trayIcon}>
+          <Bluetooth size={16} />
+        </div>
         <div className={styles.trayItem}>
-          <BatteryMedium size={16} />
-          <span className={styles.batteryText}>85%</span>
+          <span className={styles.batteryText}>17%</span>
+          <BatteryMedium size={18} color="#f5c211" />
+        </div>
+        <div className={styles.trayIcon}>
+          <Wifi size={16} />
+        </div>
+        <div className={styles.trayIcon}>
+          <Search size={16} />
+        </div>
+        <div className={styles.trayIcon}>
+          <SlidersHorizontal size={16} />
+        </div>
+        <div className={styles.trayIcon}>
+          <div className={styles.siriIcon}></div>
         </div>
         <div className={styles.trayItem}>
           {currentTime ? (
@@ -92,7 +107,7 @@ export default function Navbar() {
                 {currentTime.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}
               </span>
               <span className={styles.time}>
-                {currentTime.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}
+                {currentTime.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })}
               </span>
             </>
           ) : (

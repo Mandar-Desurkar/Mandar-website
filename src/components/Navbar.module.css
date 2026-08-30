@@ -167,6 +167,22 @@
   font-size: 0.85rem;
 }
 
+.trayIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.9;
+  cursor: pointer;
+}
+
+.siriIcon {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ff4b4b 0%, #4a148c 40%, #00d4ff 100%);
+  box-shadow: inset -2px -2px 4px rgba(0,0,0,0.2), inset 2px 2px 4px rgba(255,255,255,0.5);
+}
+
 .trayItem {
   display: flex;
   align-items: center;
