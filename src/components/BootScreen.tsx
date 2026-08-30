@@ -47,7 +47,7 @@ export default function BootScreen() {
           <div className={styles.content}>
             <Monitor size={64} className={styles.icon} />
             
-            <h1 className={styles.title}>Welcome to Mandar Desurkar</h1>
+            <h1 className={styles.title}>Welcome to<br />Mandar Desurkar</h1>
             
             <div className={styles.progressContainer}>
               <div 
