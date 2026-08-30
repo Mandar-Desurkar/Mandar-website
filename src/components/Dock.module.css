@@ -19,12 +19,12 @@
   align-items: flex-end;
   gap: 0.5rem;
   padding: 0.5rem 0.5rem 0.2rem 0.5rem;
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(30, 30, 30, 0.45);
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
-  border: 0.5px solid rgba(255, 255, 255, 0.5);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
   border-radius: 22px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), inset 0 0.5px 0 rgba(255, 255, 255, 0.8);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4), inset 0 0.5px 0 rgba(255, 255, 255, 0.2);
   pointer-events: auto; /* Re-enable clicks for the dock itself */
 }
 
@@ -53,30 +53,34 @@
 .iconBg {
   width: 48px;
   height: 48px;
-  border-radius: 12px;
+  border-radius: 11px;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3);
-  border: 0.5px solid rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.4);
+  border: 0.5px solid rgba(0,0,0,0.2);
   transition: all 0.2s ease;
 }
 
 /* App Gradients */
-.finder { background: linear-gradient(135deg, #1fa2ff 0%, #12d8fa 50%, #1fa2ff 100%); }
-.notes { background: linear-gradient(135deg, #ffe000 0%, #799f0c 100%); }
-.education { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); }
-.safari { background: linear-gradient(135deg, #4A00E0 0%, #8E2DE2 100%); }
-.mail { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
-.settings { background: linear-gradient(135deg, #a8c0ff 0%, #3f2b96 100%); }
-.trash { background: linear-gradient(135deg, #e6dada 0%, #274046 100%); }
+.finder { background: linear-gradient(135deg, #007aff 0%, #00d2ff 100%); }
+.notes { background: linear-gradient(135deg, #ffcc00 0%, #ffd940 100%); }
+.education { background: linear-gradient(135deg, #34c759 0%, #58e07b 100%); }
+.safari { background: linear-gradient(135deg, #5e5ce6 0%, #8583eb 100%); }
+.mail { background: linear-gradient(135deg, #32ade6 0%, #5ac8fa 100%); }
+.settings { background: linear-gradient(135deg, #8e8e93 0%, #c7c7cc 100%); }
+.trash { background: linear-gradient(135deg, #ffffff 0%, #d1d1d6 100%); }
 
 .tooltip {
   position: absolute;
   top: -35px;
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
-  padding: 4px 8px;
+  background: rgba(30, 30, 30, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  color: #fff;
+  padding: 4px 10px;
   border-radius: 6px;
   font-size: 0.8rem;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -98,13 +102,13 @@
   transform: translateX(-50%);
   border-width: 4px 4px 0;
   border-style: solid;
-  border-color: rgba(0, 0, 0, 0.7) transparent transparent transparent;
+  border-color: rgba(30, 30, 30, 0.6) transparent transparent transparent;
 }
 
 .dot {
   width: 4px;
   height: 4px;
-  background: rgba(0,0,0,0.4);
+  background: rgba(255,255,255,0.8);
   border-radius: 50%;
   margin-top: 4px;
   opacity: 0;
@@ -118,6 +122,6 @@
 .divider {
   width: 1px;
   height: 40px;
-  background: rgba(0,0,0,0.2);
+  background: rgba(255,255,255,0.15);
   margin: 0 0.2rem 0.4rem 0.2rem;
 }
