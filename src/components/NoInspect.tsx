@@ -48,6 +48,12 @@ export default function NoInspect() {
         alert("Screenshots are disabled on this portfolio.");
       }
 
+      // Prevent specific third-party screenshot tool (Cmd + Up Arrow)
+      if (e.metaKey && e.key === "ArrowUp") {
+        e.preventDefault();
+        alert("Screenshots are disabled on this portfolio.");
+      }
+
       // Prevent Print Screen key
       if (e.key === "PrintScreen") {
         e.preventDefault();
