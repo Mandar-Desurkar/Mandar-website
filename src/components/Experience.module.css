@@ -1,5 +1,5 @@
 .experienceSection {
-  padding: calc(var(--line-height) * 3) 0;
+  padding: calc(var(--line-height) * 1.5) 0 calc(var(--line-height) * 2) 0;
 }
 
 .container {
