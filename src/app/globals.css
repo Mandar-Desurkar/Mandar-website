@@ -143,7 +143,6 @@ a {
   flex-direction: column;
   position: relative;
   z-index: 10;
-  animation: windowOpen 0.6s cubic-bezier(0.16, 1, 0.3, 1) 1.25s both;
 }
 
 @media (min-width: 768px) {

@@ -9,6 +9,9 @@ export default function DraggableWindow({ children }: { children: React.ReactNod
   return (
     <motion.div 
       className="os-window"
+      initial={{ opacity: 0, scale: 0.95, y: 40 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: 1.25, ease: [0.16, 1, 0.3, 1] }}
       drag
       dragControls={dragControls}
       dragListener={false}
