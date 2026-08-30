@@ -51,10 +51,11 @@
 }
 
 .metaData {
+  font-family: 'Lucida Grande', 'Trebuchet MS', sans-serif;
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  font-size: clamp(1rem, 3.5vw, 1.2rem);
+  font-size: clamp(0.95rem, 3.5vw, 1.05rem);
   color: var(--ink-blue);
   font-weight: 600;
   margin-bottom: 0.8rem;
@@ -71,8 +72,9 @@
 }
 
 .description {
-  font-size: 1.3rem;
-  line-height: 1.4;
+  font-family: 'Lucida Grande', 'Trebuchet MS', sans-serif;
+  font-size: clamp(1rem, 3.2vw, 1.15rem);
+  line-height: 1.6;
   margin-bottom: 1rem;
 }
 

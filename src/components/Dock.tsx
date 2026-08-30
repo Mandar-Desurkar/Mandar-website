@@ -8,10 +8,25 @@ import { Smile, FileText, Rocket, GraduationCap, Mail, Settings, Trash2, AlertTr
 export default function Dock() {
   const [popupMessage, setPopupMessage] = useState<{title: string, body: string} | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+    
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY && currentScrollY > 50) {
+        setIsVisible(false); // scrolling down
+      } else {
+        setIsVisible(true); // scrolling up
+      }
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
 
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
@@ -38,7 +53,7 @@ export default function Dock() {
 
   return (
     <>
-      <div className={styles.dockWrapper}>
+      <div className={`${styles.dockWrapper} ${isVisible ? '' : styles.hidden}`}>
         <div className={styles.dock}>
           <div className={styles.dockItem} onClick={() => scrollTo('hero')}>
             <span className={styles.tooltip}>Mandar.app</span>
