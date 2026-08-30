@@ -29,8 +29,8 @@ html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
-  /* Sleek Black OS background */
-  background: radial-gradient(circle at 50% 0%, #333333 0%, #111111 60%, #000000 100%);
+  /* Solid Black OS background */
+  background: #000000;
   min-height: 100vh;
   color: var(--os-text);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
