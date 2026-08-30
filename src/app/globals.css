@@ -1,10 +1,10 @@
 :root {
   color-scheme: light;
-  /* Mac OS X Aqua UI Colors */
-  --os-bg: #1a4c8a; /* Aqua blue */
-  --os-window: #e8e8e8; /* Brushed metal/grey */
-  --os-titlebar: linear-gradient(180deg, #f5f5f5 0%, #dfdfdf 50%, #c4c4c4 51%, #dedede 100%);
-  --os-border: #999;
+  /* Modern macOS UI Colors */
+  --os-bg: #1a4c8a; /* Aqua blue (unused) */
+  --os-window: rgba(250, 250, 250, 0.85); /* Frosted metal */
+  --os-titlebar: rgba(246, 246, 246, 0.7);
+  --os-border: rgba(0, 0, 0, 0.1);
   --os-text: #222;
   
   /* Notebook Colors */
@@ -136,9 +136,11 @@ a {
   width: 100%;
   max-width: 1200px;
   margin: 32px auto 0 auto;
-  background: white;
-  border-radius: 0;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,0,0,0.1);
+  background: var(--os-window);
+  border-radius: 12px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255,255,255,0.1);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -150,24 +152,24 @@ a {
   .os-window {
     width: 95%;
     margin: 4rem auto 2rem auto;
-    border-radius: 8px;
+    border-radius: 14px;
   }
 }
 
 .os-titlebar {
   background: var(--os-titlebar);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   color: #333;
-  padding: 0.4rem 1rem;
+  padding: 0.5rem 1rem;
   display: flex;
   justify-content: center; /* Title in center for Mac */
   align-items: center;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  font-size: 1rem;
-  font-weight: bold;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
-  text-shadow: 0 1px 0 rgba(255,255,255,0.8);
-  border-bottom: 1px solid #aaa;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-shadow: none;
+  border-bottom: 1px solid var(--os-border);
   position: relative;
 }
 
@@ -180,32 +182,33 @@ a {
 
 /* Aqua Glossy Button */
 .os-btn {
-  background: linear-gradient(180deg, #ffffff 0%, #e6e6e6 50%, #d4d4d4 51%, #f3f3f3 100%);
-  border: 1px solid #999;
-  border-radius: 12px; /* Pill shaped for Mac */
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 6px; /* Modern rounded square for buttons */
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   padding: 0.35rem 1.2rem;
   color: #333;
-  font-size: 1rem;
+  font-size: 0.95rem;
+  font-weight: 500;
   transition: all 0.1s ease;
 }
 
 .os-btn:active {
-  background: linear-gradient(180deg, #d4d4d4 0%, #c2c2c2 50%, #b8b8b8 51%, #e0e0e0 100%);
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+  background: rgba(230, 230, 230, 0.9);
+  box-shadow: none;
 }
 
 /* Mac OS Traffic Lights */
 .traffic-light {
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid rgba(0,0,0,0.3);
-  box-shadow: inset 0 1px 4px rgba(255,255,255,0.7), 0 1px 1px rgba(0,0,0,0.1);
+  border: 0.5px solid rgba(0,0,0,0.15);
+  box-shadow: none;
   padding: 0;
   cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Cpath d='M9 13v-5a1 1 0 0 1 2 0v4h1v-7a1 1 0 0 1 2 0v7h1v-8a1 1 0 0 1 2 0v8h1v-6a1 1 0 0 1 2 0v10c0 3.3-2.7 6-6 6h-2c-2.5 0-4.8-1.5-5.6-3.8l-1.4-3.5c-.3-.8.4-1.5 1.1-1.2l2.3 1v-9a1 1 0 0 1 2 0v5z' fill='white' stroke='black' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E") 8 2, pointer !important;
   position: relative;
@@ -216,24 +219,24 @@ a {
   content: "";
   display: none;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  font-size: 10px;
-  font-weight: bold;
+  font-size: 8px;
+  font-weight: 800;
   line-height: 1;
-  color: rgba(0,0,0,0.6);
+  color: rgba(0,0,0,0.5);
 }
 
 .traffic-light-container:hover .traffic-light::before {
   display: block;
 }
 
-.traffic-red { background: radial-gradient(circle at 30% 30%, #ff6b6b, #ff0000); }
-.traffic-red::before { content: "x"; margin-bottom: 2px; }
+.traffic-red { background: #FF5F56; }
+.traffic-red::before { content: "✕"; margin-bottom: 0px; }
 
-.traffic-yellow { background: radial-gradient(circle at 30% 30%, #ffdf6b, #ffaa00); }
-.traffic-yellow::before { content: "-"; margin-bottom: 2px; }
+.traffic-yellow { background: #FFBD2E; }
+.traffic-yellow::before { content: "−"; margin-bottom: 0px; font-size: 10px; }
 
-.traffic-green { background: radial-gradient(circle at 30% 30%, #6bff6b, #00d000); }
-.traffic-green::before { content: "+"; margin-bottom: 1px; }
+.traffic-green { background: #27C93F; }
+.traffic-green::before { content: "＋"; margin-bottom: 0px; font-size: 10px; }
 
 /* System Popup Alert */
 .popup-overlay {
@@ -252,8 +255,10 @@ a {
 .popup-alert {
   background: var(--os-window);
   border: 1px solid var(--os-border);
-  border-radius: 8px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.6), inset 1px 1px 0 rgba(255,255,255,0.7);
+  border-radius: 12px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
   width: 90%;
   max-width: 400px;
   display: flex;
@@ -263,14 +268,13 @@ a {
 }
 
 .popup-header {
-  background: var(--os-titlebar);
-  padding: 0.5rem 1rem;
+  background: transparent;
+  padding: 1rem 1rem 0.5rem 1rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  border-bottom: 1px solid #aaa;
-  font-weight: bold;
-  text-shadow: 0 1px 0 rgba(255,255,255,0.8);
+  font-weight: 600;
+  text-shadow: none;
 }
 
 .popup-icon {
@@ -288,6 +292,5 @@ a {
   display: flex;
   justify-content: center;
   padding: 1rem;
-  background: #f0f0f0;
-  border-top: 1px solid #ccc;
+  background: transparent;
 }
