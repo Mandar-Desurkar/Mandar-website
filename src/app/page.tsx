@@ -7,6 +7,7 @@ import Contact from "@/components/Contact";
 import BootScreen from "@/components/BootScreen";
 import Dock from "@/components/Dock";
 import DraggableWindow from "@/components/DraggableWindow";
+import { WindowProvider } from "@/context/WindowContext";
 
 export default function Home() {
   return (
@@ -14,15 +15,17 @@ export default function Home() {
       <BootScreen />
       <Navbar />
       
-      <DraggableWindow>
-        <Hero />
-        <Experience />
-        <Education />
-        <Projects />
-        <Contact />
-      </DraggableWindow>
-      
-      <Dock />
+      <WindowProvider>
+        <DraggableWindow>
+          <Hero />
+          <Experience />
+          <Education />
+          <Projects />
+          <Contact />
+        </DraggableWindow>
+        
+        <Dock />
+      </WindowProvider>
     </main>
   );
 }

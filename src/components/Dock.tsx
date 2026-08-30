@@ -5,12 +5,14 @@ import { createPortal } from "react-dom";
 import styles from "./Dock.module.css";
 import { Smile, FileText, Rocket, GraduationCap, Mail, Settings, Trash2, AlertTriangle } from "lucide-react";
 import { FaLinkedin } from "react-icons/fa";
+import { useWindow } from "@/context/WindowContext";
 
 export default function Dock() {
   const [popupMessage, setPopupMessage] = useState<{title: string, body: string} | null>(null);
   const [mounted, setMounted] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const { isMinimized, setIsMinimized } = useWindow();
 
   useEffect(() => {
     setMounted(true);
@@ -30,6 +32,9 @@ export default function Dock() {
   }, [lastScrollY]);
 
   const scrollTo = (id: string) => {
+    if (isMinimized) {
+      setIsMinimized(false);
+    }
     const el = document.getElementById(id);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });

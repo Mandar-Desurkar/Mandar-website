@@ -3,10 +3,12 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { AlertTriangle, X } from "lucide-react";
+import { useWindow } from "@/context/WindowContext";
 
 export default function TrafficLights() {
   const [popupMessage, setPopupMessage] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
+  const { setIsMinimized } = useWindow();
 
   useEffect(() => {
     setMounted(true);
@@ -17,7 +19,7 @@ export default function TrafficLights() {
   };
 
   const handleYellowClick = () => {
-    setPopupMessage("Action Denied: Cannot minimize. Focus is required to ship legendary products.");
+    setIsMinimized(true);
   };
 
   const handleGreenClick = () => {
