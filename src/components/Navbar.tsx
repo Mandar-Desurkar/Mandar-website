@@ -46,7 +46,7 @@ export default function Navbar() {
           aria-label="Toggle System Menu"
         >
           <span className={styles.appleMenu}>&#63743;</span>
-          <span className={styles.brandTitle}>Mandar OS</span>
+          <span className={styles.brandTitle}>Mandar Desurkar</span>
           <span className={styles.mobileHamburger}>
             {isMenuOpen ? <X size={14} /> : <Menu size={14} />}
           </span>
@@ -64,7 +64,7 @@ export default function Navbar() {
         {/* Retro Mac OS Dropdown Menu for Mobile / Click */}
         {isMenuOpen && (
           <div className={styles.osDropdown}>
-            <div className={styles.dropdownHeader}>Mandar OS v1.0</div>
+            <div className={styles.dropdownHeader}>Mandar Desurkar</div>
             <div className={styles.dropdownDivider}></div>
             {navLinks.map((link) => (
               <Link 
