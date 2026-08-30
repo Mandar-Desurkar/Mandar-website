@@ -1,5 +1,5 @@
 .educationSection {
-  padding: calc(var(--line-height) * 2) 0;
+  padding: var(--line-height) 0;
 }
 
 .container {
