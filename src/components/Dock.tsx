@@ -66,7 +66,7 @@ export default function Dock() {
             <div className={`${styles.iconBg} ${styles.finder}`}>
               <Smile size={28} color="white" />
             </div>
-            <div className={styles.dot}></div>
+            <div className={`${styles.dot} ${isMinimized ? styles.minimizedIndicator : ''}`}></div>
           </div>
 
           <div className={styles.dockItem} onClick={() => scrollTo('experience')}>
