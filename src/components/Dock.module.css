@@ -1,0 +1,118 @@
+.dockWrapper {
+  position: fixed;
+  bottom: 10px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  z-index: 9900;
+  pointer-events: none; /* Let clicks pass through empty space */
+}
+
+.dock {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  padding: 0.5rem 0.5rem 0.2rem 0.5rem;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.8);
+  pointer-events: auto; /* Re-enable clicks for the dock itself */
+}
+
+@media (max-width: 768px) {
+  .dockWrapper {
+    display: none; /* Hide on mobile to save space */
+  }
+}
+
+.dockItem {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
+  transform-origin: bottom center;
+}
+
+.dockItem:hover {
+  transform: scale(1.3);
+  z-index: 10;
+  margin: 0 0.5rem;
+}
+
+.iconBg {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3), inset 0 2px 2px rgba(255,255,255,0.4);
+  border: 1px solid rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+}
+
+/* App Gradients */
+.finder { background: linear-gradient(135deg, #1fa2ff 0%, #12d8fa 50%, #1fa2ff 100%); }
+.notes { background: linear-gradient(135deg, #ffe000 0%, #799f0c 100%); }
+.education { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); }
+.safari { background: linear-gradient(135deg, #4A00E0 0%, #8E2DE2 100%); }
+.mail { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+.settings { background: linear-gradient(135deg, #a8c0ff 0%, #3f2b96 100%); }
+.trash { background: linear-gradient(135deg, #e6dada 0%, #274046 100%); }
+
+.tooltip {
+  position: absolute;
+  top: -35px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-family: 'Lucida Grande', sans-serif;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.dockItem:hover .tooltip {
+  opacity: 1;
+}
+
+.tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 4px 4px 0;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.7) transparent transparent transparent;
+}
+
+.dot {
+  width: 4px;
+  height: 4px;
+  background: rgba(0,0,0,0.4);
+  border-radius: 50%;
+  margin-top: 4px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.dockItem:hover .dot {
+  opacity: 1;
+}
+
+.divider {
+  width: 1px;
+  height: 40px;
+  background: rgba(0,0,0,0.2);
+  margin: 0 0.2rem 0.4rem 0.2rem;
+}

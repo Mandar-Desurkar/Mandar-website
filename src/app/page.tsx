@@ -6,6 +6,7 @@ import Projects from "@/components/Projects";
 import Contact from "@/components/Contact";
 import BootScreen from "@/components/BootScreen";
 import TrafficLights from "@/components/TrafficLights";
+import Dock from "@/components/Dock";
 
 export default function Home() {
   return (
@@ -27,6 +28,8 @@ export default function Home() {
           <Contact />
         </div>
       </div>
+      
+      <Dock />
     </main>
   );
 }
