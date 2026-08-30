@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useDragControls } from "framer-motion";
+import { motion, useDragControls, Variants } from "framer-motion";
 import TrafficLights from "./TrafficLights";
 import { useWindow } from "@/context/WindowContext";
 import { useEffect, useState } from "react";
@@ -14,7 +14,7 @@ export default function DraggableWindow({ children }: { children: React.ReactNod
     setHasMounted(true);
   }, []);
 
-  const variants = {
+  const variants: Variants = {
     initial: { opacity: 0, scale: 0.95, y: 40 },
     open: { 
       opacity: 1, 
