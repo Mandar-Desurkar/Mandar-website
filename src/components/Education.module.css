@@ -1,0 +1,100 @@
+.educationSection {
+  padding: calc(var(--line-height) * 2) 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.headerBox {
+  margin-bottom: calc(var(--line-height) * 1.5);
+  border-bottom: 2px solid var(--ink-blue);
+  display: inline-block;
+  padding-right: 2rem;
+}
+
+.entries {
+  display: flex;
+  flex-direction: column;
+}
+
+.entry {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+  padding-left: 2.5rem;
+  position: relative;
+}
+
+.entryTitle {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.icon {
+  color: var(--ink-black);
+  position: absolute;
+  left: -0.5rem;
+  top: 0.2rem;
+}
+
+.degree {
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.1;
+  text-decoration: underline;
+  text-decoration-style: solid;
+}
+
+.metaData {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 1.2rem;
+  color: var(--ink-blue);
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.schoolLink {
+  transition: all 0.2s ease;
+}
+
+.schoolLink:hover .school {
+  color: var(--ink-red);
+  text-decoration: underline;
+  text-decoration-style: dashed;
+}
+
+.description {
+  font-size: 1.3rem;
+  line-height: 1.4;
+  margin-bottom: 1rem;
+}
+
+.skillsBox {
+  font-size: 1.2rem;
+  background-color: rgba(0, 0, 139, 0.05); /* Slight blue highlight */
+  padding: 0.25rem 0.5rem;
+  border: 1px dashed var(--ink-blue);
+  display: inline-block;
+  max-width: fit-content;
+  margin-bottom: 1.5rem;
+}
+
+.skillsLabel {
+  font-weight: 700;
+  color: var(--ink-red);
+}
+
+.divider {
+  width: 100%;
+  height: 2px;
+  background-image: linear-gradient(to right, var(--ink-black) 50%, transparent 50%);
+  background-size: 10px 100%;
+  opacity: 0.2;
+  margin-top: 1rem;
+}

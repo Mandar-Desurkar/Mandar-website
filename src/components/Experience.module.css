@@ -1,0 +1,103 @@
+.experienceSection {
+  padding: calc(var(--line-height) * 3) 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.headerBox {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 2px solid var(--ink-black);
+  margin-bottom: var(--line-height);
+}
+
+.scribbleDate {
+  font-size: 1.2rem;
+  color: var(--ink-blue);
+  transform: rotate(-3deg);
+  padding-bottom: 0.5rem;
+}
+
+.entries {
+  display: flex;
+  flex-direction: column;
+  padding-left: 1rem;
+}
+
+.entry {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+  padding-left: 2.5rem;
+  position: relative;
+}
+
+.futureEntry {
+  opacity: 0.6;
+}
+
+.futureEntry .role {
+  text-decoration: none;
+  border-bottom: 2px dashed var(--ink-red);
+}
+
+.futureEntry .checkboxIcon {
+  color: var(--ink-blue);
+  opacity: 0.5;
+}
+
+.entryTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  height: calc(var(--line-height) * 1.5);
+}
+
+.checkboxIcon {
+  color: var(--ink-black);
+}
+
+.role {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--ink-red);
+}
+
+.metaData {
+  display: flex;
+  gap: 1rem;
+  margin-left: 2.25rem;
+  height: var(--line-height);
+  align-items: flex-end;
+}
+
+.company {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--ink-black);
+}
+
+.period {
+  font-size: 1.2rem;
+  color: var(--ink-blue);
+}
+
+.description {
+  margin-left: 2.25rem;
+  margin-top: calc(var(--line-height) * 0.5);
+  font-size: 1.5rem;
+  line-height: var(--line-height);
+  max-width: 700px;
+}
+
+.divider {
+  height: calc(var(--line-height) * 0.5);
+  border-bottom: 2px dashed var(--ink-black);
+  margin-left: 2.25rem;
+  width: 80%;
+  max-width: 600px;
+}

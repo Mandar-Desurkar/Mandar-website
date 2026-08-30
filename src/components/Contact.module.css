@@ -1,0 +1,79 @@
+.contactSection {
+  padding: calc(var(--line-height) * 2) 0 calc(var(--line-height) * 3) 0;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.doodleBox {
+  width: 100%;
+  max-width: 800px;
+  padding: 2rem;
+  border: 3px dashed var(--ink-blue);
+  border-radius: 10px;
+  background-color: transparent;
+  transform: rotate(1deg);
+}
+
+.headerBox {
+  text-align: center;
+  margin-bottom: calc(var(--line-height) * 1.5);
+  position: relative;
+}
+
+.headerBox::after {
+  content: "";
+  display: block;
+  width: 150px;
+  height: 4px;
+  background: var(--ink-red);
+  margin: 0 auto;
+  border-radius: 5px;
+  transform: rotate(-2deg);
+}
+
+.description {
+  color: var(--ink-black);
+  font-size: 1.5rem;
+  line-height: var(--line-height);
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto calc(var(--line-height) * 2) auto;
+}
+
+.socials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: calc(var(--line-height) * 2);
+}
+
+.socialBtn {
+  font-size: 1.4rem;
+}
+
+.iconScribble {
+  color: var(--ink-black);
+  display: inline-flex;
+  padding: 0.5rem;
+  border: 2px solid var(--ink-black);
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.iconScribble:hover {
+  background: var(--ink-black);
+  color: var(--paper-bg);
+  transform: scale(1.1) rotate(10deg);
+}
+
+.footer {
+  text-align: center;
+  border-top: 2px solid var(--ink-blue);
+  padding-top: var(--line-height);
+  color: var(--ink-blue);
+  font-size: 1.2rem;
+}
