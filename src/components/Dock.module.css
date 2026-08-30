@@ -16,15 +16,15 @@
 
 .dock {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 0.5rem 0.2rem 0.5rem;
-  background: rgba(30, 30, 30, 0.45);
+  padding: 0.5rem 0.6rem;
+  background: rgba(35, 35, 35, 0.6);
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
   border: 0.5px solid rgba(255, 255, 255, 0.15);
-  border-radius: 22px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4), inset 0 0.5px 0 rgba(255, 255, 255, 0.2);
+  border-radius: 28px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 0.5px 0 rgba(255, 255, 255, 0.25);
   pointer-events: auto; /* Re-enable clicks for the dock itself */
 }
 
@@ -45,9 +45,9 @@
 }
 
 .dockItem:hover {
-  transform: scale(1.3);
+  transform: scale(1.2);
   z-index: 10;
-  margin: 0 0.5rem;
+  margin: 0 0.2rem;
 }
 
 .iconBg {
@@ -57,19 +57,19 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.4);
-  border: 0.5px solid rgba(0,0,0,0.2);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.3);
+  border: 0.5px solid rgba(0,0,0,0.3);
   transition: all 0.2s ease;
 }
 
-/* App Gradients */
-.finder { background: linear-gradient(135deg, #007aff 0%, #00d2ff 100%); }
-.notes { background: linear-gradient(135deg, #ffcc00 0%, #ffd940 100%); }
-.education { background: linear-gradient(135deg, #34c759 0%, #58e07b 100%); }
-.safari { background: linear-gradient(135deg, #5e5ce6 0%, #8583eb 100%); }
-.mail { background: linear-gradient(135deg, #32ade6 0%, #5ac8fa 100%); }
-.settings { background: linear-gradient(135deg, #8e8e93 0%, #c7c7cc 100%); }
-.trash { background: linear-gradient(135deg, #ffffff 0%, #d1d1d6 100%); }
+/* App Gradients to match inspiration */
+.finder { background: linear-gradient(180deg, #1890ff 0%, #0050b3 100%); }
+.notes { background: linear-gradient(180deg, #ffde00 0%, #ffb900 100%); }
+.education { background: linear-gradient(180deg, #34c759 0%, #1e8735 100%); }
+.safari { background: linear-gradient(180deg, #4facfe 0%, #00f2fe 100%); }
+.mail { background: linear-gradient(180deg, #5ac8fa 0%, #007aff 100%); }
+.settings { background: linear-gradient(180deg, #aaaaaa 0%, #555555 100%); }
+.trash { background: linear-gradient(180deg, #f5f5f5 0%, #cccccc 100%); }
 
 .tooltip {
   position: absolute;
@@ -111,6 +111,8 @@
   background: rgba(255,255,255,0.8);
   border-radius: 50%;
   margin-top: 4px;
+  position: absolute;
+  bottom: -6px;
   opacity: 0;
   transition: opacity 0.2s ease;
 }
@@ -121,7 +123,7 @@
 
 .divider {
   width: 1px;
-  height: 40px;
+  height: 38px;
   background: rgba(255,255,255,0.15);
-  margin: 0 0.2rem 0.4rem 0.2rem;
+  margin: 0 0.4rem;
 }
