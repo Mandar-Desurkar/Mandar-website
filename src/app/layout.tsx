@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Caveat, VT323 } from "next/font/google";
 import "./globals.css";
+import NoInspect from "@/components/NoInspect";
 
 const caveat = Caveat({
   subsets: ["latin"],
@@ -26,6 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${caveat.variable} ${vt323.variable}`}>
+        <NoInspect />
         {children}
       </body>
     </html>
