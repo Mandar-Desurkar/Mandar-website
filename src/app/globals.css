@@ -35,6 +35,8 @@ body {
   color: var(--os-text);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   scroll-behavior: smooth;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 a {

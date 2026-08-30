@@ -35,14 +35,41 @@ export default function NoInspect() {
       if ((e.ctrlKey || e.metaKey) && (e.shiftKey || e.altKey) && (e.key === "C" || e.key === "c")) {
         e.preventDefault();
       }
+
+      // Prevent macOS Screenshots (Cmd+Shift+3, Cmd+Shift+4, Cmd+Shift+5)
+      if (e.metaKey && e.shiftKey && (e.key === "3" || e.key === "4" || e.key === "5")) {
+        e.preventDefault();
+        alert("Screenshots are disabled on this portfolio.");
+      }
+
+      // Prevent Windows Snipping Tool (Win+Shift+S)
+      if (e.metaKey && e.shiftKey && (e.key === "S" || e.key === "s")) {
+        e.preventDefault();
+        alert("Screenshots are disabled on this portfolio.");
+      }
+
+      // Prevent Print Screen key
+      if (e.key === "PrintScreen") {
+        e.preventDefault();
+        navigator.clipboard.writeText(''); // Attempt to clear clipboard
+        alert("Screenshots are disabled on this portfolio.");
+      }
+    };
+
+    // Prevent Copying text
+    const handleCopy = (e: ClipboardEvent) => {
+      e.preventDefault();
+      alert("Copying text is disabled on this portfolio.");
     };
 
     document.addEventListener("contextmenu", handleContextMenu);
     document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("copy", handleCopy);
 
     return () => {
       document.removeEventListener("contextmenu", handleContextMenu);
       document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("copy", handleCopy);
     };
   }, []);
 
