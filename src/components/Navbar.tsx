@@ -86,7 +86,7 @@ export default function Navbar() {
         </div>
         <div className={styles.trayItem}>
           <span className={styles.batteryText}>17%</span>
-          <BatteryMedium size={18} color="#f5c211" />
+          <BatteryMedium size={18} color="#000000" />
         </div>
         <div className={styles.trayIcon}>
           <Wifi size={16} />
