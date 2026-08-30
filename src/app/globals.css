@@ -64,7 +64,7 @@ a {
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 2rem;
+  left: 1.5rem;
   width: 2px;
   background-color: var(--margin-color);
   z-index: 10;
@@ -73,14 +73,14 @@ a {
 
 @media (min-width: 768px) {
   .notebook-bg::before {
-    left: 4rem;
+    left: 3.5rem;
   }
 }
 
 /* Container inside notebook */
 .container {
   width: 100%;
-  padding: 0 1rem 0 3rem;
+  padding: 0 1rem 0 2.5rem;
 }
 
 @media (min-width: 768px) {
