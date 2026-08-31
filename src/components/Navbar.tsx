@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import styles from "./Navbar.module.css";
 import Link from "next/link";
 import { BatteryMedium, Menu, X, Bluetooth, Wifi, Search, SlidersHorizontal } from "lucide-react";
-import { FaApple } from "react-icons/fa";
 
 export default function Navbar() {
   const [currentTime, setCurrentTime] = useState<Date | null>(null);
@@ -46,7 +45,6 @@ export default function Navbar() {
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           aria-label="Toggle System Menu"
         >
-          <span className={styles.appleMenu}><FaApple size={16} /></span>
           <span className={styles.brandTitle}>Mandar Desurkar</span>
           <span className={styles.mobileHamburger}>
             {isMenuOpen ? <X size={14} /> : <Menu size={14} />}
