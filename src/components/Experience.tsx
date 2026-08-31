@@ -1,7 +1,6 @@
 "use client";
 
 import styles from "./Experience.module.css";
-import { CheckSquare, Square } from "lucide-react";
 
 const experiences = [
   {
@@ -44,20 +43,14 @@ export default function Experience() {
         
         <div className={styles.headerBox}>
           <h2 className="hand-heading-2" style={{ marginBottom: 0 }}>
-            Experience Log
+            Experience
           </h2>
-          <span className={styles.scribbleDate}>{new Date().toLocaleDateString()}</span>
         </div>
 
         <div className={styles.entries}>
           {experiences.map((exp, index) => (
             <div key={index} className={`${styles.entry} ${exp.isFuture ? styles.futureEntry : ''}`}>
               <div className={styles.entryTitle}>
-                {exp.isFuture ? (
-                  <Square className={styles.checkboxIcon} size={24} />
-                ) : (
-                  <CheckSquare className={styles.checkboxIcon} size={24} />
-                )}
                 <h3 className={styles.role}>{exp.role}</h3>
               </div>
               
@@ -68,7 +61,7 @@ export default function Experience() {
               
               <p className={styles.description}>{exp.description}</p>
               
-              <div className={styles.divider}></div>
+              
             </div>
           ))}
         </div>
