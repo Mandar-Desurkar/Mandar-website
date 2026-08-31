@@ -12,7 +12,7 @@ export default function Dock() {
   const [mounted, setMounted] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const { windows, openWindow } = useWindow();
+  const { activeTab, setActiveTab, isMinimized, setIsMinimized } = useWindow();
 
   useEffect(() => {
     setMounted(true);
@@ -32,7 +32,10 @@ export default function Dock() {
   }, [lastScrollY]);
 
   const handleIconClick = (id: string, title: string) => {
-    openWindow(id, title);
+    setActiveTab(id);
+    if (isMinimized) {
+      setIsMinimized(false);
+    }
   };
 
   const handleSettings = () => {
@@ -58,7 +61,7 @@ export default function Dock() {
             <div className={`${styles.iconBg} ${styles.finder}`}>
               <Smile size={28} color="white" />
             </div>
-            <div className={`${styles.dot} ${windows['about']?.isOpen ? styles.active : ''} ${windows['about']?.isMinimized ? styles.minimizedIndicator : ''}`}></div>
+            <div className={`${styles.dot} ${activeTab === 'about' ? styles.active : ''} ${isMinimized && activeTab === 'about' ? styles.minimizedIndicator : ''}`}></div>
           </div>
 
           <div className={styles.dockItem} onClick={() => handleIconClick('experience', 'Experience')}>
@@ -66,7 +69,7 @@ export default function Dock() {
             <div className={`${styles.iconBg} ${styles.notes}`}>
               <FileText size={28} color="white" />
             </div>
-            <div className={`${styles.dot} ${windows['experience']?.isOpen ? styles.active : ''} ${windows['experience']?.isMinimized ? styles.minimizedIndicator : ''}`}></div>
+            <div className={`${styles.dot} ${activeTab === 'experience' ? styles.active : ''} ${isMinimized && activeTab === 'experience' ? styles.minimizedIndicator : ''}`}></div>
           </div>
 
           <div className={styles.dockItem} onClick={() => handleIconClick('education', 'Education')}>
@@ -74,7 +77,7 @@ export default function Dock() {
             <div className={`${styles.iconBg} ${styles.education}`}>
               <GraduationCap size={28} color="white" />
             </div>
-            <div className={`${styles.dot} ${windows['education']?.isOpen ? styles.active : ''} ${windows['education']?.isMinimized ? styles.minimizedIndicator : ''}`}></div>
+            <div className={`${styles.dot} ${activeTab === 'education' ? styles.active : ''} ${isMinimized && activeTab === 'education' ? styles.minimizedIndicator : ''}`}></div>
           </div>
 
           <div className={styles.dockItem} onClick={() => handleIconClick('projects', 'Projects')}>
@@ -82,7 +85,7 @@ export default function Dock() {
             <div className={`${styles.iconBg} ${styles.safari}`}>
               <Rocket size={28} color="white" />
             </div>
-            <div className={`${styles.dot} ${windows['projects']?.isOpen ? styles.active : ''} ${windows['projects']?.isMinimized ? styles.minimizedIndicator : ''}`}></div>
+            <div className={`${styles.dot} ${activeTab === 'projects' ? styles.active : ''} ${isMinimized && activeTab === 'projects' ? styles.minimizedIndicator : ''}`}></div>
           </div>
 
           <div className={styles.dockItem} onClick={() => handleIconClick('contact', 'Contact')}>
@@ -90,7 +93,7 @@ export default function Dock() {
             <div className={`${styles.iconBg} ${styles.mail}`}>
               <Mail size={28} color="white" />
             </div>
-            <div className={`${styles.dot} ${windows['contact']?.isOpen ? styles.active : ''} ${windows['contact']?.isMinimized ? styles.minimizedIndicator : ''}`}></div>
+            <div className={`${styles.dot} ${activeTab === 'contact' ? styles.active : ''} ${isMinimized && activeTab === 'contact' ? styles.minimizedIndicator : ''}`}></div>
           </div>
 
           <div className={styles.dockItem} onClick={() => window.open('https://www.linkedin.com/in/mandar-desurkar/', '_blank')}>

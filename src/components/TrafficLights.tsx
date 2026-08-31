@@ -5,21 +5,21 @@ import { createPortal } from "react-dom";
 import { AlertTriangle, X } from "lucide-react";
 import { useWindow } from "@/context/WindowContext";
 
-export default function TrafficLights({ windowId }: { windowId: string }) {
+export default function TrafficLights() {
   const [popupMessage, setPopupMessage] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
-  const { closeWindow, minimizeWindow } = useWindow();
+  const { setIsMinimized } = useWindow();
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
   const handleRedClick = () => {
-    closeWindow(windowId);
+    setPopupMessage("Action Denied: You cannot close this window while a product build is in progress.");
   };
 
   const handleYellowClick = () => {
-    minimizeWindow(windowId);
+    setIsMinimized(true);
   };
 
   const handleGreenClick = () => {

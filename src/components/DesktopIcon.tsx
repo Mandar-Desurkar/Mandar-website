@@ -11,17 +11,19 @@ interface DesktopIconProps {
 }
 
 export default function DesktopIcon({ id, title, icon }: DesktopIconProps) {
-  const { openWindow } = useWindow();
+  const { setActiveTab, setIsMinimized } = useWindow();
 
   const handleClick = () => {
     if (typeof window !== "undefined" && window.innerWidth < 768) {
-      openWindow(id, title);
+      setActiveTab(id);
+      setIsMinimized(false);
     }
   };
 
   const handleDoubleClick = () => {
     if (typeof window !== "undefined" && window.innerWidth >= 768) {
-      openWindow(id, title);
+      setActiveTab(id);
+      setIsMinimized(false);
     }
   };
 

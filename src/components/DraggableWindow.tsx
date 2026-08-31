@@ -6,23 +6,14 @@ import { useWindow } from "@/context/WindowContext";
 import { useEffect, useState } from "react";
 
 export default function DraggableWindow({ 
-  windowId, 
   title, 
-  children,
-  defaultPos = { x: 0, y: 0 }
+  children
 }: { 
-  windowId: string, 
-  title: string, 
-  children: React.ReactNode,
-  defaultPos?: { x: number, y: number }
+  title: string | React.ReactNode, 
+  children: React.ReactNode
 }) {
   const dragControls = useDragControls();
-  const { windows, focusWindow } = useWindow();
-  
-  const windowState = windows[windowId];
-  const isMinimized = windowState?.isMinimized || false;
-  const zIndex = windowState?.zIndex || 10;
-  const isOpen = windowState?.isOpen || false;
+  const { isMinimized } = useWindow();
   
   const [hasMounted, setHasMounted] = useState(false);
 
@@ -31,24 +22,22 @@ export default function DraggableWindow({
   }, []);
 
   const variants: Variants = {
-    initial: { opacity: 0, scale: 0.95, y: defaultPos.y + 40, x: defaultPos.x },
+    initial: { opacity: 0, scale: 0.95, y: 40, x: 0 },
     open: { 
       opacity: 1, 
       scale: 1, 
-      y: defaultPos.y, 
-      x: defaultPos.x,
+      y: 0, 
+      x: 0,
       transition: hasMounted ? { duration: 0.4, type: "spring", bounce: 0.2 } : { duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] } 
     },
     minimized: { 
       opacity: 0, 
       scale: 0.1, 
       y: 600,
-      x: defaultPos.x,
+      x: 0,
       transition: { duration: 0.5, type: "spring", bounce: 0.1 } 
     }
   };
-
-  if (!isOpen) return null;
 
   return (
     <motion.div 
@@ -60,19 +49,17 @@ export default function DraggableWindow({
       dragControls={dragControls}
       dragListener={false}
       dragMomentum={false}
-      onPointerDown={() => focusWindow(windowId)}
-      style={{ position: 'absolute', zIndex }}
+      style={{ position: 'absolute', zIndex: 10 }}
     >
       <div 
         className="os-titlebar" 
         onPointerDown={(e) => {
-          focusWindow(windowId);
           dragControls.start(e);
         }}
         style={{ cursor: "grab", touchAction: "none" }}
         title="Drag to move"
       >
-        <TrafficLights windowId={windowId} />
+        <TrafficLights />
         <span>{title}</span>
       </div>
       
