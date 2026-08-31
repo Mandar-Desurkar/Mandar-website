@@ -12,7 +12,7 @@ export default function Dock() {
   const [mounted, setMounted] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const { isMinimized, setIsMinimized } = useWindow();
+  const { windows, openWindow } = useWindow();
 
   useEffect(() => {
     setMounted(true);
@@ -31,16 +31,8 @@ export default function Dock() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
-  const scrollTo = (id: string) => {
-    if (isMinimized) {
-      setIsMinimized(false);
-    }
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+  const handleIconClick = (id: string, title: string) => {
+    openWindow(id, title);
   };
 
   const handleSettings = () => {
@@ -61,44 +53,44 @@ export default function Dock() {
     <>
       <div className={`${styles.dockWrapper} ${isVisible ? '' : styles.hidden}`}>
         <div className={styles.dock}>
-          <div className={styles.dockItem} onClick={() => scrollTo('hero')}>
+          <div className={styles.dockItem} onClick={() => handleIconClick('about', 'About Me')}>
             <span className={styles.tooltip}>Mandar.app</span>
             <div className={`${styles.iconBg} ${styles.finder}`}>
               <Smile size={28} color="white" />
             </div>
-            <div className={`${styles.dot} ${isMinimized ? styles.minimizedIndicator : ''}`}></div>
+            <div className={`${styles.dot} ${windows['about']?.isOpen ? styles.active : ''} ${windows['about']?.isMinimized ? styles.minimizedIndicator : ''}`}></div>
           </div>
 
-          <div className={styles.dockItem} onClick={() => scrollTo('experience')}>
+          <div className={styles.dockItem} onClick={() => handleIconClick('experience', 'Experience')}>
             <span className={styles.tooltip}>Experience Log</span>
             <div className={`${styles.iconBg} ${styles.notes}`}>
               <FileText size={28} color="white" />
             </div>
-            <div className={styles.dot}></div>
+            <div className={`${styles.dot} ${windows['experience']?.isOpen ? styles.active : ''} ${windows['experience']?.isMinimized ? styles.minimizedIndicator : ''}`}></div>
           </div>
 
-          <div className={styles.dockItem} onClick={() => scrollTo('education')}>
+          <div className={styles.dockItem} onClick={() => handleIconClick('education', 'Education')}>
             <span className={styles.tooltip}>Education</span>
             <div className={`${styles.iconBg} ${styles.education}`}>
               <GraduationCap size={28} color="white" />
             </div>
-            <div className={styles.dot}></div>
+            <div className={`${styles.dot} ${windows['education']?.isOpen ? styles.active : ''} ${windows['education']?.isMinimized ? styles.minimizedIndicator : ''}`}></div>
           </div>
 
-          <div className={styles.dockItem} onClick={() => scrollTo('projects')}>
+          <div className={styles.dockItem} onClick={() => handleIconClick('projects', 'Projects')}>
             <span className={styles.tooltip}>Shipped Products</span>
             <div className={`${styles.iconBg} ${styles.safari}`}>
               <Rocket size={28} color="white" />
             </div>
-            <div className={styles.dot}></div>
+            <div className={`${styles.dot} ${windows['projects']?.isOpen ? styles.active : ''} ${windows['projects']?.isMinimized ? styles.minimizedIndicator : ''}`}></div>
           </div>
 
-          <div className={styles.dockItem} onClick={() => scrollTo('contact')}>
+          <div className={styles.dockItem} onClick={() => handleIconClick('contact', 'Contact')}>
             <span className={styles.tooltip}>Contact</span>
             <div className={`${styles.iconBg} ${styles.mail}`}>
               <Mail size={28} color="white" />
             </div>
-            <div className={styles.dot}></div>
+            <div className={`${styles.dot} ${windows['contact']?.isOpen ? styles.active : ''} ${windows['contact']?.isMinimized ? styles.minimizedIndicator : ''}`}></div>
           </div>
 
           <div className={styles.dockItem} onClick={() => window.open('https://www.linkedin.com/in/mandar-desurkar/', '_blank')}>

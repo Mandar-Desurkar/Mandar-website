@@ -150,6 +150,46 @@ a {
   z-index: 10;
 }
 
+.absolute-window {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 44px 16px 80px 16px; /* Override auto margins when absolute */
+  width: calc(100% - 32px); /* Fallback for mobile */
+}
+
+@media (min-width: 768px) {
+  .absolute-window {
+    width: 80%;
+    max-width: 900px;
+    margin: 0; /* Let Framer Motion handle positioning completely on desktop via x/y */
+  }
+}
+
+.desktop-grid {
+  position: absolute;
+  top: 44px; /* below navbar */
+  right: 16px;
+  bottom: 80px; /* above dock */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-end;
+  z-index: 5; /* behind windows */
+  padding: 16px 0;
+}
+
+@media (max-width: 768px) {
+  .desktop-grid {
+    left: 16px;
+    right: 16px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+}
+
 @media (min-width: 768px) {
   .os-window {
     width: 95%;
