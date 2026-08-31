@@ -62,9 +62,9 @@ a {
   line-height: var(--line-height);
   color: var(--ink-black);
   position: relative;
-  
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
+  min-height: 100%; /* Stretch to fill window height when resized */
+  display: flex;
+  flex-direction: column;
 }
 
 .apple-note-date {
