@@ -135,7 +135,7 @@ a {
 }
 
 .os-window {
-  width: calc(100% - 24px); /* 12px gap on left and right */
+  width: 100%;
   max-width: 1200px;
   margin: 44px auto 80px auto; /* 32px navbar + 12px gap at top, 80px at bottom for dock space */
   background: var(--os-window);
