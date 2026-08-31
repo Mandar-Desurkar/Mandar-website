@@ -162,11 +162,12 @@ a {
   .absolute-window {
     width: 80%;
     max-width: 1000px; /* slightly wider max-width for modern desktop */
-    height: 85vh; /* fill more of the screen vertically */
-    max-height: 800px;
+    height: fit-content; /* shrink to fit the tab content */
+    max-height: 85vh; /* scroll if the tab is too long */
+    overflow-y: auto; /* enable scrolling if it hits max height */
     /* Center it inside the safe area */
-    top: 44px;
-    bottom: 100px;
+    top: 0;
+    bottom: 0;
     left: 20px;
     right: 120px; /* Leave space for desktop icons on the right */
     margin: auto;
