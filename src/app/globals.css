@@ -161,8 +161,15 @@ a {
 @media (min-width: 768px) {
   .absolute-window {
     width: 80%;
-    max-width: 900px;
-    margin: 0; /* Let Framer Motion handle positioning completely on desktop via x/y */
+    max-width: 1000px; /* slightly wider max-width for modern desktop */
+    height: 85vh; /* fill more of the screen vertically */
+    max-height: 800px;
+    /* Center it inside the safe area */
+    top: 44px;
+    bottom: 100px;
+    left: 20px;
+    right: 120px; /* Leave space for desktop icons on the right */
+    margin: auto;
   }
 }
 
