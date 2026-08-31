@@ -216,11 +216,11 @@ a {
     min-width: 400px;
     max-height: 90vh; /* Prevent resizing completely off screen */
     overflow: hidden; /* Important: hide overflow so the handles don't scroll and content stays inside */
-    /* Center it inside the safe area */
+    /* Center it perfectly */
     top: 0;
     bottom: 0;
-    left: 20px;
-    right: 120px; /* Leave space for desktop icons on the right */
+    left: 0;
+    right: 0;
     margin: auto;
   }
 }

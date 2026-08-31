@@ -19,7 +19,7 @@ export default function DraggableWindow({
   const windowRef = useRef<HTMLDivElement>(null);
   
   // Custom resize state
-  const [size, setSize] = useState({ width: '80%', height: 'fit-content' });
+  const [size, setSize] = useState({ width: '76vw', height: 'fit-content' });
   const [isResizing, setIsResizing] = useState(false);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export default function DraggableWindow({
 
   // Reset to auto-fit when changing tabs
   useEffect(() => {
-    setSize({ width: '80%', height: 'fit-content' });
+    setSize({ width: '76vw', height: 'fit-content' });
   }, [activeTab]);
 
   const handleResizeStart = (e: React.PointerEvent, edge: 'bottom' | 'right' | 'bottom-right') => {
