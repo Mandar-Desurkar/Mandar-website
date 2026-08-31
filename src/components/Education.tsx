@@ -1,7 +1,6 @@
 "use client";
 
 import styles from "./Education.module.css";
-import { GraduationCap } from "lucide-react";
 
 const educationLogs = [
   {
@@ -37,7 +36,6 @@ export default function Education() {
           {educationLogs.map((edu, index) => (
             <div key={index} className={styles.entry}>
               <div className={styles.entryTitle}>
-                <GraduationCap className={styles.icon} size={28} />
                 <h3 className={styles.degree}>{edu.degree}</h3>
               </div>
               
@@ -58,7 +56,7 @@ export default function Education() {
                 <span className={styles.skillsLabel}>Skills:</span> {edu.skills}
               </div>
               
-              <div className={styles.divider}></div>
+              
             </div>
           ))}
         </div>
