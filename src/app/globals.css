@@ -8,14 +8,12 @@
   --os-text: #222;
   
   /* Notebook Colors */
-  --paper-bg: #fdfbf7;
-  --line-color: #92b0d3;
-  --margin-color: #ff7c7c;
-  --ink-black: #1a1a24;
-  --ink-blue: #00008b;
-  --ink-red: #cc0000;
+  --paper-bg: #faf9f6; /* Clean off-white */
+  --ink-black: #1a1a1a;
+  --ink-blue: #007aff;
+  --ink-red: #ff3b30;
   
-  --line-height: 2rem;
+  --line-height: 1.6;
 }
 
 * {
@@ -47,37 +45,28 @@ a {
 /* Notebook styling to be applied to a specific container */
 .notebook-bg {
   background-color: var(--paper-bg);
-  font-family: var(--font-handwriting), cursive;
-  font-size: 1.3rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 1.1rem;
   line-height: var(--line-height);
   color: var(--ink-black);
-  
-  background-image: 
-    linear-gradient(var(--line-color) 1px, transparent 1px);
-  background-size: 100% var(--line-height);
-  background-position: 0 0;
   position: relative;
   
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.apple-note-date {
+  text-align: center;
+  color: #8e8e93; /* Apple standard gray */
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding-top: 1rem;
+  padding-bottom: 0.5rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 .notebook-bg::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 1.5rem;
-  width: 2px;
-  background-color: var(--margin-color);
-  z-index: 10;
-  pointer-events: none;
-}
-
-@media (min-width: 768px) {
-  .notebook-bg::before {
-    left: 3.5rem;
-  }
+  display: none;
 }
 
 /* Container inside notebook */
@@ -94,32 +83,23 @@ a {
 
 /* Typography utilities */
 .hand-heading-1 {
-  font-family: var(--font-handwriting), cursive;
-  font-size: clamp(2.2rem, 8vw, 4rem);
-  font-weight: 700;
-  line-height: calc(var(--line-height) * 1.5);
-  margin-bottom: calc(var(--line-height) * 0.5);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 1rem;
   color: var(--ink-black);
 }
 
 .hand-heading-2 {
-  font-family: var(--font-handwriting), cursive;
-  font-size: clamp(1.8rem, 6vw, 3rem);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
   font-weight: 700;
-  line-height: calc(var(--line-height) * 1.5);
-  margin-bottom: calc(var(--line-height) * 0.5);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 1rem;
   color: var(--ink-black);
-}
-
-@media (min-width: 768px) {
-  .hand-heading-1 {
-    line-height: calc(var(--line-height) * 2);
-    margin-bottom: var(--line-height);
-  }
-  .hand-heading-2 {
-    line-height: calc(var(--line-height) * 2);
-    margin-bottom: var(--line-height);
-  }
 }
 
 /* Mac OS X UI Components */

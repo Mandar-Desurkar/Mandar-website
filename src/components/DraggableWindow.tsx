@@ -64,6 +64,7 @@ export default function DraggableWindow({
       </div>
       
       <div className="notebook-bg">
+        <div className="apple-note-date">August 31, 2026 at 9:41 AM</div>
         {children}
       </div>
     </motion.div>
