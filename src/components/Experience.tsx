@@ -55,7 +55,8 @@ export default function Experience() {
               </div>
               
               <div className={styles.metaData}>
-                <span className={styles.company}>@ {exp.company}</span>
+                <span className={styles.atSymbol}>@</span>
+                <span className={styles.company}>{exp.company}</span>
                 <span className={styles.period}>({exp.period})</span>
               </div>
               

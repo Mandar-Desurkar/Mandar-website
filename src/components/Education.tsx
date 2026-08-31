@@ -42,10 +42,14 @@ export default function Education() {
               <div className={styles.metaData}>
                 {edu.link ? (
                   <a href={edu.link} target="_blank" rel="noopener noreferrer" className={styles.schoolLink}>
-                    <span className={styles.school}>@ {edu.school}</span>
+                    <span className={styles.atSymbol}>@</span>
+                    <span className={styles.school}>{edu.school}</span>
                   </a>
                 ) : (
-                  <span className={styles.school}>@ {edu.school}</span>
+                  <>
+                    <span className={styles.atSymbol}>@</span>
+                    <span className={styles.school}>{edu.school}</span>
+                  </>
                 )}
                 <span className={styles.period}>({edu.period})</span>
               </div>
