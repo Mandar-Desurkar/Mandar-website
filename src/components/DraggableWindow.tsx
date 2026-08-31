@@ -132,15 +132,15 @@ export default function DraggableWindow({
       {!isMinimized && (
         <>
           <div 
-            style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '10px', cursor: 'ew-resize', zIndex: 20 }}
+            className="resize-handle-right"
             onPointerDown={(e) => handleResizeStart(e, 'right')}
           />
           <div 
-            style={{ position: 'absolute', left: 0, bottom: 0, right: 0, height: '10px', cursor: 'ns-resize', zIndex: 20 }}
+            className="resize-handle-bottom"
             onPointerDown={(e) => handleResizeStart(e, 'bottom')}
           />
           <div 
-            style={{ position: 'absolute', right: 0, bottom: 0, width: '15px', height: '15px', cursor: 'nwse-resize', zIndex: 30 }}
+            className="resize-handle-corner"
             onPointerDown={(e) => handleResizeStart(e, 'bottom-right')}
           />
         </>

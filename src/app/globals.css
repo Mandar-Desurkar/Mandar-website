@@ -20,7 +20,7 @@
   box-sizing: border-box;
   padding: 0;
   margin: 0;
-  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='24'%3E%3Cpath d='M1 1 L13 13 L8.5 13.5 L11.5 20.5 L9 21.5 L6 14.5 L2 18 Z' fill='black' stroke='white' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E") 1 1, auto !important;
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='24'%3E%3Cpath d='M1 1 L13 13 L8.5 13.5 L11.5 20.5 L9 21.5 L6 14.5 L2 18 Z' fill='black' stroke='white' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E") 1 1, auto;
 }
 
 html,
@@ -168,6 +168,37 @@ a {
   overflow-y: auto;
   overflow-x: hidden;
   height: 100%;
+}
+
+/* Resize Handles */
+.resize-handle-right {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 10px;
+  cursor: ew-resize !important;
+  z-index: 20;
+}
+
+.resize-handle-bottom {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: 10px;
+  cursor: ns-resize !important;
+  z-index: 20;
+}
+
+.resize-handle-corner {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 15px;
+  height: 15px;
+  cursor: nwse-resize !important;
+  z-index: 30;
 }
 
 .absolute-window {
