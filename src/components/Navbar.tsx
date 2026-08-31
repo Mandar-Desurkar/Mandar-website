@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import styles from "./Navbar.module.css";
 import Link from "next/link";
 import { BatteryMedium, Menu, X, Bluetooth, Wifi, Search, SlidersHorizontal } from "lucide-react";
+import { FaApple } from "react-icons/fa";
 
 export default function Navbar() {
   const [currentTime, setCurrentTime] = useState<Date | null>(null);
@@ -45,7 +46,7 @@ export default function Navbar() {
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           aria-label="Toggle System Menu"
         >
-          <span className={styles.appleMenu}>&#63743;</span>
+          <span className={styles.appleMenu}><FaApple size={16} /></span>
           <span className={styles.brandTitle}>Mandar Desurkar</span>
           <span className={styles.mobileHamburger}>
             {isMenuOpen ? <X size={14} /> : <Menu size={14} />}
@@ -81,23 +82,23 @@ export default function Navbar() {
       </nav>
       
       <div className={styles.systemTray}>
-        <div className={styles.trayIcon}>
+        <div className={`${styles.trayIcon} ${styles.hideOnMobile}`}>
           <Bluetooth size={16} />
         </div>
         <div className={styles.trayItem}>
           <span className={styles.batteryText}>17%</span>
           <BatteryMedium size={18} color="#000000" />
         </div>
-        <div className={styles.trayIcon}>
+        <div className={`${styles.trayIcon} ${styles.hideOnMobile}`}>
           <Wifi size={16} />
         </div>
-        <div className={styles.trayIcon}>
+        <div className={`${styles.trayIcon} ${styles.hideOnMobile}`}>
           <Search size={16} />
         </div>
-        <div className={styles.trayIcon}>
+        <div className={`${styles.trayIcon} ${styles.hideOnMobile}`}>
           <SlidersHorizontal size={16} />
         </div>
-        <div className={styles.trayIcon}>
+        <div className={`${styles.trayIcon} ${styles.hideOnMobile}`}>
           <div className={styles.siriIcon}></div>
         </div>
         <div className={styles.trayItem}>

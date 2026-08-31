@@ -61,6 +61,7 @@
 
 .brandTitle {
   font-weight: 700;
+  white-space: nowrap;
 }
 
 .mobileHamburger {
@@ -196,6 +197,12 @@
 
 .date {
   display: none;
+}
+
+@media (max-width: 768px) {
+  .hideOnMobile {
+    display: none !important;
+  }
 }
 
 @media (min-width: 768px) {
