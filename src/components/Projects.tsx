@@ -35,14 +35,13 @@ export default function Projects() {
         
         <div className={styles.headerBox}>
           <h2 className="hand-heading-2" style={{ marginBottom: 0 }}>
-            Product Notebook
+            Projects
           </h2>
         </div>
 
         <div className={styles.grid}>
           {projects.map((project, index) => (
-            <div key={index} className={styles.stickyNote}>
-              <div className={styles.pin}></div>
+            <div key={index} className={styles.card}>
               <div className={styles.cardHeader}>
                 <h3 className={styles.title}>{project.title}</h3>
                 <div className={styles.links}>
