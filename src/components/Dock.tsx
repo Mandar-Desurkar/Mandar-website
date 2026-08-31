@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import styles from "./Dock.module.css";
-import { AlertTriangle } from "lucide-react";
-import Image from "next/image";
+import { Smile, FileText, Rocket, GraduationCap, Mail, Settings, Trash2, AlertTriangle } from "lucide-react";
+import { FaLinkedin } from "react-icons/fa";
 import { useWindow } from "@/context/WindowContext";
 
 export default function Dock() {
@@ -58,48 +58,48 @@ export default function Dock() {
         <div className={styles.dock}>
           <div className={styles.dockItem} onClick={() => handleIconClick('about', 'About Me')}>
             <span className={styles.tooltip}>Mandar.app</span>
-            <div className={styles.iconBg}>
-              <Image src="/icons/Folder.svg" alt="About Me" width={48} height={48} className={styles.dockImage} />
+            <div className={`${styles.iconBg} ${styles.finder}`}>
+              <Smile size={28} color="white" />
             </div>
             <div className={`${styles.dot} ${activeTab === 'about' ? styles.active : ''} ${isMinimized && activeTab === 'about' ? styles.minimizedIndicator : ''}`}></div>
           </div>
 
           <div className={styles.dockItem} onClick={() => handleIconClick('experience', 'Experience')}>
             <span className={styles.tooltip}>Experience Log</span>
-            <div className={styles.iconBg}>
-              <Image src="/icons/Folder2.svg" alt="Experience" width={48} height={48} className={styles.dockImage} />
+            <div className={`${styles.iconBg} ${styles.notes}`}>
+              <FileText size={28} color="white" />
             </div>
             <div className={`${styles.dot} ${activeTab === 'experience' ? styles.active : ''} ${isMinimized && activeTab === 'experience' ? styles.minimizedIndicator : ''}`}></div>
           </div>
 
           <div className={styles.dockItem} onClick={() => handleIconClick('education', 'Education')}>
             <span className={styles.tooltip}>Education</span>
-            <div className={styles.iconBg}>
-              <Image src="/icons/Folder3.svg" alt="Education" width={48} height={48} className={styles.dockImage} />
+            <div className={`${styles.iconBg} ${styles.education}`}>
+              <GraduationCap size={28} color="white" />
             </div>
             <div className={`${styles.dot} ${activeTab === 'education' ? styles.active : ''} ${isMinimized && activeTab === 'education' ? styles.minimizedIndicator : ''}`}></div>
           </div>
 
           <div className={styles.dockItem} onClick={() => handleIconClick('projects', 'Projects')}>
             <span className={styles.tooltip}>Shipped Products</span>
-            <div className={styles.iconBg}>
-              <Image src="/icons/Folder4.svg" alt="Projects" width={48} height={48} className={styles.dockImage} />
+            <div className={`${styles.iconBg} ${styles.safari}`}>
+              <Rocket size={28} color="white" />
             </div>
             <div className={`${styles.dot} ${activeTab === 'projects' ? styles.active : ''} ${isMinimized && activeTab === 'projects' ? styles.minimizedIndicator : ''}`}></div>
           </div>
 
           <div className={styles.dockItem} onClick={() => handleIconClick('contact', 'Contact')}>
             <span className={styles.tooltip}>Contact</span>
-            <div className={styles.iconBg}>
-              <Image src="/icons/Folder5.svg" alt="Contact" width={48} height={48} className={styles.dockImage} />
+            <div className={`${styles.iconBg} ${styles.mail}`}>
+              <Mail size={28} color="white" />
             </div>
             <div className={`${styles.dot} ${activeTab === 'contact' ? styles.active : ''} ${isMinimized && activeTab === 'contact' ? styles.minimizedIndicator : ''}`}></div>
           </div>
 
           <div className={styles.dockItem} onClick={() => window.open('https://www.linkedin.com/in/mandar-desurkar/', '_blank')}>
             <span className={styles.tooltip}>LinkedIn</span>
-            <div className={styles.iconBg}>
-              <Image src="/icons/Folder6.svg" alt="LinkedIn" width={48} height={48} className={styles.dockImage} />
+            <div className={`${styles.iconBg} ${styles.linkedin}`}>
+              <FaLinkedin size={28} color="white" />
             </div>
             <div className={styles.dot}></div>
           </div>
@@ -108,16 +108,16 @@ export default function Dock() {
 
           <div className={styles.dockItem} onClick={handleSettings}>
             <span className={styles.tooltip}>Theme Settings</span>
-            <div className={styles.iconBg}>
-              <Image src="/icons/Folder7.svg" alt="Settings" width={48} height={48} className={styles.dockImage} />
+            <div className={`${styles.iconBg} ${styles.settings}`}>
+              <Settings size={28} color="white" />
             </div>
             <div className={styles.dot}></div>
           </div>
 
           <div className={styles.dockItem} onClick={handleTrash}>
             <span className={styles.tooltip}>Imposter Syndrome</span>
-            <div className={styles.iconBg}>
-              <Image src="/icons/Folder8.svg" alt="Trash" width={48} height={48} className={styles.dockImage} />
+            <div className={`${styles.iconBg} ${styles.trash}`}>
+              <Trash2 size={28} color="white" />
             </div>
             <div className={styles.dot}></div>
           </div>

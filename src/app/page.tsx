@@ -11,7 +11,7 @@ import Dock from "@/components/Dock";
 import DraggableWindow from "@/components/DraggableWindow";
 import DesktopIcon from "@/components/DesktopIcon";
 import { WindowProvider, useWindow } from "@/context/WindowContext";
-import { User, Briefcase, GraduationCap, FolderGit2, Mail } from "lucide-react";
+import Image from "next/image";
 
 function ActiveSection() {
   const { activeTab } = useWindow();
@@ -44,11 +44,11 @@ function DesktopEnvironment() {
   return (
     <>
       <div className="desktop-grid">
-        <DesktopIcon id="about" title="About Me" icon={<User size={36} color="#ffffff" strokeWidth={1.5} />} />
-        <DesktopIcon id="experience" title="Experience" icon={<Briefcase size={36} color="#ffffff" strokeWidth={1.5} />} />
-        <DesktopIcon id="education" title="Education" icon={<GraduationCap size={36} color="#ffffff" strokeWidth={1.5} />} />
-        <DesktopIcon id="projects" title="Projects" icon={<FolderGit2 size={36} color="#ffffff" strokeWidth={1.5} />} />
-        <DesktopIcon id="contact" title="Contact" icon={<Mail size={36} color="#ffffff" strokeWidth={1.5} />} />
+        <DesktopIcon id="about" title="About Me" icon={<Image src="/icons/Folder.svg" alt="About Me" width={56} height={56} className="drop-shadow-md" />} />
+        <DesktopIcon id="experience" title="Experience" icon={<Image src="/icons/Folder2.svg" alt="Experience" width={56} height={56} className="drop-shadow-md" />} />
+        <DesktopIcon id="education" title="Education" icon={<Image src="/icons/Folder3.svg" alt="Education" width={56} height={56} className="drop-shadow-md" />} />
+        <DesktopIcon id="projects" title="Projects" icon={<Image src="/icons/Folder4.svg" alt="Projects" width={56} height={56} className="drop-shadow-md" />} />
+        <DesktopIcon id="contact" title="Contact" icon={<Image src="/icons/Folder5.svg" alt="Contact" width={56} height={56} className="drop-shadow-md" />} />
       </div>
 
       <DraggableWindow title={<WindowTitle />}>
