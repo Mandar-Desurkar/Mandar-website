@@ -3,7 +3,7 @@
 import { motion, useDragControls, Variants } from "framer-motion";
 import TrafficLights from "./TrafficLights";
 import { useWindow } from "@/context/WindowContext";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export default function DraggableWindow({ 
   title, 
@@ -13,13 +13,65 @@ export default function DraggableWindow({
   children: React.ReactNode
 }) {
   const dragControls = useDragControls();
-  const { isMinimized } = useWindow();
+  const { isMinimized, activeTab } = useWindow();
   
   const [hasMounted, setHasMounted] = useState(false);
+  const windowRef = useRef<HTMLDivElement>(null);
+  
+  // Custom resize state
+  const [size, setSize] = useState({ width: '80%', height: 'fit-content' });
+  const [isResizing, setIsResizing] = useState(false);
 
   useEffect(() => {
     setHasMounted(true);
   }, []);
+
+  // Reset to auto-fit when changing tabs
+  useEffect(() => {
+    setSize({ width: '80%', height: 'fit-content' });
+  }, [activeTab]);
+
+  const handleResizeStart = (e: React.PointerEvent, edge: 'bottom' | 'right' | 'bottom-right') => {
+    e.preventDefault();
+    e.stopPropagation(); // prevent drag from taking over
+    setIsResizing(true);
+    
+    if (!windowRef.current) return;
+    
+    const startX = e.clientX;
+    const startY = e.clientY;
+    const startWidth = windowRef.current.getBoundingClientRect().width;
+    const startHeight = windowRef.current.getBoundingClientRect().height;
+
+    const handlePointerMove = (moveEvent: PointerEvent) => {
+      const deltaX = moveEvent.clientX - startX;
+      const deltaY = moveEvent.clientY - startY;
+
+      let newWidth = startWidth;
+      let newHeight = startHeight;
+
+      if (edge === 'right' || edge === 'bottom-right') {
+        newWidth = Math.max(400, startWidth + deltaX);
+      }
+      if (edge === 'bottom' || edge === 'bottom-right') {
+        newHeight = Math.max(300, startHeight + deltaY);
+      }
+
+      setSize({
+        width: `${newWidth}px`,
+        height: `${newHeight}px`
+      });
+    };
+
+    const handlePointerUp = () => {
+      setIsResizing(false);
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('pointerup', handlePointerUp);
+    };
+
+    window.addEventListener('pointermove', handlePointerMove);
+    window.addEventListener('pointerup', handlePointerUp);
+  };
 
   const variants: Variants = {
     initial: { opacity: 0, scale: 0.95, y: 40, x: 0 },
@@ -41,6 +93,7 @@ export default function DraggableWindow({
 
   return (
     <motion.div 
+      ref={windowRef}
       className="os-window absolute-window"
       variants={variants}
       initial="initial"
@@ -49,7 +102,12 @@ export default function DraggableWindow({
       dragControls={dragControls}
       dragListener={false}
       dragMomentum={false}
-      style={{ position: 'absolute', zIndex: 10 }}
+      style={{ 
+        position: 'absolute', 
+        zIndex: 10,
+        width: size.width,
+        height: size.height,
+      }}
     >
       <div 
         className="os-titlebar" 
@@ -63,10 +121,30 @@ export default function DraggableWindow({
         <span>{title}</span>
       </div>
       
-      <div className="notebook-bg">
-        <div className="apple-note-date">August 31, 2026 at 9:41 AM</div>
-        {children}
+      <div className="window-content-scroll">
+        <div className="notebook-bg">
+          <div className="apple-note-date">August 31, 2026 at 9:41 AM</div>
+          {children}
+        </div>
       </div>
+
+      {/* Resize Handles */}
+      {!isMinimized && (
+        <>
+          <div 
+            style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '10px', cursor: 'ew-resize', zIndex: 20 }}
+            onPointerDown={(e) => handleResizeStart(e, 'right')}
+          />
+          <div 
+            style={{ position: 'absolute', left: 0, bottom: 0, right: 0, height: '10px', cursor: 'ns-resize', zIndex: 20 }}
+            onPointerDown={(e) => handleResizeStart(e, 'bottom')}
+          />
+          <div 
+            style={{ position: 'absolute', right: 0, bottom: 0, width: '15px', height: '15px', cursor: 'nwse-resize', zIndex: 30 }}
+            onPointerDown={(e) => handleResizeStart(e, 'bottom-right')}
+          />
+        </>
+      )}
     </motion.div>
   );
 }
