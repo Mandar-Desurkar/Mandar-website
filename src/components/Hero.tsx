@@ -131,9 +131,9 @@ export default function Hero() {
             </div>
           </motion.div>
 
-          {/* Apps I've built: one card per app with the SAME two CTAs in the same order, so app vs
-              website is never ambiguous: 📱 Try app (solid, opens the in-site prototype) on top,
-              🌐 Website ↗ (outline, leaves the site) below. Missing prototype = disabled "App · soon". */}
+          {/* Apps I've built: a quiet list under the photo (no cards, no buttons) so the hero keeps
+              one primary CTA. Each app has two distinct text links in the same order:
+              📱 Try app (blue, opens the in-site prototype) · 🌐 Website ↗ (grey, external). */}
           <motion.div
             className={styles.appsShelf}
             initial={{ opacity: 0, y: 12 }}
@@ -141,58 +141,56 @@ export default function Hero() {
             transition={{ delay: initialDelay + 0.9, duration: 0.4, ease: "easeOut" }}
           >
             <p className={styles.appsCaption}>Apps I&apos;ve built</p>
-            <ul className={styles.appsGrid}>
+            <ul className={styles.appsList}>
               {shippedApps.map((app) => {
                 const launchPrototype = () => {
                   if (!app.prototype) return;
                   trackEvent("Opened Prototype", { prototype: app.prototype, placement: "hero" });
                   setOpenPrototype(app.prototype);
                 };
-                const trackWebsite = (placement: "hero_icon" | "hero_chip") =>
-                  trackEvent("Clicked External Link", { link_type: "app_website", label: app.name, placement });
                 return (
-                  <li key={app.name} className={styles.appCard} title={`${app.name} · ${app.caption}`}>
-                    <div className={styles.appHeader}>
-                      <span className={styles.appIcon}>
-                        <Image src={app.icon} alt="" width={34} height={34} />
-                      </span>
+                  <li key={app.name} className={styles.appRow} title={`${app.name} · ${app.caption}`}>
+                    <span className={styles.appIcon}>
+                      <Image src={app.icon} alt="" width={40} height={40} />
+                    </span>
+                    <span className={styles.appText}>
                       <span className={styles.appName}>
                         {app.name}
                         <span className={styles.srOnly}> · {app.caption}</span>
                       </span>
-                    </div>
-
-                    {app.prototype ? (
-                      <motion.button
-                        type="button"
-                        className={`${styles.appCta} ${styles.appCtaApp}`}
-                        onClick={launchPrototype}
-                        whileTap={{ scale: 0.95 }}
-                        aria-label={`Try the ${app.name} app (interactive prototype)`}
-                      >
-                        <Smartphone size={13} strokeWidth={2.4} aria-hidden="true" /> Try app
-                      </motion.button>
-                    ) : (
-                      <span
-                        className={`${styles.appCta} ${styles.appCtaDisabled}`}
-                        aria-disabled="true"
-                        title="Interactive app prototype coming soon"
-                      >
-                        <Smartphone size={13} strokeWidth={2.4} aria-hidden="true" /> App · soon
+                      <span className={styles.appLinks}>
+                        {app.prototype ? (
+                          <button
+                            type="button"
+                            className={`${styles.appLink} ${styles.appLinkApp}`}
+                            onClick={launchPrototype}
+                            aria-label={`Try the ${app.name} app (interactive prototype)`}
+                          >
+                            <Smartphone size={12} strokeWidth={2.4} aria-hidden="true" />
+                            Try app
+                          </button>
+                        ) : (
+                          <span className={`${styles.appLink} ${styles.appLinkSoon}`} title="Interactive app prototype coming soon">
+                            <Smartphone size={12} strokeWidth={2.4} aria-hidden="true" />
+                            App soon
+                          </span>
+                        )}
+                        <span className={styles.linkDot} aria-hidden="true">·</span>
+                        <a
+                          href={app.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`${styles.appLink} ${styles.appLinkWeb}`}
+                          onClick={() =>
+                            trackEvent("Clicked External Link", { link_type: "app_website", label: app.name, placement: "hero_chip" })
+                          }
+                          aria-label={`${app.name} website (opens in a new tab)`}
+                        >
+                          <Globe size={12} strokeWidth={2.4} aria-hidden="true" />
+                          Website ↗
+                        </a>
                       </span>
-                    )}
-
-                    <motion.a
-                      href={app.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`${styles.appCta} ${styles.appCtaWeb}`}
-                      onClick={() => trackWebsite("hero_chip")}
-                      whileTap={{ scale: 0.95 }}
-                      aria-label={`${app.name} website (opens in a new tab)`}
-                    >
-                      <Globe size={13} strokeWidth={2.4} aria-hidden="true" /> Website <span aria-hidden="true">↗</span>
-                    </motion.a>
+                    </span>
                   </li>
                 );
               })}

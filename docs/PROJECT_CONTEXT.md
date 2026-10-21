@@ -329,6 +329,16 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
   tooltip and a screen-reader span. The grid uses `repeat(2, minmax(0, 1fr))` (with plain 1fr,
   the unwrapped name pushed a card past the window edge). The polaroid's bottom border is
   40→32px to keep the About window from scrolling (right 411px ≤ left 414px).
+  **Minimal redesign (owner: "clumsy and packed")**: the cards and four bold buttons were replaced by a
+  quiet list under the photo (232px, the photo's width): 32px icon, app name, then text links
+  📱 **Try app** (blue = in-site prototype) · 🌐 **Website ↗** (grey = external). No borders or
+  shadows. The hero keeps one primary CTA (LinkedIn). The polaroid is back to its original 260px /
+  40px bottom border. Right column 390px ≤ left 414px.
+  **Icon fix (owner: one small, one big)**: Kissan's `new_logo.png` is mostly transparent padding
+  (logo = 54% of width) while Gau's filled 81%. Both are now re-rendered the same way: logo cropped
+  to its bounds and scaled to **90% width on a white 256px square** →
+  `public/apps/kissan-sampurna-icon.png` / `gau-sampurna-icon.png` (old `.webp` deleted). The icon
+  slot is 40px (radius 10). Right column 398px ≤ left 414px. Use the same recipe for any new app.
 - [ ] Pre-existing: on shorter screens (e.g. 1440×780) the About text column alone (505px) is
   taller than the 64vh window, so the window scrolls. Consider a min height for About.
   2026-10-21: Added the Gau Sampurna prototype (prod branch). See its section.
@@ -341,3 +351,5 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
   design decisions.
 - 2026-10-21: Committed everything (Claude setup + UI/content) on `prod`, fast-forwarded
   `dev` locally. Push pending a GitHub account switch.
+- 2026-10-21: Committed the minimal apps shelf + equal-size app icons on `prod`, fast-forwarded
+  `dev`, pushed both to GitHub.

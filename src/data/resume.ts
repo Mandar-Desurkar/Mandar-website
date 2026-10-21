@@ -43,7 +43,7 @@ export const shippedApps: ShippedApp[] = [
   {
     name: "Kissan Sampurna",
     caption: "Crop advisory",
-    icon: "/apps/kissan-sampurna.webp",
+    icon: "/apps/kissan-sampurna-icon.png",
     website: "https://www.kissansampurna.com/",
     prototype: "kissan-sampurna",
   },

@@ -164,56 +164,43 @@
   transform: rotate(2deg);
 }
 
-/* "Apps I've built" under the photo: one card per app, identical CTA order in every card */
+/* "Apps I've built" under the photo: a quiet list, same width as the photo, no boxes */
 .appsShelf {
-  width: 300px;
-  max-width: 100%;
+  width: 232px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 }
 
 .appsCaption {
-  padding-left: 2px;
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: #8e8e93;
+  color: #a1a1a6;
 }
 
-.appsGrid {
+.appsList {
   list-style: none;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr)); /* equal cards, never wider than the column */
-  gap: 10px;
-}
-
-.appCard {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 9px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.1), 0 4px 14px rgba(0, 0, 0, 0.06);
+  gap: 14px;
 }
 
-.appHeader {
+.appRow {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 2px;
+  gap: 12px;
 }
 
 .appIcon {
   flex-shrink: 0;
-  width: 34px;
-  height: 34px;
+  width: 40px;
+  height: 40px;
   overflow: hidden;
-  border-radius: 9px;
+  border-radius: 10px;
   background: #fff;
-  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.14), 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.14);
 }
 
 .appIcon img {
@@ -223,65 +210,79 @@
   object-fit: cover;
 }
 
-/* Wraps to two lines ("Kissan / Sampurna") so both cards keep equal width and height */
-.appName {
+.appText {
   min-width: 0;
-  font-size: 0.78rem;
-  font-weight: 700;
-  line-height: 1.2;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.appName {
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.25;
+  white-space: nowrap;
   color: var(--ink-black);
 }
 
-/* Shared CTA shape; colour + icon say which kind it is */
-.appCta {
+.appLinks {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 5px;
-  height: 26px;
-  border-radius: 8px;
+  gap: 6px;
+}
+
+/* Text links, not buttons: secondary to the hero's main CTA */
+.appLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border: none;
+  background: none;
   font: inherit;
   font-size: 0.72rem;
-  font-weight: 700;
+  font-weight: 600;
   white-space: nowrap;
   cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease;
+  transition: color 0.15s ease;
 }
 
-/* 📱 App = solid: an experience inside this site */
-.appCtaApp {
-  border: none;
-  background: var(--ink-blue);
-  color: #fff;
-}
-
-.appCtaApp:hover {
-  background: #0058b0;
-}
-
-/* 🌐 Website = outline + ↗: leaves to an external site */
-.appCtaWeb {
-  border: 1px solid rgba(0, 102, 204, 0.4);
-  background: #fff;
+/* 📱 Try app = the richer action, in the accent colour */
+.appLinkApp {
   color: var(--ink-blue);
 }
 
-.appCtaWeb:hover {
-  border-color: var(--ink-blue);
-  background: #eef5fd;
+.appLinkApp:hover {
+  color: #004a99;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
-.appCtaDisabled {
-  border: 1px dashed #d1d1d6;
-  background: #f5f5f7;
+/* 🌐 Website ↗ = external, deliberately quieter */
+.appLinkWeb {
+  color: #6e6e73;
+}
+
+.appLinkWeb:hover {
+  color: var(--ink-black);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.appLinkSoon {
   color: #a1a1a6;
   cursor: default;
 }
 
-.appCtaApp:focus-visible,
-.appCtaWeb:focus-visible {
+.linkDot {
+  color: #c7c7cc;
+  font-size: 0.72rem;
+}
+
+.appLink:focus-visible {
   outline: 2px solid var(--ink-blue);
   outline-offset: 2px;
+  border-radius: 3px;
 }
 
 /* Polaroid Image Frame */
@@ -289,10 +290,10 @@
   position: relative;
   z-index: 2;
   width: 220px;
-  height: 252px; /* Taller for the bottom text area */
+  height: 260px; /* Taller for the bottom text area */
   border-radius: 2px;
   background: white;
-  padding: 10px 10px 32px 10px; /* Thicker bottom border */
+  padding: 10px 10px 40px 10px; /* Thicker bottom border */
   box-shadow: 2px 5px 15px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0,0,0,0.05);
   transform: rotate(3deg); /* Slight tilt */
 }
