@@ -1,0 +1,332 @@
+/* macOS small Music widget (170px wide) on the desktop, behind windows */
+.widget {
+  --label: #1d1d1f;
+  --secondary-label: rgba(60, 60, 67, 0.6);
+  --tertiary-fill: rgba(60, 60, 67, 0.18);
+  --music-red: #fa2d48;
+
+  position: absolute;
+  top: 84px; /* aligned with the top edge of the open window */
+  left: 20px;
+  z-index: 5; /* same layer as desktop icons, under windows (10) */
+  box-sizing: border-box;
+  width: 170px;
+  height: 212px;
+  padding: 14px 14px 9px;
+  border-radius: 22px;
+  /* Widget material: bright frosted glass with a hairline edge and soft depth */
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: saturate(180%) blur(40px);
+  -webkit-backdrop-filter: saturate(180%) blur(40px);
+  box-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.12),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.7),
+    0 1px 3px rgba(0, 0, 0, 0.08),
+    0 12px 32px rgba(0, 0, 0, 0.22);
+  color: var(--label);
+  font-family: var(--font-system);
+  -webkit-font-smoothing: antialiased;
+  perspective: 700px; /* for the front/back flip */
+}
+
+@media (max-width: 767.98px) {
+  .widget {
+    display: none;
+  }
+}
+
+.face {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Hidden media element (a <video> so muted autoplay is allowed); kept in layout, not display:none */
+.media {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---------- Front: player ---------- */
+
+.topRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.coverSlot {
+  position: relative;
+  width: 58px;
+  height: 58px;
+}
+
+.cover {
+  position: absolute;
+  inset: 0;
+  border-radius: 9px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--music-red), #a833b9);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.22);
+}
+
+/* Hairline inner edge, like artwork in Apple Music */
+.cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+}
+
+.cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sideButtons {
+  height: 58px;
+  margin: -4px -6px 0 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.iconBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--secondary-label);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.iconBtn:hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--label);
+}
+
+/* Secondary action (product notes): quieter than the speaker */
+.subtle {
+  color: rgba(60, 60, 67, 0.4);
+}
+
+/* While muted, tint the glyph so the one action that adds sound stands out */
+.muted,
+.muted:hover {
+  color: var(--music-red);
+}
+
+.info {
+  margin-top: auto;
+  min-width: 0;
+}
+
+.title,
+.subtitle {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.title {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 19px;
+  letter-spacing: -0.015em;
+}
+
+.subtitle {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 17px;
+  letter-spacing: -0.005em;
+  color: var(--secondary-label);
+}
+
+/* ---------- Progress / scrubber ---------- */
+
+.progress {
+  margin-top: 9px;
+}
+
+.bar {
+  position: relative;
+  height: 12px; /* generous hit area around a thin track */
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  touch-action: none;
+  border-radius: 6px;
+}
+
+.barTrack {
+  position: relative;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--tertiary-fill);
+  overflow: hidden;
+  transition: height 0.15s ease;
+}
+
+.barFill {
+  position: absolute;
+  inset: 0;
+  background: var(--label);
+  transform-origin: left center;
+  transition: transform 0.25s linear;
+}
+
+.knob {
+  position: absolute;
+  top: 50%;
+  width: 11px;
+  height: 11px;
+  margin: -5.5px 0 0 -5.5px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  pointer-events: none;
+}
+
+.bar:hover .barTrack,
+.bar:focus-visible .barTrack,
+.bar[data-scrubbing="true"] .barTrack {
+  height: 6px;
+}
+
+.bar:hover .knob,
+.bar:focus-visible .knob,
+.bar[data-scrubbing="true"] .knob {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Follow the finger exactly while dragging */
+.bar[data-scrubbing="true"] .barFill {
+  transition: none;
+}
+
+.times {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1px;
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--secondary-label);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Controls ---------- */
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 2px -8px 0;
+}
+
+.controlBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 34px;
+  padding: 0;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--label);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.controlBtn:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.iconSwap {
+  display: flex;
+}
+
+.iconBtn:focus-visible,
+.controlBtn:focus-visible,
+.doneBtn:focus-visible,
+.bar:focus-visible {
+  outline: 2px solid var(--ink-blue);
+  outline-offset: 1px;
+}
+
+/* ---------- Back: product notes ---------- */
+
+.notesHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.notesTitle {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.doneBtn {
+  padding: 2px 0;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--music-red);
+  cursor: pointer;
+}
+
+.notesList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 11.5px;
+  line-height: 15px;
+  color: var(--secondary-label);
+}
+
+.notesList strong {
+  font-weight: 600;
+  color: var(--label);
+}
+
+.hint {
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.hint code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  background: rgba(0, 0, 0, 0.06);
+  padding: 1px 3px;
+  border-radius: 4px;
+  word-break: break-all;
+}

@@ -50,7 +50,12 @@ scan 'lorem|ipsum|TODO|TBD|FIXME' "TODO/lorem markers" warn
 scan 'console\.(log|debug)' "console.log calls" warn
 
 section "Security"
-out="$(grep -rn 'target="_blank"' src/ | grep -v 'noopener')"
+# JSX often splits attributes across lines, so look at a few lines around each match
+out="$(grep -rn -B3 -A3 'target="_blank"' src/ | awk '
+  /target="_blank"/ { hit = $0; win = $0; n = 7; next }
+  n > 0 { win = win $0; n-- }
+  n == 0 && hit != "" { if (win !~ /noopener/) print hit; hit = "" }
+  END { if (hit != "" && win !~ /noopener/) print hit }')"
 if [ -n "$out" ]; then fail "target=_blank without rel=noopener"; printf '%s\n' "$out" | sed 's/^/      /'; else pass "External links use rel=noopener"; fi
 out="$(grep -rnE "window\.open\([^)]*'_blank'\)" src/)"
 if [ -n "$out" ]; then warn "window.open without noopener"; printf '%s\n' "$out" | sed 's/^/      /'; else pass "window.open calls safe"; fi

@@ -8,19 +8,64 @@ export const profile = {
   email: "mandardesurkar3@gmail.com",
   phone: "+91 8073118693",
   linkedin: "https://www.linkedin.com/in/mandar-desurkar/",
+  // Export the resume PDF from Overleaf to public/resume.pdf. Until it exists, the hero
+  // falls back to "Connect on LinkedIn" + "Get in touch".
+  resumeUrl: "/resume.pdf",
+  // Short hero line; keep it to about 3 lines so the About window fits without scrolling.
+  // Supports **bold** via RichText.
+  intro:
+    "I take AI-powered products from 0→1, from the first PRD to launch, growth and monetization. Currently Associate PM at Silo Fortune, building agritech apps for India's farmers.",
+  // Full resume summary, for longer-form use (e.g. structured data).
   summary:
     "Associate Product Manager with 2.5+ years of owning AI-powered 0→1 products, from strategy, PRDs and roadmaps to launch, growth and monetization. I grew two agritech apps to 250K+ installs, shipped computer-vision diagnostics and satellite farm monitoring, and built the CRM and last-mile stack behind ₹1 Cr+ of sales a month.",
   metaDescription:
     "Associate Product Manager building AI-powered 0→1 products: 250K+ app installs, 3× trial conversion, and the CRM behind ₹1 Cr+ in monthly sales.",
 };
 
-export const kpis = [
-  { value: "250K+", label: "App Installs" },
-  { value: "3×", label: "Trial Conversion" },
-  { value: "₹1 Cr+", label: "Monthly Sales Enabled" },
+// One-time macOS-style notification shown ~20s into a first visit (HiringNotification.tsx)
+export const hiringNudge = {
+  title: "📬 Open to PM roles",
+  body: "Looking for my next Product Manager role, building AI-powered 0→1 products.",
+  cta: "Let's talk",
+};
+
+// "Apps I've built" shelf under the hero photo. Tapping the icon runs the richest action
+// available: the interactive prototype if there is one, otherwise the live website.
+export type ShippedApp = {
+  name: string;
+  caption: string;
+  icon: string;
+  website: string;
+  prototype?: "kissan-sampurna" | "gau-sampurna";
+};
+
+export const shippedApps: ShippedApp[] = [
+  {
+    name: "Kissan Sampurna",
+    caption: "Crop advisory",
+    icon: "/apps/kissan-sampurna.webp",
+    website: "https://www.kissansampurna.com/",
+    prototype: "kissan-sampurna",
+  },
+  {
+    name: "Gau Sampurna",
+    caption: "Dairy farming app",
+    icon: "/apps/gau-sampurna-icon.png", // official app icon (prod app.json)
+    website: "https://www.gausampurna.com/",
+    prototype: "gau-sampurna",
+  },
 ];
 
-export type ExperienceGroup = { title?: string; bullets: string[] };
+// Hero KPI cards count up from 0 to `value`; `decimals` is used only while counting, so small
+// numbers (3, 1) still visibly tick before landing on the clean final value.
+export const kpis = [
+  { prefix: "", value: 250, suffix: "K+", decimals: 0, label: "App Installs" },
+  { prefix: "", value: 3, suffix: "×", decimals: 1, label: "Trial Uplift" },
+  { prefix: "₹", value: 1, suffix: " Cr+", decimals: 1, label: "Monthly Sales" },
+];
+
+// `prototype` makes the group title open an interactive app prototype (see src/components/prototype).
+export type ExperienceGroup = { title?: string; prototype?: "kissan-sampurna"; bullets: string[] };
 
 export type Experience = {
   role: string;
@@ -49,6 +94,7 @@ export const experiences: Experience[] = [
     groups: [
       {
         title: "Kissan Sampurna & Gau Sampurna Apps: 0→1 Launch & AI Features",
+        prototype: "kissan-sampurna",
         bullets: [
           "Led the launch of two farmer apps with a **15-person team** (Engineering, Design, Data Science) to **250K+ combined installs** and 20K+ MAU, and designed the V1 UI/UX hands-on in Figma, from user flows to developer-ready screens.",
           "**Shipped AI-powered satellite monitoring**, letting farmers geotag field boundaries on their phones to track crop health (via vegetation indices), disease risk and irrigation needs across the whole farm, with alerts in **13 languages**.",
@@ -124,6 +170,7 @@ export type Project = {
   description: string;
   tags: string[];
   link?: string;
+  prototype?: "kissan-sampurna";
 };
 
 export const projects: Project[] = [
@@ -135,6 +182,7 @@ export const projects: Project[] = [
     description:
       "Two farmer apps launched with a 15-person team: satellite crop monitoring, computer-vision diagnosis of crop and 20+ cattle diseases, a crop recommendation engine across 655K+ farm profiles, and a 32+ SKU marketplace.",
     tags: ["AgriTech", "AI / CV", "Mobile"],
+    prototype: "kissan-sampurna",
   },
   {
     slug: "sampurna-growth",

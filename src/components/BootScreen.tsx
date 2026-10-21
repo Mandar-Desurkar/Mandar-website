@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./BootScreen.module.css";
 import { Monitor } from "lucide-react";
+import { trackEvent } from "@/lib/analytics";
 
 export default function BootScreen() {
   const [isBooting, setIsBooting] = useState(true);
@@ -26,6 +27,7 @@ export default function BootScreen() {
 
     // Unmount after 1.25 seconds (gives time for bar to fill and pause)
     const timeout = setTimeout(() => {
+      trackEvent("Completed Boot Screen", {});
       setIsBooting(false);
     }, 1250);
 

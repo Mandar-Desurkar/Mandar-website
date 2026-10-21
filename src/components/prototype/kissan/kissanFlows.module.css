@@ -1,0 +1,1272 @@
+/* Crop Guide + Farm Monitoring screens (dev branch) at 375px. Values mirror the RN ScaledSheets. */
+
+/* ---------- Shared: TopBarNew, PrimaryButton (pill), footer ---------- */
+.topBarNew {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 20px;
+  background: #fff;
+}
+
+.backCircle,
+.topBarSpacer {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.backCircle {
+  border-radius: 50%;
+  border: 1px solid #d8f3dc;
+}
+
+.topBarSpacer {
+  font-size: 20px;
+  color: #111827;
+}
+
+.topBarNewTitle {
+  flex: 1;
+  text-align: center;
+  font-size: 19px;
+  font-weight: 700;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pillBtn {
+  width: 100%;
+  min-height: 52px;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 999px;
+  background: #004691;
+  color: #fff;
+  font: inherit;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.pillBtn:disabled {
+  background: #9ca3af;
+  opacity: 0.5;
+  cursor: default;
+}
+
+.gradientBtn {
+  width: 100%;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #002e60, #004691);
+  color: #fff;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.footer {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 20px 16px;
+  background: #fff;
+}
+
+.flex {
+  flex: 1;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.hr {
+  display: block;
+  height: 1px;
+  background: #f1f5f9;
+}
+
+.hrLight {
+  display: block;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* Keep children of scrolling flex columns at their natural size (no collapsing images) */
+.qBody > *,
+.reportBody > *,
+.markBody > *,
+.completeBody > *,
+.fmReportBody > * {
+  flex-shrink: 0;
+}
+
+/* ---------- Crop Guide: question screens ---------- */
+.qBody {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 8px 20px 24px;
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.qTitle {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1f2937;
+  line-height: 1.25;
+}
+
+.qSubtitle {
+  font-size: 15px;
+  line-height: 22px;
+  color: #6b7280;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 12px;
+}
+
+.seasonCard,
+.budgetCard {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.cardSelectedBlue {
+  border: 1.5px solid #004691;
+  background: #004691;
+}
+
+.seasonCard .seasonImg {
+  height: 108px;
+}
+
+.seasonLabel {
+  padding: 12px 14px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.cardSelectedBlue .seasonLabel,
+.cardSelectedBlue .budgetLabel,
+.cardSelectedBlue .budgetHint {
+  color: #fff;
+}
+
+.methodCard {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.methodCard .methodImg {
+  height: 150px;
+  border-radius: 16px;
+}
+
+.methodRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 28px;
+}
+
+.methodLabel {
+  flex: 1;
+  font-size: 16px;
+  color: #1f2937;
+}
+
+.checkbox {
+  width: 24px;
+  height: 24px;
+  border: 1.5px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.checkboxOn {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  background: #004691;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.budgetCard .budgetImg {
+  height: 96px;
+}
+
+.budgetText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px 14px;
+}
+
+.budgetLabel {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.budgetHint {
+  font-size: 12.5px;
+  line-height: 1.35;
+  color: #6b7280;
+}
+
+/* ---------- Crop Guide: report ---------- */
+.reportBody {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 8px 20px 32px;
+}
+
+.cgHero {
+  position: relative;
+  min-height: 236px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.cgHero > img {
+  position: absolute;
+  inset: 0;
+}
+
+.cgHeroShade {
+  position: relative;
+  min-height: 236px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px;
+  background: linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.95) 62%);
+}
+
+.topPickBadge {
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #0f2a4a;
+}
+
+.heroCrop {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.05;
+  color: #0f2a4a;
+}
+
+.matchPill {
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: #d3d800;
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f2a4a;
+}
+
+.sowRow {
+  padding: 9px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.6);
+  font-size: 13.5px;
+  color: #1f2937;
+}
+
+.rowBetween {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.cardTitle {
+  flex: 1;
+  font-size: 19px;
+  font-weight: 700;
+  color: #0f2a4a;
+  line-height: 1.25;
+}
+
+.caption {
+  margin-top: 2px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.cardBody {
+  font-size: 14px;
+  color: #4b5563;
+  margin-top: -6px;
+}
+
+.passed {
+  flex-shrink: 0;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid #bbe5c8;
+  background: #e7f6ec;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #15803d;
+}
+
+.fitGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.fitCell,
+.profit {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #f7f9fb;
+}
+
+.fitIcon {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.fitLabel {
+  display: block;
+  font-size: 12.5px;
+  color: #6b7280;
+}
+
+.fitValue {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  color: #15803d;
+}
+
+.profitText {
+  flex: 1;
+}
+
+.profitValue {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.amberPill {
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid #f7d27a;
+  background: #fff7e0;
+  font-size: 12px;
+  font-weight: 700;
+  color: #d97706;
+}
+
+.readyTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f2a4a;
+}
+
+.compareRow {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.compareCurrent {
+  border-color: #93c5fd;
+  background: #eff6ff;
+}
+
+.compareIcon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.compareBody {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.compareHead {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.compareName {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f2a4a;
+}
+
+.seasonPill {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #f1f2f4;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #6b7280;
+}
+
+.compareCurrent .seasonPill {
+  background: #bfdbfe;
+}
+
+.viewingPill,
+.matchScorePill {
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.viewingPill {
+  background: #004691;
+}
+
+.progressRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.track {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: #e5e7eb;
+  overflow: hidden;
+}
+
+.fill {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+}
+
+.progressText {
+  font-size: 12px;
+  font-weight: 700;
+  color: #4b5563;
+}
+
+/* ---------- Farm Monitoring: mark your farm ---------- */
+.markBody {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 12px 20px 24px;
+}
+
+.methodCardLarge {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  background: #fff;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.cardSelectedGreen {
+  border: 2px solid #15803d;
+}
+
+.methodCardLarge .methodLargeImg {
+  height: 150px;
+  border-radius: 16px;
+}
+
+.greenCheck {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #15803d;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.radioGrey {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #6b7280;
+}
+
+.saveLater {
+  font-size: 14px;
+  color: #013f82;
+}
+
+/* ---------- Farm Monitoring: draw boundary ---------- */
+.mapArea {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.mapTip {
+  position: absolute;
+  top: 12px;
+  left: 16px;
+  right: 16px;
+  z-index: 2;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-size: 13px;
+  color: #1f2937;
+}
+
+.mapSvg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.boundaryFill {
+  fill: rgba(255, 255, 255, 0.18);
+  animation: fadeIn 0.4s ease 1.3s both;
+}
+
+.boundaryLine {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 3;
+  stroke-linejoin: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: draw 1.3s ease-in-out 0.2s forwards;
+}
+
+.pin {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pinPop 0.3s ease-out both;
+}
+
+@keyframes draw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes pinPop {
+  from { opacity: 0; transform: scale(0.2); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .boundaryLine { animation: none; stroke-dashoffset: 0; }
+  .boundaryFill,
+  .pin { animation: none; }
+}
+
+.mapSheet {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: -18px;
+  padding: 16px 20px;
+  border-radius: 20px 20px 0 0;
+  background: #fff;
+  box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.12);
+  position: relative;
+  z-index: 3;
+}
+
+.mapControls {
+  display: flex;
+  gap: 8px;
+}
+
+.mapControl {
+  padding: 6px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+  background: #fff;
+  font: inherit;
+  font-size: 13px;
+  color: #013f82;
+  cursor: pointer;
+}
+
+.areaBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.areaLabel {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.areaValue {
+  font-size: 26px;
+  font-weight: 700;
+  color: #0f2a4a;
+}
+
+.areaCaption {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* ---------- Farm Monitoring: setup complete ---------- */
+.completeBody {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 28px 20px;
+  text-align: center;
+}
+
+.completeChip {
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: #e7f6ec;
+  color: #15803d;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+}
+
+.completeTitle {
+  margin-top: 6px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #0f2a4a;
+}
+
+.completeSub {
+  font-size: 15px;
+  line-height: 1.45;
+  color: #6b7280;
+}
+
+.farmCard {
+  width: 100%;
+  margin-top: 18px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  text-align: left;
+}
+
+.farmCard .farmCardImg {
+  height: 170px;
+}
+
+.farmCardRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 16px;
+  font-size: 15px;
+  color: #1f2937;
+}
+
+.activeDot {
+  font-size: 13px;
+  font-weight: 700;
+  color: #15803d;
+}
+
+.outlinePill {
+  width: 100%;
+  padding: 13px 24px;
+  border: 1.5px solid #004691;
+  border-radius: 999px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: #004691;
+}
+
+/* ---------- Farm Monitoring: report ---------- */
+.fmReportBody {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 8px 16px 28px;
+  background: #f8fafc;
+}
+
+.naHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.naTitleStack {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.warnIcon {
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: #fef2f2;
+  color: #dc2626;
+  font-size: 18px;
+}
+
+.naTitle {
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.15;
+  color: #dc2626;
+}
+
+.syncStack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.syncPill {
+  padding: 4px 10px;
+  border: 1px solid #fde68a;
+  border-radius: 100px;
+  background: #fffbeb;
+  font-size: 12px;
+  font-weight: 700;
+  color: #d97706;
+}
+
+.updated {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.cropArea {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f2a4a;
+}
+
+.farmLocation {
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+.naDescription {
+  font-size: 14px;
+  line-height: 1.45;
+  color: #475569;
+}
+
+.details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  row-gap: 12px;
+}
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-right: 8px;
+}
+
+.detailLabel {
+  font-size: 12.5px;
+  color: #94a3b8;
+}
+
+.detailValue {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #0f2a4a;
+}
+
+.yourFarmTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.tab {
+  padding: 6px 16px;
+  border: none;
+  border-radius: 999px;
+  background: #e2e8f0;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  color: #004691;
+  cursor: pointer;
+}
+
+.tabActive {
+  background: #004691;
+  color: #fff;
+}
+
+.overlayWrap {
+  position: relative;
+  height: 165px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.overlaySvg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.legend {
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+  color: #475569;
+}
+
+.legend span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.sectionTitle {
+  margin-bottom: -6px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f2a4a;
+}
+
+.recCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.06);
+}
+
+.recTop {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.recTitleGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.recIcon {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+}
+
+.recTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.audioBtn {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 70, 145, 0.1);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.audioActive {
+  background: #004691;
+  color: #fff;
+}
+
+.zonePill {
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.recBody {
+  font-size: 14px;
+  line-height: 1.45;
+  color: #475569;
+}
+
+.scanBtn {
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 999px;
+  background: #004691;
+  color: #fff;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.doneBtn {
+  align-self: center;
+  padding: 7px 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background: #fff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  color: #002a57;
+  cursor: pointer;
+}
+
+.doneBtnDone {
+  border-color: #15803d;
+  background: #e7f6ec;
+  color: #15803d;
+}
+
+.accordion {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+
+.vitalsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.vital {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.vitalTile {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.vitalText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.vitalLabel {
+  font-size: 13px;
+  color: #475569;
+}
+
+.vitalValue {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.stageHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.stageIcon {
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+  background: #ecfdf5;
+  color: #059669;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+}
+
+.stageTitleGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.stageBadge {
+  padding: 3px 8px;
+  border-radius: 8px;
+  background: #e6f4ea;
+  font-size: 12px;
+  font-weight: 700;
+  color: #059669;
+}
+
+.stageName {
+  font-size: 24px;
+  font-weight: 700;
+  color: #0f2a4a;
+}
+
+.bars {
+  display: flex;
+  gap: 8px;
+}
+
+.bar {
+  flex: 1;
+  height: 8px;
+  border-radius: 4px;
+}
+
+.stageLabels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: -6px;
+  font-size: 11.5px;
+  color: #64748b;
+}
+
+.stageLabelBold {
+  font-weight: 700;
+  color: #0f2a4a;
+}
+
+.timing {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.dayText {
+  font-size: 14.5px;
+  color: #1e293b;
+}
+
+.countdown {
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: #eef2f6;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f2a4a;
+}
+
+.confirmBox {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 12px;
+  background: rgba(21, 128, 61, 0.1);
+}
+
+.confirmHeader {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.helpCircle {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #15803d;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.confirmTitle {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f2a4a;
+}
+
+.confirmBody {
+  display: block;
+  font-size: 13px;
+  color: #475569;
+}
+
+.confirmActions {
+  display: flex;
+  gap: 10px;
+}
+
+.pillOutline,
+.pillSolid {
+  flex: 1;
+  padding: 9px 12px;
+  border-radius: 999px;
+  text-align: center;
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 700;
+}
+
+.pillOutline {
+  border: 1.5px solid #15803d;
+  color: #15803d;
+}
+
+.pillSolid {
+  border: none;
+  background: #15803d;
+  color: #fff;
+  cursor: pointer;
+}
+
+.thanks {
+  padding: 10px;
+  border-radius: 12px;
+  background: #e7f6ec;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: #15803d;
+}

@@ -4,13 +4,14 @@ import { useState, useEffect, useRef } from "react";
 import styles from "./Navbar.module.css";
 import Link from "next/link";
 import { BatteryMedium, Menu, X, Bluetooth, Wifi, Search, SlidersHorizontal } from "lucide-react";
-import { useWindow } from "@/context/WindowContext";
+import { useWindow, type OpenSource, type SectionId } from "@/context/WindowContext";
+import { trackEvent } from "@/lib/analytics";
 
 export default function Navbar() {
   const [currentTime, setCurrentTime] = useState<Date | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const { setActiveTab, setIsMinimized } = useWindow();
+  const { openSection } = useWindow();
 
   useEffect(() => {
     // Only set time on client to avoid hydration mismatch
@@ -40,11 +41,16 @@ export default function Navbar() {
     { name: "Contact", id: "contact" as const },
   ];
 
-  const handleNavClick = (e: React.MouseEvent, id: 'about' | 'experience' | 'education' | 'projects' | 'contact') => {
+  // openSection also reopens a closed window (previously menu links left it closed)
+  const handleNavClick = (e: React.MouseEvent, id: SectionId, source: OpenSource) => {
     e.preventDefault();
-    setActiveTab(id);
-    setIsMinimized(false);
+    openSection(id, source);
     setIsMenuOpen(false);
+  };
+
+  const toggleMenu = () => {
+    if (!isMenuOpen) trackEvent("Opened System Menu", {});
+    setIsMenuOpen(!isMenuOpen);
   };
 
   return (
@@ -52,7 +58,7 @@ export default function Navbar() {
       <nav className={styles.nav} ref={menuRef}>
         <button 
           className={`${styles.appleMenuBtn} ${isMenuOpen ? styles.menuOpen : ""}`}
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          onClick={toggleMenu}
           aria-label="Toggle System Menu"
         >
           <span className={styles.brandTitle}>Mandar Desurkar</span>
@@ -68,7 +74,7 @@ export default function Navbar() {
               key={link.name} 
               href={`#${link.id}`} 
               className={styles.menuItem}
-              onClick={(e) => handleNavClick(e, link.id)}
+              onClick={(e) => handleNavClick(e, link.id, "menu_bar")}
             >
               {link.name}
             </a>
@@ -85,7 +91,7 @@ export default function Navbar() {
                 key={link.name} 
                 href={`#${link.id}`} 
                 className={styles.dropdownItem}
-                onClick={(e) => handleNavClick(e, link.id)}
+                onClick={(e) => handleNavClick(e, link.id, "system_menu")}
               >
                 {link.name}
               </a>

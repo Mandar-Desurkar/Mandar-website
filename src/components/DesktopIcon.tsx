@@ -1,32 +1,28 @@
 "use client";
 
-import { useWindow } from "@/context/WindowContext";
+import { useWindow, type SectionId } from "@/context/WindowContext";
 import styles from "./DesktopIcon.module.css";
 import React from "react";
 
 interface DesktopIconProps {
-  id: string;
+  id: SectionId;
   title: string;
   icon: React.ReactNode;
   dotColor?: string;
 }
 
 export default function DesktopIcon({ id, title, icon, dotColor }: DesktopIconProps) {
-  const { setActiveTab, setIsMinimized, setIsClosed } = useWindow();
+  const { openSection } = useWindow();
 
   const handleClick = () => {
     if (typeof window !== "undefined" && window.innerWidth < 768) {
-      setActiveTab(id);
-      setIsMinimized(false);
-      setIsClosed(false);
+      openSection(id, "desktop_icon");
     }
   };
 
   const handleDoubleClick = () => {
     if (typeof window !== "undefined" && window.innerWidth >= 768) {
-      setActiveTab(id);
-      setIsMinimized(false);
-      setIsClosed(false);
+      openSection(id, "desktop_icon");
     }
   };
 

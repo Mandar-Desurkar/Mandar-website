@@ -2,6 +2,7 @@
 
 import styles from "./Education.module.css";
 import { skills } from "@/data/resume";
+import { trackEvent } from "@/lib/analytics";
 
 const educationLogs: {
   degree: string;
@@ -51,7 +52,13 @@ export default function Education() {
               
               <div className={styles.metaData}>
                 {edu.link ? (
-                  <a href={edu.link} target="_blank" rel="noopener noreferrer" className={styles.schoolLink}>
+                  <a
+                    href={edu.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.schoolLink}
+                    onClick={() => trackEvent("Clicked External Link", { link_type: "school_map", label: edu.school })}
+                  >
                     <span className={styles.atSymbol}>@</span>
                     <span className={styles.school}>{edu.school}</span>
                   </a>

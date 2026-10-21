@@ -3,6 +3,7 @@
 import { motion, useDragControls, Variants } from "framer-motion";
 import TrafficLights from "./TrafficLights";
 import { useWindow } from "@/context/WindowContext";
+import { trackEvent } from "@/lib/analytics";
 import { useEffect, useState, useRef } from "react";
 
 export default function DraggableWindow({ 
@@ -33,8 +34,8 @@ export default function DraggableWindow({
 
     switch (activeTab) {
       case 'about':
-        newWidth = '60vw';
-        newHeight = '70vh';
+        newWidth = '65vw'; // wide enough for "I'm a product builder." on one line
+        newHeight = '64vh'; // hugs hero, KPIs and CTAs with no empty space below
         break;
       case 'experience':
         newWidth = '70vw';
@@ -49,8 +50,8 @@ export default function DraggableWindow({
         newHeight = '80vh';
         break;
       case 'contact':
-        newWidth = '50vw';
-        newHeight = '60vh';
+        newWidth = '55vw';
+        newHeight = '68vh'; // fits the card and footer without clipping
         break;
       default:
         newWidth = '60vw';
@@ -99,6 +100,10 @@ export default function DraggableWindow({
 
     const handlePointerUp = () => {
       setIsResizing(false);
+      const rect = windowRef.current?.getBoundingClientRect();
+      if (rect && (Math.round(rect.width) !== Math.round(startWidth) || Math.round(rect.height) !== Math.round(startHeight))) {
+        trackEvent("Resized Window", { section: activeTab, width: Math.round(rect.width), height: Math.round(rect.height) });
+      }
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('pointerup', handlePointerUp);
     };
@@ -156,6 +161,7 @@ export default function DraggableWindow({
       dragControls={dragControls}
       dragListener={false}
       dragMomentum={false}
+      onDragEnd={() => trackEvent("Moved Window", { section: activeTab })}
       style={{ 
         position: 'absolute', 
         zIndex: isMaximized ? 9999 : 10,

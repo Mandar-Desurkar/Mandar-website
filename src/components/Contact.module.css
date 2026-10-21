@@ -1,5 +1,6 @@
 .contactSection {
-  padding: 2.5rem 0 4rem 0;
+  /* side padding leaves room for the 1deg tilt so the dashed box isn't clipped */
+  padding: 2.5rem 2rem 2rem 2rem;
 }
 
 .container {

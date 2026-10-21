@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import styles from "./Dock.module.css";
 import { Smile, FileText, Rocket, GraduationCap, Mail, Settings, Trash2, AlertTriangle } from "lucide-react";
 import { FaLinkedin } from "react-icons/fa";
-import { useWindow } from "@/context/WindowContext";
+import { useWindow, type SectionId } from "@/context/WindowContext";
 
 export default function Dock() {
   const [popupMessage, setPopupMessage] = useState<{title: string, body: string} | null>(null);
@@ -31,7 +31,7 @@ export default function Dock() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
-  const handleIconClick = (id: string, title: string) => {
+  const handleIconClick = (id: SectionId, title: string) => {
     setActiveTab(id);
     if (isMinimized) {
       setIsMinimized(false);

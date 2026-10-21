@@ -1,19 +1,23 @@
 "use client";
 
 import { useWindow } from "@/context/WindowContext";
+import { trackEvent } from "@/lib/analytics";
 
 export default function TrafficLights() {
-  const { isMaximized, setIsMaximized, setIsMinimized, setIsClosed } = useWindow();
+  const { activeTab, isMaximized, setIsMaximized, setIsMinimized, setIsClosed } = useWindow();
 
   const handleRedClick = () => {
+    trackEvent("Closed Window", { section: activeTab });
     setIsClosed(true);
   };
 
   const handleYellowClick = () => {
+    trackEvent("Minimized Window", { section: activeTab });
     setIsMinimized(true);
   };
 
   const handleGreenClick = () => {
+    trackEvent(isMaximized ? "Restored Window" : "Maximized Window", { section: activeTab });
     setIsMaximized(!isMaximized);
   };
 

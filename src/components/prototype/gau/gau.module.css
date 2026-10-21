@@ -1,0 +1,1104 @@
+/* Gau Sampurna screens (prod branch) at 375px. Values mirror the RN StyleSheets. */
+
+.flex {
+  flex: 1;
+}
+
+/* ---------- Shared top bar (TopBarNew with cow subtitle) ---------- */
+.topBar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  background: #fff;
+}
+
+.backCircle,
+.backSpacer {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+}
+
+.backCircle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 50%;
+  font-size: 16px;
+  color: #1b4332;
+}
+
+.topTitles {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.topTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: #231f20;
+}
+
+.topSubtitle {
+  font-size: 12px;
+  color: #7a7a7a;
+}
+
+.primaryBtn {
+  width: 100%;
+  height: 46px;
+  border: none;
+  border-radius: 99px;
+  background: #004691;
+  color: #fff;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ghostBtn,
+.outlineBtn {
+  display: block;
+  width: 100%;
+  padding: 11px 0;
+  border-radius: 99px;
+  text-align: center;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  color: #004691;
+}
+
+.outlineBtn {
+  border: 1.5px solid #004691;
+  background: #fff;
+  cursor: pointer;
+}
+
+.overline {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #7a7a7a;
+}
+
+/* ---------- 1. Scan hub ---------- */
+.hubHeader {
+  flex-shrink: 0;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: #fff;
+}
+
+.counter {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1e9e52;
+}
+
+.upgradeBtn {
+  padding: 8px 16px;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #002b58, #2b65a4);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.hubScroll {
+  background: #fff;
+}
+
+.herdBand {
+  padding: 20px 16px 10px;
+  background: #e1ebf0;
+}
+
+.cowCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.cowCard .cowAvatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+}
+
+.cowInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cowName {
+  font-size: 18px;
+  font-weight: 700;
+  color: #002b58;
+}
+
+.cowBreed {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.changeCow {
+  padding: 7px 12px;
+  border-radius: 99px;
+  background: rgba(179, 223, 239, 0.45);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #004691;
+}
+
+.hubSection {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px 16px 28px;
+}
+
+.hubSectionTitle {
+  margin-top: 4px;
+  font-size: 19px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.diseaseCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #002b58, #2b65a4);
+}
+
+.urgentBadge {
+  padding: 3px 12px;
+  border-radius: 99px;
+  background: #ff0000;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.diseaseTitle {
+  display: block;
+  font-size: 23px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #fff;
+}
+
+.diseaseDesc {
+  display: block;
+  margin-top: 4px;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.diseaseBtn {
+  padding: 9px 18px;
+  border: none;
+  border-radius: 99px;
+  background: #fff;
+  color: #002b58;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.routineRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.routineCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.scanTime {
+  padding: 2px 8px;
+  border-radius: 99px;
+  background: #f2f7fc;
+  font-size: 11px;
+  font-weight: 700;
+  color: #000;
+}
+
+.routineCard .routineImg {
+  width: 56px;
+  height: 54px;
+  object-fit: contain;
+}
+
+.routineTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: #081322;
+}
+
+.routineSub {
+  font-size: 12.5px;
+  color: #59697d;
+}
+
+.divider {
+  align-self: stretch;
+  height: 1px;
+  margin: 4px 0;
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.routineAction {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #003166;
+}
+
+.actionIcon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(8, 70, 145, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #004691;
+}
+
+.dungCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+}
+
+.dungCard .dungImg {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+}
+
+.dungText {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dungTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.popularBadge {
+  padding: 2px 9px;
+  border-radius: 99px;
+  background: #d3d800;
+  font-size: 11px;
+  font-weight: 700;
+  color: #231f20;
+}
+
+.scanNowBtn {
+  padding: 8px 14px;
+  border-radius: 99px;
+  background: #004691;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.reportCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  background: #f8fad8;
+}
+
+.reportCard .mascot {
+  width: 110px;
+  height: 92px;
+  object-fit: contain;
+}
+
+.reportCardText {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+/* ---------- 2. Photo guide ---------- */
+.captureBody {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 8px 16px 20px;
+}
+
+.captureSub {
+  text-align: center;
+  font-size: 13.5px;
+  color: #4a4a4a;
+}
+
+.framePreview {
+  position: relative;
+  height: 210px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.corner {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  border: 4px solid #fff;
+}
+
+.cornerTL { top: 12px; left: 12px; border-right: none; border-bottom: none; border-radius: 10px 0 0 0; }
+.cornerTR { top: 12px; right: 12px; border-left: none; border-bottom: none; border-radius: 0 10px 0 0; }
+.cornerBL { bottom: 12px; left: 12px; border-right: none; border-top: none; border-radius: 0 0 0 10px; }
+.cornerBR { bottom: 12px; right: 12px; border-left: none; border-top: none; border-radius: 0 0 10px 0; }
+
+.tips {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tip {
+  display: flex;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #f7f9fc;
+}
+
+.tipEmoji {
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.tipTitle {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: #231f20;
+}
+
+.tipDesc {
+  display: block;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: #4a4a4a;
+}
+
+.captureFooter {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 16px 14px;
+  background: #fff;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* ---------- 3. Analyzing ---------- */
+.analyzeBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 24px;
+  border: none;
+  background: #fff;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.analyzePhoto {
+  position: relative;
+  width: 150px;
+  height: 150px;
+}
+
+.analyzePhoto img {
+  border-radius: 50%;
+  box-shadow: 0 0 0 6px #f2f7fc, 0 0 0 7px #d9e2ec;
+}
+
+.analyzeEmoji {
+  position: absolute;
+  right: -2px;
+  bottom: 4px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.analyzeTitle {
+  margin-top: 26px;
+  font-size: 21px;
+  font-weight: 700;
+  color: #231f20;
+}
+
+.analyzeSub {
+  margin-top: 4px;
+  font-size: 13px;
+  color: #7a7a7a;
+}
+
+.steps {
+  width: 100%;
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14.5px;
+  color: #b0b0b0;
+  transition: color 0.2s ease;
+}
+
+.stepIcon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 2px solid #d9e2ec;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.stepDone {
+  color: #231f20;
+}
+
+.stepDone .stepIcon {
+  border-color: #1e9e52;
+  background: #1e9e52;
+  color: #fff;
+}
+
+.stepActive {
+  color: #004691;
+  font-weight: 700;
+}
+
+.stepActive .stepIcon {
+  border-color: #004691;
+  border-top-color: transparent;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stepActive .stepIcon { animation: none; }
+}
+
+.analyzeTip {
+  margin-top: auto;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #f2f7fc;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: #004691;
+}
+
+/* ---------- 4. Report ready ---------- */
+.readyBody {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 20px 20px 24px;
+}
+
+.readyCheck {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #1e9e52;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.readyTitle {
+  font-size: 22px;
+  font-weight: 700;
+  color: #231f20;
+}
+
+.readySummary {
+  width: 100%;
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+}
+
+.readySummary .readyThumb {
+  width: 100%;
+  height: 140px;
+  margin-bottom: 8px;
+  border-radius: 12px;
+}
+
+.scoreLine {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.scoreNumber {
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.scoreMax {
+  font-size: 18px;
+  color: #7a7a7a;
+}
+
+.scoreVerdict {
+  font-size: 15px;
+  font-weight: 700;
+  color: #dc2626;
+}
+
+.readyDx {
+  width: 100%;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 12px;
+  background: #fff3f0;
+}
+
+.readyDxLabel {
+  display: block;
+  font-size: 11.5px;
+  color: #7a7a7a;
+}
+
+.readyDxName {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  color: #222;
+}
+
+/* Children of scrolling flex columns must keep their size; otherwise boxes with no intrinsic
+   height (e.g. the 180px photo) collapse to 0 and the last card gets squeezed. */
+.captureBody > *,
+.readyBody > *,
+.reportBody > *,
+.hubSection > * {
+  flex-shrink: 0;
+}
+
+/* ---------- Shared report pieces ---------- */
+.reportBody {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 10px 16px 28px;
+  background: #f8fbf8;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.rowBetween {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.badge {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11.5px;
+  font-weight: 700;
+}
+
+.badgeClear {
+  background: #e8f5e9;
+  color: #16a34a;
+}
+
+.badgeVet {
+  background: #fff3f0;
+  color: #dc2626;
+}
+
+.badgeDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.sectionLabel {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #888;
+}
+
+/* ---------- 5. Diagnosis ---------- */
+.dxHero {
+  position: relative;
+  height: 180px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.heroNameBadge {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.dxName {
+  font-size: 17px;
+  font-weight: 700;
+  color: #222;
+}
+
+.countLabel {
+  font-size: 12px;
+  font-weight: 700;
+  color: #7a7a7a;
+}
+
+.indicator {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 0;
+  border-top: 1px solid #f0f0f0;
+}
+
+.indicatorText {
+  display: flex;
+  flex-direction: column;
+}
+
+.indicatorName {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #222;
+}
+
+.indicatorDesc {
+  font-size: 12px;
+  color: #7a7a7a;
+}
+
+.greenBar {
+  padding: 8px 10px;
+  border-left: 3px solid #16a34a;
+  border-radius: 0 8px 8px 0;
+  background: #f8fbf8;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #333;
+}
+
+.warningCard {
+  padding: 16px;
+  border-radius: 16px;
+  background: #fff8e1;
+}
+
+.warningTitle {
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #c79100;
+}
+
+.warningText {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #5d4500;
+}
+
+.vetCard {
+  display: flex;
+  overflow: hidden;
+  border: 1px solid #f3d2d2;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.vetAccent {
+  width: 5px;
+  flex-shrink: 0;
+  background: #c62828;
+}
+
+.vetBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px;
+}
+
+.vetTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: #c62828;
+}
+
+.vetBullet {
+  font-size: 13.5px;
+  color: #333;
+}
+
+.vetCallBtn {
+  margin-top: 6px;
+  padding: 13px 0;
+  border: none;
+  border-radius: 12px;
+  background: #c62828;
+  color: #fff;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ---------- 6. Animal status & valuation ---------- */
+.anchorNav {
+  flex-shrink: 0;
+  display: flex;
+  gap: 8px;
+  padding: 4px 16px 10px;
+  background: #fff;
+}
+
+.anchorBtn {
+  padding: 4px 12px;
+  border-radius: 16px;
+  background: #f3f4f6;
+  font-size: 12px;
+  font-weight: 700;
+  color: #6b7280;
+}
+
+.anchorActive {
+  background: #e8f5e9;
+  color: #008026;
+}
+
+.cattleCard {
+  display: flex;
+  gap: 14px;
+  padding: 14px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.cattleCard .cattleImg {
+  width: 84px;
+  height: 84px;
+  flex-shrink: 0;
+  border-radius: 12px;
+}
+
+.cattleInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+}
+
+.breedName {
+  font-size: 18px;
+  font-weight: 700;
+  color: #222;
+}
+
+.metaRow {
+  display: flex;
+  gap: 8px;
+}
+
+.gradeBadge {
+  padding: 2px 8px;
+  border: 1px solid #f9a825;
+  border-radius: 6px;
+  background: #fff8e1;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #b26a00;
+}
+
+.verified {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #008026;
+}
+
+.weight {
+  font-size: 13px;
+  color: #555;
+}
+
+.purityBar {
+  display: flex;
+  gap: 2px;
+  height: 14px;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.puritySeg {
+  height: 100%;
+}
+
+.purityLabels {
+  display: flex;
+  font-size: 11px;
+  color: #888;
+}
+
+.purityLabels span {
+  text-align: center;
+}
+
+.purityActive {
+  font-weight: 700;
+  color: #43a047;
+}
+
+.purityNote {
+  font-size: 13px;
+  color: #333;
+}
+
+.econGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.econItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  border-radius: 12px;
+  background: #f9f9f9;
+}
+
+.econLabel {
+  display: block;
+  font-size: 11px;
+  color: #888;
+}
+
+.econValue {
+  font-size: 19px;
+  font-weight: 700;
+  color: #222;
+}
+
+.econValue small {
+  font-size: 12px;
+  font-weight: 400;
+  color: #888;
+}
+
+.bcsBar {
+  height: 4px;
+  border-radius: 2px;
+  background: #e0e0e0;
+  overflow: hidden;
+}
+
+.bcsBar span {
+  display: block;
+  height: 100%;
+  background: #008026;
+}
+
+.marketRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 12px;
+  background: #f9f9f9;
+}
+
+.marketValue {
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  color: #008026;
+}
+
+.buyingRec {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.buyingBadge {
+  padding: 5px 12px;
+  border-radius: 8px;
+  background: #008026;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.checksRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.checkStat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 4px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.checkStat b {
+  font-size: 22px;
+  letter-spacing: 0;
+}
+
+.dietTag {
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: #e8f5e9;
+  font-size: 11px;
+  font-weight: 700;
+  color: #008026;
+}
+
+.dietRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 0;
+  border-top: 1px solid #f0f0f0;
+  font-size: 13px;
+  color: #444;
+}
+
+.dietRow b {
+  flex-shrink: 0;
+  color: #008026;
+}

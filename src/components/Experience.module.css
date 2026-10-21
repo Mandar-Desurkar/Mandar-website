@@ -98,6 +98,53 @@
   margin-bottom: 0.5rem;
 }
 
+/* Group title that opens an interactive prototype */
+.groupTitleButton {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  margin-bottom: 0.5rem;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.groupTitleButton .groupTitle {
+  margin-bottom: 0;
+  text-decoration: underline;
+  text-decoration-color: rgba(0, 102, 204, 0.35);
+  text-underline-offset: 3px;
+}
+
+.groupTitleButton:hover .groupTitle {
+  text-decoration-color: currentColor;
+}
+
+.prototypePill {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #e3f0fb;
+  color: #004691;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background-color 0.15s ease;
+}
+
+.groupTitleButton:hover .prototypePill {
+  background: #cfe5f8;
+}
+
+.groupTitleButton:focus-visible {
+  outline: 2px solid var(--ink-blue);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
 .bulletList {
   font-size: 1rem;
   line-height: 1.55;

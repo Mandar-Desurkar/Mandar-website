@@ -3,8 +3,15 @@
 import styles from "./Projects.module.css";
 import { ExternalLink } from "lucide-react";
 import { projects } from "@/data/resume";
+import { trackEvent } from "@/lib/analytics";
+import { useState } from "react";
+import dynamic from "next/dynamic";
+
+const KissanPrototype = dynamic(() => import("./prototype/KissanPrototype"), { ssr: false });
 
 export default function Projects() {
+  const [showPrototype, setShowPrototype] = useState(false);
+
   return (
     <section id="projects" className={styles.projectsSection}>
       <div className={`container ${styles.container}`}>
@@ -30,6 +37,7 @@ export default function Projects() {
                       target="_blank"
                       rel="noopener noreferrer"
                       className={styles.iconLink}
+                      onClick={() => trackEvent("Clicked External Link", { link_type: "project", label: project.title })}
                       aria-label={`Open ${project.title} (opens in new tab)`}
                     >
                       <ExternalLink size={20} />
@@ -46,6 +54,19 @@ export default function Projects() {
 
               <p className={styles.description}>{project.description}</p>
 
+              {project.prototype && (
+                <button
+                  type="button"
+                  className={styles.prototypeBtn}
+                  onClick={() => {
+                    trackEvent("Opened Prototype", { prototype: project.prototype!, placement: "projects" });
+                    setShowPrototype(true);
+                  }}
+                >
+                  ▶ View app prototype
+                </button>
+              )}
+
               <div className={styles.tags}>
                 {project.tags.map((tag) => (
                   <span key={tag} className={styles.tag}>#{tag}</span>
@@ -55,6 +76,8 @@ export default function Projects() {
           ))}
         </div>
       </div>
+
+      {showPrototype && <KissanPrototype onClose={() => setShowPrototype(false)} />}
     </section>
   );
 }

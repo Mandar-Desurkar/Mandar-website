@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# reference-only clones of other repos (read-only; never commit, never build)
+/_external/
+
+# Commercial songs (Jailer 2 / Sun Pictures): local-only, never published
+/public/music/one-sun-one-moon.*
+/public/music/ala-bolelo.*

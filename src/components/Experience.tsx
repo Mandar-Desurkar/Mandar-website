@@ -1,11 +1,23 @@
 "use client";
 
 import styles from "./Experience.module.css";
+import { useState } from "react";
+import dynamic from "next/dynamic";
 import { Trophy } from "lucide-react";
 import RichText from "./RichText";
 import { experiences, beyondWork } from "@/data/resume";
+import { trackEvent } from "@/lib/analytics";
+
+const KissanPrototype = dynamic(() => import("./prototype/KissanPrototype"), { ssr: false });
 
 export default function Experience() {
+  const [showPrototype, setShowPrototype] = useState(false);
+
+  const openPrototype = () => {
+    trackEvent("Opened Prototype", { prototype: "kissan-sampurna", placement: "experience" });
+    setShowPrototype(true);
+  };
+
   return (
     <section id="experience" className={styles.experienceSection}>
       <div className={`container ${styles.container}`}>
@@ -33,7 +45,14 @@ export default function Experience() {
 
               {exp.groups?.map((group, i) => (
                 <div key={group.title ?? i} className={styles.group}>
-                  {group.title && <h4 className={styles.groupTitle}>{group.title}</h4>}
+                  {group.title && group.prototype ? (
+                    <button type="button" className={styles.groupTitleButton} onClick={openPrototype}>
+                      <span className={styles.groupTitle}>{group.title}</span>
+                      <span className={styles.prototypePill}>▶ View app prototype</span>
+                    </button>
+                  ) : (
+                    group.title && <h4 className={styles.groupTitle}>{group.title}</h4>
+                  )}
                   <ul className={styles.bulletList}>
                     {group.bullets.map((bullet) => (
                       <li key={bullet}><RichText text={bullet} /></li>
@@ -71,6 +90,8 @@ export default function Experience() {
         </div>
 
       </div>
+
+      {showPrototype && <KissanPrototype onClose={() => setShowPrototype(false)} />}
     </section>
   );
 }

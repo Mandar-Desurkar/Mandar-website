@@ -10,6 +10,8 @@ import BootScreen from "@/components/BootScreen";
 import Dock from "@/components/Dock";
 import DraggableWindow from "@/components/DraggableWindow";
 import DesktopIcon from "@/components/DesktopIcon";
+import MusicPlayer from "@/components/MusicPlayer";
+import HiringNotification from "@/components/HiringNotification";
 import { WindowProvider, useWindow } from "@/context/WindowContext";
 import Image from "next/image";
 import { AnimatePresence } from "framer-motion";
@@ -44,6 +46,8 @@ function DesktopEnvironment() {
   
   return (
     <>
+      <MusicPlayer />
+
       <div className="desktop-grid">
         <DesktopIcon id="about" title="About Me" dotColor="#3BA7FF" icon={<Image src="/icons/Folder.svg" alt="About Me" width={56} height={56} className="drop-shadow-md" />} />
         <DesktopIcon id="experience" title="Experience" dotColor="#32D74B" icon={<Image src="/icons/Folder2.svg" alt="Experience" width={56} height={56} className="drop-shadow-md" />} />
@@ -71,6 +75,7 @@ export default function Home() {
       <WindowProvider>
         <Navbar />
         <DesktopEnvironment />
+        <HiringNotification />
       </WindowProvider>
     </main>
   );

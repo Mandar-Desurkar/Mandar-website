@@ -1,0 +1,786 @@
+/* Kissan Sampurna screens at 375px (iPhone logical width). Values mirror the RN ScaledSheets. */
+
+.screen {
+  --primary: #004691;
+  --cta: #01438a;
+  --tertiary: #d3d800;
+  --text-dark: #1f2937;
+  --text-light: #6b7280;
+
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  color: var(--text-dark);
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.screen img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.scroll {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+
+.scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.padded {
+  padding: 12px 16px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* TopBar.jsx */
+.topBar {
+  height: 52px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px;
+  background: #fff;
+}
+
+.backBtn {
+  display: flex;
+}
+
+.topTitle {
+  flex: 1;
+  font-size: 20px;
+  font-weight: 700;
+  color: #333;
+}
+
+.infoBtn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #4b722d;
+  color: #fff;
+  font-weight: 700;
+  font-size: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Buttons */
+.primaryBtn {
+  width: 100%;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: none;
+  border-radius: 12px;
+  background: var(--cta);
+  color: #fff;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  box-shadow: 0 8px 18px rgba(92, 74, 42, 0.2);
+  cursor: pointer;
+}
+
+.secondaryBtn {
+  width: 100%;
+  min-height: 48px;
+  border: 1.5px solid var(--cta);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--cta);
+  font: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Pulsing ring that shows prototype viewers where to tap next */
+.hotspot {
+  position: relative;
+}
+
+.hotspot::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 14px;
+  border: 2px solid rgba(211, 216, 0, 0.95);
+  animation: hotspotPulse 1.6s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes hotspotPulse {
+  0% { opacity: 0.9; transform: scale(0.98); }
+  70% { opacity: 0; transform: scale(1.06); }
+  100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hotspot::after { animation: none; opacity: 0.8; }
+}
+
+/* ---------- 1. Crop Doctor ---------- */
+.cdHero {
+  height: 256px;
+  background: #fff9f0;
+  overflow: hidden;
+}
+
+.cdTitleBlock {
+  text-align: center;
+  padding: 20px 4px 0;
+}
+
+.cdTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: #01458e;
+}
+
+.cdSubtitle {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #6b7a6b;
+}
+
+.howItWorks {
+  padding: 22px 16px 0;
+}
+
+.howTitle {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  text-align: center;
+  color: #000;
+  margin-bottom: 14px;
+}
+
+.stepsRow {
+  display: flex;
+  gap: 12px;
+}
+
+.stepCol {
+  flex: 1;
+  text-align: center;
+}
+
+.stepCard {
+  height: 136px;
+  border: 1px solid #e7d9b8;
+  border-radius: 12px;
+  background: #fff9f0;
+  overflow: hidden;
+}
+
+.stepLabel {
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #000;
+}
+
+.ctaPad {
+  padding: 26px 16px 28px;
+}
+
+/* ---------- 2. Select crop ---------- */
+.scSubtitle {
+  font-size: 15px;
+  color: #4d4d4d;
+}
+
+.searchRow {
+  display: flex;
+  gap: 10px;
+}
+
+.searchBar {
+  flex: 1;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  color: #9ca3af;
+  font-size: 15px;
+}
+
+.searchBtn {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sectionTitleBlack {
+  font-size: 18px;
+  font-weight: 700;
+  color: #000;
+  margin-bottom: -4px;
+}
+
+.popularRow {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  margin: 0 -16px;
+  padding: 4px 16px 6px;
+  scrollbar-width: none;
+}
+
+.popularRow::-webkit-scrollbar {
+  display: none;
+}
+
+.popularCard {
+  flex: 0 0 96px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #fff;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.popularCard .popularImg {
+  height: 70px;
+  border-radius: 10px;
+  background: #f8f9fa;
+}
+
+.popularName {
+  font-size: 14px;
+  font-weight: 700;
+  color: #000;
+}
+
+.popularChip {
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #f1f3b0;
+  font-size: 12px;
+  color: #000;
+}
+
+.categoryGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.categoryCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 6px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.categoryCard .categoryImg {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+}
+
+.categoryLabel {
+  font-size: 14px;
+  font-weight: 700;
+  color: #000;
+}
+
+.requestCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 12px;
+  background: #e9f2fd;
+}
+
+.requestTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: #01438a;
+}
+
+.requestSub {
+  font-size: 12px;
+  color: #2c2c2c;
+}
+
+.requestBtn {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* ---------- 3. Scan method ---------- */
+.callout {
+  padding: 10px 16px;
+  border: 1px solid #c9e1ff;
+  border-radius: 8px;
+  background: #e9f2fd;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.calloutTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0072d0;
+}
+
+.calloutDesc {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #2c2c2c;
+}
+
+.sectionTitleBlue {
+  font-size: 18px;
+  font-weight: 700;
+  color: #01438a;
+  margin-bottom: -4px;
+}
+
+.optionsRow {
+  display: flex;
+  gap: 12px;
+}
+
+.optionCard {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.optionSelected {
+  background: #01438a;
+  border-color: #01438a;
+}
+
+.optionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 40px;
+}
+
+.optionLabel {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.optionSelected .optionLabel {
+  color: #fff;
+}
+
+.radio {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.radioOn {
+  border-color: var(--tertiary);
+}
+
+.radioOn::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--tertiary);
+}
+
+.optionCard .optionImg {
+  height: 115px;
+  border-radius: 10px;
+  background: #f8f9fa;
+}
+
+.guideCard {
+  display: flex;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+}
+
+.guideBox {
+  position: relative;
+  flex: 1;
+  aspect-ratio: 1;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #f3f4f6;
+}
+
+.guideBadge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.badgeOk { background: #16a34a; }
+.badgeBad { background: #ef4444; }
+
+/* ---------- 4. Analyzing ---------- */
+.analyzeBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 18px 20px;
+  border: none;
+  background: #fff;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.scanFrame {
+  position: relative;
+  width: 100%;
+  height: 340px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(1, 67, 138, 0.18);
+}
+
+.scanLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 3px;
+  background: var(--tertiary);
+  box-shadow: 0 0 18px 6px rgba(211, 216, 0, 0.55);
+  animation: scan 1.3s ease-in-out infinite alternate;
+}
+
+@keyframes scan {
+  from { top: 0; }
+  to { top: calc(100% - 3px); }
+}
+
+.analyzeTitle {
+  margin-top: 26px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #01458e;
+}
+
+.analyzeSub {
+  margin-top: 6px;
+  font-size: 14px;
+  color: var(--text-light);
+}
+
+.progressTrack {
+  width: 70%;
+  height: 6px;
+  margin-top: 18px;
+  border-radius: 3px;
+  background: #e3f0fb;
+  overflow: hidden;
+}
+
+.progressFill {
+  display: block;
+  height: 100%;
+  background: var(--cta);
+  transform-origin: left;
+  animation: fill linear forwards;
+}
+
+@keyframes fill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.aiChip {
+  margin-top: 22px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #f1f3b0;
+  font-size: 12px;
+  font-weight: 700;
+  color: #3a3d00;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scanLine { animation: none; top: 50%; }
+}
+
+/* ---------- 5. Report ---------- */
+.reportHero {
+  position: relative;
+  height: 290px;
+}
+
+.heroShade {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 14px 16px 16px;
+  background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.7));
+}
+
+.heroTopStack {
+  align-self: flex-end;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.severityBadge {
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: #f97316;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.2);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.aiScore {
+  color: #fff;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+}
+
+.aiScore b {
+  font-size: 12px;
+}
+
+.diseaseTitle {
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.warningBanner {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: #fffbeb;
+  color: #92400e;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.tagsRow {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.tagChip {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #2c2c2c;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.reportSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.reportSectionTitle {
+  font-size: 17px;
+  font-weight: 700;
+  color: #01438a;
+}
+
+.reportText {
+  font-size: 13px;
+  line-height: 1.45;
+  color: #374151;
+}
+
+.reportCaption {
+  font-size: 12px;
+  color: var(--text-light);
+  margin-top: -6px;
+}
+
+.stagesRow {
+  display: flex;
+  gap: 6px;
+}
+
+.stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+}
+
+.stage img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: 8px;
+}
+
+.stageCurrent {
+  border-color: #f97316;
+  background: #fff7ed;
+}
+
+.stageName {
+  font-size: 10px;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.stageSpread {
+  font-size: 10px;
+  color: var(--text-light);
+}
+
+.stageCurrent .stageSpread {
+  color: #c2410c;
+  font-weight: 700;
+}
+
+.lossRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 10px;
+  border-radius: 8px;
+  background: #f8f9fa;
+  font-size: 13px;
+}
+
+.lossRow b {
+  color: #b91c1c;
+}
+
+.lossActive {
+  background: #fff7ed;
+  outline: 1px solid #fdba74;
+}
+
+.nowPill {
+  margin-left: 6px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: #f97316;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.planCard {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  background: #f8f9fa;
+}
+
+.planDay {
+  flex-shrink: 0;
+  height: fit-content;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: #e3f0fb;
+  color: #01438a;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.planTitle {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.planDesc {
+  margin-top: 2px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--text-light);
+}
+
+.reportCtas {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
