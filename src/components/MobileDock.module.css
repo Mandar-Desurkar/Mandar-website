@@ -1,106 +1,93 @@
-/* Phone dock: frosted glass like the iOS dock, sized for thumbs (each target ≥ 44px). */
+/* iOS tab bar: 49pt tall plus the home-indicator safe area, translucent chrome material with a
+   hairline top edge, system-blue active tint, 10pt labels. */
 
-.dock {
+.tabBar {
   display: none;
 }
 
 @media (max-width: 767.98px), (max-width: 1023.98px) and (pointer: coarse), (max-height: 500px) and (pointer: coarse) {
-  .dock {
+  .tabBar {
     position: fixed;
-    left: 10px;
-    right: 10px;
-    bottom: calc(10px + env(safe-area-inset-bottom));
+    left: 0;
+    right: 0;
+    bottom: 0;
     z-index: 900;
-    height: 68px;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    align-items: center;
-    padding: 0 6px;
-    border-radius: 26px;
-    background: rgba(255, 255, 255, 0.28);
-    backdrop-filter: saturate(180%) blur(24px);
-    -webkit-backdrop-filter: saturate(180%) blur(24px);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.28), inset 0 0 0 0.5px rgba(255, 255, 255, 0.45);
+    height: calc(49px + env(safe-area-inset-bottom));
+    padding: 0 max(4px, env(safe-area-inset-right)) env(safe-area-inset-bottom) max(4px, env(safe-area-inset-left));
+    background: rgba(249, 249, 249, 0.94);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    box-shadow: 0 -0.5px 0 rgba(0, 0, 0, 0.3);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+    animation: rise 0.3s cubic-bezier(0.2, 0.9, 0.3, 1) both;
   }
 }
 
-.item {
-  position: relative;
-  height: 60px;
+@keyframes rise {
+  from { transform: translateY(100%); }
+}
+
+.tab {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 3px;
+  justify-content: flex-start;
+  gap: 2px;
+  padding-top: 6px;
   border: 0;
   background: none;
-  color: #fff;
+  color: #8e8e93;
   -webkit-tap-highlight-color: transparent;
 }
 
-.icon {
-  width: 34px;
-  height: 34px;
-  display: flex;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-  transition: transform 0.15s ease;
-}
-
-.item:active .icon {
-  transform: scale(0.88);
+.tab:active svg {
+  opacity: 0.6;
 }
 
 .label {
-  font-size: 10.5px;
+  font-size: 10px;
   font-weight: 500;
+  line-height: 12px;
   letter-spacing: 0.1px;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
   white-space: nowrap;
 }
 
-/* The open section: bold label plus the macOS "running app" dot */
-.active .label {
-  font-weight: 700;
+.active {
+  color: #007aff;
 }
 
-.active::after {
-  content: "";
-  position: absolute;
-  bottom: -1px;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+.tab:focus-visible {
+  outline: 2px solid #007aff;
+  outline-offset: -4px;
+  border-radius: 10px;
 }
 
-.item:focus-visible {
-  outline: 2px solid #fff;
-  outline-offset: -2px;
-  border-radius: 14px;
+/* Phone in landscape: iOS uses a compact bar with the label beside the glyph */
+@media (max-height: 500px) and (pointer: coarse) and (orientation: landscape) {
+  .tabBar {
+    height: calc(32px + env(safe-area-inset-bottom));
+  }
+
+  .tab {
+    flex-direction: row;
+    justify-content: center;
+    gap: 6px;
+    padding-top: 0;
+    align-items: center;
+  }
+
+  .tab svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .label {
+    font-size: 13px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .icon { transition: none; }
-}
-
-/* Phone in landscape: a shorter, centred dock that leaves room for the window */
-@media (max-height: 500px) and (pointer: coarse) and (orientation: landscape) {
-  .dock {
-    left: 50%;
-    right: auto;
-    width: min(480px, calc(100% - 20px));
-    height: 56px;
-    bottom: calc(6px + env(safe-area-inset-bottom));
-    transform: translateX(-50%);
-  }
-
-  .item {
-    height: 50px;
-  }
-
-  .icon {
-    width: 28px;
-    height: 28px;
-  }
+  .tabBar { animation: none; }
 }

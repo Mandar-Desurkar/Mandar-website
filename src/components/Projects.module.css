@@ -192,3 +192,90 @@
     background: #cfe5f8;
   }
 }
+
+/* Phone, inside the iOS app shell (`.ios-app` exists only in the phone layout, at any width): white rounded cards on the grouped background, an iOS tinted
+ button for the prototype, and the large title in place of the section heading. */
+:global(.ios-app) .projectsSection {
+  padding: 8px 0 28px;
+}
+
+:global(.ios-app) .headerBox {
+  display: none;
+}
+
+:global(.ios-app) .grid {
+  gap: 20px;
+  padding: 0;
+}
+
+:global(.ios-app) .card {
+  padding: 16px;
+  border: 0;
+  border-radius: 12px;
+  box-shadow: none;
+}
+
+:global(.ios-app) .cardHeader {
+  margin-bottom: 10px;
+}
+
+:global(.ios-app) .title {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 25px;
+  letter-spacing: -0.4px;
+  color: #000;
+}
+
+:global(.ios-app) .context {
+  margin-top: 2px;
+  font-size: 15px;
+  line-height: 20px;
+  color: #8e8e93;
+}
+
+:global(.ios-app) .metrics {
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+:global(.ios-app) .metric {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(52, 199, 89, 0.14);
+  color: #248a3d;
+  font-size: 13px;
+  line-height: 18px;
+}
+
+:global(.ios-app) .description {
+  margin-bottom: 14px;
+  font-size: 16px;
+  line-height: 21px;
+  color: #3c3c43;
+}
+
+:global(.ios-app) .prototypeBtn {
+  align-self: stretch;
+  justify-content: center;
+  min-height: 44px;
+  margin: 0 0 14px;
+  border-radius: 12px;
+  background: rgba(0, 122, 255, 0.12);
+  color: #007aff;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+:global(.ios-app) .prototypeBtn:active {
+  background: rgba(0, 122, 255, 0.2);
+}
+
+:global(.ios-app) .tag {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #f2f2f7;
+  color: #3c3c43;
+  font-size: 13px;
+  line-height: 18px;
+}

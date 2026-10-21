@@ -73,6 +73,15 @@
   line-height: 1.2;
 }
 
+/* Brackets come from CSS so the phone's iOS cards can drop them */
+.period::before {
+  content: "(";
+}
+
+.period::after {
+  content: ")";
+}
+
 .schoolLink {
   transition: all 0.2s ease;
 }
@@ -151,4 +160,103 @@
   .toolkitTitle {
     font-size: 0.95rem;
   }
+}
+
+/* Phone, inside the iOS app shell (`.ios-app` exists only in the phone layout, at any width): each school and the toolkit are white rounded cards on the
+ grouped background; the large title replaces the section heading. */
+:global(.ios-app) .educationSection {
+  padding: 8px 0 28px;
+}
+
+:global(.ios-app) .headerBox,
+:global(.ios-app) .atSymbol {
+  display: none;
+}
+
+:global(.ios-app) .entry,
+:global(.ios-app) .toolkitCard {
+  margin-bottom: 20px;
+  padding: 16px;
+  border: 0;
+  border-radius: 12px;
+  background: #fff;
+}
+
+:global(.ios-app) .degree {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 25px;
+  letter-spacing: -0.4px;
+  color: #000;
+}
+
+:global(.ios-app) .metaData {
+  gap: 4px 8px;
+  margin-bottom: 10px;
+}
+
+/* The school opens Maps, so it reads as a link (system blue) */
+:global(.ios-app) .school {
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 500;
+  color: #007aff;
+}
+
+:global(.ios-app) .period,
+:global(.ios-app) .grade {
+  font-size: 15px;
+  line-height: 20px;
+  color: #8e8e93;
+}
+
+:global(.ios-app) .period::before,
+:global(.ios-app) .period::after {
+  content: none;
+}
+
+:global(.ios-app) .grade {
+  font-weight: 600;
+  color: #3c3c43;
+}
+
+:global(.ios-app) .description {
+  font-size: 16px;
+  line-height: 21px;
+  color: #3c3c43;
+  margin-bottom: 12px;
+}
+
+:global(.ios-app) .skillsBox {
+  margin-bottom: 0;
+  padding-top: 12px;
+  border-top: 0.5px solid rgba(60, 60, 67, 0.29);
+  font-size: 15px;
+  line-height: 20px;
+  color: #3c3c43;
+}
+
+:global(.ios-app) .skillsLabel {
+  color: #000;
+}
+
+:global(.ios-app) .toolkitTitle {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: #6d6d72;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 0.5px solid rgba(60, 60, 67, 0.29);
+}
+
+:global(.ios-app) .toolkitRow {
+  font-size: 15px;
+  line-height: 20px;
+  color: #3c3c43;
+  margin-bottom: 10px;
+}
+
+:global(.ios-app) .toolkitRow:last-child {
+  margin-bottom: 0;
 }

@@ -31,7 +31,7 @@ export default function Experience() {
               <div className={styles.metaData}>
                 <span className={styles.atSymbol}>@</span>
                 <span className={styles.company}>{exp.company}</span>
-                <span className={styles.period}>({exp.period})</span>
+                <span className={styles.period}>{exp.period}</span>
               </div>
 
               <p className={styles.description}>{exp.summary}</p>
@@ -72,7 +72,7 @@ export default function Experience() {
             <span className={styles.company} style={{ fontWeight: 500 }}>
               {beyondWork.discipline}
             </span>
-            <span className={styles.period}>({beyondWork.period})</span>
+            <span className={styles.period}>{beyondWork.period}</span>
           </div>
 
           <ul className={styles.beyondWorkList}>

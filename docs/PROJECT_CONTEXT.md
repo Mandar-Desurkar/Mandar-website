@@ -30,8 +30,9 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
   AltQube (06/2023–09/2025); B.E. ISE, M. S. Ramaiah Institute of Technology (CGPA 8.30);
   former Team India open-water swimmer.
 - Project Claude skills live in `.claude/skills/` (index in `CLAUDE.md`).
-- Mobile: phones and touch tablets get a full-width sheet + dock and an edge-to-edge prototype
-  viewer (see "Mobile & responsive layout").
+- Mobile: phones and touch tablets get an **iOS-style UI** (home screen with widgets, app icons and
+  a contact dock; each section opens as a full-screen iOS app with a tab bar) and an edge-to-edge
+  prototype viewer (see "Mobile & responsive layout").
 - Context auto-sync: a Stop hook (`.claude/hooks/update-context.sh`, registered in
   `.claude/settings.json`) makes Claude update this file before ending any response in which
   project files changed.
@@ -95,11 +96,31 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
   `(max-width: 767.98px), (max-width: 1023.98px) and (pointer: coarse), (max-height: 500px) and
   (pointer: coarse)`, i.e. phones, touch tablets in portrait, and phones in landscape. Keep JS and
   CSS identical if it changes (globals.css, `MobileDock`, `DesktopIcon` modules).
-- **Phone layout:** `DraggableWindow` renders a fixed full-width sheet (`.mobile-window`, top 40px,
-  above the dock; no drag/resize; only the red Close, with a 44px touch target). `MobileDock.tsx` is an
-  iOS-style dock with the five sections (re-tapping the open one scrolls it to top). With the window
-  closed the folders form a 4-column home screen. Desktop icons open with one tap on any touch screen
-  and are keyboard-accessible.
+- **Phone layout = iOS (2026-10-21).** Shared pieces live in `src/components/ios/`:
+  `AppIcon.tsx` (squircle, radius 22.4% of size, gradient + glyph or real app image), `sections.tsx`
+  (`SECTION_APPS`: one lucide glyph, label, title and colour per section, used by the home grid and
+  the tab bar) and `ContactCard.tsx`.
+  - **Home screen** (`MobileHome.tsx`, the phone landing page): medium profile widget (→ About), two
+    small widgets (Impact KPIs → Projects; "Currently" role → Experience), a 4-column app grid (the
+    five sections + Kissan/Gau icons that open the prototypes), and a dock of unlabelled contact apps
+    (Phone, Messages `sms:`, Mail, LinkedIn; `Clicked Contact Method`, placement `home_dock`).
+  - **Section = full-screen iOS app** (`DraggableWindow` phone branch, classes `mobile-window ios-app`):
+    nav bar with blue "‹ Home" (aria-label "Home screen") and Share; the inline title fades in with a
+    hairline once the content scrolls; a 34pt Large Title on Experience/Education/Projects
+    (`ios-grouped`, background `#F2F2F7`, white 12px-radius cards). About and Contact are profile pages
+    without a large title. Opening zooms in from 0.9 like an app launch.
+  - **Tab bar** (`MobileDock.tsx`, `nav[aria-label="Sections"]`): only while a section is open; 49pt +
+    safe area, translucent, `#007AFF` active / `#8E8E93` inactive, 10pt labels; re-tapping the
+    current tab scrolls to top; compact 32pt bar with side-by-side labels in landscape.
+  - **Section styling:** each module has a `:global(.ios-app) …` block (not inside a container query,
+    so landscape gets it too) that hides the duplicate section heading and turns entries into cards.
+    Date brackets come from `.period::before/::after` so the iOS cards can drop them.
+  - **Contact** on phones renders `ios/ContactCard.tsx` (iOS Contacts card: photo, name, message/call/
+    mail/LinkedIn tiles, grouped rows, Notes, and **Add to Contacts**, a vCard download tracked as
+    method `vcard`). The "SYSTEM HALTED" footer is desktop-only.
+  - **System touches:** black boot screen with a white glyph and a thin bar (no text);
+    `HiringNotification` drops from the top as an iOS banner (15pt text, tinted full-width action).
+  - Desktop icons still open with one tap on any touch screen and are keyboard-accessible.
 - **Sections use container queries** on the window (`.window-content-scroll { container: window /
   inline-size }`): `< 600px` phone tuning, `≥ 600px` desktop padding and row CTAs, `≥ 800px`
   side-by-side hero, Projects 2/3 columns at `640/960px`. The hero shows a compact "identity row"
@@ -443,4 +464,39 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
   - **Default Landing Page on Mobile**: In `WindowContext.tsx`, mobile devices (`window.matchMedia(MOBILE_QUERY).matches`) now default to `isClosed: true` on initial mount (unless visiting with a deep link), opening directly onto the iOS-style mobile home screen. Desktop devices continue opening with the About Me window displayed as before.
   - **Eliminated Prototype Redundancy**: Removed duplicate app prototype icons (`Kissan` and `Gau` with blue play badges) and the redundant tip text from `.grid` in `MobileHome.tsx`. The prototypes now live exclusively in the featured Figma Mobile Prototypes showcase.
   - **Streamlined 5-Column Section Grid**: Arranged the 5 section folders (`About`, `Experience`, `Education`, `Projects`, `Contact`) into a single, balanced horizontal row on the home screen above the dock.
-
+- 2026-10-21: **Mobile prototype player fixes** (verification of the combined mobile redesign at
+  320–430px and all 128 prototype screens). (1) The collapsed controls pill sat bottom-centre on top
+  of both apps' Scan tab; it's now a slim tab on the right edge at mid-height. (2) Swipe used a
+  whole-screen Framer drag, which hijacked banner/product carousels and was cancelled by the browser;
+  replaced with touch-swipe detection that ignores sideways-only scrollers (verified: carousel swipe
+  scrolls the row, plain swipe changes screen). (3) Kissan home was 45px wider than the screen (My
+  Crops row had no scroller), so the page wobbled sideways; the row now scrolls. (4) Toolbar drops
+  Restart/Hide below 360px so the title stays readable; the coach mark wraps instead of truncating.
+  (5) Home widget caption no longer attributes the combined 250K+ installs to Kissan alone.
+  Uncommitted.
+- 2026-10-21: **Phone home screen simplified** (owner: "too packed and clumsy… without redundancy").
+  Removed the section folder grid (it duplicated the dock) and replaced the "Figma Mobile Prototypes"
+  card (badge, "Full Touch Mode" tag, two-line captions, "Try" buttons) with one quiet "Apps I've built
+  · tap to try" list: icon, name, one-line caption, chevron, whole row tappable. Home is now three
+  matching frosted widgets (profile, KPIs, apps) plus the dock. Uncommitted.
+- 2026-10-21: **Phone About simplified** (owner: "simple and minimal"). Below a 600px window
+  (`@container window (max-width: 599.98px)` in `Hero.module.css`): round 76px photo instead of the
+  tilted polaroid, no "Apps I've built" list (the phone home screen has it), no sparkle doodle, KPIs as
+  one hairline-divided strip instead of three boxed cards, then LinkedIn + "Get in touch". Phone
+  section pages also drop the dotted notebook background (plain white). Desktop unchanged. Uncommitted.
+- 2026-10-21: **Phone About fits one screen, iOS type** (owner: CTAs needed a scroll; wanted the iPhone
+  font and sizes). Sized for the tightest case (iPhone SE in Safari, ~390px of content): 52px round
+  photo, Title 1 headline 28/34, Subheadline intro 15/20, Title 3 numbers, Caption labels, and both
+  CTAs in one row (filled "Connect on LinkedIn" ~57% + tinted "Get in touch"). Steps down under 640px
+  tall and up to Large Title 34/41 + Body 17 on tall phones (≥ 760px). Measured zero scroll from
+  320×568 to 430×932 with no clipped labels. Font stack now explicitly SF Pro Text/Display first
+  (`-apple-system`), then `system-ui` (Roboto on Android). Phone section pages use Callout 16 body and
+  Title 2 22/28 headings. Uncommitted.
+- 2026-10-21: **iOS redesign of the phone UI** (owner: "make it like iPhone OS"). See "Phone layout =
+  iOS" under "Mobile & responsive layout". New `src/components/ios/` (AppIcon, sections, ContactCard);
+  `MobileHome` rewritten as an iOS home screen; `MobileDock` is now an iOS tab bar; the section sheet
+  became a full-screen app with a large title and grouped cards; iOS boot screen and notification
+  banner on phones. Verified in headless Chrome (touch emulation): home and all sections at 320×568,
+  375×667, 393×852 and landscape 852×393 with no horizontal overflow and no page errors; About still
+  fits with no scroll at 320×568; Kissan/Gau icons open and close the prototypes; desktop/laptop
+  unchanged (1024/1280/1440). `tsc` and `next build` pass. Uncommitted.

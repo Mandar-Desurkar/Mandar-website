@@ -1,44 +1,34 @@
 "use client";
 
-// Phone-only navigation (< 768px): an iOS-style dock pinned to the bottom so every section is one
-// thumb tap away. Desktop keeps the double-click folders and the menu bar. Tapping the open section
-// again scrolls it back to the top, like an iOS tab bar.
-import Image from "next/image";
-import { useWindow, type SectionId } from "@/context/WindowContext";
+// Phone-only navigation: an iOS tab bar shown while a section "app" is open (the home screen has
+// its own dock of contact apps). Desktop keeps the double-click folders and the menu bar. Tapping
+// the current tab again scrolls it back to the top, as on iOS.
+import { useWindow } from "@/context/WindowContext";
+import { SECTION_APPS } from "./ios/sections";
 import styles from "./MobileDock.module.css";
 
 export const SECTION_SCROLL_TOP = "section-scroll-top";
 
-const ITEMS: { id: SectionId; label: string; icon: string }[] = [
-  { id: "about", label: "About", icon: "/icons/folder.webp" },
-  { id: "experience", label: "Experience", icon: "/icons/folder2.webp" },
-  { id: "education", label: "Education", icon: "/icons/folder3.webp" },
-  { id: "projects", label: "Projects", icon: "/icons/folder4.webp" },
-  { id: "contact", label: "Contact", icon: "/icons/folder5.webp" },
-];
-
 export default function MobileDock() {
   const { activeTab, isClosed, isMinimized, openSection } = useWindow();
-  const windowVisible = !isClosed && !isMinimized;
+  if (isClosed || isMinimized) return null;
 
   return (
-    <nav className={styles.dock} aria-label="Sections">
-      {ITEMS.map(({ id, label, icon }) => {
-        const current = windowVisible && activeTab === id;
+    <nav className={styles.tabBar} aria-label="Sections">
+      {SECTION_APPS.map(({ id, label, Glyph }) => {
+        const current = activeTab === id;
         return (
           <button
             key={id}
             type="button"
-            className={`${styles.item} ${current ? styles.active : ""}`}
+            className={`${styles.tab} ${current ? styles.active : ""}`}
             aria-current={current ? "page" : undefined}
             onClick={() => {
               if (current) window.dispatchEvent(new Event(SECTION_SCROLL_TOP));
               else openSection(id, "mobile_dock");
             }}
           >
-            <span className={styles.icon}>
-              <Image src={icon} alt="" width={34} height={34} />
-            </span>
+            <Glyph size={25} strokeWidth={current ? 2.3 : 1.8} aria-hidden="true" />
             <span className={styles.label}>{label}</span>
           </button>
         );

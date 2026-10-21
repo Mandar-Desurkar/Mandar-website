@@ -7,15 +7,26 @@
 // flow list open as bottom sheets. State and analytics stay in PrototypeViewer.
 import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Expand, ListTree, Minimize, RotateCcw, Smartphone, X } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, Expand, ListTree, Minimize, RotateCcw, Smartphone, X } from "lucide-react";
 import styles from "./PrototypeMobile.module.css";
 import { lato } from "./fonts";
 import type { Prototype } from "@/data/prototypes/kissanSampurna";
 
 const DESIGN_W = 375; // screens are built for a 375pt-wide phone
-const MAX_W = 430;
 const HINT_KEY = "prototype-mobile-hint-seen";
 const CHROME_MS = 3500;
+// A swipe that starts inside a sideways-only scroller (banner carousel, chips, product rows) must
+// scroll that row, not change the screen. Vertical page scrollers don't count.
+function inHorizontalScroller(target: EventTarget | null, stop: Element) {
+  for (let el = target as HTMLElement | null; el && el !== stop; el = el.parentElement) {
+    const st = getComputedStyle(el);
+    const scrollsX = (st.overflowX === "auto" || st.overflowX === "scroll") && el.scrollWidth > el.clientWidth + 2;
+    const scrollsY = (st.overflowY === "auto" || st.overflowY === "scroll") && el.scrollHeight > el.clientHeight + 2;
+    if (scrollsX && !scrollsY) return true;
+  }
+  return false;
+}
+
 const INTERACTIVE = "button, a, input, select, textarea, label, [role='button'], [role='slider'], [role='tab']";
 
 type Props = {
@@ -183,6 +194,28 @@ export default function PrototypeMobile({
   // The player keeps going across flows, so ‹ › never dead-end mid-prototype
   const hasPrevFlow = flowIndex > 0;
   const hasNextFlow = flowIndex < prototype.flows.length - 1;
+  // Swipe left/right between screens. Plain touch events rather than a drag, so the browser's own
+  // vertical scrolling and the app's sideways carousels keep working underneath.
+  const swipe = useRef<{ x: number; y: number; t: number; blocked: boolean } | null>(null);
+  const onTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (e.touches.length !== 1) return (swipe.current = null);
+    const t = e.touches[0];
+    const blocked = inHorizontalScroller(e.target, e.currentTarget) || !!(e.target as HTMLElement).closest("input, textarea, [role='slider']");
+    swipe.current = { x: t.clientX, y: t.clientY, t: e.timeStamp, blocked };
+  };
+  const onTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    const start = swipe.current;
+    swipe.current = null;
+    if (!start || start.blocked) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - start.x;
+    const dy = t.clientY - start.y;
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.8 && e.timeStamp - start.t < 700) {
+      if (dx < 0) goNext();
+      else goPrev();
+    }
+  };
+
   const goPrev = () => {
     showChrome();
     if (!isFirst) onPrev();
@@ -216,16 +249,8 @@ export default function PrototypeMobile({
                 <motion.div
                   key={`${flow.id}/${screen.id}`}
                   className={styles.slide}
-                  drag="x"
-                  dragConstraints={{ left: 0, right: 0 }}
-                  dragElastic={0.2}
-                  onDragEnd={(_, info) => {
-                    if (info.offset.x < -40 || info.velocity.x < -300) {
-                      goNext();
-                    } else if (info.offset.x > 40 || info.velocity.x > 300) {
-                      goPrev();
-                    }
-                  }}
+                  onTouchStart={onTouchStart}
+                  onTouchEnd={onTouchEnd}
                   initial={{ x: direction * 40, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
                   exit={{ x: direction * -40, opacity: 0 }}
@@ -264,7 +289,8 @@ export default function PrototypeMobile({
           >
             <span className={styles.hintDot} />
             <span className={styles.hintText}>
-              <b>Figma Prototype Mode</b> · Tap hotspots or swipe horizontally to navigate
+              <b>Figma prototype mode.</b> Tap the glowing areas or swipe sideways to move through the app. Tap
+              any empty spot to bring back the controls and PM notes.
             </span>
             <X size={14} className={styles.hintClose} />
           </motion.button>
@@ -317,37 +343,34 @@ export default function PrototypeMobile({
             >
               <ChevronRight size={20} />
             </button>
-            <button type="button" className={styles.tbBtn} onClick={onRestart} aria-label="Restart flow" title="Restart flow">
+            <button type="button" className={`${styles.tbBtn} ${styles.tbOptional}`} onClick={onRestart} aria-label="Restart flow" title="Restart flow">
               <RotateCcw size={16} />
             </button>
             <button type="button" className={styles.tbBtn} onClick={openFlows} aria-label="All flows and screens" title="All flows">
               <ListTree size={18} />
             </button>
-            <button type="button" className={styles.tbBtn} onClick={() => setChrome(false)} aria-label="Hide controls" title="Hide toolbar">
+            <button type="button" className={`${styles.tbBtn} ${styles.tbOptional}`} onClick={() => setChrome(false)} aria-label="Hide controls" title="Hide toolbar">
               <ChevronDown size={17} />
             </button>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Minimal floating trigger badge when toolbar is auto-hidden */}
+      {/* Hidden toolbar leaves a small tab on the right edge, clear of the app's tab bar and header */}
       <AnimatePresence>
         {!chrome && !sheet && !landscape && (
           <motion.button
             type="button"
             className={styles.miniPill}
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 14 }}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 20 }}
             transition={{ duration: 0.2 }}
             onClick={showChrome}
-            aria-label="Show prototype controls"
+            aria-label={`Show prototype controls (${flow.title}, screen ${screenIndex + 1} of ${flow.screens.length})`}
           >
             <span className={styles.miniDot} />
-            <span className={styles.miniText}>
-              {flow.title} · {screenIndex + 1}/{flow.screens.length}
-            </span>
-            <ChevronUp size={14} className={styles.miniChevron} />
+            <ChevronLeft size={16} className={styles.miniChevron} />
           </motion.button>
         )}
       </AnimatePresence>

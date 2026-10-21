@@ -1,0 +1,84 @@
+/* iOS app icon: squircle tile, white SF-style glyph, 12pt label with the home-screen text shadow. */
+
+.icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #fff;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tile {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18), inset 0 0.5px 0 rgba(255, 255, 255, 0.35);
+  transition: transform 0.18s ease, filter 0.18s ease;
+}
+
+/* iOS dims and shrinks an icon slightly while it is pressed */
+.icon:active .tile {
+  transform: scale(0.92);
+  filter: brightness(0.85);
+}
+
+.imageTile {
+  overflow: hidden;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 11px;
+  background: #ff3b30;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 22px;
+  text-align: center;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.label {
+  max-width: 76px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  line-height: 14px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.icon:focus-visible {
+  outline: none;
+}
+
+.icon:focus-visible .tile {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile { transition: none; }
+}

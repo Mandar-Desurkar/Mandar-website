@@ -338,10 +338,21 @@
 }
 
 /* My Crops */
+/* My Crops scrolls sideways like the app; without its own scroller it widened the whole page */
 .cropsRow {
   display: flex;
   gap: 20px;
   margin-top: 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.cropsRow::-webkit-scrollbar {
+  display: none;
+}
+
+.cropsRow > * {
+  flex-shrink: 0;
 }
 
 .cropItem {

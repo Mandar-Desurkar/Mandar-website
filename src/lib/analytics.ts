@@ -54,7 +54,7 @@ export type AnalyticsEvents = {
   "Closed Prototype": { prototype: string; screens_viewed: number; seconds_open: number };
 
   // Conversion: the north star
-  "Clicked Contact Method": { method: "email" | "linkedin" | "phone"; placement: "contact_window" | "hero" | "home_widget" };
+  "Clicked Contact Method": { method: "email" | "linkedin" | "phone" | "sms" | "vcard"; placement: "contact_window" | "hero" | "home_widget" | "home_dock" };
   "Opened Resume": { placement: "hero" };
   "Clicked External Link": {
     link_type: "school_map" | "project" | "app_website";

@@ -16,7 +16,8 @@
   --line-height: 1.5;
 
   /* Universal Apple System Font Stack */
-  --font-system: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  /* SF Pro on iPhone/Mac (-apple-system), Roboto on Android (system-ui), Segoe UI on Windows */
+  --font-system: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
 *, *::before, *::after {
@@ -477,25 +478,50 @@ a {
     display: none !important;
   }
 
-  /* The section window is a full-width sheet above the dock */
+  /* A section opens as a full-screen iOS app: edge to edge, above the tab bar */
   .mobile-window {
-    top: calc(10px + env(safe-area-inset-top));
-    left: 8px;
-    right: 8px;
-    bottom: calc(88px + env(safe-area-inset-bottom));
+    --ios-tabbar: 49px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: calc(var(--ios-tabbar) + env(safe-area-inset-bottom));
     width: auto;
     max-width: none;
     margin: 0;
-    border-radius: 16px;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35), 0 0 0 0.5px rgba(0, 0, 0, 0.2);
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: #fff;
+    transform-origin: 50% 40%;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
   }
 
-  @media (orientation: landscape) {
+  @media (orientation: landscape) and (max-height: 500px) {
     .mobile-window {
-      left: max(8px, env(safe-area-inset-left));
-      right: max(8px, env(safe-area-inset-right));
-      bottom: calc(70px + env(safe-area-inset-bottom));
+      --ios-tabbar: 32px;
     }
+  }
+
+  /* Grouped pages use the iOS grouped background (systemGroupedBackground) behind white cards */
+  .mobile-window.ios-grouped,
+  .mobile-window.ios-grouped .notebook-bg {
+    background-color: #f2f2f7;
+  }
+
+  /* Plain pages on phones: the dotted notebook grid is visual noise at this size. Text follows
+     the iOS type scale: Callout body (16/22), Title 2 section headings (22/28). */
+  .mobile-window .notebook-bg {
+    background-image: none;
+    font-size: 16px;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .mobile-window .hand-heading-2 {
+    font-size: 22px;
+    line-height: 28px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
   }
 
   .mobile-window .window-content-scroll {
@@ -503,64 +529,106 @@ a {
     -webkit-overflow-scrolling: touch;
   }
 
-  /* iOS-style sheet header: grabber bar + frosted nav bar */
-  .mobile-sheet-header {
+  /* iOS nav bar: 44pt under the status bar. Transparent over the large title, then the chrome
+     material and a hairline once content scrolls beneath it. */
+  .ios-navbar {
+    position: relative;
+    z-index: 2;
     flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: minmax(88px, 1fr) auto minmax(88px, 1fr);
     align-items: center;
-    background: rgba(248, 248, 250, 0.94);
+    height: calc(44px + env(safe-area-inset-top));
+    padding: env(safe-area-inset-top) max(6px, env(safe-area-inset-right)) 0 max(2px, env(safe-area-inset-left));
+    background: transparent;
+    box-shadow: 0 0.5px 0 transparent;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .ios-grouped .ios-navbar {
+    background: #f2f2f7;
+  }
+
+  .ios-navbar.is-scrolled {
+    background: rgba(249, 249, 249, 0.94);
     backdrop-filter: saturate(180%) blur(20px);
     -webkit-backdrop-filter: saturate(180%) blur(20px);
-    border-top-left-radius: 16px;
-    border-top-right-radius: 16px;
-    border-bottom: 0.5px solid rgba(0, 0, 0, 0.12);
+    box-shadow: 0 0.5px 0 rgba(0, 0, 0, 0.3);
   }
 
-  .mobile-sheet-grabber {
-    width: 36px;
-    height: 4.5px;
-    border-radius: 999px;
-    background: rgba(0, 0, 0, 0.22);
-    margin-top: 6px;
-    margin-bottom: 2px;
-  }
-
-  /* iOS-style nav bar: 44px targets, system-blue tint */
-  .mobile-navbar {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 48px 1fr 48px;
-    align-items: center;
-    height: 44px;
-    padding: 0 4px;
-  }
-
-  .mobile-nav-btn {
-    width: 44px;
+  .ios-nav-back,
+  .ios-nav-btn {
     height: 44px;
     display: flex;
     align-items: center;
-    justify-content: center;
     border: 0;
-    border-radius: 12px;
     background: none;
     color: #007aff;
+    font: inherit;
+    font-size: 17px;
+    letter-spacing: -0.4px;
     -webkit-tap-highlight-color: transparent;
   }
 
-  .mobile-nav-btn:active {
-    background: rgba(0, 122, 255, 0.1);
+  .ios-nav-back {
+    justify-self: start;
+    padding: 0 8px 0 0;
+    margin-left: -2px;
   }
 
-  .mobile-nav-title {
-    text-align: center;
+  .ios-nav-back svg {
+    margin-right: -4px;
+  }
+
+  .ios-nav-btn {
+    justify-self: end;
+    width: 44px;
+    justify-content: center;
+  }
+
+  .ios-nav-back:active,
+  .ios-nav-btn:active {
+    opacity: 0.35;
+  }
+
+  .ios-nav-back:focus-visible,
+  .ios-nav-btn:focus-visible {
+    outline: 2px solid #007aff;
+    outline-offset: -2px;
+    border-radius: 10px;
+  }
+
+  .ios-nav-title {
     font-size: 17px;
     font-weight: 600;
-    color: #1d1d1f;
+    line-height: 22px;
+    letter-spacing: -0.4px;
+    color: #000;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .ios-navbar.is-scrolled .ios-nav-title {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Content sits on the iOS 16pt layout margin */
+  .ios-app .container {
+    padding: 0 16px;
+  }
+
+  /* iOS Large Title: 34pt bold, aligned to the 16pt layout margin */
+  .ios-large-title {
+    margin: 2px 0 0;
+    padding: 0 16px 4px;
+    font-size: 34px;
+    font-weight: 700;
+    line-height: 41px;
+    letter-spacing: 0.4px;
+    color: #000;
   }
 
   .mobile-toast {

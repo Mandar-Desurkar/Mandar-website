@@ -4,8 +4,14 @@ import styles from "./Contact.module.css";
 import { Mail, Phone } from "lucide-react";
 import { FaLinkedin } from "react-icons/fa";
 import { trackEvent } from "@/lib/analytics";
+import { useIsMobile } from "@/hooks/useIsMobile";
+import ContactCard from "./ios/ContactCard";
 
 export default function Contact() {
+  // Phones get an iOS Contacts card instead of the notebook doodle
+  const isMobile = useIsMobile();
+  if (isMobile) return <ContactCard />;
+
   return (
     <section id="contact" className={styles.contactSection}>
       <div className={styles.container}>

@@ -7,8 +7,9 @@ import { trackEvent } from "@/lib/analytics";
 import { useEffect, useState, useRef } from "react";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { SECTION_SCROLL_TOP } from "./MobileDock";
-import { LayoutGrid, Share } from "lucide-react";
+import { ChevronLeft, Share } from "lucide-react";
 import { profile } from "@/data/resume";
+import { sectionApp } from "./ios/sections";
 
 export default function DraggableWindow({ 
   title, 
@@ -20,6 +21,8 @@ export default function DraggableWindow({
   const dragControls = useDragControls();
   const { isMinimized, isMaximized, activeTab, setIsClosed } = useWindow();
   const [toast, setToast] = useState<string | null>(null);
+  // Phone: the large title has scrolled under the nav bar, so the inline title and hairline show
+  const [scrolled, setScrolled] = useState(false);
 
   // Phone nav bar: Share opens the native share sheet (WhatsApp, LinkedIn…), else copies the link
   const shareProfile = async () => {
@@ -187,45 +190,59 @@ export default function DraggableWindow({
     }
   };
 
+  // Opening a section zooms it up like an iOS app launch; going Home shrinks it back
   const mobileVariants: Variants = {
-    initial: { opacity: 0, y: 24, scale: 1 },
-    open: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.32, ease: [0.16, 1, 0.3, 1] } },
-    minimized: { opacity: 0, y: 80, transition: { duration: 0.2 } },
-    closed: { opacity: 0, y: 40, transition: { duration: 0.18 } },
+    initial: { opacity: 0, scale: 0.9 },
+    open: { opacity: 1, scale: 1, transition: { duration: 0.34, ease: [0.2, 0.9, 0.3, 1] } },
+    minimized: { opacity: 0, scale: 0.9, transition: { duration: 0.2 } },
+    closed: { opacity: 0, scale: 0.9, transition: { duration: 0.2 } },
   };
 
   if (isMobile) {
+    const app = sectionApp(activeTab);
+    // About and Contact are profile-style pages with their own header (photo + name); the others are
+    // grouped-list pages that start with an iOS large title
+    const grouped = activeTab !== "about";
+    const largeTitle = grouped && activeTab !== "contact";
     return (
       <motion.div
-        className="os-window mobile-window"
+        className={`os-window mobile-window ios-app ${grouped ? "ios-grouped" : ""}`}
         variants={mobileVariants}
         initial="initial"
         animate={isMinimized ? "minimized" : "open"}
         exit="closed"
         style={{ position: "fixed", zIndex: 10 }}
       >
-        {/* iOS-style sheet header: grabber handle + nav bar */}
-        <div className="mobile-sheet-header">
-          <div className="mobile-sheet-grabber" aria-hidden="true" />
-          <div className="mobile-navbar">
-            <button
-              type="button"
-              className="mobile-nav-btn"
-              aria-label="Home screen"
-              onClick={() => {
-                trackEvent("Closed Window", { section: activeTab });
-                setIsClosed(true);
-              }}
-            >
-              <LayoutGrid size={20} />
-            </button>
-            <span className="mobile-nav-title">{title}</span>
-            <button type="button" className="mobile-nav-btn" aria-label="Share this portfolio" onClick={shareProfile}>
-              <Share size={20} />
-            </button>
-          </div>
-        </div>
-        <div className="window-content-scroll" ref={scrollRef}>
+        {/* iOS nav bar: back to Home, inline title once the large title scrolls away, Share */}
+        <header className={`ios-navbar ${scrolled ? "is-scrolled" : ""}`}>
+          <button
+            type="button"
+            className="ios-nav-back"
+            aria-label="Home screen"
+            onClick={() => {
+              trackEvent("Closed Window", { section: activeTab });
+              setIsClosed(true);
+            }}
+          >
+            <ChevronLeft size={30} strokeWidth={2.2} aria-hidden="true" />
+            <span>Home</span>
+          </button>
+          <span className="ios-nav-title" aria-hidden={!scrolled}>
+            {app.title}
+          </span>
+          <button type="button" className="ios-nav-btn" aria-label="Share this portfolio" onClick={shareProfile}>
+            <Share size={22} strokeWidth={2} aria-hidden="true" />
+          </button>
+        </header>
+        <div
+          className="window-content-scroll"
+          ref={scrollRef}
+          onScroll={(e) => {
+            const past = e.currentTarget.scrollTop > (largeTitle ? 40 : 120);
+            if (past !== scrolled) setScrolled(past);
+          }}
+        >
+          {largeTitle && <h1 className="ios-large-title">{app.title}</h1>}
           <div className="notebook-bg">{children}</div>
         </div>
         {toast && (

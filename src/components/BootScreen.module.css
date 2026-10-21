@@ -62,3 +62,44 @@
   font-size: 0.9rem;
   color: #666666;
 }
+
+/* Phone: boots like an iPhone, a white glyph and a thin progress bar on black, no text */
+@media (max-width: 767.98px), (max-width: 1023.98px) and (pointer: coarse), (max-height: 500px) and (pointer: coarse) {
+  .bootScreen {
+    background-color: #000;
+    color: #fff;
+  }
+
+  .icon {
+    color: #fff;
+    margin-bottom: 56px;
+  }
+
+  .title {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .progressContainer {
+    width: 150px;
+    height: 4px;
+    border: 0;
+    border-radius: 2px;
+    background-color: #3a3a3c;
+    box-shadow: none;
+    margin-bottom: 0;
+  }
+
+  .progressBar {
+    background: #fff;
+    box-shadow: none;
+  }
+
+  .statusText {
+    display: none;
+  }
+}

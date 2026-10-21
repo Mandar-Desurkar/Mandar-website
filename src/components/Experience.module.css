@@ -76,6 +76,15 @@
   line-height: 1.2;
 }
 
+/* Brackets come from CSS so the phone's iOS cards can drop them */
+.period::before {
+  content: "(";
+}
+
+.period::after {
+  content: ")";
+}
+
 .description {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   margin-top: 0.2rem;
@@ -243,4 +252,124 @@
   .beyondWorkCard {
     padding: 1.1rem;
   }
+}
+
+/* Phone, inside the iOS app shell (`.ios-app` exists only in the phone layout, at any width): an inset grouped list. Each role is a white rounded card on the
+ grouped background; the large title in the nav bar replaces the section heading. */
+:global(.ios-app) .experienceSection {
+  padding: 8px 0 28px;
+}
+
+:global(.ios-app) .headerBox,
+:global(.ios-app) .atSymbol {
+  display: none;
+}
+
+:global(.ios-app) .entry,
+:global(.ios-app) .beyondWorkCard {
+  margin-bottom: 20px;
+  padding: 16px;
+  border: 0;
+  border-radius: 12px;
+  background: #fff;
+}
+
+:global(.ios-app) .role {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 25px;
+  letter-spacing: -0.4px;
+  color: #000;
+}
+
+:global(.ios-app) .metaData {
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+:global(.ios-app) .company,
+:global(.ios-app) .period {
+  font-size: 15px;
+  line-height: 20px;
+  color: #3c3c43;
+}
+
+:global(.ios-app) .company {
+  font-weight: 500;
+}
+
+:global(.ios-app) .period {
+  color: #8e8e93;
+}
+
+:global(.ios-app) .period::before,
+:global(.ios-app) .period::after {
+  content: none;
+}
+
+:global(.ios-app) .description {
+  margin-top: 0;
+  font-size: 16px;
+  line-height: 21px;
+  color: #3c3c43;
+}
+
+/* Each product group sits under a hairline separator, like rows in an iOS list */
+:global(.ios-app) .group {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 0.5px solid rgba(60, 60, 67, 0.29);
+}
+
+:global(.ios-app) .groupTitle {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 22px;
+  color: #000;
+}
+
+:global(.ios-app) .groupTitleButton .groupTitle {
+  text-decoration: none;
+}
+
+/* iOS tinted button */
+:global(.ios-app) .prototypePill {
+  min-height: 34px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(0, 122, 255, 0.12);
+  color: #007aff;
+  font-size: 15px;
+  font-weight: 600;
+  box-shadow: none;
+}
+
+:global(.ios-app) .groupTitleButton:active .prototypePill {
+  background: rgba(0, 122, 255, 0.2);
+}
+
+:global(.ios-app) .bulletList,
+:global(.ios-app) .beyondWorkList {
+  font-size: 15px;
+  line-height: 20px;
+  color: #3c3c43;
+}
+
+:global(.ios-app) .bulletList strong,
+:global(.ios-app) .beyondWorkList strong {
+  color: #000;
+  font-weight: 600;
+}
+
+:global(.ios-app) .beyondWorkHeader {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 0.5px solid rgba(60, 60, 67, 0.29);
+}
+
+:global(.ios-app) .beyondWorkTitle {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: #6d6d72;
 }

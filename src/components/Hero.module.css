@@ -445,25 +445,230 @@
   }
 }
 
-/* Narrow phones (≈360px Android): smaller photo, and the app links may wrap instead of clipping */
-@container window (max-width: 379.98px) {
+/* ==================== Phone About: one screen, no scrolling ====================
+   Sized against the tightest real case (iPhone SE in Safari: ~380px of content between the nav bar
+   and the dock) so the CTAs are always visible. iOS type scale: Title 1 headline (28/34), Subheadline
+   intro (15/20), Title 3 numbers (20), Caption labels (12). Both CTAs share one row, as iOS pairs a
+   filled and a tinted button. */
+@container window (max-width: 599.98px) {
+  .heroSection {
+    padding-top: 1rem;
+    padding-bottom: 1.25rem;
+  }
+
+  .heroContainer {
+    gap: 0.75rem;
+  }
+
   .visualsGroup {
-    gap: 16px;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding-left: 0;
+  }
+
+  /* The apps list lives on the phone home screen; the sparkle is decoration */
+  .appsShelf,
+  .sparkDoodle {
+    display: none;
   }
 
   .profileFrame {
-    width: 96px;
-    height: 116px;
-    padding: 5px 5px 18px;
+    width: 52px;
+    height: 52px;
+    padding: 0;
+    border-radius: 50%;
+    background: none;
+    box-shadow: 0 0 0 2px #fff, 0 0 0 3px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.12);
+    transform: none;
   }
 
-  .appLinks {
-    flex-wrap: wrap;
-    row-gap: 0;
-    column-gap: 10px;
+  .photoWrapper {
+    border-radius: 50%;
   }
 
-  .linkDot {
-    display: none;
+  .heroContent :global(.hand-heading-1) {
+    margin-bottom: 0.6rem;
+    font-size: 28px;
+    line-height: 34px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+
+  .description {
+    margin-bottom: 1rem;
+    font-size: 15px;
+    line-height: 20px;
+    color: #3c3c43;
+  }
+
+  /* Numbers as one quiet strip with hairline dividers instead of three boxed cards */
+  .kpiGrid {
+    gap: 0;
+    margin-bottom: 1.1rem;
+    padding: 0.7rem 0;
+    border-top: 0.5px solid rgba(60, 60, 67, 0.18);
+    border-bottom: 0.5px solid rgba(60, 60, 67, 0.18);
+  }
+
+  .kpiCard {
+    padding: 0 0.7rem;
+    border: 0;
+    border-radius: 0;
+    background: none;
+  }
+
+  .kpiCard:first-child {
+    padding-left: 0;
+  }
+
+  .kpiCard + .kpiCard {
+    border-left: 0.5px solid rgba(60, 60, 67, 0.18);
+  }
+
+  .kpiCard:hover {
+    background: none;
+    box-shadow: none;
+  }
+
+  .kpiValue {
+    margin-bottom: 0.1rem;
+    font-size: 20px;
+    line-height: 25px;
+    font-weight: 700;
+  }
+
+  .kpiLabel {
+    font-size: 12px;
+    line-height: 16px;
+    color: rgba(60, 60, 67, 0.6);
+  }
+
+  /* Filled + tinted buttons side by side, 44pt tall */
+  .ctaGroup {
+    flex-direction: row;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .ctaGroup > * {
+    flex: 1;
+    min-width: 0;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 0 10px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* The primary label is the longer one, so it gets the larger share of the row */
+  .ctaGroup > :first-child {
+    flex: 1.35;
+  }
+
+  .linkScribble {
+    align-self: auto;
+    background: rgba(0, 122, 255, 0.1);
+    color: #007aff;
+  }
+
+  .linkScribble:hover {
+    color: #007aff;
+    transform: none;
+  }
+
+  /* Narrow Android phones: keep "Connect on LinkedIn" on one line */
+  @container window (max-width: 359.98px) {
+    .ctaGroup > * {
+      padding: 0 8px;
+      font-size: 14px;
+    }
+  }
+
+  /* Tall phones (iPhone 12–16 and Pro Max with room to spare): step up to the iOS Large Title (34/41)
+     and Body (17/22) sizes so the page fills the screen instead of ending halfway down */
+  @media (min-height: 760px) {
+    .heroSection {
+      padding-top: 1.75rem;
+    }
+
+    .heroContainer {
+      gap: 1.1rem;
+    }
+
+    .profileFrame {
+      width: 72px;
+      height: 72px;
+    }
+
+    .heroContent :global(.hand-heading-1) {
+      margin-bottom: 0.85rem;
+      font-size: 34px;
+      line-height: 41px;
+    }
+
+    .description {
+      margin-bottom: 1.5rem;
+      font-size: 17px;
+      line-height: 24px;
+    }
+
+    .kpiGrid {
+      margin-bottom: 1.5rem;
+      padding: 0.95rem 0;
+    }
+
+    .kpiValue {
+      font-size: 22px;
+      line-height: 28px;
+    }
+
+    .kpiLabel {
+      font-size: 13px;
+    }
+
+    .ctaGroup > * {
+      min-height: 50px;
+      border-radius: 14px;
+      font-size: 16px;
+    }
+  }
+
+  /* Short phones (iPhone SE in Safari and smaller): everything steps down one size */
+  @media (max-height: 640px) {
+    .heroSection {
+      padding-top: 0.75rem;
+      padding-bottom: 0.75rem;
+    }
+
+    .profileFrame {
+      width: 44px;
+      height: 44px;
+    }
+
+    .heroContent :global(.hand-heading-1) {
+      font-size: 24px;
+      line-height: 29px;
+    }
+
+    .description {
+      margin-bottom: 0.75rem;
+      font-size: 14px;
+      line-height: 19px;
+    }
+
+    .kpiGrid {
+      margin-bottom: 0.85rem;
+      padding: 0.55rem 0;
+    }
+
+    .kpiValue {
+      font-size: 18px;
+      line-height: 22px;
+    }
   }
 }

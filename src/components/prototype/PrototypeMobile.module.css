@@ -206,9 +206,9 @@
   gap: 10px;
   max-width: 420px;
   margin: 0 auto;
-  padding: 8px 14px;
+  padding: 10px 14px;
   border: 0;
-  border-radius: 999px;
+  border-radius: 16px;
   background: rgba(22, 22, 26, 0.94);
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
@@ -236,9 +236,6 @@
 .hintText {
   flex: 1;
   min-width: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .hintClose {
@@ -246,35 +243,43 @@
   opacity: 0.6;
 }
 
-/* ---------- Minimal floating mini-pill when toolbar is hidden ---------- */
+/* ---------- Hidden toolbar: a small tab on the right edge ----------
+   Bottom-centre would sit on the app's tab bar (both apps put Scan in the middle), and the top has
+   the app header (neither scrolls), so the tab hugs the right edge at mid-height, over content the
+   visitor can scroll out from under it. */
 .miniPill {
   position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: calc(12px + env(safe-area-inset-bottom));
+  right: env(safe-area-inset-right);
+  top: 50%;
   z-index: 45;
-  height: 38px;
+  width: 22px;
+  height: 60px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding: 0 14px;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 0 0 2px;
   border: 0;
-  border-radius: 19px;
-  background: rgba(22, 22, 26, 0.9);
+  border-radius: 12px 0 0 12px;
+  background: rgba(22, 22, 26, 0.86);
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4), inset 0 0 0 0.5px rgba(255, 255, 255, 0.15);
+  box-shadow: -4px 4px 18px rgba(0, 0, 0, 0.3), inset 0 0 0 0.5px rgba(255, 255, 255, 0.15);
   color: #f2f2f7;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: -0.1px;
   cursor: pointer;
+  transform: translateY(-50%);
   -webkit-tap-highlight-color: transparent;
-  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+/* A bigger invisible hit area so the slim tab is easy to tap */
+.miniPill::after {
+  content: "";
+  position: absolute;
+  inset: -10px 0 -10px -14px;
 }
 
 .miniPill:active {
-  transform: translateX(-50%) scale(0.96);
   background: rgba(30, 30, 36, 0.96);
 }
 
@@ -286,15 +291,8 @@
   box-shadow: 0 0 8px rgba(13, 153, 255, 0.8);
 }
 
-.miniText {
-  max-width: 220px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 .miniChevron {
-  opacity: 0.7;
+  opacity: 0.85;
 }
 
 /* ---------- Sheets ---------- */
@@ -676,5 +674,13 @@
   .screen :global(textarea),
   .screen :global(select) {
     font-size: 16px !important;
+  }
+}
+
+/* Narrow phones: Restart (also in the PM note sheet) and Hide (the bar auto-hides) give way so the
+   screen title stays readable */
+@media (max-width: 359.98px) {
+  .tbOptional {
+    display: none;
   }
 }
