@@ -80,8 +80,7 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
 - [ ] **Security/UX:** `NoInspect.tsx` blocks copy (including the email); `Dock.tsx`
       `window.open` lacks `noopener`.
 - [ ] Add `src/app/not-found.tsx` (OS-themed 404).
-- [ ] Push `prod` and `dev` to origin. Committed locally on 2026-10-21; the push was rejected (403)
-      because git was signed in as `mandar-desurkar3`, not the repo owner `Mandar-Desurkar`.
+- [x] Pushed `prod` and `dev` to origin (2026-10-21) using the Mandar-Desurkar account.
 
 ## Kissan Sampurna interactive prototype
 
@@ -333,8 +332,10 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 - [ ] Pre-existing: on shorter screens (e.g. 1440×780) the About text column alone (505px) is
   taller than the 64vh window, so the window scrolls. Consider a min height for About.
   2026-10-21: Added the Gau Sampurna prototype (prod branch). See its section.
-  2026-10-21: Committed all work since 44e86cd to `prod` and fast-forwarded `dev` (local; push
-  still needs the GitHub account switch to Mandar-Desurkar). Fixed preflight's `_blank`/noopener
+  2026-10-21: Committed all work since 44e86cd to `prod` and fast-forwarded `dev`, then **pushed
+  both to GitHub** (e577dc2). Pushing requires the repo owner account: `gh auth switch --user
+  Mandar-Desurkar`, push with `-c credential.helper= -c 'credential.helper=!gh auth
+  git-credential'`, then switch back to mandar-desurkar3. Fixed preflight's `_blank`/noopener
   check to handle multi-line JSX.
   Next idea (not built): a site-wide "PM annotations" toggle showing the reasoning behind other
   design decisions.
