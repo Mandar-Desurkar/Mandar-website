@@ -20,8 +20,8 @@
   padding: 11px 13px 12px 11px;
   border-radius: 18px;
   background: rgba(246, 246, 246, 0.86);
-  backdrop-filter: saturate(180%) blur(30px);
   -webkit-backdrop-filter: saturate(180%) blur(30px);
+  backdrop-filter: saturate(180%) blur(30px);
   box-shadow:
     0 0 0 0.5px rgba(0, 0, 0, 0.12),
     inset 0 0.5px 0 rgba(255, 255, 255, 0.7),

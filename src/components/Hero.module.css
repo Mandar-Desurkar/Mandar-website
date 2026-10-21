@@ -472,13 +472,15 @@
     display: none;
   }
 
+  /* The face leads the page: a large round portrait (88pt, 112pt on tall phones), as on an iOS
+     contact card, rather than a small avatar beside a bigger headline */
   .profileFrame {
-    width: 52px;
-    height: 52px;
+    width: 88px;
+    height: 88px;
     padding: 0;
     border-radius: 50%;
     background: none;
-    box-shadow: 0 0 0 2px #fff, 0 0 0 3px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 0 0 3px #fff, 0 0 0 3.5px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.14);
     transform: none;
   }
 
@@ -593,7 +595,7 @@
      and Body (17/22) sizes so the page fills the screen instead of ending halfway down */
   @media (min-height: 760px) {
     .heroSection {
-      padding-top: 1.75rem;
+      padding-top: 1rem;
     }
 
     .heroContainer {
@@ -601,14 +603,14 @@
     }
 
     .profileFrame {
-      width: 72px;
-      height: 72px;
+      width: 112px;
+      height: 112px;
     }
 
     .heroContent :global(.hand-heading-1) {
       margin-bottom: 0.85rem;
-      font-size: 34px;
-      line-height: 41px;
+      font-size: 30px;
+      line-height: 36px;
     }
 
     .description {
@@ -646,8 +648,8 @@
     }
 
     .profileFrame {
-      width: 44px;
-      height: 44px;
+      width: 72px;
+      height: 72px;
     }
 
     .heroContent :global(.hand-heading-1) {

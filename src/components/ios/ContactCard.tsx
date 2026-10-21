@@ -5,7 +5,7 @@
 // the phone a vCard so a recruiter can save me in one tap.
 import Image from "next/image";
 import { FaLinkedin } from "react-icons/fa";
-import { Mail, MessageCircle, Phone, UserPlus } from "lucide-react";
+import { IoCall, IoChatbubble, IoMail, IoPersonAdd } from "react-icons/io5";
 import { profile } from "@/data/resume";
 import { trackEvent } from "@/lib/analytics";
 import styles from "./ContactCard.module.css";
@@ -29,10 +29,11 @@ const vcard = [
 type Method = "sms" | "phone" | "email" | "linkedin";
 const track = (method: Method | "vcard") => trackEvent("Clicked Contact Method", { method, placement: "contact_window" });
 
+// iOS Contacts uses filled SF Symbols in these tiles, so the glyphs are filled (Ionicons 5)
 const ACTIONS: { method: Method; label: string; href: string; Icon: React.ComponentType<{ size?: number }>; external?: boolean }[] = [
-  { method: "sms", label: "message", href: `sms:${tel}`, Icon: MessageCircle },
-  { method: "phone", label: "call", href: `tel:${tel}`, Icon: Phone },
-  { method: "email", label: "mail", href: `mailto:${profile.email}`, Icon: Mail },
+  { method: "sms", label: "message", href: `sms:${tel}`, Icon: IoChatbubble },
+  { method: "phone", label: "call", href: `tel:${tel}`, Icon: IoCall },
+  { method: "email", label: "mail", href: `mailto:${profile.email}`, Icon: IoMail },
   { method: "linkedin", label: "LinkedIn", href: profile.linkedin, Icon: FaLinkedin, external: true },
 ];
 
@@ -42,7 +43,7 @@ export default function ContactCard() {
   return (
     <section className={styles.card} aria-label="Contact card">
       <header className={styles.head}>
-        <Image src="/profile-new.jpg" alt="" width={104} height={104} className={styles.avatar} priority />
+        <Image src="/profile-avatar.jpg" alt="" width={104} height={104} className={styles.avatar} priority />
         <h1 className={styles.name}>{profile.name}</h1>
         <p className={styles.role}>{profile.role}</p>
       </header>
@@ -91,7 +92,7 @@ export default function ContactCard() {
           className={`${styles.row} ${styles.button}`}
           onClick={() => track("vcard")}
         >
-          <UserPlus size={20} aria-hidden="true" />
+          <IoPersonAdd size={20} aria-hidden="true" />
           Add to Contacts
         </a>
       </div>

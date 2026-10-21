@@ -1,5 +1,8 @@
-/* Phone home screen, laid out like an iOS home screen: widgets, a 4-column app grid and a frosted
-   dock pinned to the bottom. Widgets use the iOS widget radius (22px) and frosted material. */
+/* Phone home screen, laid out like an iOS home screen: a medium widget, two small widgets, a
+   4-column app grid, the "Search" pill and a frosted dock pinned to the bottom. Widgets use iOS 26
+   Liquid Glass (dark tinted glass with a bright rim and a soft sheen) so they read on the wallpaper.
+   Grid metrics follow iPhone (393pt wide: 26pt margins, 60pt icons, ~158pt small widgets) and come
+   from --margin / --gx, so a small widget is always exactly two icon columns wide. */
 
 .home {
   display: none;
@@ -7,15 +10,18 @@
 
 @media (max-width: 767.98px), (max-width: 1023.98px) and (pointer: coarse), (max-height: 500px) and (pointer: coarse) {
   .home {
+    --margin: 26px;
+    --gx: 22px;
+    --gy: 20px;
+    --icon: 60px;
     position: fixed;
     inset: 0;
     z-index: 4;
     display: flex;
     flex-direction: column;
-    max-width: 520px;
+    max-width: 480px;
     margin: 0 auto;
-    padding: calc(16px + env(safe-area-inset-top)) 0 calc(10px + env(safe-area-inset-bottom));
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+    padding: calc(14px + env(safe-area-inset-top)) 0 calc(8px + env(safe-area-inset-bottom));
     -webkit-font-smoothing: antialiased;
     animation: zoomIn 0.4s cubic-bezier(0.2, 0.9, 0.3, 1) both;
   }
@@ -26,13 +32,31 @@
   from { opacity: 0; transform: scale(1.06); }
 }
 
-.page {
+/* Home pages side by side; native scroll snapping gives the iOS swipe with momentum */
+.pager {
   flex: 1;
   min-height: 0;
   display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+
+.pager::-webkit-scrollbar {
+  display: none;
+}
+
+.page {
+  flex: 0 0 100%;
+  height: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 0 20px 16px;
+  padding: 0 var(--margin) 12px;
   overflow-y: auto;
   scrollbar-width: none;
 }
@@ -41,24 +65,40 @@
   display: none;
 }
 
-/* iOS widget material */
+/* When the apps don't all fit (short screens, landscape), the page scrolls and fades out at the
+   edge instead of being cut off */
+@media (max-height: 640px) {
+  .page {
+    -webkit-mask-image: linear-gradient(#000 calc(100% - 20px), transparent);
+    mask-image: linear-gradient(#000 calc(100% - 20px), transparent);
+  }
+}
+
+/* ---------- Widgets: Liquid Glass ---------- */
+
 .widget {
   flex-shrink: 0;
   border: 0;
-  border-radius: 22px;
-  background: rgba(28, 24, 36, 0.38);
-  backdrop-filter: saturate(180%) blur(24px);
-  -webkit-backdrop-filter: saturate(180%) blur(24px);
-  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.2), 0 6px 20px rgba(0, 0, 0, 0.18);
+  border-radius: 24px;
+  background:
+    linear-gradient(155deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.03) 45%, rgba(255, 255, 255, 0.07)),
+    rgba(22, 18, 32, 0.34);
+  -webkit-backdrop-filter: saturate(180%) blur(28px);
+  backdrop-filter: saturate(180%) blur(28px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.24),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.16),
+    0 10px 30px rgba(0, 0, 0, 0.22);
   color: #fff;
   font: inherit;
   text-align: left;
   -webkit-tap-highlight-color: transparent;
-  transition: transform 0.18s ease;
+  transition: transform 0.18s ease, filter 0.18s ease;
 }
 
 .widget:active {
   transform: scale(0.97);
+  filter: brightness(1.08);
 }
 
 .widget:focus-visible {
@@ -80,38 +120,41 @@
   height: 64px;
   border-radius: 50%;
   object-fit: cover;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.55), 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
 .profileText {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
 }
 
+/* iOS Title 3 (20/25) name, Subheadline (15/20) role */
 .profileText b {
   font-size: 20px;
   font-weight: 700;
   line-height: 25px;
-  letter-spacing: -0.4px;
+  letter-spacing: -0.45px;
 }
 
 .profileText > span {
   font-size: 15px;
   line-height: 20px;
-  color: rgba(255, 255, 255, 0.8);
+  letter-spacing: -0.24px;
+  color: rgba(255, 255, 255, 0.78);
 }
 
 .profileText > .open {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  margin-top: 4px;
+  gap: 7px;
+  margin-top: 5px;
   font-size: 13px;
   font-weight: 600;
   line-height: 18px;
-  color: #a6f4b8;
+  letter-spacing: -0.08px;
+  color: #8ff0a8;
 }
 
 .open i {
@@ -119,14 +162,14 @@
   height: 8px;
   border-radius: 50%;
   background: #30d158;
-  box-shadow: 0 0 0 3px rgba(48, 209, 88, 0.25);
+  box-shadow: 0 0 0 3px rgba(48, 209, 88, 0.25), 0 0 8px rgba(48, 209, 88, 0.6);
 }
 
-/* Small widgets: square, two per row */
+/* Small widgets: square, two icon columns wide each */
 .smallRow {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: var(--gx);
 }
 
 .small {
@@ -134,42 +177,46 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  padding: 14px;
+  padding: 15px;
   overflow: hidden;
 }
 
+/* Caption 2 (11pt), bold, tracked uppercase, as iOS widget headers */
 .caption {
   font-size: 11px;
   font-weight: 700;
   line-height: 13px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.62);
 }
 
+/* Large Title (34pt) figure */
 .bigNumber {
   margin-top: 6px;
   font-size: 34px;
   font-weight: 700;
   line-height: 38px;
-  letter-spacing: -0.8px;
+  letter-spacing: -0.6px;
   font-variant-numeric: tabular-nums;
 }
 
 .bigLabel {
   font-size: 13px;
   line-height: 16px;
-  color: rgba(255, 255, 255, 0.8);
+  letter-spacing: -0.08px;
+  color: rgba(255, 255, 255, 0.78);
 }
 
 .minor {
   margin-top: auto;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
   font-size: 12px;
-  line-height: 15px;
-  color: rgba(255, 255, 255, 0.72);
+  line-height: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  white-space: nowrap;
 }
 
 .minor b {
@@ -177,22 +224,27 @@
   font-weight: 700;
 }
 
+/* "Currently": the same glass, tinted blue → indigo */
 .now {
-  background: linear-gradient(160deg, rgba(10, 132, 255, 0.55), rgba(88, 86, 214, 0.5));
+  background:
+    linear-gradient(155deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0) 50%),
+    linear-gradient(160deg, rgba(10, 132, 255, 0.62), rgba(94, 92, 230, 0.56));
 }
 
+/* Headline (17pt semibold) */
 .role {
   margin-top: 8px;
   font-size: 17px;
-  font-weight: 700;
-  line-height: 21px;
-  letter-spacing: -0.3px;
+  font-weight: 600;
+  line-height: 22px;
+  letter-spacing: -0.43px;
 }
 
 .company {
   margin-top: 2px;
   font-size: 15px;
-  line-height: 19px;
+  line-height: 20px;
+  letter-spacing: -0.24px;
   color: rgba(255, 255, 255, 0.85);
 }
 
@@ -200,42 +252,152 @@
   margin-top: auto;
   font-size: 12px;
   font-weight: 600;
-  line-height: 15px;
-  color: rgba(255, 255, 255, 0.72);
+  line-height: 16px;
+  color: rgba(255, 255, 255, 0.75);
 }
 
-/* App grid: 4 columns, as on iPhone */
+/* ---------- App grid: 4 columns, as on iPhone ---------- */
 .grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  row-gap: 22px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: var(--gx);
+  row-gap: var(--gy);
+  align-items: start;
   justify-items: center;
-  padding-top: 6px;
+  padding-top: 4px;
 }
 
-/* Dock */
+/* ---------- Page dots, Search pill + dock ---------- */
+
+.dots {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+/* iOS page dots: 7pt dots on a 16pt pitch (9pt apart); the 20pt height keeps them easy to tap */
+.dot {
+  width: 16px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.dot::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.38);
+  transition: background-color 0.2s ease;
+}
+
+.dotActive::before {
+  background: #fff;
+}
+
+.dot:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: -2px;
+  border-radius: 10px;
+}
+
+.search {
+  flex-shrink: 0;
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 30px;
+  margin: 4px 0 14px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 15px;
+  background: rgba(120, 120, 135, 0.32);
+  -webkit-backdrop-filter: saturate(160%) blur(20px);
+  backdrop-filter: saturate(160%) blur(20px);
+  box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.08px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.search:active {
+  filter: brightness(1.25);
+}
+
+.search:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
 .dock {
   flex-shrink: 0;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   justify-items: center;
   margin: 0 12px;
-  padding: 14px 6px;
-  border-radius: 32px;
-  background: rgba(255, 255, 255, 0.22);
-  backdrop-filter: saturate(180%) blur(28px);
-  -webkit-backdrop-filter: saturate(180%) blur(28px);
-  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.25);
+  padding: 15px calc(var(--margin) - 12px);
+  border-radius: 34px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06)),
+    rgba(40, 36, 52, 0.22);
+  -webkit-backdrop-filter: saturate(180%) blur(30px);
+  backdrop-filter: saturate(180%) blur(30px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), inset 0 0 0 0.5px rgba(255, 255, 255, 0.14);
 }
 
-/* Small phones (iPhone SE 1st gen, 320pt) */
+/* ---------- Sizes ---------- */
+
+/* Large phones (Plus / Pro Max, 414–440pt) */
+@media (min-width: 414px) {
+  .home { --margin: 28px; --gx: 24px; --icon: 62px; }
+}
+
+/* iPhone SE / mini (375pt) */
+@media (max-width: 389.98px) {
+  .home { --margin: 22px; --gx: 20px; --gy: 18px; }
+}
+
+/* 320pt phones: smaller icons and margins so four columns still fit */
 @media (max-width: 359.98px) {
-  .page { padding: 0 14px 12px; gap: 12px; }
-  .smallRow { gap: 12px; }
-  .small { aspect-ratio: auto; min-height: 150px; padding: 12px; }
+  .home { --margin: 14px; --gx: 12px; --gy: 16px; --icon: 54px; }
+  .page { gap: 12px; }
+  .profile { padding: 14px; gap: 12px; }
+  .avatar { width: 54px; height: 54px; }
+  .profileText b { font-size: 18px; line-height: 23px; }
+  .profileText > span { font-size: 14px; line-height: 19px; }
+  .small { aspect-ratio: auto; min-height: 146px; padding: 12px; }
   .bigNumber { font-size: 28px; line-height: 32px; }
-  .minor { margin-top: 8px; }
+  .minor { margin-top: 8px; font-size: 11px; line-height: 15px; }
   .role { font-size: 15px; line-height: 19px; }
+  .company { font-size: 14px; line-height: 18px; }
+  .dock { padding: 12px 4px; border-radius: 30px; }
+}
+
+/* Short screens (Safari with its toolbars on an SE) */
+@media (max-height: 700px) {
+  .home { --gy: 16px; }
+  .search { margin: 4px 0 10px; }
+  .dock { padding-top: 12px; padding-bottom: 12px; }
+}
+
+/* Phone in landscape: no room for the Search pill; a compact dock leaves space for the widgets */
+@media (max-height: 500px) and (pointer: coarse) and (orientation: landscape) {
+  .home { max-width: 560px; }
+  .search,
+  .dots { display: none; }
+  .dock { --icon: 46px; margin-top: 6px; padding: 8px 40px; border-radius: 24px; }
+  .small { aspect-ratio: auto; min-height: 150px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

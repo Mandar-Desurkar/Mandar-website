@@ -213,7 +213,8 @@ export default function DraggableWindow({
         exit="closed"
         style={{ position: "fixed", zIndex: 10 }}
       >
-        {/* iOS nav bar: back to Home, inline title once the large title scrolls away, Share */}
+        {/* iOS nav bar: round glass Back (to the home screen) and Share buttons, inline title once the
+            large title scrolls away */}
         <header className={`ios-navbar ${scrolled ? "is-scrolled" : ""}`}>
           <button
             type="button"
@@ -224,21 +225,20 @@ export default function DraggableWindow({
               setIsClosed(true);
             }}
           >
-            <ChevronLeft size={30} strokeWidth={2.2} aria-hidden="true" />
-            <span>Home</span>
+            <ChevronLeft size={21} strokeWidth={2.5} aria-hidden="true" />
           </button>
           <span className="ios-nav-title" aria-hidden={!scrolled}>
             {app.title}
           </span>
           <button type="button" className="ios-nav-btn" aria-label="Share this portfolio" onClick={shareProfile}>
-            <Share size={22} strokeWidth={2} aria-hidden="true" />
+            <Share size={17} strokeWidth={2.3} aria-hidden="true" />
           </button>
         </header>
         <div
           className="window-content-scroll"
           ref={scrollRef}
           onScroll={(e) => {
-            const past = e.currentTarget.scrollTop > (largeTitle ? 40 : 120);
+            const past = e.currentTarget.scrollTop > (largeTitle ? 34 : 120);
             if (past !== scrolled) setScrolled(past);
           }}
         >

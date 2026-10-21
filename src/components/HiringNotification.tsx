@@ -107,7 +107,7 @@ export default function HiringNotification() {
               </button>
 
               <Image
-                src="/profile-new.jpg"
+                src="/profile-avatar.jpg"
                 alt=""
                 width={38}
                 height={38}

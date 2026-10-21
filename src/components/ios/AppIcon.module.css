@@ -1,4 +1,7 @@
-/* iOS app icon: squircle tile, white SF-style glyph, 12pt label with the home-screen text shadow. */
+/* iOS app icon. The tile is Apple's continuous-curvature "squircle" (a superellipse mask, not a
+   rounded rectangle), with an iOS 26 glass sheen and rim, a white SF-style glyph and a 12pt label
+   with the home-screen text shadow. The shadow lives on a wrapper (.frame) because a mask clips
+   box-shadows. The size comes from --icon so a grid can scale every icon at once. */
 
 .icon {
   display: flex;
@@ -14,25 +17,55 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-.tile {
+.frame {
   position: relative;
   flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18), inset 0 0.5px 0 rgba(255, 255, 255, 0.35);
+  display: block;
+  width: var(--icon, 60px);
+  height: var(--icon, 60px);
+  /* Only shapes the focus ring; the visible shape comes from the tile's mask */
+  border-radius: 26%;
+  filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.14)) drop-shadow(0 4px 10px rgba(0, 0, 0, 0.12));
   transition: transform 0.18s ease, filter 0.18s ease;
 }
 
-/* iOS dims and shrinks an icon slightly while it is pressed */
-.icon:active .tile {
-  transform: scale(0.92);
-  filter: brightness(0.85);
+.tile {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: #fff;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M100.0 50.0L100.0 65.0L99.9 69.7L99.8 73.2L99.6 76.0L99.4 78.4L99.1 80.5L98.8 82.4L98.4 84.0L98.0 85.6L97.5 87.0L97.0 88.3L96.4 89.5L95.8 90.6L95.1 91.7L94.3 92.6L93.5 93.5L92.6 94.3L91.7 95.1L90.6 95.8L89.5 96.4L88.3 97.0L87.0 97.5L85.6 98.0L84.0 98.4L82.4 98.8L80.5 99.1L78.4 99.4L76.0 99.6L73.2 99.8L69.7 99.9L65.0 100.0L50.0 100.0L35.0 100.0L30.3 99.9L26.8 99.8L24.0 99.6L21.6 99.4L19.5 99.1L17.6 98.8L16.0 98.4L14.4 98.0L13.0 97.5L11.7 97.0L10.5 96.4L9.4 95.8L8.3 95.1L7.4 94.3L6.5 93.5L5.7 92.6L4.9 91.7L4.2 90.6L3.6 89.5L3.0 88.3L2.5 87.0L2.0 85.6L1.6 84.0L1.2 82.4L0.9 80.5L0.6 78.4L0.4 76.0L0.2 73.2L0.1 69.7L0.0 65.0L0.0 50.0L0.0 35.0L0.1 30.3L0.2 26.8L0.4 24.0L0.6 21.6L0.9 19.5L1.2 17.6L1.6 16.0L2.0 14.4L2.5 13.0L3.0 11.7L3.6 10.5L4.2 9.4L4.9 8.3L5.7 7.4L6.5 6.5L7.4 5.7L8.3 4.9L9.4 4.2L10.5 3.6L11.7 3.0L13.0 2.5L14.4 2.0L16.0 1.6L17.6 1.2L19.5 0.9L21.6 0.6L24.0 0.4L26.8 0.2L30.3 0.1L35.0 0.0L50.0 0.0L65.0 0.0L69.7 0.1L73.2 0.2L76.0 0.4L78.4 0.6L80.5 0.9L82.4 1.2L84.0 1.6L85.6 2.0L87.0 2.5L88.3 3.0L89.5 3.6L90.6 4.2L91.7 4.9L92.6 5.7L93.5 6.5L94.3 7.4L95.1 8.3L95.8 9.4L96.4 10.5L97.0 11.7L97.5 13.0L98.0 14.4L98.4 16.0L98.8 17.6L99.1 19.5L99.4 21.6L99.6 24.0L99.8 26.8L99.9 30.3L100.0 35.0Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M100.0 50.0L100.0 65.0L99.9 69.7L99.8 73.2L99.6 76.0L99.4 78.4L99.1 80.5L98.8 82.4L98.4 84.0L98.0 85.6L97.5 87.0L97.0 88.3L96.4 89.5L95.8 90.6L95.1 91.7L94.3 92.6L93.5 93.5L92.6 94.3L91.7 95.1L90.6 95.8L89.5 96.4L88.3 97.0L87.0 97.5L85.6 98.0L84.0 98.4L82.4 98.8L80.5 99.1L78.4 99.4L76.0 99.6L73.2 99.8L69.7 99.9L65.0 100.0L50.0 100.0L35.0 100.0L30.3 99.9L26.8 99.8L24.0 99.6L21.6 99.4L19.5 99.1L17.6 98.8L16.0 98.4L14.4 98.0L13.0 97.5L11.7 97.0L10.5 96.4L9.4 95.8L8.3 95.1L7.4 94.3L6.5 93.5L5.7 92.6L4.9 91.7L4.2 90.6L3.6 89.5L3.0 88.3L2.5 87.0L2.0 85.6L1.6 84.0L1.2 82.4L0.9 80.5L0.6 78.4L0.4 76.0L0.2 73.2L0.1 69.7L0.0 65.0L0.0 50.0L0.0 35.0L0.1 30.3L0.2 26.8L0.4 24.0L0.6 21.6L0.9 19.5L1.2 17.6L1.6 16.0L2.0 14.4L2.5 13.0L3.0 11.7L3.6 10.5L4.2 9.4L4.9 8.3L5.7 7.4L6.5 6.5L7.4 5.7L8.3 4.9L9.4 4.2L10.5 3.6L11.7 3.0L13.0 2.5L14.4 2.0L16.0 1.6L17.6 1.2L19.5 0.9L21.6 0.6L24.0 0.4L26.8 0.2L30.3 0.1L35.0 0.0L50.0 0.0L65.0 0.0L69.7 0.1L73.2 0.2L76.0 0.4L78.4 0.6L80.5 0.9L82.4 1.2L84.0 1.6L85.6 2.0L87.0 2.5L88.3 3.0L89.5 3.6L90.6 4.2L91.7 4.9L92.6 5.7L93.5 6.5L94.3 7.4L95.1 8.3L95.8 9.4L96.4 10.5L97.0 11.7L97.5 13.0L98.0 14.4L98.4 16.0L98.8 17.6L99.1 19.5L99.4 21.6L99.6 24.0L99.8 26.8L99.9 30.3L100.0 35.0Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+  /* Glass rim: a bright top edge and a faint inner outline */
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.38), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
+/* iOS 26 sheen: light falling on the top half of the glass */
+.tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.05) 42%, rgba(255, 255, 255, 0) 60%);
+  pointer-events: none;
+}
+
+/* Real app icons (white backgrounds) keep their artwork untouched, with a hairline edge */
 .imageTile {
-  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+.imageTile::after {
+  display: none;
+}
+
+/* iOS dims and shrinks an icon slightly while it is pressed */
+.icon:active .frame {
+  transform: scale(0.92);
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.12)) brightness(0.85);
 }
 
 .image {
@@ -55,30 +88,35 @@
   font-weight: 600;
   line-height: 22px;
   text-align: center;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
+/* iOS home-screen label: 12pt, white with a soft shadow so it reads on any wallpaper. It may be as
+   wide as one grid pitch (icon + column gap) and wraps to a second line only when a full name like
+   "Kissan Sampurna" doesn't fit, rather than being truncated. */
 .label {
-  max-width: 76px;
+  display: -webkit-box;
+  max-width: calc(var(--icon, 60px) + var(--gx, 18px) + 6px);
   font-size: 12px;
   font-weight: 500;
-  letter-spacing: 0.01em;
+  letter-spacing: 0;
   line-height: 14px;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
-  white-space: nowrap;
+  text-align: center;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.35), 0 1px 1.5px rgba(0, 0, 0, 0.35);
   overflow: hidden;
-  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
 }
 
 .icon:focus-visible {
   outline: none;
 }
 
-.icon:focus-visible .tile {
+.icon:focus-visible .frame {
   outline: 2px solid #fff;
   outline-offset: 3px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tile { transition: none; }
+  .frame { transition: none; }
 }

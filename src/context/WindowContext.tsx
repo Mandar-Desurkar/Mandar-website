@@ -5,8 +5,8 @@ import { trackEvent, secondsSince } from '@/lib/analytics';
 
 export type SectionId = 'about' | 'experience' | 'education' | 'projects' | 'contact';
 export type PrototypeId = 'kissan-sampurna' | 'gau-sampurna';
-export type PrototypePlacement = 'hero' | 'experience' | 'projects' | 'home_screen' | 'deep_link';
-export type OpenSource = 'desktop_icon' | 'menu_bar' | 'system_menu' | 'hero_cta' | 'notification' | 'mobile_dock' | 'home_widget';
+export type PrototypePlacement = 'hero' | 'experience' | 'projects' | 'home_screen' | 'deep_link' | 'spotlight';
+export type OpenSource = 'desktop_icon' | 'menu_bar' | 'system_menu' | 'hero_cta' | 'notification' | 'mobile_dock' | 'home_widget' | 'spotlight';
 
 type WindowContextType = {
   isMinimized: boolean;

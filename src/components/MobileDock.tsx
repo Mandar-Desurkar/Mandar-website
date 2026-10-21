@@ -1,8 +1,9 @@
 "use client";
 
-// Phone-only navigation: an iOS tab bar shown while a section "app" is open (the home screen has
-// its own dock of contact apps). Desktop keeps the double-click folders and the menu bar. Tapping
-// the current tab again scrolls it back to the top, as on iOS.
+// Phone-only navigation: the iOS tab bar shown while a section "app" is open (the home screen has
+// its own dock of contact apps), in the current Liquid Glass style: a floating capsule, the selected
+// tab on a glass pill with a filled glyph, the others outlined. Desktop keeps the folders and the
+// menu bar. Tapping the current tab again scrolls it back to the top, as on iOS.
 import { useWindow } from "@/context/WindowContext";
 import { SECTION_APPS } from "./ios/sections";
 import styles from "./MobileDock.module.css";
@@ -15,8 +16,9 @@ export default function MobileDock() {
 
   return (
     <nav className={styles.tabBar} aria-label="Sections">
-      {SECTION_APPS.map(({ id, label, Glyph }) => {
+      {SECTION_APPS.map(({ id, label, Glyph, Outline }) => {
         const current = activeTab === id;
+        const Icon = current ? Glyph : Outline;
         return (
           <button
             key={id}
@@ -28,7 +30,7 @@ export default function MobileDock() {
               else openSection(id, "mobile_dock");
             }}
           >
-            <Glyph size={25} strokeWidth={current ? 2.3 : 1.8} aria-hidden="true" />
+            <Icon className={styles.glyph} aria-hidden="true" />
             <span className={styles.label}>{label}</span>
           </button>
         );

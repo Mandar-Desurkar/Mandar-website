@@ -42,7 +42,12 @@ export type AnalyticsEvents = {
   "Dismissed Hiring Notification": { method: "close_button" | "timeout" };
 
   // Interactive app prototypes (e.g. Kissan Sampurna)
-  "Opened Prototype": { prototype: string; placement: "hero" | "experience" | "projects" | "home_screen" | "deep_link" };
+  "Opened Prototype": { prototype: string; placement: "hero" | "experience" | "projects" | "home_screen" | "deep_link" | "spotlight" };
+  // Phone home screen: the iOS Search pill opens Spotlight over the sections, apps and contact actions
+  "Opened Spotlight": Record<string, never>;
+  // Phone home screen has two pages (apps, then the clock/calendar); page is 1-based
+  "Viewed Home Screen Page": { page: number; method: "swipe" | "dots" };
+  "Selected Spotlight Result": { result: string; kind: "section" | "app" | "contact"; query_length: number };
   // Mobile section nav bar: native share sheet, or the copied link where sharing isn't supported
   "Shared Profile": { method: "native" | "copy"; section: string };
   "Viewed Prototype Screen": {
@@ -54,7 +59,7 @@ export type AnalyticsEvents = {
   "Closed Prototype": { prototype: string; screens_viewed: number; seconds_open: number };
 
   // Conversion: the north star
-  "Clicked Contact Method": { method: "email" | "linkedin" | "phone" | "sms" | "vcard"; placement: "contact_window" | "hero" | "home_widget" | "home_dock" };
+  "Clicked Contact Method": { method: "email" | "linkedin" | "phone" | "sms" | "vcard"; placement: "contact_window" | "hero" | "home_widget" | "home_dock" | "spotlight" };
   "Opened Resume": { placement: "hero" };
   "Clicked External Link": {
     link_type: "school_map" | "project" | "app_website";

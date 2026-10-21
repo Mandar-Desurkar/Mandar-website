@@ -21,8 +21,9 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
 - Sections (tab ids in `WindowContext.activeTab`): `about`, `experience`, `education`,
   `projects`, `contact`.
 - Branches: `main` (default), `dev`, `prod` (release). Remote: GitHub `Mandar-Desurkar/Mandar-website`.
-- Uncommitted work on `prod` as of 2026-10-21: UI changes across about 20 components/styles;
-  `public/profile.jpg` replaced by `public/profile-new.jpg`.
+- Profile photo (2026-10-21): `public/profile-photo.jpg` (640px, full frame) for the About hero /
+  desktop polaroid, and `public/profile-avatar.jpg` (320px head-and-shoulders crop) for the round
+  avatars (home widget, Contact card, hiring notification). To change the photo, replace both.
 - **Content source of truth: `src/data/resume.ts`** (profile, KPIs, experience, projects,
   beyond work, skills), synced with the owner's LaTeX resume on 2026-10-21. Edit content
   there, not in JSX. `**text**` renders bold through `src/components/RichText.tsx`.
@@ -43,6 +44,8 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-21 | Write `-webkit-backdrop-filter` **before** `backdrop-filter` in every CSS file | Lightning CSS (Next's CSS pipeline) merges the two and keeps only the last one; with `-webkit-` last, Chrome/Android got no blur at all on any glass surface |
+| 2026-10-21 | Phone home keeps the owner's widget/icon positions and mountain wallpaper; only the components were modernised (iOS 26 Liquid Glass, filled glyphs, Search pill) | Owner tried an iOS-grid re-layout with a pastel wallpaper and preferred the original arrangement |
 | 2026-10-21 | Keep project knowledge in-repo (`CLAUDE.md`, this file, `.claude/skills/`) | Survives switching Claude accounts and machines; git versions it |
 | 2026-10-21 | Added 10 project skills + `preflight.sh` / `asset-report.sh` | Consistent expert workflow for SEO, a11y, perf, content, deploy |
 | 2026-10-21 | Hero KPIs = 250K+ installs, 3× trial conversion, ₹1 Cr+ monthly sales | Replaced unverifiable "12+ products / 1M+ users / 4+ years"; every number now traces to the resume |
@@ -97,21 +100,43 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
   (pointer: coarse)`, i.e. phones, touch tablets in portrait, and phones in landscape. Keep JS and
   CSS identical if it changes (globals.css, `MobileDock`, `DesktopIcon` modules).
 - **Phone layout = iOS (2026-10-21).** Shared pieces live in `src/components/ios/`:
-  `AppIcon.tsx` (squircle, radius 22.4% of size, gradient + glyph or real app image), `sections.tsx`
-  (`SECTION_APPS`: one lucide glyph, label, title and colour per section, used by the home grid and
-  the tab bar) and `ContactCard.tsx`.
-  - **Home screen** (`MobileHome.tsx`, the phone landing page): medium profile widget (→ About), two
-    small widgets (Impact KPIs → Projects; "Currently" role → Experience), a 4-column app grid (the
-    five sections + Kissan/Gau icons that open the prototypes), and a dock of unlabelled contact apps
-    (Phone, Messages `sms:`, Mail, LinkedIn; `Clicked Contact Method`, placement `home_dock`).
+  `AppIcon.tsx` (Apple-style squircle via an inline superellipse SVG **mask**, n=5, not border-radius;
+  iOS 26 glass sheen + rim; the drop shadow sits on a `.frame` wrapper because masks clip
+  box-shadows; gradient + glyph or real app image; `AppTile` is the non-interactive tile), `sections.tsx` (`SECTION_APPS`: filled + outline Ionicons 5 glyphs,
+  label, colour and Spotlight keywords per section, used by the home grid, Spotlight and the tab bar),
+  `contactApps.tsx` (`CONTACT_APPS`: Phone, Messages, Mail, LinkedIn for the dock and Spotlight),
+  `Spotlight.tsx` and `ContactCard.tsx`.
+  - **Home screen** (`MobileHome.tsx`, the phone landing page). **Owner-approved layout, keep the
+    positions:** medium profile widget (→ About), two small widgets side by side (Impact KPIs →
+    Projects; "Currently" role → Experience), a 4-column app grid (the five sections + "Kissan
+    Sampurna" / "Gau Sampurna" with full names, which open the prototypes), the iOS **Search** pill
+    (opens Spotlight), and a dock of unlabelled contact apps (`Clicked Contact Method`, placement
+    `home_dock`). Mountain wallpaper (`wallpaper-mobile.webp`) stays. Widgets are iOS 26 Liquid Glass
+    (dark tinted glass, bright rim, sheen); icons use filled glyphs; grid metrics come from `--margin`
+    / `--gx` / `--icon` so a small widget is exactly two icon columns wide. Labels may wrap to two lines
+    rather than truncate.
+  - **Page 2** (swipe left, or tap the page dots above the Search pill): `ios/ClockWidget.tsx`, a
+    medium widget in the page-1 Liquid Glass styled like the native iOS Calendar + World Clock widgets
+    (SF Pro, red weekday/month, 12-hour time, "Bangalore · 5h 30m ahead of you", weekends grey, today
+    on a red disc). Dots are 7pt on a 16pt pitch. It shows **Mandar's time in Bangalore (IST)**, not the visitor's
+    (the site plays his phone; helps recruiters abroad), and tapping it opens Contact. Pages are a
+    native scroll-snap row (`.pager`); dock, dots and Search stay fixed. Time renders client-only via
+    `useSyncExternalStore` (server snapshot null) to avoid hydration mismatches. Event `Viewed Home
+    Screen Page` {page, method: swipe | dots}. Dots are hidden in landscape.
+  - **Spotlight** (`ios/Spotlight.tsx`): search over the apps, sections and contact actions, also
+    matching resume keywords (companies, products, skills). Return opens the first result, Esc/Cancel
+    close. Events `Opened Spotlight`, `Selected Spotlight Result`; open source / placement `spotlight`.
   - **Section = full-screen iOS app** (`DraggableWindow` phone branch, classes `mobile-window ios-app`):
-    nav bar with blue "‹ Home" (aria-label "Home screen") and Share; the inline title fades in with a
-    hairline once the content scrolls; a 34pt Large Title on Experience/Education/Projects
+    Liquid Glass nav bar with 36pt round glass ‹ (aria-label "Home screen") and Share buttons (44pt
+    touch targets); the inline title and a soft blurred scroll edge fade in once the content scrolls; a
+    28pt page title on Experience/Education/Projects
     (`ios-grouped`, background `#F2F2F7`, white 12px-radius cards). About and Contact are profile pages
     without a large title. Opening zooms in from 0.9 like an app launch.
-  - **Tab bar** (`MobileDock.tsx`, `nav[aria-label="Sections"]`): only while a section is open; 49pt +
-    safe area, translucent, `#007AFF` active / `#8E8E93` inactive, 10pt labels; re-tapping the
-    current tab scrolls to top; compact 32pt bar with side-by-side labels in landscape.
+  - **Tab bar** (`MobileDock.tsx`, `nav[aria-label="Sections"]`): only while a section is open; iOS 26
+    floating glass capsule (62pt, 44pt in landscape), the active tab on a blue-tinted pill with a filled
+    glyph, inactive tabs outlined; re-tapping the current tab scrolls to top. The window runs to the
+    bottom edge: content scrolls under the bar, a `.mobile-window::after` gradient fades it out behind
+    the bar, and `.window-content-scroll::after` adds room so the last card clears it.
   - **Section styling:** each module has a `:global(.ios-app) …` block (not inside a container query,
     so landscape gets it too) that hides the duplicate section heading and turns entries into cards.
     Date brackets come from `.period::before/::after` so the iOS cards can drop them.
@@ -267,6 +292,38 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 
 ## Changelog
 
+- 2026-10-21: **Icon audit fixes** (owner asked whether the phone icons are modern and correct).
+  Contact's cyan paper plane read as Telegram's icon → teal handshake (`PiHandshakeFill`, outline in
+  the tab bar). Icon corners now use Apple's continuous squircle (superellipse mask) instead of rounded
+  rects, with a glass sheen and rim; Kissan/Gau keep their real white store icons (checked against the
+  apps' `app.json`). Per-glyph optical scaling (`glyphScale`, `glyphSize()` in `ios/sections.tsx`) so
+  the person and handshake don't look smaller than the briefcase or cap. Contact card action tiles
+  switched from outline (lucide) to filled glyphs, as in iOS Contacts. Uncommitted.
+- 2026-10-21: Page-2 widget redesigned from the serif "aesthetic" style to native iOS (owner: modern
+  iOS design, 12-hour clock): Liquid Glass to match page 1, World Clock offset line, Calendar-widget
+  grid. Page dots tightened to the iOS 16pt pitch. Uncommitted.
+- 2026-10-21: **Swipeable second home page** on phones with a clock + calendar widget (owner's
+  reference: dark "aesthetic" serif widget). IST time, tap → Contact, page dots, new analytics event.
+  Verified a real touch swipe snaps to page 2 and updates the dots; 320 / 375 / 393px clean;
+  `tsc`, lint and `next build` pass. Uncommitted.
+- 2026-10-21: New profile photo (owner-supplied). Replaces `profile-new.jpg` (deleted) with
+  `profile-photo.jpg` and a tight `profile-avatar.jpg` crop so the face isn't tiny in small circles.
+  New file names so browsers and the image CDN don't serve the old cached photo. Uncommitted.
+- 2026-10-21: **Phone section chrome and About header, lighter** (owner: nav buttons and title too big,
+  photo too small). Nav buttons are 36pt glass circles with a 44pt touch target (`::after`), smaller
+  glyphs, aligned to the 16pt margin; grey-tinted on white pages (About/Contact) instead of a shadow.
+  Nav bar 52 → 48pt. Page title 34pt Large Title → 28/34 Title 1. About portrait 52/72/44 → 88pt
+  (112pt on tall phones, 72pt on short), hero headline on tall phones 34 → 30/36. CTAs still above the
+  tab bar at 375×560. Uncommitted.
+- 2026-10-21: **Modern iOS (iPhone 18 / iOS 26) components on the phone UI**, keeping the owner's home
+  layout and wallpaper. Liquid Glass widgets and dock; filled Ionicons 5 glyphs on icons and dock; full
+  app names ("Kissan Sampurna", "Gau Sampurna", wrapping to two lines when needed); a working iOS
+  Search pill → Spotlight (`ios/Spotlight.tsx`, new events `Opened Spotlight` / `Selected Spotlight
+  Result`); floating glass tab bar with outline/filled glyphs; round glass nav buttons; scroll-edge fade
+  so text no longer runs through the tab bar. Fixed site-wide: no backdrop blur in Chrome/Android
+  (prefix order, see Decisions); hero `CountUp` hydration mismatch when reduced motion is on.
+  Verified in headless Chrome at 320×568, 375×667, 393×852, 430×932, 852×393 and desktop 1440×900;
+  `tsc` and `next build` pass; lint unchanged (pre-existing errors only). Uncommitted.
 - 2026-10-21: Added `.claude/skills/` (10 skills), `.claude/settings.json`, project section
   in `CLAUDE.md`, and this context file.
 - 2026-10-21: Added Stop hook `.claude/hooks/update-context.sh` that requires this file to be

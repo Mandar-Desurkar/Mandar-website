@@ -16,8 +16,8 @@
   border-radius: 22px;
   /* Widget material: bright frosted glass with a hairline edge and soft depth */
   background: rgba(255, 255, 255, 0.86);
-  backdrop-filter: saturate(180%) blur(40px);
   -webkit-backdrop-filter: saturate(180%) blur(40px);
+  backdrop-filter: saturate(180%) blur(40px);
   box-shadow:
     0 0 0 0.5px rgba(0, 0, 0, 0.12),
     inset 0 0.5px 0 rgba(255, 255, 255, 0.7),
