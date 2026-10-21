@@ -292,6 +292,10 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 
 ## Changelog
 
+- 2026-10-21: Committed this session's phone work as **097613d** on `dev`, fast-forwarded `prod`,
+  pushed both (all "Uncommitted" entries below from 2026-10-21's iOS-components pass onward are in
+  it). Preflight: build, secrets and links pass; the 2 fails (5 lint errors, assets > 300 KB) and the
+  SEO warnings are pre-existing backlog items.
 - 2026-10-21: **Icon audit fixes** (owner asked whether the phone icons are modern and correct).
   Contact's cyan paper plane read as Telegram's icon → teal handshake (`PiHandshakeFill`, outline in
   the tab bar). Icon corners now use Apple's continuous squircle (superellipse mask) instead of rounded
