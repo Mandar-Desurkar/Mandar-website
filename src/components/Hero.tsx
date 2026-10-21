@@ -66,18 +66,18 @@ const SparkDoodle = () => (
 export default function Hero() {
   const [initialDelay] = useState(isFirstMount ? 1.8 : 0);
   const { openSection } = useWindow();
-  const [openPrototype, setOpenPrototype] = useState<"kissan-sampurna" | "gau-sampurna" | null>(() => {
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      const proto = params.get("prototype");
-      if (proto === "kissan-sampurna" || proto === "gau-sampurna") {
-        return proto;
-      }
-    }
-    return null;
-  });
+  const [openPrototype, setOpenPrototype] = useState<"kissan-sampurna" | "gau-sampurna" | null>(null);
   // Show "View Resume" only once the PDF is actually deployed, so the CTA never 404s.
   const [hasResume, setHasResume] = useState(false);
+
+  // Deep link (?prototype=…, from "Share prototype"). Read after mount: reading window during the
+  // first render made the server and client HTML differ (hydration error).
+  useEffect(() => {
+    const proto = new URLSearchParams(window.location.search).get("prototype");
+    if (proto !== "kissan-sampurna" && proto !== "gau-sampurna") return;
+    const raf = requestAnimationFrame(() => setOpenPrototype(proto));
+    return () => cancelAnimationFrame(raf);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;

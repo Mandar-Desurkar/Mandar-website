@@ -1,0 +1,708 @@
+/* Gau Sampurna paywall (screens/subscription/paywall/*, paywallTheme.js) and subscription success. */
+
+.screen {
+  background: #f7f9fc;
+}
+
+.onHero {
+  background: #244c0d;
+}
+
+.heroArt {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.heroBg {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: auto;
+  min-height: 100%;
+  object-fit: cover;
+}
+
+/* Figma ellipse photo: 721×499 at (-164, -40) inside a 393-wide frame */
+.heroPhoto {
+  position: absolute;
+  left: -41.7%;
+  top: -40px;
+  width: 183.5%;
+  height: auto;
+}
+
+.header {
+  position: relative;
+  z-index: 5;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 20px 10px;
+}
+
+.iconBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #0d1c2e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.onHero .iconBtn {
+  border-color: transparent;
+}
+
+.iconSpacer {
+  width: 36px;
+  height: 36px;
+}
+
+.dots {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.dots i {
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+  background: #d9d9d9;
+}
+
+.dots .dotOn {
+  width: 22px;
+  background: #004691;
+}
+
+.body {
+  position: relative;
+}
+
+.stepWrap {
+  padding: 0 20px 20px;
+}
+
+.video {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 353 / 264;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #e0ddd5;
+}
+
+.video img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.duration {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.mute {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.headline {
+  margin: 0;
+  font-size: 22px;
+  line-height: 29px;
+  font-weight: 700;
+  color: #004691;
+  text-align: center;
+}
+
+.sub {
+  margin: 10px 0 0;
+  font-size: 15px;
+  line-height: 21px;
+  color: #6b7280;
+  text-align: center;
+}
+
+.trustCard {
+  min-height: 92px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  border-radius: 16px;
+  background: #f8f9d9;
+  animation: slideIn 0.35s ease-out;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(16px); }
+}
+
+.stack {
+  display: flex;
+}
+
+.stack img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #f8f9d9;
+  object-fit: cover;
+}
+
+.stack img + img {
+  margin-left: -12px;
+}
+
+.portrait {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.logo {
+  width: 64px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.slideBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.slideBody b {
+  font-size: 15px;
+  line-height: 20px;
+  color: #0d1c2e;
+}
+
+.slideBody small {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.stars {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.stars small {
+  margin-left: 6px;
+}
+
+.carouselDots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.carouselDots button {
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+  background: #d9d9d9;
+}
+
+.carouselDots .cDotOn {
+  width: 18px;
+  background: #004691;
+}
+
+.featList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.featRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+}
+
+.featRow img {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: #e0ddd5;
+}
+
+.featRow span {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.featRow b {
+  font-size: 15px;
+  color: #0d1c2e;
+}
+
+.featRow small {
+  font-size: 13px;
+  line-height: 18px;
+  color: #6b7280;
+}
+
+.footnote {
+  margin: 18px 0 0;
+  font-size: 12px;
+  line-height: 18px;
+  color: #6b7280;
+  text-align: center;
+}
+
+.heroScroll {
+  display: flex;
+  flex-direction: column;
+  padding: 72px 20px 24px;
+}
+
+.kicker {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+}
+
+.heroTitle {
+  margin-top: 6px;
+  font-size: 28px;
+  line-height: 34px;
+  font-weight: 900;
+  letter-spacing: 0.2px;
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+.planCard {
+  margin-top: 22px;
+  padding: 18px;
+  border-radius: 20px;
+  background: #fff;
+}
+
+.planPlain {
+  margin-top: 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+}
+
+.expiredTitle {
+  display: block;
+  padding: 0 8px;
+  font-size: 22px;
+  line-height: 29px;
+  color: #004691;
+  text-align: center;
+}
+
+.divider {
+  display: block;
+  height: 1px;
+  margin: 16px 0;
+  background: #e5e7eb;
+}
+
+.planRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.planId {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.crownTile,
+.radioTile {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #eef3fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.crownTile img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+}
+
+.radioTile {
+  width: 40px;
+  height: 40px;
+}
+
+.radioTile > i {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #004691;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.radioTile > i > i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #004691;
+}
+
+.planName {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.planName b {
+  font-size: 18px;
+  color: #004691;
+}
+
+.badge {
+  padding: 3px 10px;
+  border-radius: 8px;
+  background: #ffaa00;
+  color: #0d1c2e;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.price {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.price > span {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+}
+
+.price b {
+  font-size: 22px;
+  line-height: 26px;
+  color: #004691;
+}
+
+.price small {
+  font-size: 13px;
+  line-height: 19px;
+  color: #6b7280;
+}
+
+.tlRow {
+  display: flex;
+}
+
+.rail {
+  width: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tick {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #22c55e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ring,
+.ringSmall {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #004691;
+}
+
+.ringSmall {
+  width: 12px;
+  height: 12px;
+  margin-top: 4px;
+}
+
+.dotFilled {
+  width: 10px;
+  height: 10px;
+  margin-top: 5px;
+  border-radius: 50%;
+  background: #002553;
+}
+
+.connector {
+  flex: 1;
+  width: 1.5px;
+  margin: 4px 0;
+  background: #e5e7eb;
+}
+
+.tlBody {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 14px;
+}
+
+.tlCard {
+  margin-bottom: 10px;
+  padding: 12px;
+  border-radius: 12px;
+  background: #f6f8fb;
+}
+
+.tlBody > span:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tlBody b {
+  font-size: 15px;
+  color: #0d1c2e;
+}
+
+.tlBody small {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.tlIcon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tlIcon img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}
+
+.cancelInline,
+.cancelNote {
+  display: block;
+  font-size: 13px;
+  line-height: 19px;
+  color: #6b7280;
+  text-align: center;
+}
+
+.cancelNote {
+  margin-top: 14px;
+}
+
+.plainScroll {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding: 8px 20px 24px;
+  background: #fff;
+}
+
+.plainTitle {
+  margin-bottom: 16px;
+  font-size: 20px;
+  color: #004691;
+  text-align: center;
+}
+
+.errorBanner {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #f5c2c2;
+  background: #fde7e7;
+  color: #c0392b;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.footer {
+  position: relative;
+  z-index: 5;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 20px 16px;
+}
+
+.terms {
+  margin: 0 0 2px;
+  font-size: 12px;
+  line-height: 18px;
+  color: #6b7280;
+  text-align: center;
+}
+
+.terms b {
+  color: #004691;
+  text-decoration: underline;
+}
+
+.onHero .terms,
+.onHero .terms b {
+  color: #fff;
+}
+
+.cta {
+  height: 56px;
+  border-radius: 999px;
+  background: #004691;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cta::after {
+  border-radius: 999px;
+}
+
+.secure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.securePill {
+  align-self: center;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.78);
+  color: #0d1c2e;
+}
+
+.spinner {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2.5px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Success */
+.successHead {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: flex-end;
+  padding: 6px 20px;
+}
+
+.successCenter {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 20px;
+}
+
+.successTitle {
+  font-size: 26px;
+  line-height: 33px;
+  color: #004691;
+  text-align: center;
+}
+
+.successCard {
+  margin-top: 24px;
+  padding: 18px;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+}
+
+.successCard .divider {
+  margin: 14px 0;
+}
+
+.successRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  color: #6b7280;
+}
+
+.successRow b {
+  color: #0d1c2e;
+}
+
+.reminder {
+  margin-top: 14px;
+  font-size: 13px;
+  color: #6b7280;
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trustCard, .spinner { animation: none; }
+}

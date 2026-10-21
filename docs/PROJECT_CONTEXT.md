@@ -120,8 +120,8 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
 - **Map gotcha:** `fm-farm-illustration.webp` has its own red outline baked in (x≈458–650), so
   the map and satellite views frame a clean region (viewBox x≈764–1087) via SVG `<image>`. The
   boundary `FIELD` points are traced in the image's own pixel coordinates; zones are clipped to it.
-- **Still to build:** Free trial → Subscription (paywall, 2.4%→8% story) and Onboarding (13
-  languages).
+- **Still to build:** Kissan onboarding / login (13 languages). The free trial → subscription paywall
+  shipped in the coverage pass (flow "Free trial & plan").
 - [ ] **Confidentiality:** confirm Silo Fortune is OK with showing these screens and assets
   publicly before deploying.
 
@@ -132,15 +132,20 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
   (`google-services.json`, `GoogleService-Info.plist`); never copy them anywhere.
 - **Same brand system** as Kissan (`#004691`, lime `#D3D800`, text `#231F20`, Lato headings),
   so it reuses `PrototypeViewer` and the self-hosted Lato.
-- **Flows (2026-10-21):** *AI Disease Check*: Scan hub (Gowri, "Cow unwell or Off-feed?") →
-  photo guide (side profile + tips) → analyzing (live steps) → Report Ready "1/31 conditions" →
-  diagnosis (CLEAR / NEEDS VET indicators, warning signs, free vet helpline). *Animal Status &
-  Value*: hub → body photo guide (udder tip) → analyzing → status report (Grade A2 purity scale,
-  BCS, milk capacity, est. market value ₹78–86k + buying rec, health checks, daily ration). Prod
-  screens **31 diseases from one side photo** (resume says 20+, so consider updating).
-- **Code:** `src/data/prototypes/gauSampurna.ts`, `src/components/prototype/gau/GauScreens.tsx` +
-  `gau.module.css`, `src/components/prototype/GauPrototype.tsx` (next/dynamic). Assets resized
-  from ~10 MB to 412 KB in `public/prototypes/gau-sampurna/`. Report values are illustrative.
+- **Coverage (2026-10-21): 13 flows / 76 screens**, every live route in prod (checklist and the
+  list of dead routes left out: `docs/prototype-coverage-plan.md`). Flows, in viewer order: Home ·
+  AI Disease Check · Animal Status · Market Value · Dung Scan · 360° Health Report (Pro gate) · Scan
+  History & Reports · My Herd · Shop & orders · Cattle Trading · Pratham plan (paywall) · Account ·
+  Welcome & sign-up. Free-user reports show premium sections frosted with an "Unlock Full Report"
+  banner; the 360° report (Pro only) renders unlocked. Prod screens **31 diseases from one side
+  photo** (resume says 20+, so consider updating).
+- **Code:** one file per area in `src/components/prototype/gau/`: `GauShared.tsx` (tab bar with the
+  Reports-tab variant, sheets, alerts, toast, product card), `GauHome`, `GauHerd`, `GauScan` (hub +
+  orchestrator steps for all five scan types), `GauReports`, `GauHistory`, `GauPratham`, `GauShop`,
+  `GauTrading`, `GauAccount`, `GauWelcome`, each with its own CSS module. Flows and PM notes:
+  `src/data/prototypes/gauSampurna.ts`. `GauPrototype.tsx` merges the screen maps. The old
+  `GauScreens.tsx` / `gau.module.css` were removed. Assets: `public/prototypes/gau-sampurna/` (1.8 MB,
+  99 files; onboarding art downloaded from the app's public S3 bucket). Values are illustrative.
 - **Hero card:** Gau now uses the official app icon (prod `app.json` → `assets/icons/app-icon.png`
   → `public/apps/gau-sampurna-icon.png`) and an active **Try app**. The website logo version was
   removed.
@@ -148,6 +153,8 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
   0 and the last card got squeezed. Set `flex-shrink: 0` (also applied to the Kissan flows).
 - [ ] Experience's "Kissan & Gau Sampurna" group still opens only the Kissan prototype; consider a
   second pill for Gau.
+- [ ] Gau sample catalogue: Bio Bloom, Nitro Power and Micro Nutri names/prices were inferred from
+  image file names; confirm or replace with real catalogue data.
 
 ## Analytics
 
@@ -159,11 +166,17 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
 - Only explicit event: **`Viewed Home Page`** (fires on load, carries `prompt_version: 'BA400.4'`,
   which is safe to remove once verified). For more events use `npx @amplitude/wizard` or the
   Amplitude MCP; don't invent a taxonomy.
+- **Firebase Web SDK & Analytics** (`firebase@^13.0.0`):
+  - Project ID: `mandar-portfolio`, Measurement ID: `G-JKRX4FZQRD`.
+  - Configured in `src/lib/firebase.ts` with env variables in `.env.local` (`NEXT_PUBLIC_FIREBASE_*`) and `.env.example`.
+  - Client analytics initialized in `src/instrumentation-client.ts`.
+  - Typed tracking plan in `src/lib/analytics.ts` dual-logs every event to both Amplitude and Firebase Analytics in real time.
 - Cost: the Amplitude chunk is about **186 KB gzipped** (autocapture + session-replay recorder)
   and loads before the app is interactive. Revisit if Lighthouse scores drop. Session replay
   records every visit, so consider a short privacy note on the site.
 - [ ] Owner to confirm on the Amplitude Setup page: checklist flips **and** `Viewed Home Page`
   appears in the live event feed.
+- [ ] Owner to verify in Firebase Console that `view_home_page` and incoming events appear in the DebugView / Realtime dashboard.
 - No AI/LLM code in the repo, so Agent Analytics was skipped.
 - **Full tracking plan** (owner request, 2026-10-21) lives in `src/lib/analytics.ts`, typed
   via `trackEvent(name, props)`. Add new events there first. 33 explicit events cover: boot
@@ -338,6 +351,15 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
   to its bounds and scaled to **90% width on a white 256px square** →
   `public/apps/kissan-sampurna-icon.png` / `gau-sampurna-icon.png` (old `.webp` deleted). The icon
   slot is 40px (radius 10). Right column 398px ≤ left 414px. Use the same recipe for any new app.
+  2026-10-21: **Prototype coverage pass** (owner: "a lot of screens and flows are missing"). Plan and
+  checklist: `docs/prototype-coverage-plan.md`. Kissan now has 7 flows / ~60 screens: Home & Weather
+  (new, incl. the weather report), AI Crop Doctor (category, request crop, camera + guide, review,
+  laser analysis view, full rv2 report, healthy result, history), Crop Guide (both paths from the
+  owner's flow chart, all report sections, no-fit, history), Farm Monitoring setup + report
+  (My Farms, add-farm questions, draw/walk marking, menu edits, full details, history, no-crop),
+  Free trial & plan (3-step paywall + ₹1 trial). Shared UI in `kissan/KissanShared.tsx` (tab bar,
+  CustomAlert, sheet). Viewer `ScreenProps` gained `back()` and `go(screenId)` for branches. Fixed a
+  hydration error in `Hero.tsx` from the `?prototype=` deep link (now read after mount).
 - [ ] Pre-existing: on shorter screens (e.g. 1440×780) the About text column alone (505px) is
   taller than the 64vh window, so the window scrolls. Consider a min height for About.
   2026-10-21: Added the Gau Sampurna prototype (prod branch). See its section.
@@ -355,3 +377,12 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 - 2026-10-21: Replaced the prototype viewer with an authentic, minimal **Figma Prototype Presentation UI** based directly on the user's Figma desktop screenshots: top Figma document tab strip (`⌂`, `Kissan Sampurna App - Prototype`, `Gau Sampurna Mobile App`), presentation bar with Figma logo, collapsible sidebar toggle `[| ]`, centered title dropdown (`Kissan Sampurna App ˅`), avatar `MD`, blue `Share prototype` button, clean collapsible `Flows` sidebar with `✓ Active flow` and `Description` PM notes, pure deep-dark canvas (no dot grid, no bottom floating pill), centered iPhone frame, and seamless switching between Kissan and Gau. Removed unnecessary static tabs.
 - 2026-10-21: Enhanced prototype sidebar UX: added screen count badges per flow (`5 screens`, etc.), nested list of all screen frames with active blue indicator and direct 1-click switching, plus quick interactive screen selector pills `[1] [2] [3]...` in the Description section.
 - 2026-10-21: Polished prototype viewer UI: added macOS traffic light controls (close, minimize, maximize) on the top-left tab strip beside the home icon, eliminated the duplicate `#` in the screen list (`# 1. Crop Doctor`), removed the redundant bottom `< Screen 1 of 5 >` stepper in favor of the quick pills, and eliminated sidebar scrollbar clutter.
+- 2026-10-21: **Gau Sampurna full coverage** (owner: "add all the flows, screens and design"). Rebuilt
+  the prototype from the prod repo route by route: 13 flows / 76 screens covering home, herd, all five
+  AI scans with every orchestrator step and full reports, scan history / reports tab / chat replay,
+  Pratham paywall (trial, failed, expired, success), shop to order tracking, cattle trading (sell +
+  ₹49 verification), account, and welcome / login / onboarding. Dead routes documented in
+  `docs/prototype-coverage-plan.md`. Verified in headless Chrome and `next build`. Uncommitted.
+  Note: a parallel Firebase analytics change (`src/lib/firebase.ts`, `analytics.ts`,
+  `instrumentation-client.ts`) logs `logFirebaseEvent is not defined` and Firebase 400s in the
+  browser; it is separate from the prototype work.

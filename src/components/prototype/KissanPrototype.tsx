@@ -6,10 +6,20 @@ import PrototypeViewer from "./PrototypeViewer";
 import { kissanScreens } from "./kissan/KissanScreens";
 import { cropGuideScreens } from "./kissan/CropGuideScreens";
 import { farmMonitoringScreens } from "./kissan/FarmMonitoringScreens";
+import { homeWeatherScreens } from "./kissan/HomeWeatherScreens";
+import { cropDoctorScreens } from "./kissan/CropDoctorScreens";
+import { subscriptionScreens } from "./kissan/SubscriptionScreens";
 import { kissanSampurnaPrototype } from "@/data/prototypes/kissanSampurna";
 
-// Crop Doctor (prod branch design) + Crop Guide and Farm Monitoring (dev branch design)
-const screens = { ...kissanScreens, ...cropGuideScreens, ...farmMonitoringScreens };
+// Crop Doctor (prod branch design) + Home, Weather, Crop Guide and Farm Monitoring (dev branch design)
+const screens = {
+  ...homeWeatherScreens,
+  ...kissanScreens,
+  ...cropDoctorScreens,
+  ...cropGuideScreens,
+  ...farmMonitoringScreens,
+  ...subscriptionScreens,
+};
 
 type Props = {
   onClose: () => void;

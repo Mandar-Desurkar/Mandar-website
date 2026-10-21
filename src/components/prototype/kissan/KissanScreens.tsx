@@ -1,16 +1,21 @@
 /* eslint-disable @next/next/no-img-element -- fixed-size mock screens inside a phone frame */
 "use client";
 
-// Kissan Sampurna screens, recreated for the web from the React Native source
-// (code/screens/crop-disease/*): same colours, type sizes, layout and English copy.
-import { useEffect, useState, type ComponentType } from "react";
+// Kissan Sampurna AI Crop Doctor entry screens, recreated for the web from the React Native source
+// (code/screens/crop-disease/*, prod): Crop Doctor home, select crop and scan method. The rest of the
+// flow lives in CropDoctorScreens.tsx. Same colours, type sizes, layout and English copy.
+import { useState, type ComponentType } from "react";
 import s from "./kissan.module.css";
+import { KAlert, KissanTabBar } from "./KissanShared";
 
-// next: advance within the flow; restart: back to the flow's first screen;
+// next: advance within the flow; back: previous screen; restart: back to the flow's first screen;
+// go: jump to a screen in the same flow (YES/NO branches);
 // goToFlow: jump into another flow, as the real app links features together.
 export type ScreenProps = {
   next: () => void;
+  back: () => void;
   restart: () => void;
+  go: (screenId: string) => void;
   goToFlow: (flowId: string, screenId?: string) => void;
 };
 
@@ -30,14 +35,19 @@ const ChevronRight = ({ color = "#fff" }: { color?: string }) => (
   </svg>
 );
 
-function TopBar({ title, info = true }: { title: string; info?: boolean }) {
+// code/components/TopBar.jsx
+export function TopBar({ title, info = true, onInfo }: { title: string; info?: boolean; onInfo?: () => void }) {
   return (
     <div className={s.topBar}>
       <span className={s.backBtn}>
         <BackIcon />
       </span>
       <span className={s.topTitle}>{title}</span>
-      {info && <span className={s.infoBtn}>i</span>}
+      {info && (
+        <button type="button" className={s.infoBtn} onClick={onInfo} aria-label="Information">
+          i
+        </button>
+      )}
     </div>
   );
 }
@@ -50,10 +60,11 @@ const HOW_IT_WORKS = [
   { image: "step-take-action.webp", label: "Take action" },
 ];
 
-function CropDoctor({ next }: ScreenProps) {
+function CropDoctor({ next, goToFlow }: ScreenProps) {
+  const [info, setInfo] = useState(false);
   return (
-    <div className={s.screen}>
-      <TopBar title="Crop Doctor" />
+    <div className={s.screen} style={{ position: "relative" }}>
+      <TopBar title="Crop Doctor" onInfo={() => setInfo(true)} />
       <div className={s.scroll}>
         <div className={s.cdHero}>
           <img src={img("crop-check-hero.webp")} alt="" />
@@ -81,6 +92,15 @@ function CropDoctor({ next }: ScreenProps) {
           </button>
         </div>
       </div>
+      <KissanTabBar active="scan" goToFlow={goToFlow} />
+      {info && (
+        <KAlert
+          title="Crop Doctor"
+          message="Take or upload a photo of your crop to detect diseases, get treatment suggestions, and prevention tips."
+          buttons={[{ text: "OK", onPress: () => setInfo(false) }]}
+          onClose={() => setInfo(false)}
+        />
+      )}
     </div>
   );
 }
@@ -94,16 +114,18 @@ const POPULAR = [
   { name: "Cotton", image: "crop-cotton.webp" },
 ];
 
+// cropCatalogConfig.js: curated tiles with their tints
 const CATEGORIES = [
-  { name: "Cereals", image: "cat-cereals.webp" },
-  { name: "Vegetables", image: "cat-vegetables.webp" },
-  { name: "Fruits", image: "cat-fruits.webp" },
-  { name: "Pulses", image: "cat-pulses.webp" },
-  { name: "Oilseeds", image: "cat-oilseeds.webp" },
-  { name: "Spices", image: "cat-spices.webp" },
+  { name: "Cereals", image: "cat-cereals.webp", tint: "rgba(249, 173, 14, 0.15)" },
+  { name: "Vegetables", image: "cat-vegetables.webp", tint: "rgba(148, 186, 10, 0.15)" },
+  { name: "Fruits", image: "cat-fruits.webp", tint: "rgba(255, 15, 0, 0.15)" },
+  { name: "Pulses", image: "cat-pulses.webp", tint: "rgba(229, 245, 76, 0.15)" },
+  { name: "Oil seeds", image: "cat-oilseeds.webp", tint: "rgba(255, 232, 13, 0.15)" },
+  { name: "Spices", image: "cat-spices.webp", tint: "rgba(222, 128, 34, 0.15)" },
+  { name: "Others", image: "cat-others.webp", tint: "rgba(0, 70, 145, 0.08)" },
 ];
 
-function SelectCrop({ next }: ScreenProps) {
+function SelectCrop({ go }: ScreenProps) {
   return (
     <div className={s.screen}>
       <TopBar title="Select Crop" info={false} />
@@ -123,7 +145,7 @@ function SelectCrop({ next }: ScreenProps) {
         <div className={s.popularRow}>
           {POPULAR.map((crop) =>
             crop.name === "Rice" ? (
-              <button key={crop.name} type="button" className={`${s.popularCard} ${s.hotspot}`} onClick={next}>
+              <button key={crop.name} type="button" className={`${s.popularCard} ${s.hotspot}`} onClick={() => go("scan-method")}>
                 <img className={s.popularImg} src={img(crop.image)} alt="" />
                 <span className={s.popularName}>{crop.name}</span>
                 <span className={s.popularChip}>Popular</span>
@@ -141,10 +163,15 @@ function SelectCrop({ next }: ScreenProps) {
         <p className={s.sectionTitleBlack}>Browse by Category</p>
         <div className={s.categoryGrid}>
           {CATEGORIES.map((cat) => (
-            <div key={cat.name} className={s.categoryCard}>
-              <img className={s.categoryImg} src={img(cat.image)} alt="" />
+            <button
+              key={cat.name}
+              type="button"
+              className={`${s.categoryCard} ${cat.name === "Cereals" ? s.hotspot : ""}`}
+              onClick={cat.name === "Cereals" ? () => go("cd-category") : undefined}
+            >
+              <img className={s.categoryImg} src={img(cat.image)} alt="" style={{ background: cat.tint }} />
               <span className={s.categoryLabel}>{cat.name}</span>
-            </div>
+            </button>
           ))}
         </div>
 
@@ -153,7 +180,9 @@ function SelectCrop({ next }: ScreenProps) {
             <p className={s.requestTitle}>Can&apos;t find your crop?</p>
             <p className={s.requestSub}>Let us know and will add it for you.</p>
           </div>
-          <span className={s.requestBtn}>Request Crop</span>
+          <button type="button" className={s.requestBtn} onClick={() => go("cd-request")}>
+            Request Crop
+          </button>
         </div>
       </div>
     </div>
@@ -222,159 +251,8 @@ function ScanMethod({ next }: ScreenProps) {
   );
 }
 
-// ---------- 4. Analyzing ----------
-
-const ANALYZE_MS = 2600;
-
-function Analyzing({ next }: ScreenProps) {
-  // Auto-advance like the real app once the scan "completes"; tapping skips ahead.
-  useEffect(() => {
-    const timer = setTimeout(next, ANALYZE_MS);
-    return () => clearTimeout(timer);
-  }, [next]);
-
-  return (
-    <div className={s.screen}>
-      <TopBar title="Crop Diagnosis" info={false} />
-      <button type="button" className={s.analyzeBody} onClick={next} aria-label="Skip to report">
-        <div className={s.scanFrame}>
-          <img src={img("analysis.jpg")} alt="" />
-          <span className={s.scanLine} />
-        </div>
-        <p className={s.analyzeTitle}>Analyzing...</p>
-        <p className={s.analyzeSub}>Scanning image for diseases...</p>
-        <div className={s.progressTrack}>
-          <span className={s.progressFill} style={{ animationDuration: `${ANALYZE_MS}ms` }} />
-        </div>
-        <span className={s.aiChip}>✦ AI-powered crop disease detection</span>
-      </button>
-    </div>
-  );
-}
-
-// ---------- 5. Diagnosis report (disease-report-rv2.jsx + diseaseReportMock.js) ----------
-
-const STAGES = [
-  { name: "Healthy", image: "prog-1-healthy.webp", spread: "0-5%" },
-  { name: "Early Spot", image: "prog-2-early-spot.webp", spread: "5-20%" },
-  { name: "Early Spread", image: "prog-3-early-spread.webp", spread: "20-45%", current: true },
-  { name: "Moderate", image: "prog-4-moderate-spread.webp", spread: "45-70%" },
-  { name: "Yellowing", image: "prog-5-yellowing.webp", spread: "70%+" },
-];
-
-const LOSS = [
-  { stage: "Stage 1", loss: "-₹0" },
-  { stage: "Stage 2", loss: "-₹17 to -₹1,860" },
-  { stage: "Stage 3", loss: "-₹99 to -₹10,935", active: true },
-  { stage: "Stage 4", loss: "-₹233 to -₹25,640" },
-];
-
-const PLAN = [
-  {
-    day: "Day 1",
-    title: "Find and remove the first cases",
-    desc: "Inspect your Rice crop for spreading leaf spots in the lower, humid canopy. Bag the first affected leaves; don't drop them on the soil.",
-  },
-  {
-    day: "Day 2",
-    title: "Apply the first treatment",
-    desc: "Spray a protectant fungicide (Mancozeb ~2 g/L or Copper oxychloride ~3 g/L). Follow the label dose and pre-harvest interval.",
-  },
-  {
-    day: "Day 3",
-    title: "Attack what the problem needs",
-    desc: "Open up the canopy, improve drainage and switch to base irrigation so foliage dries fast.",
-  },
-  {
-    day: "Day 7",
-    title: "Rescan and decide",
-    desc: "Re-inspect the whole crop. If it's still spreading, step up treatment; if it has stopped, keep preventive cover.",
-  },
-];
-
-function Report({ restart }: ScreenProps) {
-  return (
-    <div className={s.screen}>
-      <TopBar title="Diagnosis Result" info={false} />
-      <div className={s.scroll}>
-        <div className={s.reportHero}>
-          <img src={img("report-hero.webp")} alt="" />
-          <div className={s.heroShade}>
-            <div className={s.heroTopStack}>
-              <span className={s.severityBadge}>MODERATE</span>
-              <span className={s.aiScore}>✦ AI SCORE <b>95%</b></span>
-            </div>
-            <div>
-              <p className={s.diseaseTitle}>Brown Spot</p>
-              <p className={s.warningBanner}>⚠ Immediate action required — high risk</p>
-              <div className={s.tagsRow}>
-                <span className={s.tagChip}>🌱 Rice</span>
-                <span className={s.tagChip}>🍃 Leaf</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className={s.padded}>
-          <section className={s.reportSection}>
-            <p className={s.reportSectionTitle}>Disease Progression</p>
-            <p className={s.reportText}>
-              If left untreated, the disease may progress from ~45% to 80% spread in the next 4 days.
-            </p>
-            <div className={s.stagesRow}>
-              {STAGES.map((st) => (
-                <div key={st.name} className={`${s.stage} ${st.current ? s.stageCurrent : ""}`}>
-                  <img src={img(st.image)} alt="" />
-                  <span className={s.stageName}>{st.name}</span>
-                  <span className={s.stageSpread}>{st.current ? "Now" : st.spread}</span>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section className={s.reportSection}>
-            <p className={s.reportSectionTitle}>Revenue Loss</p>
-            <p className={s.reportCaption}>Estimated loss per acre if left untreated</p>
-            {LOSS.map((l) => (
-              <div key={l.stage} className={`${s.lossRow} ${l.active ? s.lossActive : ""}`}>
-                <span>
-                  {l.stage}
-                  {l.active && <span className={s.nowPill}>Now</span>}
-                </span>
-                <b>{l.loss}</b>
-              </div>
-            ))}
-          </section>
-
-          <section className={s.reportSection}>
-            <p className={s.reportSectionTitle}>Early Intervention Plan</p>
-            {PLAN.map((p) => (
-              <div key={p.day} className={s.planCard}>
-                <span className={s.planDay}>{p.day}</span>
-                <div>
-                  <p className={s.planTitle}>{p.title}</p>
-                  <p className={s.planDesc}>{p.desc}</p>
-                </div>
-              </div>
-            ))}
-          </section>
-
-          <div className={s.reportCtas}>
-            <span className={s.primaryBtn}>Start Treatment</span>
-            <button type="button" className={`${s.secondaryBtn} ${s.hotspot}`} onClick={restart}>
-              Re-Scan
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export const kissanScreens: Record<string, ComponentType<ScreenProps>> = {
   "crop-doctor": CropDoctor,
   "select-crop": SelectCrop,
   "scan-method": ScanMethod,
-  analyzing: Analyzing,
-  report: Report,
 };

@@ -1,0 +1,729 @@
+/* Gau Sampurna account area (prod): account, profile, notifications, language, addresses, about, contact. */
+
+.grey {
+  background: #f7f9fc;
+}
+
+.header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 56px;
+  padding: 8px 12px;
+  background: #fff;
+}
+
+.header b {
+  font-size: 18px;
+  color: #0f172a;
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0f172a;
+}
+
+.profileHeader {
+  flex-shrink: 0;
+  padding: 4px 20px 20px;
+  border-radius: 0 0 24px 24px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.refreshRow {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.profileRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.avatar,
+.bigAvatar {
+  position: relative;
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #004691, #2b65a4);
+  color: #fff;
+  font-size: 26px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar i,
+.bigAvatar i {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background: #004691;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+}
+
+.details > b {
+  font-size: 20px;
+  color: #0f172a;
+}
+
+.details > small {
+  font-size: 13.5px;
+  color: #64748b;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: #94a3b8;
+}
+
+.meta > span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.meta > i {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #cbd5e1;
+}
+
+.metaOn {
+  color: #004691;
+  font-weight: 600;
+}
+
+.planTag {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  padding: 4px 10px;
+  border-radius: 99px;
+  border: 1px solid #004691;
+  color: #004691;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 16px 24px;
+}
+
+.body > * {
+  flex-shrink: 0;
+}
+
+.quick {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.quickCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 6px;
+  border-radius: 14px;
+  background: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.quickCard i,
+.menuItem i,
+.updateRow i {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sectionTitle {
+  margin-top: 8px;
+  padding: 0 4px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  color: #64748b;
+}
+
+.section {
+  padding: 4px 14px;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.menuItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.menuItem span {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.last {
+  border-bottom: 0;
+}
+
+.updateRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+}
+
+.updateRow > span {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.updateRow b {
+  font-size: 14.5px;
+}
+
+.updateRow small {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.updateBtn {
+  padding: 7px 14px;
+  border-radius: 99px;
+  background: #004691;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.logout {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 6px;
+  border-radius: 14px;
+  border: 1px solid #fecaca;
+  background: #fff;
+  color: #dc2626;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.version {
+  text-align: center;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* Profile */
+.formBody {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 16px;
+}
+
+.photo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.bigAvatar {
+  width: 96px;
+  height: 96px;
+  font-size: 30px;
+}
+
+.photo small {
+  font-size: 13px;
+  color: #004691;
+  font-weight: 600;
+}
+
+.formCard {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.formCard label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+}
+
+.formCard input {
+  height: 46px;
+  padding: 0 12px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  font: inherit;
+  font-size: 14.5px;
+  font-weight: 400;
+  color: #0f172a;
+}
+
+.formCard input:disabled {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.formCard small {
+  font-size: 12px;
+  font-weight: 400;
+  color: #64748b;
+}
+
+.formCard small b {
+  color: #004691;
+}
+
+/* Notifications */
+.markAll {
+  flex-shrink: 0;
+  align-self: flex-end;
+  margin: 4px 16px 0;
+  color: #004691;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.noteList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 16px 20px;
+}
+
+.noteList > * {
+  flex-shrink: 0;
+}
+
+.note {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+}
+
+.unread {
+  border-color: #bfdbfe;
+  background: #f0f7ff;
+}
+
+.note img {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.note > span {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.note b {
+  font-size: 14.5px;
+  color: #0f172a;
+}
+
+.note small {
+  font-size: 13px;
+  line-height: 1.4;
+  color: #475569;
+}
+
+.note em {
+  font-size: 11.5px;
+  font-style: normal;
+  color: #94a3b8;
+}
+
+.unreadDot {
+  width: 8px;
+  height: 8px;
+  margin-top: 6px;
+  border-radius: 50%;
+  background: #2563eb;
+}
+
+/* Language */
+.langHead {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 4px 20px 16px;
+}
+
+.langHead b {
+  font-size: 24px;
+  color: #0f172a;
+}
+
+.langHead small {
+  font-size: 14px;
+  color: #64748b;
+}
+
+.langList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 20px 16px;
+}
+
+.langList > * {
+  flex-shrink: 0;
+}
+
+.langRow {
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+}
+
+.langRow > span {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.langRow b {
+  font-size: 18px;
+  color: #0f172a;
+}
+
+.langRow small {
+  font-size: 12.5px;
+  color: #94a3b8;
+}
+
+.langOn {
+  border: 2px solid #16a34a;
+  padding: 13px 15px;
+}
+
+.radio {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.langOn .radio {
+  border-color: #16a34a;
+}
+
+.radio i {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #16a34a;
+}
+
+/* Addresses */
+.addrList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 16px;
+}
+
+.addrList > * {
+  flex-shrink: 0;
+}
+
+.count {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.addrCard {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.addrTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.addrTop b {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+}
+
+.addrTop em {
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: #eef4fb;
+  color: #004691;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.addrCard small {
+  font-size: 13px;
+  color: #475569;
+}
+
+.addrActions {
+  display: flex;
+  gap: 18px;
+  margin-top: 8px;
+  padding-top: 10px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.addrActions button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #004691;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.addrActions .delete {
+  color: #dc2626;
+}
+
+/* About */
+.about {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 0 20px 28px;
+}
+
+.about > * {
+  flex-shrink: 0;
+}
+
+.aboutHero {
+  width: calc(100% + 40px);
+  height: 190px;
+  margin: 0 -20px;
+  object-fit: cover;
+}
+
+.about h3 {
+  margin: 0 0 8px;
+  font-size: 19px;
+  color: #0f172a;
+}
+
+.about p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: #475569;
+}
+
+.vision {
+  padding: 16px;
+  border-radius: 16px;
+  background: #f0faf5;
+}
+
+.visionHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  font-size: 17px;
+}
+
+.visionHead i {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #e8f5e9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.subLabel {
+  display: block;
+  margin-bottom: 4px;
+  color: #004691;
+}
+
+.feature {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px !important;
+}
+
+.feature svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.feature b {
+  color: #0f172a;
+}
+
+.tagline {
+  display: block;
+  margin-top: 8px;
+  color: #0f172a;
+}
+
+.footerLogo {
+  align-self: center;
+  width: 160px;
+  height: 60px;
+  object-fit: contain;
+}
+
+/* Contact */
+.contact {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+
+.contact > * {
+  flex-shrink: 0;
+}
+
+.supportHero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 22px;
+  border-radius: 18px;
+  background: #eef4fb;
+}
+
+.supportHero b {
+  font-size: 19px;
+}
+
+.supportHero small {
+  font-size: 13px;
+  color: #475569;
+}
+
+.contactRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.contactRow i {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contactRow > span {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.contactRow b {
+  font-size: 15px;
+}
+
+.contactRow small {
+  font-size: 12.5px;
+  color: #64748b;
+}
+
+.helpText {
+  margin: 4px 4px 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #64748b;
+}

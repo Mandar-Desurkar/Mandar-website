@@ -1,0 +1,1371 @@
+/* Kissan Sampurna Home + Weather report, from code/screens/home/* and
+   code/screens/weather/weather-forecast-v2-screen.jsx (dev). Sizes are the RN ScaledSheet values at 375px. */
+
+.screen {
+  --primary: #004691;
+  --tertiary: #d3d800;
+  --text-dark: #1f2937;
+  --text-light: #6b7280;
+  --border: #e5e7eb;
+
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  color: var(--text-dark);
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+
+.scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.scroll > * {
+  flex-shrink: 0;
+}
+
+.btnReset {
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-align: inherit;
+}
+
+.hotspot {
+  position: relative;
+}
+
+.hotspot::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 999px;
+  border: 2px solid rgba(211, 216, 0, 0.95);
+  animation: hotspotPulse 1.6s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes hotspotPulse {
+  0% { opacity: 0.9; transform: scale(0.98); }
+  70% { opacity: 0; transform: scale(1.06); }
+  100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hotspot::after { animation: none; opacity: 0.8; }
+}
+
+/* ---------- Home: WeatherCard.jsx ---------- */
+.wxHero {
+  position: relative;
+  background: #0b1220 center / cover no-repeat;
+  color: #fff;
+  margin-bottom: 16px;
+}
+
+.wxHero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(2, 4, 7, 0.6);
+}
+
+.wxHeroContent {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px 16px 16px;
+}
+
+.wxHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.wxLocation {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  font-size: 16px;
+  font-weight: 500;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+.wxLocation span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wxHeaderRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.wxTempRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 18px;
+  font-weight: 700;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+.wxCondition {
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.wxHeadline {
+  margin: 4px 0 0;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.25;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+.wxDivider {
+  height: 1px;
+  margin: 4px 0;
+  background: rgba(25, 110, 237, 0.5);
+}
+
+.wxAdvisories {
+  display: flex;
+  gap: 10px;
+}
+
+.wxAdvisory {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.3;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+.wxAdvisoryIcon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wxForecastBtn {
+  align-self: center;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 8px 48px;
+  border-radius: 999px;
+  background: #2f9a48;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* ---------- Home: QuickActions.jsx ---------- */
+.quick {
+  padding: 4px 16px 4px;
+}
+
+.greeting {
+  margin: 0 0 4px;
+  font-size: 16px;
+}
+
+.quickHeading {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.quickGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.quickCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 14px 20px 16px;
+  border-radius: 16px;
+  background: #e8f4fa;
+  color: var(--primary);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: pre-line;
+}
+
+.quickCard img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+}
+
+.seasonBanner {
+  position: relative;
+  overflow: hidden;
+  margin: 16px 0;
+  padding: 16px 126px 16px 16px;
+  border-radius: 20px;
+  border: 1px solid #d1fae5;
+  background: #d6eef8;
+}
+
+.newBadge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.seasonTitle {
+  margin: 2px 0 0;
+  color: var(--primary);
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.seasonDesc {
+  margin: 0 0 8px;
+  color: #374151;
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.seasonBtn {
+  display: inline-block;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.seasonImg {
+  position: absolute;
+  right: -64px;
+  bottom: -64px;
+  width: 256px;
+  height: 256px;
+  object-fit: contain;
+}
+
+/* ---------- Home: sections ---------- */
+.section {
+  padding: 16px 20px;
+  margin-bottom: 24px;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.sectionTitle {
+  margin: 0 0 12px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.sectionHeader .sectionTitle {
+  margin: 0;
+}
+
+.viewAll {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-light);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.hScroll {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin: 0 -20px;
+  padding: 0 20px;
+}
+
+.hScroll::-webkit-scrollbar {
+  display: none;
+}
+
+.hScroll > * {
+  flex-shrink: 0;
+}
+
+/* My Crops */
+.cropsRow {
+  display: flex;
+  gap: 20px;
+  margin-top: 16px;
+}
+
+.cropItem {
+  width: 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.cropCircle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  overflow: hidden;
+}
+
+.cropCircle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.addCrop {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 2px dashed var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-light);
+}
+
+/* Diagnosis card (renderDiagnosisSection) */
+.diagnosisCard {
+  margin: 0 20px 24px;
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.diagnosisTitle {
+  margin: 0 0 20px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.diagnosisSteps {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 24px;
+}
+
+.diagnosisStep {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-light);
+  font-size: 12px;
+}
+
+.stepIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #e3f0fb;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.primaryPill {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px;
+  border-radius: 24px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* Recent scans */
+.scanCard {
+  position: relative;
+  width: 200px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.scanCard img {
+  display: block;
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+}
+
+.riskBadge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.scanInfo {
+  padding: 12px;
+}
+
+.scanRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  color: var(--text-light);
+  font-size: 12px;
+}
+
+.scanRow b {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.scanIssue {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* Mandi prices (MandiPriceCard.jsx) */
+.mandiSection {
+  background: #f4fafd;
+}
+
+.chipsRow {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.chip {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: #fff;
+  font-size: 14px;
+}
+
+.chipActive {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  font-weight: 700;
+}
+
+.mandiCard {
+  width: 322px;
+  padding: 18px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: #fff;
+}
+
+.mandiHead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.mandiImg {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  background: #fafafa;
+}
+
+.mandiImg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.8;
+}
+
+.mandiName {
+  margin: 0 0 3px;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.mandiSub {
+  margin: 0;
+  color: var(--text-light);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.mandiPriceRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 14px;
+}
+
+.mandiPrice {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.mandiPrice small {
+  color: var(--text-light);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.up { color: var(--primary); font-size: 14px; font-weight: 700; }
+.down { color: #ef4444; font-size: 14px; font-weight: 700; }
+
+.mandiMinMax {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  color: var(--text-light);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.thinDivider {
+  height: 1px;
+  margin-bottom: 14px;
+  background: #f0f0f0;
+}
+
+.mandiFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.intel {
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.outlinePill {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 7px 10px 7px 14px;
+  border-radius: 24px;
+  border: 1.5px solid var(--primary);
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Soil analysis card (renderCropRecommendationsSection) */
+.soilCard {
+  padding: 24px;
+  margin-bottom: 24px;
+  border-radius: 12px;
+  border: 1px solid #d4d4df;
+  background: #fafafc;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.soilHeader {
+  margin: 0 0 24px;
+  color: #1f2937;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.soilStep {
+  display: flex;
+  gap: 16px;
+}
+
+.soilIconCol {
+  width: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.soilIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  background: #f3f4f6;
+  color: #003b49;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.soilLine {
+  flex: 1;
+  min-height: 40px;
+  border-left: 2px dashed #9ca3af;
+}
+
+.soilText {
+  flex: 1;
+  padding: 2px 0 24px;
+}
+
+.soilText b {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 16px;
+  letter-spacing: 0.3px;
+}
+
+.soilText span {
+  color: #4b5563;
+  font-size: 14px;
+}
+
+.analysisBtn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 14px;
+  border-radius: 8px;
+  background: #004a99;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.recoCard {
+  width: 160px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.recoCard img {
+  display: block;
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+}
+
+.recoInfo {
+  padding: 12px;
+}
+
+.recoInfo b {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 16px;
+}
+
+.recoInfo span {
+  color: var(--text-light);
+  font-size: 12px;
+}
+
+/* FarmMonitorCTA.jsx */
+.fmCta {
+  margin: 0 16px 20px;
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+}
+
+.fmHeading {
+  margin: 0 0 24px;
+  color: var(--primary);
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+  white-space: pre-line;
+}
+
+.fmSteps {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.fmStep {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.fmStepIcon {
+  width: 56px;
+  height: 56px;
+  margin-bottom: 10px;
+  border-radius: 50%;
+  border: 2px solid #d0d5dd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fmStep b {
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.fmStep span {
+  color: var(--text-light);
+  font-size: 12px;
+  white-space: pre-line;
+}
+
+.fmConnector {
+  width: 24px;
+  height: 1.5px;
+  margin-top: 28px;
+  background: #d0d5dd;
+}
+
+.limePill {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 24px;
+  border-radius: 30px;
+  background: var(--tertiary);
+  color: var(--primary);
+  font-size: 16px;
+  font-weight: 800;
+}
+
+/* My Farm cards */
+.farmCard {
+  width: 300px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.farmImgWrap {
+  position: relative;
+  height: 160px;
+  background: #f8f9fa;
+}
+
+.farmImgWrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.satBadge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 5px 10px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.farmContent {
+  padding: 16px;
+}
+
+.farmTitleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.farmName {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.statusBadge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.farmMeta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  color: var(--text-light);
+  font-size: 13px;
+}
+
+.farmMeta span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.farmAlert {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  background: #f8f9fa;
+}
+
+.farmAlert b {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 14px;
+}
+
+.farmAlert span {
+  color: var(--text-light);
+  font-size: 12px;
+}
+
+/* ---------- Weather report (weather-forecast-v2-screen.jsx) ---------- */
+.wx {
+  --card: #0f172a;
+  --ink: #f8fafc;
+  --cta: #1e40af;
+  --ink-line: rgba(248, 250, 252, 0.125);
+  --ink-wash: rgba(248, 250, 252, 0.05);
+
+  background: #0b1220 center / cover no-repeat;
+  color: var(--ink);
+}
+
+.wx::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.wx > * {
+  position: relative;
+}
+
+.wxTopBar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: 12px 16px 8px;
+}
+
+.wxTitle {
+  flex: 1;
+  margin-left: 12px;
+  font-size: 21px;
+  font-weight: 600;
+}
+
+.speakHalo {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(30, 64, 175, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.speakBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--cta);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wxScroll {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 4px 16px 28px;
+}
+
+.wxCard {
+  padding: 16px;
+  border-radius: 16px;
+  background: var(--card);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.wxSectionTitle {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.wxLine {
+  height: 1px;
+  margin: 16px 0;
+  background: var(--ink-line);
+}
+
+.locRow {
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid var(--ink-line);
+  background: var(--card);
+}
+
+.locContent {
+  display: flex;
+  align-items: center;
+}
+
+.locPin {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cta);
+}
+
+.locName {
+  flex: 1;
+  margin-left: 12px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.changeLink {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  color: #93b4f5;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.todayRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 8px 20px;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.todayRow b {
+  font-size: 14px;
+}
+
+.todayInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.todayTemp {
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.todayCond {
+  padding: 2px 12px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.5);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.eventRow {
+  display: flex;
+  align-items: center;
+}
+
+.eventTile {
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  background: var(--cta);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.eventText {
+  flex: 1;
+  margin-left: 12px;
+}
+
+.eventHeadline {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.eventBadge {
+  display: inline-block;
+  margin: 4px 0;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #fca5a5;
+  color: #262e3f;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+}
+
+.eventTime {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 4px 0;
+  color: rgba(248, 250, 252, 0.6);
+  font-size: 12px;
+}
+
+.adviceBox {
+  display: flex;
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--ink-line);
+  background: var(--ink-wash);
+}
+
+.adviceIcon {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--cta);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.adviceText {
+  flex: 1;
+  margin: 0 0 0 12px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.actionCta {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  aspect-ratio: 2.65;
+  padding-bottom: 14px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: center / cover no-repeat;
+}
+
+.actionCtaBtn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 24px;
+  border-radius: 999px;
+  background: var(--tertiary);
+  color: var(--primary);
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.actionCtaPlus {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: var(--tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tabStrip {
+  display: flex;
+  gap: 4px;
+  margin-top: 16px;
+  padding: 4px;
+  border-radius: 12px;
+  border: 1px solid var(--ink-line);
+}
+
+.tabItem {
+  flex: 1;
+  padding: 8px 4px;
+  border-radius: 8px;
+  text-align: center;
+  color: rgba(248, 250, 252, 0.7);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.tabItemActive {
+  background: rgba(30, 64, 175, 0.35);
+  color: #c7d7fb;
+  font-weight: 800;
+}
+
+.table {
+  margin-top: 16px;
+  border-radius: 16px;
+  border: 1px solid var(--ink-line);
+  overflow: hidden;
+}
+
+.tableHead,
+.tableRow {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+}
+
+.tableHead {
+  background: var(--ink-wash);
+  color: rgba(248, 250, 252, 0.7);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.tableRow {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  border-top: 1px solid var(--ink-line);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.colTime { width: 17%; }
+.colCondition { width: 38%; padding-right: 6px; }
+.colAction { width: 45%; color: rgba(248, 250, 252, 0.7); }
+.colDay { width: 24%; }
+.colConditionWeek { width: 36%; padding-right: 6px; }
+.colActionWeek { width: 40%; color: rgba(248, 250, 252, 0.7); }
+
+.condCell {
+  display: flex;
+  gap: 4px;
+}
+
+.condCell span {
+  flex: 1;
+}
+
+.expandBtn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin-top: 16px;
+  color: #93b4f5;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.detailGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.detailTile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid var(--ink-line);
+}
+
+.detailIcon {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.detailIcon img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.detailCol {
+  flex: 1;
+  min-width: 0;
+}
+
+.detailLabel {
+  color: rgba(248, 250, 252, 0.7);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.detailValue {
+  margin-top: 4px;
+  font-size: 18px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.detailBadge {
+  margin-top: 6px;
+  padding: 4px 6px;
+  border-radius: 999px;
+  color: #262e3f;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.moreFarm {
+  padding: 16px;
+  border-radius: 16px;
+  background: #b3dfef;
+  color: var(--text-dark);
+}
+
+.moreFarmTitle {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.moreFarmRow {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.moreFarmTile {
+  position: relative;
+  flex: 1;
+  aspect-ratio: 1;
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  background: center / cover no-repeat;
+}
+
+.moreFarmTile::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 65%;
+  background: linear-gradient(transparent, #000);
+}
+
+.moreFarmLabel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 12px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+}

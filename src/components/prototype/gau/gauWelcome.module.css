@@ -1,0 +1,354 @@
+/* Gau Sampurna first run (prod): splash, language, login, OTP, register, onboarding. */
+
+.splash {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  background: #004691;
+  color: #fff;
+}
+
+.splashLogo {
+  width: 120px;
+  height: 120px;
+  border-radius: 28px;
+  background: #fff;
+  animation: pop 0.6s ease-out both;
+}
+
+.splashText {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  animation: rise 0.6s 0.3s ease-out both;
+}
+
+.splashText b {
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 3px;
+}
+
+.splashText i {
+  width: 44px;
+  height: 3px;
+  border-radius: 2px;
+  background: #d3d800;
+}
+
+.splashText small {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  opacity: 0.85;
+}
+
+.splashFooter {
+  position: absolute;
+  bottom: 32px;
+  font-size: 12px;
+  opacity: 0.7;
+  animation: rise 0.6s 0.6s ease-out both;
+}
+
+@keyframes pop {
+  from { opacity: 0; transform: scale(0.8); }
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(12px); }
+}
+
+.topBar {
+  flex-shrink: 0;
+  padding: 8px 12px;
+}
+
+.back {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 32px 24px 24px;
+}
+
+.logo {
+  width: 110px;
+  height: 110px;
+  margin-bottom: 8px;
+  border-radius: 24px;
+}
+
+.logoSmall {
+  width: 90px;
+  height: 90px;
+  margin-bottom: 8px;
+  border-radius: 20px;
+}
+
+.title {
+  display: block;
+  max-width: 90%;
+  font-size: 26px;
+  line-height: 1.25;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.subtitle {
+  max-width: 92%;
+  margin: 6px 0 8px;
+  font-size: 15px;
+  line-height: 24px;
+  color: #64748b;
+}
+
+.subtitle b {
+  color: #0f172a;
+}
+
+.link {
+  color: #004691;
+  font-weight: 700;
+}
+
+.phoneBox {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 56px;
+  margin-top: 16px;
+  padding: 0 16px;
+  border-radius: 14px;
+  border: 1.5px solid #cbd5e1;
+  background: #fff;
+}
+
+.phoneBox:focus-within {
+  border-color: #004691;
+}
+
+.phoneBox span {
+  font-size: 16px;
+  color: #475569;
+}
+
+.phoneBox i {
+  width: 1px;
+  height: 22px;
+  background: #cbd5e1;
+}
+
+.phoneBox input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 17px;
+  letter-spacing: 1px;
+  outline: none;
+}
+
+.notice {
+  min-height: 22px;
+  padding-top: 4px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.cta {
+  width: 100%;
+  height: 56px;
+  margin-top: 8px;
+  border-radius: 16px;
+  background: #004691;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cta::after {
+  border-radius: 18px;
+}
+
+.ctaOff {
+  background: #cbd5e1;
+  cursor: default;
+}
+
+.footer {
+  margin-top: auto;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #94a3b8;
+  text-align: center;
+}
+
+.otpRow {
+  display: flex;
+  gap: 14px;
+  margin: 22px 0 6px;
+}
+
+.otpRow input {
+  width: 62px;
+  height: 64px;
+  border-radius: 14px;
+  border: 1.5px solid #cbd5e1;
+  font: inherit;
+  font-size: 26px;
+  font-weight: 800;
+  text-align: center;
+  color: #0f172a;
+  outline: none;
+}
+
+.otpRow input:focus,
+.otpRow .otpFilled {
+  border-color: #004691;
+}
+
+.autofill {
+  align-self: flex-start;
+  margin-bottom: 14px;
+  color: #64748b;
+  font-size: 12.5px;
+  text-decoration: underline;
+}
+
+.resend {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 14px;
+  color: #64748b;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 14px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #334155;
+}
+
+.field input {
+  height: 52px;
+  padding: 0 14px;
+  border-radius: 14px;
+  border: 1.5px solid #cbd5e1;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.error {
+  font-size: 12px;
+  font-weight: 500;
+  color: #dc2626;
+}
+
+.terms {
+  flex-shrink: 0;
+  padding: 0 24px 22px;
+  font-size: 12px;
+  line-height: 20px;
+  color: #94a3b8;
+  text-align: center;
+}
+
+.skipRow {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: flex-end;
+  min-height: 48px;
+  padding: 8px 20px;
+}
+
+.skip {
+  color: #64748b;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.slide {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 24px;
+  animation: rise 0.35s ease-out both;
+}
+
+.slide img {
+  width: 280px;
+  height: 280px;
+  margin-bottom: 16px;
+  object-fit: contain;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.chips span {
+  padding: 6px 12px;
+  border-radius: 99px;
+  border: 1px solid rgba(0, 70, 145, 0.21);
+  background: rgba(0, 70, 145, 0.07);
+  color: #004691;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.obFooter {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 0 24px 24px;
+}
+
+.dots {
+  display: flex;
+  gap: 6px;
+}
+
+.dots button {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background: #cbd5e1;
+}
+
+.dots .dotOn {
+  width: 24px;
+  background: #004691;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splashLogo, .splashText, .splashFooter, .slide { animation: none; }
+}

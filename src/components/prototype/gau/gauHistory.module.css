@@ -1,0 +1,474 @@
+/* Gau Sampurna scan history, reports tab and scan chat (prod). */
+
+.header,
+.chatTop {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 56px;
+  padding: 8px 12px;
+  background: #fff;
+  border-bottom: 1px solid #eef2f6;
+}
+
+.iconBtn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.filterBar {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 0;
+  background: #fff;
+  border-bottom: 1px solid #eef2f6;
+}
+
+.chipRow {
+  display: flex;
+  gap: 8px;
+  padding: 0 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.chipRow::-webkit-scrollbar {
+  display: none;
+}
+
+.chip {
+  flex-shrink: 0;
+  padding: 6px 12px;
+  border-radius: 99px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: #555;
+  font-size: 12.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 16px 24px;
+  background: #f7f9fc;
+}
+
+.list > * {
+  flex-shrink: 0;
+}
+
+.item,
+.reportItem {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 8px;
+  padding: 12px;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.dateBadge {
+  width: 52px;
+  height: 56px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.dateBadge small {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.dateBadge b {
+  font-size: 20px;
+  line-height: 1.1;
+}
+
+.info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.info small {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.itemTitle,
+.typeRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.typeRow {
+  font-size: 13px;
+  font-weight: 500;
+  color: #475569;
+}
+
+.itemTitle i,
+.typeRow i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.cowLine {
+  font-size: 13px;
+  color: #475569;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 60px 0;
+  color: #333;
+}
+
+.retry {
+  padding: 10px 20px;
+  border-radius: 99px;
+  background: #008026;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.chatLink {
+  align-self: center;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 16px;
+  color: #64748b;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+/* Reports tab */
+.dashboard {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 16px 8px;
+  background: #f7f9fc;
+}
+
+.totalCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 18px 20px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #004691, #2b65a4);
+  color: #fff;
+}
+
+.totalCard svg {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.9;
+}
+
+.totalCard small {
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+.totalCard b {
+  font-size: 32px;
+  line-height: 1.1;
+}
+
+.compactFilter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #475569;
+}
+
+.compactFilter > span {
+  flex: 1;
+}
+
+.clear {
+  color: #004691;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.filterBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 99px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #004691;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.filterBtn::after {
+  border-radius: 99px;
+}
+
+.reportItem img {
+  width: 54px;
+  height: 54px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.reportName {
+  font-size: 15px;
+  color: #0f172a;
+}
+
+.sheetHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.sheetHead b {
+  font-size: 18px;
+  color: #111827;
+}
+
+.close {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sheetLabel {
+  display: block;
+  margin: 14px 0 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #475569;
+}
+
+.wrapRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sheetActions {
+  display: flex;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+/* Scan chat */
+.chatScreen {
+  background: #f7f9fc;
+}
+
+.messages {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+}
+
+.messages > * {
+  flex-shrink: 0;
+}
+
+.botRow,
+.userRow {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.userRow {
+  justify-content: flex-end;
+}
+
+.botIcon {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+}
+
+.botIcon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.botBubble,
+.userBubble {
+  max-width: 78%;
+  padding: 10px 14px;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.botBubble {
+  border-radius: 16px 16px 16px 4px;
+  background: #fff;
+  color: #1e293b;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.userBubble {
+  border-radius: 16px 16px 4px 16px;
+  background: #004691;
+  color: #fff;
+}
+
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.option {
+  padding: 6px 10px;
+  border-radius: 99px;
+  border: 1px solid #cbd5e1;
+  font-size: 12px;
+  color: #475569;
+}
+
+.optionOn {
+  border-color: #004691;
+  background: #eef4fb;
+  color: #004691;
+  font-weight: 700;
+}
+
+.imgBubble {
+  align-self: flex-end;
+  width: 190px;
+  height: 140px;
+  border-radius: 16px;
+  border: 3px solid #004691;
+  overflow: hidden;
+}
+
+.imgBubble img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.reportCard {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 78%;
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid #dbe6f3;
+  background: #fff;
+}
+
+.reportCard > span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.reportCard small {
+  font-size: 12.5px;
+  color: #64748b;
+}
+
+.viewReport {
+  margin-top: 6px;
+  padding: 10px 0;
+  border-radius: 10px;
+  background: #004691;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-align: center;
+}
+
+.inputBar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-top: 1px solid #e2e8f0;
+  background: #fff;
+}
+
+.inputBar input {
+  flex: 1;
+  height: 44px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 22px;
+  background: #f1f5f9;
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+}
+
+.send {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

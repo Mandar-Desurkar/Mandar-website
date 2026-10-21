@@ -132,7 +132,15 @@ export default function PrototypeViewer({ prototype, screens, onClose, onSwitchP
   );
 
   const next = useCallback(() => goTo(flowIndex, screenIndex + 1, "tap"), [goTo, flowIndex, screenIndex]);
+  const back = useCallback(() => goTo(flowIndex, screenIndex - 1, "tap"), [goTo, flowIndex, screenIndex]);
   const restart = useCallback(() => goTo(flowIndex, 0, "restart"), [goTo, flowIndex]);
+  const go = useCallback(
+    (screenId: string) => {
+      const si = prototype.flows[flowIndex].screens.findIndex((sc) => sc.id === screenId);
+      if (si !== -1) goTo(flowIndex, si, "tap");
+    },
+    [goTo, prototype.flows, flowIndex]
+  );
   const goToFlow = useCallback(
     (flowId: string, screenId?: string) => {
       const fi = prototype.flows.findIndex((f) => f.id === flowId);
@@ -589,7 +597,7 @@ export default function PrototypeViewer({ prototype, screens, onClose, onSwitchP
                           exit={{ x: direction * -50, opacity: 0 }}
                           transition={{ duration: 0.18, ease: "easeOut" }}
                         >
-                          <Screen next={next} restart={restart} goToFlow={goToFlow} />
+                          <Screen next={next} back={back} restart={restart} go={go} goToFlow={goToFlow} />
                         </motion.div>
                       </AnimatePresence>
                     </div>

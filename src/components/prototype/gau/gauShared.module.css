@@ -1,0 +1,482 @@
+/* Shared Gau Sampurna prototype UI (prod): screen root, TenantTabBar + TabButton, top bars, sheets,
+   alerts, toast, product card, buttons. Values are the RN StyleSheet sizes at 375px. */
+
+.screen {
+  --primary: #004691;
+  --navy: #002b58;
+  --ink: #231f20;
+  --muted: #64748b;
+  --border: #e2e8f0;
+
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  color: var(--ink);
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+
+.scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.scroll > * {
+  flex-shrink: 0;
+}
+
+.hScroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 0 16px 4px;
+}
+
+.hScroll::-webkit-scrollbar {
+  display: none;
+}
+
+.hScroll > * {
+  flex-shrink: 0;
+}
+
+:where(.btnReset) {
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-align: inherit;
+}
+
+.hotspot {
+  position: relative;
+}
+
+.hotspot::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 14px;
+  border: 2px solid rgba(211, 216, 0, 0.95);
+  animation: hotspotPulse 1.6s ease-out infinite;
+  pointer-events: none;
+}
+
+.round::after {
+  border-radius: 999px;
+}
+
+@keyframes hotspotPulse {
+  0% { opacity: 0.9; transform: scale(0.98); }
+  70% { opacity: 0; transform: scale(1.06); }
+  100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hotspot::after { animation: none; opacity: 0.8; }
+}
+
+/* TenantTabBar.jsx + TabButton.jsx */
+.tabBar {
+  flex-shrink: 0;
+  height: 68px;
+  display: flex;
+  border-radius: 20px 20px 0 0;
+  background: #fff;
+  box-shadow: 0 -8px 12px rgba(0, 0, 0, 0.08);
+}
+
+.tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 0;
+  color: #9ca3af;
+  font-size: 10px;
+  letter-spacing: 0.2px;
+}
+
+.tabActive {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.scanCircle {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 70, 145, 0.35);
+}
+
+.cowMask {
+  display: inline-block;
+  background: currentColor;
+  mask: url("/prototypes/gau-sampurna/icon-cow.png") center / contain no-repeat;
+  -webkit-mask: url("/prototypes/gau-sampurna/icon-cow.png") center / contain no-repeat;
+}
+
+/* Top bars */
+.topBar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 8px 16px;
+  background: #fff;
+}
+
+.backBtn {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #fff;
+  color: #1b4332;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.topTitle {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topSpacer {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Buttons */
+.primary {
+  width: 100%;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.primaryDisabled {
+  background: #cbd5e1;
+  cursor: default;
+}
+
+.secondary {
+  width: 100%;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1.5px solid var(--primary);
+  background: #fff;
+  color: var(--primary);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.footer {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 16px 16px;
+  background: #fff;
+}
+
+/* Overlays */
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: rgba(0, 0, 0, 0.45);
+  animation: fadeIn 0.18s ease-out;
+}
+
+.sheet {
+  max-height: 88%;
+  overflow-y: auto;
+  scrollbar-width: none;
+  padding: 18px 20px 24px;
+  border-radius: 24px 24px 0 0;
+  background: #fff;
+  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+  animation: slideUp 0.22s ease-out;
+}
+
+.center {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 28px;
+  background: rgba(0, 0, 0, 0.45);
+  animation: fadeIn 0.18s ease-out;
+}
+
+.alert {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 22px 20px 16px;
+  border-radius: 16px;
+  background: #fff;
+  text-align: center;
+}
+
+.alert b {
+  font-size: 17px;
+  color: #0f172a;
+}
+
+.alert p {
+  margin: 0;
+  color: #475569;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.alertActions {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.alertActions > * {
+  flex: 1;
+}
+
+.toast {
+  position: absolute;
+  left: 50%;
+  bottom: 84px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: #0f172a;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes fadeIn { from { opacity: 0; } }
+@keyframes slideUp { from { transform: translateY(40px); opacity: 0.6; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay, .sheet, .center { animation: none; }
+}
+
+/* Recommended / product card (recommended-for-you-section.jsx) */
+.productCard {
+  width: 172px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  border: 1px solid #eef2f6;
+  background: #fff;
+  overflow: hidden;
+  text-align: left;
+}
+
+.productImg {
+  position: relative;
+  height: 140px;
+  background: #fff;
+}
+
+.productImg img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.offBadge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: #16a34a;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.productBody {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px 12px;
+}
+
+.descPill {
+  align-self: flex-start;
+  max-width: 100%;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: #eef4fb;
+  color: var(--primary);
+  font-size: 10.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.productTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.rating small {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.weight {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.priceRow {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.price {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.mrp {
+  color: #94a3b8;
+  font-size: 12px;
+  text-decoration: line-through;
+}
+
+.addBtn {
+  margin-top: 6px;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.stepper {
+  margin-top: 6px;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6px;
+  border-radius: 10px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.stepper button {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+/* Section headers used across home/herd */
+.sectionHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  margin-bottom: 12px;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.link {
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 600;
+}
