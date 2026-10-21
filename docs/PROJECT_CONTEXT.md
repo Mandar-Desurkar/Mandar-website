@@ -97,8 +97,7 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
   CTA `#01438A`, lime `#D3D800`), Lato font (OFL, self-hosted via `next/font/local` in
   `src/components/prototype/fonts/`), English copy from `en.json`, and copied assets in
   `public/prototypes/kissan-sampurna/` (~1 MB, loaded only when opened).
-- **Code:** `PrototypeViewer.tsx` (a macOS window with a flow sidebar, PM note per screen,
-  and a scaled iPhone frame; ←/→/Esc; analytics `Opened / Viewed Prototype Screen / Closed
+- **Code:** `PrototypeViewer.tsx` (redesigned in Figma Presentation Mode with authentic tab strip, document tabs, dropdown title, settings toggle, 1-click flow/screen pills, native macOS traffic light window controls with hover glyphs `✕`/`−`/`＋`, and a scaled iPhone frame; ←/→/Esc; analytics `Opened / Viewed Prototype Screen / Closed
   Prototype`), `kissan/KissanScreens.tsx` + `kissan.module.css` (the screens),
   `KissanPrototype.tsx` (loaded on demand via `next/dynamic`). Content and PM notes live in
   `src/data/prototypes/kissanSampurna.ts`. Opened from the Experience group title ("▶ View app
@@ -353,3 +352,6 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
   `dev` locally. Push pending a GitHub account switch.
 - 2026-10-21: Committed the minimal apps shelf + equal-size app icons on `prod`, fast-forwarded
   `dev`, pushed both to GitHub.
+- 2026-10-21: Replaced the prototype viewer with an authentic, minimal **Figma Prototype Presentation UI** based directly on the user's Figma desktop screenshots: top Figma document tab strip (`⌂`, `Kissan Sampurna App - Prototype`, `Gau Sampurna Mobile App`), presentation bar with Figma logo, collapsible sidebar toggle `[| ]`, centered title dropdown (`Kissan Sampurna App ˅`), avatar `MD`, blue `Share prototype` button, clean collapsible `Flows` sidebar with `✓ Active flow` and `Description` PM notes, pure deep-dark canvas (no dot grid, no bottom floating pill), centered iPhone frame, and seamless switching between Kissan and Gau. Removed unnecessary static tabs.
+- 2026-10-21: Enhanced prototype sidebar UX: added screen count badges per flow (`5 screens`, etc.), nested list of all screen frames with active blue indicator and direct 1-click switching, plus quick interactive screen selector pills `[1] [2] [3]...` in the Description section.
+- 2026-10-21: Polished prototype viewer UI: added macOS traffic light controls (close, minimize, maximize) on the top-left tab strip beside the home icon, eliminated the duplicate `#` in the screen list (`# 1. Crop Doctor`), removed the redundant bottom `< Screen 1 of 5 >` stepper in favor of the quick pills, and eliminated sidebar scrollbar clutter.

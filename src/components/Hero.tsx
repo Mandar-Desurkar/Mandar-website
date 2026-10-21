@@ -66,7 +66,16 @@ const SparkDoodle = () => (
 export default function Hero() {
   const [initialDelay] = useState(isFirstMount ? 1.8 : 0);
   const { openSection } = useWindow();
-  const [openPrototype, setOpenPrototype] = useState<"kissan-sampurna" | "gau-sampurna" | null>(null);
+  const [openPrototype, setOpenPrototype] = useState<"kissan-sampurna" | "gau-sampurna" | null>(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const proto = params.get("prototype");
+      if (proto === "kissan-sampurna" || proto === "gau-sampurna") {
+        return proto;
+      }
+    }
+    return null;
+  });
   // Show "View Resume" only once the PDF is actually deployed, so the CTA never 404s.
   const [hasResume, setHasResume] = useState(false);
 
@@ -80,6 +89,7 @@ export default function Hero() {
       .catch(() => {
         // offline or blocked: keep the LinkedIn fallback
       });
+
     return () => {
       cancelled = true;
     };
@@ -147,6 +157,11 @@ export default function Hero() {
                   if (!app.prototype) return;
                   trackEvent("Opened Prototype", { prototype: app.prototype, placement: "hero" });
                   setOpenPrototype(app.prototype);
+                  if (typeof window !== "undefined") {
+                    const url = new URL(window.location.href);
+                    url.searchParams.set("prototype", app.prototype);
+                    window.history.replaceState({}, "", url.toString());
+                  }
                 };
                 return (
                   <li key={app.name} className={styles.appRow} title={`${app.name} · ${app.caption}`}>
@@ -325,8 +340,46 @@ export default function Hero() {
           </motion.div>
         </motion.div>
       </div>
-      {openPrototype === "kissan-sampurna" && <KissanPrototype onClose={() => setOpenPrototype(null)} />}
-      {openPrototype === "gau-sampurna" && <GauPrototype onClose={() => setOpenPrototype(null)} />}
+      {openPrototype === "kissan-sampurna" && (
+        <KissanPrototype
+          onClose={() => {
+            setOpenPrototype(null);
+            if (typeof window !== "undefined") {
+              const url = new URL(window.location.href);
+              url.searchParams.delete("prototype");
+              window.history.replaceState({}, "", url.pathname);
+            }
+          }}
+          onSwitchPrototype={(id) => {
+            setOpenPrototype(id);
+            if (typeof window !== "undefined") {
+              const url = new URL(window.location.href);
+              url.searchParams.set("prototype", id);
+              window.history.replaceState({}, "", url.toString());
+            }
+          }}
+        />
+      )}
+      {openPrototype === "gau-sampurna" && (
+        <GauPrototype
+          onClose={() => {
+            setOpenPrototype(null);
+            if (typeof window !== "undefined") {
+              const url = new URL(window.location.href);
+              url.searchParams.delete("prototype");
+              window.history.replaceState({}, "", url.pathname);
+            }
+          }}
+          onSwitchPrototype={(id) => {
+            setOpenPrototype(id);
+            if (typeof window !== "undefined") {
+              const url = new URL(window.location.href);
+              url.searchParams.set("prototype", id);
+              window.history.replaceState({}, "", url.toString());
+            }
+          }}
+        />
+      )}
     </section>
   );
 }
