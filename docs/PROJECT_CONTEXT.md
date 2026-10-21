@@ -418,7 +418,8 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
   screen's timer, still running during its exit animation, pulled the viewer back to the previous flow
   (`goTo` now ignores calls from a screen that is no longer current); hero clipping at ~1024px
   (container queries); 48 MB of folder SVGs replaced by WebPs. The `responsive-design` skill now
-  documents the shared phone query, container queries and the built phone layout. Uncommitted.
+  documents the shared phone query, container queries and the built phone layout. Committed as
+  0b9ff98 on `prod` (on top of the Firebase commit bb45251), `dev` fast-forwarded, both pushed.
 - 2026-10-21: **Gau Sampurna full coverage** (owner: "add all the flows, screens and design"). Rebuilt
   the prototype from the prod repo route by route: 13 flows / 76 screens covering home, herd, all five
   AI scans with every orchestrator step and full reports, scan history / reports tab / chat replay,
