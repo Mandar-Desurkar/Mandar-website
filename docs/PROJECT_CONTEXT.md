@@ -24,6 +24,10 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
 - Profile photo (2026-10-21): `public/profile-photo.jpg` (640px, full frame) for the About hero /
   desktop polaroid, and `public/profile-avatar.jpg` (320px head-and-shoulders crop) for the round
   avatars (home widget, Contact card, hiring notification). To change the photo, replace both.
+  `public/profile-new.jpg` is a **compatibility copy** of `profile-photo.jpg`, nothing references it:
+  pages loaded before the 2026-10-21 deploy (open tabs, Safari / LinkedIn in-app cache) still request
+  the old path and showed a broken photo after it was deleted. Safe to delete after a few weeks; when
+  renaming public assets in future, keep the old file for a while.
 - **Content source of truth: `src/data/resume.ts`** (profile, KPIs, experience, projects,
   beyond work, skills), synced with the owner's LaTeX resume on 2026-10-21. Edit content
   there, not in JSX. `**text**` renders bold through `src/components/RichText.tsx`.
@@ -292,6 +296,12 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 
 ## Changelog
 
+- 2026-10-21: "Images not showing" investigation. Live site is **https://mandar-desurkar.vercel.app**
+  (the repo's homepage link `mandar-website.vercel.app` is stale: DEPLOYMENT_NOT_FOUND; per-deploy
+  URLs are behind Vercel login). Every image is committed with exact case; every section and all
+  128 prototype screens load with 0 failed images on the live site in Chrome, and WebKit (Safari
+  engine, Playwright) renders the phone home correctly. Only defect: the deleted `profile-new.jpg`
+  404'd for pages loaded before the deploy → restored as a copy of the new photo.
 - 2026-10-21: Committed this session's phone work as **097613d** on `dev`, fast-forwarded `prod`,
   pushed both (all "Uncommitted" entries below from 2026-10-21's iOS-components pass onward are in
   it). Preflight: build, secrets and links pass; the 2 fails (5 lint errors, assets > 300 KB) and the
