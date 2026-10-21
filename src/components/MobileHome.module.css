@@ -162,6 +162,115 @@
   color: rgba(255, 255, 255, 0.75);
 }
 
+/* Featured Figma Prototypes showcase card */
+.prototypeWidget {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 14px 12px;
+  border-radius: 22px;
+  background: rgba(30, 24, 40, 0.45);
+  backdrop-filter: saturate(170%) blur(22px);
+  -webkit-backdrop-filter: saturate(170%) blur(22px);
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.22), 0 8px 24px rgba(0, 0, 0, 0.25);
+  color: #fff;
+}
+
+.prototypeWidgetHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2px;
+}
+
+.figmaBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  color: #fff;
+}
+
+.liveTag {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #4db4ff;
+  letter-spacing: 0.1px;
+}
+
+.prototypeCards {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.protoCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 0.5px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.09);
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.protoCard:active {
+  transform: scale(0.98);
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.protoIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  background: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+}
+
+.protoInfo {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.protoName {
+  font-size: 14.5px;
+  font-weight: 700;
+  letter-spacing: -0.1px;
+  color: #fff;
+}
+
+.protoCaption {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.78);
+  line-height: 1.3;
+}
+
+.protoPlayBtn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  background: #0d99ff;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(13, 153, 255, 0.4);
+}
+
 .grid {
   flex-shrink: 0;
   display: grid;

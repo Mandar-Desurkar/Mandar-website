@@ -433,6 +433,10 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
   ₹49 verification), account, and welcome / login / onboarding. Dead routes documented in
   `docs/prototype-coverage-plan.md`. Verified in headless Chrome and `next build`. Committed as
   4be32e4 on `dev`, `prod` fast-forwarded, both pushed. The Firebase files were left uncommitted.
-  Note: a parallel Firebase analytics change (`src/lib/firebase.ts`, `analytics.ts`,
-  `instrumentation-client.ts`) logs `logFirebaseEvent is not defined` and Firebase 400s in the
-  browser; it is separate from the prototype work.
+- 2026-10-21: **Figma Mobile Prototype & Full Site Mobile Redesign Pass**:
+  - **Mobile Prototype Player (`PrototypeMobile.tsx` & `.module.css`)**: Implemented authentic full-screen Figma mobile prototype mode. Base 375pt design scales proportionally to 100% of viewport width with `transformOrigin: "top left"` (no side letterboxing or horizontal clipping). Added Framer Motion touch swipe gestures (`drag="x"`) to flick between screens, auto-hiding toolbar with a sleek floating bottom mini-pill (`● Flow · 1/2 ^`), top Dynamic Island coach mark pill, 1-tap restart button, and smooth bottom sheets for PM notes and flows.
+  - **Mobile Home Screen (`MobileHome.tsx` & `.module.css`)**: Redesigned the Featured Figma Mobile Prototypes showcase widget into full-width stacked touch cards with official Figma SVG badge, `● Full Touch Mode` indicator, unclipped app titles, clear captions, and tactile 40px "Try" buttons.
+  - **Mobile Sheet Window (`DraggableWindow.tsx` & `globals.css`)**: Added iOS-style sheet grabber bar (`.mobile-sheet-grabber`) inside `.mobile-sheet-header` above `.mobile-navbar` for authentic bottom-sheet look and feel.
+  - **Contact Section Mobile Overhaul (`Contact.module.css`)**: Redesigned `.socials` into a clean full-width vertical action stack with 46px thumb-sized touch targets and active scale states.
+  - **Hero & Section Ergonomics**: Constrained `.sparkDoodle` in `Hero.module.css` to prevent horizontal overflow; enhanced `.prototypePill` in `Experience.module.css` and `.prototypeBtn` in `Projects.module.css` for touchscreens; fixed `BootScreen.module.css` for `100dvh` centering. Verified with CDP headless Chrome screenshots and clean production build.
+

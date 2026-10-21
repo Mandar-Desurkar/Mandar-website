@@ -176,4 +176,19 @@
   .cardHeader {
     margin-top: 0;
   }
+
+  .prototypeBtn {
+    min-height: 38px;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .prototypeBtn:active {
+    transform: scale(0.97);
+    background: #cfe5f8;
+  }
 }

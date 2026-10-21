@@ -204,23 +204,26 @@ export default function DraggableWindow({
         exit="closed"
         style={{ position: "fixed", zIndex: 10 }}
       >
-        {/* iOS-style nav bar: Home (to the home screen) · title · Share */}
-        <div className="mobile-navbar">
-          <button
-            type="button"
-            className="mobile-nav-btn"
-            aria-label="Home screen"
-            onClick={() => {
-              trackEvent("Closed Window", { section: activeTab });
-              setIsClosed(true);
-            }}
-          >
-            <LayoutGrid size={20} />
-          </button>
-          <span className="mobile-nav-title">{title}</span>
-          <button type="button" className="mobile-nav-btn" aria-label="Share this portfolio" onClick={shareProfile}>
-            <Share size={20} />
-          </button>
+        {/* iOS-style sheet header: grabber handle + nav bar */}
+        <div className="mobile-sheet-header">
+          <div className="mobile-sheet-grabber" aria-hidden="true" />
+          <div className="mobile-navbar">
+            <button
+              type="button"
+              className="mobile-nav-btn"
+              aria-label="Home screen"
+              onClick={() => {
+                trackEvent("Closed Window", { section: activeTab });
+                setIsClosed(true);
+              }}
+            >
+              <LayoutGrid size={20} />
+            </button>
+            <span className="mobile-nav-title">{title}</span>
+            <button type="button" className="mobile-nav-btn" aria-label="Share this portfolio" onClick={shareProfile}>
+              <Share size={20} />
+            </button>
+          </div>
         </div>
         <div className="window-content-scroll" ref={scrollRef}>
           <div className="notebook-bg">{children}</div>

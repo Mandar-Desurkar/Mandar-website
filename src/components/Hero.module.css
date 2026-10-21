@@ -325,6 +325,13 @@
    An identity row (small polaroid beside "Apps I've built") so the headline, KPIs and the primary
    CTA land in the first screen instead of after a full-screen photo. */
 @container window (max-width: 599.98px) {
+  .sparkDoodle {
+    width: 32px;
+    height: 32px;
+    top: -18px;
+    right: -14px;
+  }
+
   .heroSection {
     padding-top: 1.25rem;
     padding-bottom: 1.75rem;

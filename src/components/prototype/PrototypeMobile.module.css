@@ -5,7 +5,7 @@
   inset: 0;
   z-index: 10050;
   height: 100dvh;
-  background: #fff;
+  background: #0a0a0c;
   color: #fff;
   font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
   -webkit-tap-highlight-color: transparent;
@@ -18,15 +18,17 @@
   inset: 0;
   display: flex;
   justify-content: center;
+  align-items: flex-start;
   overflow: hidden;
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-  background: #fff;
+  background: #0a0a0c;
 }
 
 .screenSlot {
   position: relative;
   flex-shrink: 0;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
 }
 
 .screen {
@@ -49,6 +51,7 @@
   position: absolute;
   inset: 0;
   background: #fff;
+  touch-action: pan-y;
 }
 
 /* Figma flashes every tappable area when you tap somewhere that isn't one */
@@ -64,17 +67,18 @@
 @media (min-width: 600px) {
   .root,
   .stage {
-    background: #0e0e10;
+    background: #09090b;
   }
 
   .stage {
+    align-items: center;
     padding-top: calc(16px + env(safe-area-inset-top));
     padding-bottom: calc(16px + env(safe-area-inset-bottom));
   }
 
   .screenSlot {
     border-radius: 28px;
-    box-shadow: 0 0 0 1px #2c2c30, 0 20px 60px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 0 0 1px #2c2c30, 0 20px 60px rgba(0, 0, 0, 0.7);
   }
 }
 
@@ -83,41 +87,46 @@
   position: absolute;
   left: 0;
   right: 0;
-  bottom: calc(14px + env(safe-area-inset-bottom));
+  bottom: calc(12px + env(safe-area-inset-bottom));
   z-index: 50;
-  width: min(440px, calc(100% - 20px));
-  height: 58px;
+  width: min(430px, calc(100% - 16px));
+  height: 52px;
   margin: 0 auto;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 2px;
-  padding: 0 6px;
-  border-radius: 20px;
-  background: rgba(28, 28, 30, 0.9);
-  backdrop-filter: saturate(160%) blur(20px);
-  -webkit-backdrop-filter: saturate(160%) blur(20px);
-  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.35), inset 0 0 0 0.5px rgba(255, 255, 255, 0.12);
+  padding: 0 5px;
+  border-radius: 18px;
+  background: rgba(22, 22, 26, 0.94);
+  backdrop-filter: saturate(180%) blur(24px);
+  -webkit-backdrop-filter: saturate(180%) blur(24px);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.45), inset 0 0 0 0.5px rgba(255, 255, 255, 0.14);
 }
 
 .tbBtn {
-  width: 44px;
-  height: 44px;
+  width: 36px;
+  height: 36px;
   flex-shrink: 0;
   border: 0;
-  border-radius: 14px;
+  border-radius: 11px;
   background: none;
   color: #f2f2f7;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.1s ease, background 0.15s ease;
 }
 
 .tbBtn:active:not(:disabled) {
-  background: rgba(255, 255, 255, 0.12);
+  transform: scale(0.92);
+  background: rgba(255, 255, 255, 0.14);
 }
 
 .tbBtn:disabled {
-  opacity: 0.3;
+  opacity: 0.25;
 }
 
 .tbNext {
@@ -185,41 +194,107 @@
   font-weight: 700;
 }
 
-/* ---------- Coach mark ---------- */
+/* ---------- Coach mark (floating top pill) ---------- */
 .hint {
   position: absolute;
   left: 12px;
   right: 12px;
-  bottom: calc(84px + env(safe-area-inset-bottom));
+  top: calc(12px + env(safe-area-inset-top));
   z-index: 60;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 10px;
-  max-width: 440px;
+  max-width: 420px;
   margin: 0 auto;
-  padding: 12px 14px;
+  padding: 8px 14px;
   border: 0;
-  border-radius: 16px;
-  background: rgba(20, 20, 24, 0.95);
+  border-radius: 999px;
+  background: rgba(22, 22, 26, 0.94);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
   color: #e5e5ea;
-  font-size: 13.5px;
-  line-height: 1.45;
+  font-size: 12.5px;
+  line-height: 1.35;
   text-align: left;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45), inset 0 0 0 0.5px rgba(255, 255, 255, 0.16);
+  cursor: pointer;
 }
 
 .hint b {
-  color: #fff;
+  color: #0d99ff;
 }
 
 .hintDot {
   flex-shrink: 0;
-  width: 12px;
-  height: 12px;
-  margin-top: 3px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  border: 2px solid #d3d800;
-  box-shadow: 0 0 0 4px rgba(211, 216, 0, 0.25);
+  background: #0d99ff;
+  box-shadow: 0 0 8px rgba(13, 153, 255, 0.9);
+}
+
+.hintText {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hintClose {
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+/* ---------- Minimal floating mini-pill when toolbar is hidden ---------- */
+.miniPill {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(12px + env(safe-area-inset-bottom));
+  z-index: 45;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 19px;
+  background: rgba(22, 22, 26, 0.9);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4), inset 0 0 0 0.5px rgba(255, 255, 255, 0.15);
+  color: #f2f2f7;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.1px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.miniPill:active {
+  transform: translateX(-50%) scale(0.96);
+  background: rgba(30, 30, 36, 0.96);
+}
+
+.miniDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #0d99ff;
+  box-shadow: 0 0 8px rgba(13, 153, 255, 0.8);
+}
+
+.miniText {
+  max-width: 220px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.miniChevron {
+  opacity: 0.7;
 }
 
 /* ---------- Sheets ---------- */

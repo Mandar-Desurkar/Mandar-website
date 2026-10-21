@@ -219,6 +219,22 @@
     padding: 1.5rem 0 2rem;
   }
 
+  .groupTitleButton {
+    gap: 8px;
+    margin-top: 4px;
+    margin-bottom: 0.8rem;
+  }
+
+  .prototypePill {
+    padding: 5px 12px;
+    font-size: 0.82rem;
+    min-height: 32px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    box-shadow: 0 1px 3px rgba(0, 70, 145, 0.12);
+  }
+
   .bulletList,
   .beyondWorkList {
     padding-left: 1.1rem;

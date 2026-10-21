@@ -7,7 +7,7 @@
 // flow list open as bottom sheets. State and analytics stay in PrototypeViewer.
 import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, ChevronLeft, ChevronRight, Expand, ListTree, Minimize, RotateCcw, Smartphone, X } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Expand, ListTree, Minimize, RotateCcw, Smartphone, X } from "lucide-react";
 import styles from "./PrototypeMobile.module.css";
 import { lato } from "./fonts";
 import type { Prototype } from "@/data/prototypes/kissanSampurna";
@@ -172,9 +172,12 @@ export default function PrototypeMobile({
     else document.documentElement.requestFullscreen().catch(() => {});
   };
 
-  const scale = size.w && size.w < DESIGN_W ? size.w / DESIGN_W : 1;
-  const innerW = size.w < DESIGN_W ? DESIGN_W : Math.min(size.w, MAX_W);
-  const innerH = size.h / scale;
+  const isTablet = size.w >= 600;
+  const scale = isTablet
+    ? Math.min(1, (size.h - 32) / 812)
+    : (size.w > 0 ? size.w / DESIGN_W : 1);
+  const innerW = DESIGN_W;
+  const innerH = isTablet ? 812 : (size.h > 0 ? size.h / scale : 812);
   const isFirst = screenIndex === 0;
   const isLast = screenIndex === flow.screens.length - 1;
   // The player keeps going across flows, so ‹ › never dead-end mid-prototype
@@ -202,12 +205,27 @@ export default function PrototypeMobile({
           <div className={styles.screenSlot} style={{ width: innerW * scale, height: size.h }}>
             <div
               className={`${styles.screen} ${lato.variable} ${flash ? styles.flash : ""}`}
-              style={{ width: innerW, height: innerH, transform: scale < 1 ? `scale(${scale})` : undefined }}
+              style={{
+                width: innerW,
+                height: innerH,
+                transform: `scale(${scale})`,
+                transformOrigin: "top left",
+              }}
             >
               <AnimatePresence mode="popLayout" initial={false} custom={direction}>
                 <motion.div
                   key={`${flow.id}/${screen.id}`}
                   className={styles.slide}
+                  drag="x"
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={0.2}
+                  onDragEnd={(_, info) => {
+                    if (info.offset.x < -40 || info.velocity.x < -300) {
+                      goNext();
+                    } else if (info.offset.x > 40 || info.velocity.x > 300) {
+                      goPrev();
+                    }
+                  }}
                   initial={{ x: direction * 40, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
                   exit={{ x: direction * -40, opacity: 0 }}
@@ -232,21 +250,23 @@ export default function PrototypeMobile({
         </div>
       )}
 
+      {/* Sleek top floating coach mark pill */}
       <AnimatePresence>
         {hint && !landscape && (
           <motion.button
             type="button"
             className={styles.hint}
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
+            exit={{ opacity: 0, y: -16 }}
             onClick={() => setHint(false)}
+            aria-label="Dismiss hint"
           >
             <span className={styles.hintDot} />
-            <span>
-              <b>You&apos;re in the app.</b> Tap glowing areas to move through it. Tap any empty spot to bring back
-              these controls, the PM notes and all flows.
+            <span className={styles.hintText}>
+              <b>Figma Prototype Mode</b> · Tap hotspots or swipe horizontally to navigate
             </span>
+            <X size={14} className={styles.hintClose} />
           </motion.button>
         )}
       </AnimatePresence>
@@ -265,8 +285,8 @@ export default function PrototypeMobile({
             transition={{ duration: 0.2, ease: "easeOut" }}
             onPointerDown={showChrome}
           >
-            <button type="button" className={styles.tbBtn} onClick={onClose} aria-label="Close prototype">
-              <X size={19} />
+            <button type="button" className={styles.tbBtn} onClick={onClose} aria-label="Close prototype" title="Close">
+              <X size={18} />
             </button>
             <button
               type="button"
@@ -274,10 +294,11 @@ export default function PrototypeMobile({
               onClick={goPrev}
               disabled={isFirst && !hasPrevFlow}
               aria-label={isFirst ? "Previous flow" : "Previous screen"}
+              title="Previous screen"
             >
-              <ChevronLeft size={21} />
+              <ChevronLeft size={20} />
             </button>
-            <button type="button" className={styles.tbCenter} onClick={() => setSheet("note")} aria-label="PM note for this screen">
+            <button type="button" className={styles.tbCenter} onClick={() => setSheet("note")} aria-label="PM note for this screen" title="PM Note & specs">
               <span className={styles.tbFlow}>
                 {flow.title} · {screenIndex + 1}/{flow.screens.length}
               </span>
@@ -292,13 +313,42 @@ export default function PrototypeMobile({
               onClick={goNext}
               disabled={isLast && !hasNextFlow}
               aria-label={isLast ? "Next flow" : "Next screen"}
+              title="Next screen"
             >
-              <ChevronRight size={21} />
+              <ChevronRight size={20} />
             </button>
-            <button type="button" className={styles.tbBtn} onClick={openFlows} aria-label="All flows">
+            <button type="button" className={styles.tbBtn} onClick={onRestart} aria-label="Restart flow" title="Restart flow">
+              <RotateCcw size={16} />
+            </button>
+            <button type="button" className={styles.tbBtn} onClick={openFlows} aria-label="All flows and screens" title="All flows">
               <ListTree size={18} />
             </button>
+            <button type="button" className={styles.tbBtn} onClick={() => setChrome(false)} aria-label="Hide controls" title="Hide toolbar">
+              <ChevronDown size={17} />
+            </button>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Minimal floating trigger badge when toolbar is auto-hidden */}
+      <AnimatePresence>
+        {!chrome && !sheet && !landscape && (
+          <motion.button
+            type="button"
+            className={styles.miniPill}
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 14 }}
+            transition={{ duration: 0.2 }}
+            onClick={showChrome}
+            aria-label="Show prototype controls"
+          >
+            <span className={styles.miniDot} />
+            <span className={styles.miniText}>
+              {flow.title} · {screenIndex + 1}/{flow.screens.length}
+            </span>
+            <ChevronUp size={14} className={styles.miniChevron} />
+          </motion.button>
         )}
       </AnimatePresence>
 
