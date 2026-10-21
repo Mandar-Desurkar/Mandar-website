@@ -439,4 +439,8 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
   - **Mobile Sheet Window (`DraggableWindow.tsx` & `globals.css`)**: Added iOS-style sheet grabber bar (`.mobile-sheet-grabber`) inside `.mobile-sheet-header` above `.mobile-navbar` for authentic bottom-sheet look and feel.
   - **Contact Section Mobile Overhaul (`Contact.module.css`)**: Redesigned `.socials` into a clean full-width vertical action stack with 46px thumb-sized touch targets and active scale states.
   - **Hero & Section Ergonomics**: Constrained `.sparkDoodle` in `Hero.module.css` to prevent horizontal overflow; enhanced `.prototypePill` in `Experience.module.css` and `.prototypeBtn` in `Projects.module.css` for touchscreens; fixed `BootScreen.module.css` for `100dvh` centering. Verified with CDP headless Chrome screenshots and clean production build.
+- 2026-10-21: **Mobile Default Home Screen & Prototype Redundancy Cleanup**:
+  - **Default Landing Page on Mobile**: In `WindowContext.tsx`, mobile devices (`window.matchMedia(MOBILE_QUERY).matches`) now default to `isClosed: true` on initial mount (unless visiting with a deep link), opening directly onto the iOS-style mobile home screen. Desktop devices continue opening with the About Me window displayed as before.
+  - **Eliminated Prototype Redundancy**: Removed duplicate app prototype icons (`Kissan` and `Gau` with blue play badges) and the redundant tip text from `.grid` in `MobileHome.tsx`. The prototypes now live exclusively in the featured Figma Mobile Prototypes showcase.
+  - **Streamlined 5-Column Section Grid**: Arranged the 5 section folders (`About`, `Experience`, `Education`, `Projects`, `Contact`) into a single, balanced horizontal row on the home screen above the dock.
 

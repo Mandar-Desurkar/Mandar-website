@@ -63,13 +63,23 @@ export function WindowProvider({ children }: { children: ReactNode }) {
   // Deep link (?prototype=…, from "Share prototype"). Read after mount so the server and client
   // HTML match.
   useEffect(() => {
-    const id = new URLSearchParams(window.location.search).get('prototype');
-    if (id !== 'kissan-sampurna' && id !== 'gau-sampurna') return;
-    const raf = requestAnimationFrame(() => {
-      trackEvent('Opened Prototype', { prototype: id, placement: 'deep_link' });
-      setPrototype(id);
-    });
-    return () => cancelAnimationFrame(raf);
+    const params = new URLSearchParams(window.location.search);
+    const protoId = params.get('prototype');
+    if (protoId === 'kissan-sampurna' || protoId === 'gau-sampurna') {
+      const raf = requestAnimationFrame(() => {
+        trackEvent('Opened Prototype', { prototype: protoId, placement: 'deep_link' });
+        setPrototype(protoId);
+      });
+      return () => cancelAnimationFrame(raf);
+    }
+
+    // Default to the mobile home screen (window closed) when opening on phone/touch layout
+    try {
+      const MOBILE_QUERY = "(max-width: 767.98px), (max-width: 1023.98px) and (pointer: coarse), (max-height: 500px) and (pointer: coarse)";
+      if (window.matchMedia(MOBILE_QUERY).matches && !params.has('section')) {
+        setIsClosed(true);
+      }
+    } catch {}
   }, []);
 
   const openSection = (id: SectionId, source: OpenSource) => {
