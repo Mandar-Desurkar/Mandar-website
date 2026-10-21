@@ -4,7 +4,9 @@ import React, { createContext, useContext, useEffect, useRef, useState, ReactNod
 import { trackEvent, secondsSince } from '@/lib/analytics';
 
 export type SectionId = 'about' | 'experience' | 'education' | 'projects' | 'contact';
-export type OpenSource = 'desktop_icon' | 'menu_bar' | 'system_menu' | 'hero_cta' | 'notification' | 'mobile_dock';
+export type PrototypeId = 'kissan-sampurna' | 'gau-sampurna';
+export type PrototypePlacement = 'hero' | 'experience' | 'projects' | 'home_screen' | 'deep_link';
+export type OpenSource = 'desktop_icon' | 'menu_bar' | 'system_menu' | 'hero_cta' | 'notification' | 'mobile_dock' | 'home_widget';
 
 type WindowContextType = {
   isMinimized: boolean;
@@ -19,7 +21,20 @@ type WindowContextType = {
   openSection: (id: SectionId, source: OpenSource) => void;
   // True once the visitor has opened Contact this visit (used to skip conversion nudges)
   hasOpenedContact: boolean;
+  // The open app prototype (rendered once by PrototypeHost, so any section or the phone home
+  // screen can open it and it survives switching sections). Mirrored in ?prototype= for sharing.
+  prototype: PrototypeId | null;
+  openPrototype: (id: PrototypeId, placement: PrototypePlacement) => void;
+  switchPrototype: (id: PrototypeId) => void;
+  closePrototype: () => void;
 };
+
+function setPrototypeParam(id: PrototypeId | null) {
+  const url = new URL(window.location.href);
+  if (id) url.searchParams.set('prototype', id);
+  else url.searchParams.delete('prototype');
+  window.history.replaceState({}, '', url.toString());
+}
 
 const WindowContext = createContext<WindowContextType | undefined>(undefined);
 
@@ -29,6 +44,33 @@ export function WindowProvider({ children }: { children: ReactNode }) {
   const [isClosed, setIsClosed] = useState(false);
   const [activeTab, setActiveTab] = useState<SectionId>('about');
   const [hasOpenedContact, setHasOpenedContact] = useState(false);
+  const [prototype, setPrototype] = useState<PrototypeId | null>(null);
+
+  const openPrototype = (id: PrototypeId, placement: PrototypePlacement) => {
+    trackEvent('Opened Prototype', { prototype: id, placement });
+    setPrototype(id);
+    setPrototypeParam(id);
+  };
+  const switchPrototype = (id: PrototypeId) => {
+    setPrototype(id);
+    setPrototypeParam(id);
+  };
+  const closePrototype = () => {
+    setPrototype(null);
+    setPrototypeParam(null);
+  };
+
+  // Deep link (?prototype=…, from "Share prototype"). Read after mount so the server and client
+  // HTML match.
+  useEffect(() => {
+    const id = new URLSearchParams(window.location.search).get('prototype');
+    if (id !== 'kissan-sampurna' && id !== 'gau-sampurna') return;
+    const raf = requestAnimationFrame(() => {
+      trackEvent('Opened Prototype', { prototype: id, placement: 'deep_link' });
+      setPrototype(id);
+    });
+    return () => cancelAnimationFrame(raf);
+  }, []);
 
   const openSection = (id: SectionId, source: OpenSource) => {
     trackEvent('Opened Section', {
@@ -91,6 +133,7 @@ export function WindowProvider({ children }: { children: ReactNode }) {
       activeTab, setActiveTab,
       openSection,
       hasOpenedContact,
+      prototype, openPrototype, switchPrototype, closePrototype,
     }}>
       {children}
     </WindowContext.Provider>

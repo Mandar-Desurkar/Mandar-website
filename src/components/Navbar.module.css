@@ -214,3 +214,21 @@
     margin-right: 0.5rem;
   }
 }
+
+/* Very narrow phones (≤ 374px): drop the battery percentage so the clock never spills off-screen */
+@media (max-width: 374.98px) {
+  .batteryText {
+    display: none;
+  }
+
+  .menubar {
+    padding: 0 0.5rem;
+  }
+}
+
+/* Phones and touch tablets already have a status bar; the home screen and dock replace this menu */
+@media (max-width: 767.98px), (max-width: 1023.98px) and (pointer: coarse), (max-height: 500px) and (pointer: coarse) {
+  .menubar {
+    display: none;
+  }
+}

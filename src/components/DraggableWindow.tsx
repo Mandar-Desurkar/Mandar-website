@@ -7,6 +7,8 @@ import { trackEvent } from "@/lib/analytics";
 import { useEffect, useState, useRef } from "react";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { SECTION_SCROLL_TOP } from "./MobileDock";
+import { LayoutGrid, Share } from "lucide-react";
+import { profile } from "@/data/resume";
 
 export default function DraggableWindow({ 
   title, 
@@ -16,7 +18,29 @@ export default function DraggableWindow({
   children: React.ReactNode
 }) {
   const dragControls = useDragControls();
-  const { isMinimized, isMaximized, activeTab } = useWindow();
+  const { isMinimized, isMaximized, activeTab, setIsClosed } = useWindow();
+  const [toast, setToast] = useState<string | null>(null);
+
+  // Phone nav bar: Share opens the native share sheet (WhatsApp, LinkedIn…), else copies the link
+  const shareProfile = async () => {
+    const url = window.location.origin;
+    const data = { title: `${profile.name} · ${profile.role}`, text: `${profile.name}, ${profile.role}: portfolio and interactive app prototypes`, url };
+    if (navigator.share) {
+      try {
+        await navigator.share(data);
+        trackEvent("Shared Profile", { method: "native", section: activeTab });
+      } catch {
+        // dismissed: nothing to do
+      }
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      trackEvent("Shared Profile", { method: "copy", section: activeTab });
+      setToast("Link copied");
+      setTimeout(() => setToast(null), 1800);
+    } catch {}
+  };
   
   const [hasMounted, setHasMounted] = useState(false);
   const windowRef = useRef<HTMLDivElement>(null);
@@ -180,13 +204,32 @@ export default function DraggableWindow({
         exit="closed"
         style={{ position: "fixed", zIndex: 10 }}
       >
-        <div className="os-titlebar mobile-titlebar">
-          <TrafficLights />
-          <span>{title}</span>
+        {/* iOS-style nav bar: Home (to the home screen) · title · Share */}
+        <div className="mobile-navbar">
+          <button
+            type="button"
+            className="mobile-nav-btn"
+            aria-label="Home screen"
+            onClick={() => {
+              trackEvent("Closed Window", { section: activeTab });
+              setIsClosed(true);
+            }}
+          >
+            <LayoutGrid size={20} />
+          </button>
+          <span className="mobile-nav-title">{title}</span>
+          <button type="button" className="mobile-nav-btn" aria-label="Share this portfolio" onClick={shareProfile}>
+            <Share size={20} />
+          </button>
         </div>
         <div className="window-content-scroll" ref={scrollRef}>
           <div className="notebook-bg">{children}</div>
         </div>
+        {toast && (
+          <span className="mobile-toast" role="status">
+            {toast}
+          </span>
+        )}
       </motion.div>
     );
   }

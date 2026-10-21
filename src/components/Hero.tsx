@@ -5,7 +5,6 @@ import Image from "next/image";
 import { animate, motion, useReducedMotion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { profile, kpis, shippedApps } from "@/data/resume";
-import dynamic from "next/dynamic";
 import { useWindow } from "@/context/WindowContext";
 import { trackEvent } from "@/lib/analytics";
 import RichText from "./RichText";
@@ -14,8 +13,6 @@ import { FaLinkedin } from "react-icons/fa";
 
 let isFirstMount = true;
 
-const KissanPrototype = dynamic(() => import("./prototype/KissanPrototype"), { ssr: false });
-const GauPrototype = dynamic(() => import("./prototype/GauPrototype"), { ssr: false });
 
 const COUNT_DURATION_S = 0.7;
 
@@ -65,19 +62,9 @@ const SparkDoodle = () => (
 
 export default function Hero() {
   const [initialDelay] = useState(isFirstMount ? 1.8 : 0);
-  const { openSection } = useWindow();
-  const [openPrototype, setOpenPrototype] = useState<"kissan-sampurna" | "gau-sampurna" | null>(null);
+  const { openSection, openPrototype } = useWindow();
   // Show "View Resume" only once the PDF is actually deployed, so the CTA never 404s.
   const [hasResume, setHasResume] = useState(false);
-
-  // Deep link (?prototype=…, from "Share prototype"). Read after mount: reading window during the
-  // first render made the server and client HTML differ (hydration error).
-  useEffect(() => {
-    const proto = new URLSearchParams(window.location.search).get("prototype");
-    if (proto !== "kissan-sampurna" && proto !== "gau-sampurna") return;
-    const raf = requestAnimationFrame(() => setOpenPrototype(proto));
-    return () => cancelAnimationFrame(raf);
-  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -155,13 +142,7 @@ export default function Hero() {
               {shippedApps.map((app) => {
                 const launchPrototype = () => {
                   if (!app.prototype) return;
-                  trackEvent("Opened Prototype", { prototype: app.prototype, placement: "hero" });
-                  setOpenPrototype(app.prototype);
-                  if (typeof window !== "undefined") {
-                    const url = new URL(window.location.href);
-                    url.searchParams.set("prototype", app.prototype);
-                    window.history.replaceState({}, "", url.toString());
-                  }
+                  openPrototype(app.prototype, "hero");
                 };
                 return (
                   <li key={app.name} className={styles.appRow} title={`${app.name} · ${app.caption}`}>
@@ -340,46 +321,6 @@ export default function Hero() {
           </motion.div>
         </motion.div>
       </div>
-      {openPrototype === "kissan-sampurna" && (
-        <KissanPrototype
-          onClose={() => {
-            setOpenPrototype(null);
-            if (typeof window !== "undefined") {
-              const url = new URL(window.location.href);
-              url.searchParams.delete("prototype");
-              window.history.replaceState({}, "", url.pathname);
-            }
-          }}
-          onSwitchPrototype={(id) => {
-            setOpenPrototype(id);
-            if (typeof window !== "undefined") {
-              const url = new URL(window.location.href);
-              url.searchParams.set("prototype", id);
-              window.history.replaceState({}, "", url.toString());
-            }
-          }}
-        />
-      )}
-      {openPrototype === "gau-sampurna" && (
-        <GauPrototype
-          onClose={() => {
-            setOpenPrototype(null);
-            if (typeof window !== "undefined") {
-              const url = new URL(window.location.href);
-              url.searchParams.delete("prototype");
-              window.history.replaceState({}, "", url.pathname);
-            }
-          }}
-          onSwitchPrototype={(id) => {
-            setOpenPrototype(id);
-            if (typeof window !== "undefined") {
-              const url = new URL(window.location.href);
-              url.searchParams.set("prototype", id);
-              window.history.replaceState({}, "", url.toString());
-            }
-          }}
-        />
-      )}
     </section>
   );
 }

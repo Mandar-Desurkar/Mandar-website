@@ -471,9 +471,15 @@ a {
     background-image: url('/wallpaper-mobile.webp');
   }
 
-  /* The section window is a full-width sheet between the menu bar and the dock */
+  /* Phones have their own status bar, so the fake macOS menu bar and desktop icons give way to
+     the iOS-style home screen (MobileHome) and dock */
+  .desktop-grid {
+    display: none !important;
+  }
+
+  /* The section window is a full-width sheet above the dock */
   .mobile-window {
-    top: 40px;
+    top: calc(10px + env(safe-area-inset-top));
     left: 8px;
     right: 8px;
     bottom: calc(88px + env(safe-area-inset-bottom));
@@ -497,34 +503,58 @@ a {
     -webkit-overflow-scrolling: touch;
   }
 
-  .mobile-titlebar {
+  /* iOS-style nav bar: 44px targets, system-blue tint, frosted like a UINavigationBar */
+  .mobile-navbar {
     flex-shrink: 0;
-    min-height: 44px;
-    cursor: default !important;
-    font-size: 1rem;
+    display: grid;
+    grid-template-columns: 48px 1fr 48px;
+    align-items: center;
+    height: 48px;
+    padding: 0 2px;
+    background: rgba(248, 248, 250, 0.92);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 0.5px solid rgba(0, 0, 0, 0.12);
   }
 
-  /* Only Close makes sense on a phone; it gets a 44px touch target and a visible glyph */
-  .mobile-titlebar .traffic-yellow,
-  .mobile-titlebar .traffic-green {
-    display: none;
+  .mobile-nav-btn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 12px;
+    background: none;
+    color: #007aff;
+    -webkit-tap-highlight-color: transparent;
   }
 
-  .mobile-titlebar .traffic-red {
-    width: 14px;
-    height: 14px;
-    overflow: visible;
+  .mobile-nav-btn:active {
+    background: rgba(0, 122, 255, 0.1);
   }
 
-  .mobile-titlebar .traffic-red::before {
-    display: block;
-    font-size: 8px;
+  .mobile-nav-title {
+    text-align: center;
+    font-size: 17px;
+    font-weight: 600;
+    color: #1d1d1f;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  .mobile-titlebar .traffic-red::after {
-    content: "";
+  .mobile-toast {
     position: absolute;
-    inset: -15px;
+    left: 50%;
+    bottom: 16px;
+    transform: translateX(-50%);
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: rgba(29, 29, 31, 0.9);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
   }
 
   .popup-overlay {

@@ -1,22 +1,15 @@
 "use client";
 
 import styles from "./Experience.module.css";
-import { useState } from "react";
-import dynamic from "next/dynamic";
+import { useWindow } from "@/context/WindowContext";
 import { Trophy } from "lucide-react";
 import RichText from "./RichText";
 import { experiences, beyondWork } from "@/data/resume";
-import { trackEvent } from "@/lib/analytics";
 
-const KissanPrototype = dynamic(() => import("./prototype/KissanPrototype"), { ssr: false });
 
 export default function Experience() {
-  const [showPrototype, setShowPrototype] = useState(false);
-
-  const openPrototype = () => {
-    trackEvent("Opened Prototype", { prototype: "kissan-sampurna", placement: "experience" });
-    setShowPrototype(true);
-  };
+  const { openPrototype: open } = useWindow();
+  const openPrototype = () => open("kissan-sampurna", "experience");
 
   return (
     <section id="experience" className={styles.experienceSection}>
@@ -91,7 +84,6 @@ export default function Experience() {
 
       </div>
 
-      {showPrototype && <KissanPrototype onClose={() => setShowPrototype(false)} />}
     </section>
   );
 }

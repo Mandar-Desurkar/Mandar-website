@@ -437,3 +437,26 @@
     min-width: 0;
   }
 }
+
+/* Narrow phones (≈360px Android): smaller photo, and the app links may wrap instead of clipping */
+@container window (max-width: 379.98px) {
+  .visualsGroup {
+    gap: 16px;
+  }
+
+  .profileFrame {
+    width: 96px;
+    height: 116px;
+    padding: 5px 5px 18px;
+  }
+
+  .appLinks {
+    flex-wrap: wrap;
+    row-gap: 0;
+    column-gap: 10px;
+  }
+
+  .linkDot {
+    display: none;
+  }
+}

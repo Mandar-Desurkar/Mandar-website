@@ -115,8 +115,9 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
 - **Viewport:** `layout.tsx` exports `viewport` with `viewportFit: "cover"` so bars respect safe areas.
 - **Verified** (headless Chrome, touch emulation): every Kissan (52) and Gau (76) screen at 375×667,
   site sections at 375×667 and 393×852, viewer at 360×740 and 430×932, landscape 852×393, iPad
-  768×1024 / 1024×768, desktop 1024 / 1280 / 1440. No horizontal overflow. Still to do: a check on a
-  real phone over the LAN (`npm run dev -- -H 0.0.0.0`).
+  768×1024 / 1024×768, desktop 1024 / 1280 / 1440, plus 320 / 360 / 390 / 430px on a production build
+  and all prototype screens at 360×800. No horizontal overflow. Still to do: a check on a real phone
+  over the LAN (`npm run dev -- -H 0.0.0.0`) — emulation can't reproduce iOS safe areas or toolbars.
 
 ## Kissan Sampurna interactive prototype
 
@@ -413,6 +414,11 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 - 2026-10-21: Replaced the prototype viewer with an authentic, minimal **Figma Prototype Presentation UI** based directly on the user's Figma desktop screenshots: top Figma document tab strip (`⌂`, `Kissan Sampurna App - Prototype`, `Gau Sampurna Mobile App`), presentation bar with Figma logo, collapsible sidebar toggle `[| ]`, centered title dropdown (`Kissan Sampurna App ˅`), avatar `MD`, blue `Share prototype` button, clean collapsible `Flows` sidebar with `✓ Active flow` and `Description` PM notes, pure deep-dark canvas (no dot grid, no bottom floating pill), centered iPhone frame, and seamless switching between Kissan and Gau. Removed unnecessary static tabs.
 - 2026-10-21: Enhanced prototype sidebar UX: added screen count badges per flow (`5 screens`, etc.), nested list of all screen frames with active blue indicator and direct 1-click switching, plus quick interactive screen selector pills `[1] [2] [3]...` in the Description section.
 - 2026-10-21: Polished prototype viewer UI: added macOS traffic light controls (close, minimize, maximize) on the top-left tab strip beside the home icon, eliminated the duplicate `#` in the screen list (`# 1. Crop Doctor`), removed the redundant bottom `< Screen 1 of 5 >` stepper in favor of the quick pills, and eliminated sidebar scrollbar clutter.
+- 2026-10-21: **Mobile re-check** (owner asked "are you sure?"). Re-tested the pushed code as a production
+  build at 320/360/390/430px and swept all 128 prototype screens at 360×800. Fixed: hero "Website ↗"
+  link clipped at 360px (narrow rule: smaller polaroid, links wrap, no stray "·"); menu-bar clock and
+  home-screen icons overflowing at 320px; iOS Safari zooming the viewer when a prototype input is
+  focused (inputs get 16px text on iOS only). Uncommitted.
 - 2026-10-21: **Mobile & responsive pass** (owner: "make sure it works properly on mobile, especially
   the prototype"). See "Mobile & responsive layout". Also fixed: a prototype bug where an auto-advancing
   screen's timer, still running during its exit animation, pulled the viewer back to the previous flow

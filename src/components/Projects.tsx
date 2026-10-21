@@ -4,13 +4,11 @@ import styles from "./Projects.module.css";
 import { ExternalLink } from "lucide-react";
 import { projects } from "@/data/resume";
 import { trackEvent } from "@/lib/analytics";
-import { useState } from "react";
-import dynamic from "next/dynamic";
+import { useWindow } from "@/context/WindowContext";
 
-const KissanPrototype = dynamic(() => import("./prototype/KissanPrototype"), { ssr: false });
 
 export default function Projects() {
-  const [showPrototype, setShowPrototype] = useState(false);
+  const { openPrototype } = useWindow();
 
   return (
     <section id="projects" className={styles.projectsSection}>
@@ -58,10 +56,7 @@ export default function Projects() {
                 <button
                   type="button"
                   className={styles.prototypeBtn}
-                  onClick={() => {
-                    trackEvent("Opened Prototype", { prototype: project.prototype!, placement: "projects" });
-                    setShowPrototype(true);
-                  }}
+                  onClick={() => openPrototype(project.prototype!, "projects")}
                 >
                   ▶ View app prototype
                 </button>
@@ -77,7 +72,6 @@ export default function Projects() {
         </div>
       </div>
 
-      {showPrototype && <KissanPrototype onClose={() => setShowPrototype(false)} />}
     </section>
   );
 }

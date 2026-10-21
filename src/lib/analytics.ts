@@ -42,7 +42,9 @@ export type AnalyticsEvents = {
   "Dismissed Hiring Notification": { method: "close_button" | "timeout" };
 
   // Interactive app prototypes (e.g. Kissan Sampurna)
-  "Opened Prototype": { prototype: string; placement: "hero" | "experience" | "projects" };
+  "Opened Prototype": { prototype: string; placement: "hero" | "experience" | "projects" | "home_screen" | "deep_link" };
+  // Mobile section nav bar: native share sheet, or the copied link where sharing isn't supported
+  "Shared Profile": { method: "native" | "copy"; section: string };
   "Viewed Prototype Screen": {
     prototype: string;
     flow: string;
@@ -52,7 +54,7 @@ export type AnalyticsEvents = {
   "Closed Prototype": { prototype: string; screens_viewed: number; seconds_open: number };
 
   // Conversion: the north star
-  "Clicked Contact Method": { method: "email" | "linkedin" | "phone"; placement: "contact_window" | "hero" };
+  "Clicked Contact Method": { method: "email" | "linkedin" | "phone"; placement: "contact_window" | "hero" | "home_widget" };
   "Opened Resume": { placement: "hero" };
   "Clicked External Link": {
     link_type: "school_map" | "project" | "app_website";

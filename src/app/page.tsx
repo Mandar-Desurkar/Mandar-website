@@ -12,6 +12,8 @@ import DesktopIcon from "@/components/DesktopIcon";
 import MusicPlayer from "@/components/MusicPlayer";
 import HiringNotification from "@/components/HiringNotification";
 import MobileDock from "@/components/MobileDock";
+import MobileHome from "@/components/MobileHome";
+import PrototypeHost from "@/components/prototype/PrototypeHost";
 import { WindowProvider, useWindow } from "@/context/WindowContext";
 import Image from "next/image";
 import { AnimatePresence } from "framer-motion";
@@ -56,6 +58,7 @@ function DesktopEnvironment() {
         <DesktopIcon id="contact" title="Contact" dotColor="#FF9F0A" icon={<Image src="/icons/folder5.webp" alt="Contact" width={56} height={56} className="drop-shadow-md" />} />
       </div>
 
+      <MobileHome />
       <MobileDock />
 
       <AnimatePresence>
@@ -78,6 +81,7 @@ export default function Home() {
         <Navbar />
         <DesktopEnvironment />
         <HiringNotification />
+        <PrototypeHost />
       </WindowProvider>
     </main>
   );

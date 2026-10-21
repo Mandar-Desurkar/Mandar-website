@@ -1,12 +1,13 @@
 "use client";
 
-// Phone layout of the prototype viewer (< 768px). The visitor's phone *is* the device, so the app
-// screen fills the display edge to edge instead of a scaled-down iPhone mock. A slim top bar
-// (close · app/flow · flows) and a bottom bar (‹ · screen + PM note · ›) frame it, and the flow list
-// and PM notes open as bottom sheets. State and analytics stay in PrototypeViewer.
+// Phone prototype player (< 768px and touch tablets), modelled on Figma's mobile prototype view:
+// the app fills the whole screen like the real app, and the player chrome is a floating pill
+// (close · ‹ · screen + PM note · › · flows) that shows on open, auto-hides, and comes back when
+// the visitor taps an empty area, which also flashes the hotspots as Figma does. PM notes and the
+// flow list open as bottom sheets. State and analytics stay in PrototypeViewer.
 import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, ChevronLeft, ChevronRight, ListTree, RotateCcw, Smartphone, X } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, Expand, ListTree, Minimize, RotateCcw, Smartphone, X } from "lucide-react";
 import styles from "./PrototypeMobile.module.css";
 import { lato } from "./fonts";
 import type { Prototype } from "@/data/prototypes/kissanSampurna";
@@ -14,6 +15,8 @@ import type { Prototype } from "@/data/prototypes/kissanSampurna";
 const DESIGN_W = 375; // screens are built for a 375pt-wide phone
 const MAX_W = 430;
 const HINT_KEY = "prototype-mobile-hint-seen";
+const CHROME_MS = 3500;
+const INTERACTIVE = "button, a, input, select, textarea, label, [role='button'], [role='slider'], [role='tab']";
 
 type Props = {
   prototype: Prototype;
@@ -35,6 +38,12 @@ const subscribeLandscape = (cb: () => void) => {
   const mql = window.matchMedia(LANDSCAPE);
   mql.addEventListener("change", cb);
   return () => mql.removeEventListener("change", cb);
+};
+
+// True full screen hides the browser bars; supported on Android Chrome, not on iPhone Safari
+const subscribeFullscreen = (cb: () => void) => {
+  document.addEventListener("fullscreenchange", cb);
+  return () => document.removeEventListener("fullscreenchange", cb);
 };
 
 const APPS = [
@@ -60,10 +69,35 @@ export default function PrototypeMobile({
   const [sheet, setSheet] = useState<"flows" | "note" | null>(null);
   const [hint, setHint] = useState(false);
   const [size, setSize] = useState({ w: 0, h: 0 });
-  const stageRef = useRef<HTMLDivElement>(null);
-  const closeRef = useRef<HTMLButtonElement>(null);
+  const [chrome, setChrome] = useState(true);
+  const [chromeTick, setChromeTick] = useState(0);
+  const [flash, setFlash] = useState(false);
   const [expandedFlow, setExpandedFlow] = useState(flowIndex);
+  const [seenFlow, setSeenFlow] = useState(flowIndex);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const toolbarRef = useRef<HTMLDivElement>(null);
   const landscape = useSyncExternalStore(subscribeLandscape, () => window.matchMedia(LANDSCAPE).matches, () => false);
+  const canFullscreen = useSyncExternalStore(subscribeFullscreen, () => document.fullscreenEnabled === true, () => false);
+  const isFullscreen = useSyncExternalStore(subscribeFullscreen, () => document.fullscreenElement !== null, () => false);
+
+  const showChrome = () => {
+    setChrome(true);
+    setChromeTick((t) => t + 1);
+  };
+
+  // Entering a new flow brings the controls back briefly so the visitor sees where they are
+  if (seenFlow !== flowIndex) {
+    setSeenFlow(flowIndex);
+    setChrome(true);
+    setChromeTick((t) => t + 1);
+  }
+
+  // Auto-hide the floating controls (not while a sheet is open)
+  useEffect(() => {
+    if (!chrome || sheet) return;
+    const t = setTimeout(() => setChrome(false), CHROME_MS);
+    return () => clearTimeout(t);
+  }, [chrome, chromeTick, sheet]);
 
   // Fit the app screen to the stage: full width up to 430pt; narrower phones scale the 375pt
   // design down so layouts keep their proportions.
@@ -78,20 +112,20 @@ export default function PrototypeMobile({
     return () => ro.disconnect();
   }, []);
 
-  // One-time coach mark: what is tappable and where the notes live
+  // One-time coach mark: how the player works
   useEffect(() => {
     let seen = true;
     try {
       seen = localStorage.getItem(HINT_KEY) === "1";
     } catch {}
     if (seen) return;
-    const show = setTimeout(() => setHint(true), 600);
+    const show = setTimeout(() => setHint(true), 500);
     const hide = setTimeout(() => {
       setHint(false);
       try {
         localStorage.setItem(HINT_KEY, "1");
       } catch {}
-    }, 5200);
+    }, 6500);
     return () => {
       clearTimeout(show);
       clearTimeout(hide);
@@ -99,10 +133,18 @@ export default function PrototypeMobile({
   }, []);
 
   useEffect(() => {
-    closeRef.current?.focus();
+    toolbarRef.current?.querySelector("button")?.focus({ preventScroll: true });
   }, []);
 
-  // Esc closes the open sheet first, then the viewer (PrototypeViewer handles the viewer)
+  // Leaving the player also leaves browser full screen
+  useEffect(
+    () => () => {
+      if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+    },
+    []
+  );
+
+  // Esc closes the open sheet first, then the player (PrototypeViewer handles the player)
   useEffect(() => {
     if (!sheet) return;
     const onKey = (e: KeyboardEvent) => {
@@ -115,23 +157,39 @@ export default function PrototypeMobile({
     return () => document.removeEventListener("keydown", onKey, true);
   }, [sheet]);
 
+  // Figma behaviour: tapping a non-interactive spot flashes the hotspots and shows the controls
+  const onStageTap = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement | null;
+    if (target?.closest(INTERACTIVE)) return;
+    setFlash(true);
+    setTimeout(() => setFlash(false), 450);
+    setHint(false);
+    showChrome();
+  };
+
+  const toggleFullscreen = () => {
+    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+    else document.documentElement.requestFullscreen().catch(() => {});
+  };
+
   const scale = size.w && size.w < DESIGN_W ? size.w / DESIGN_W : 1;
   const innerW = size.w < DESIGN_W ? DESIGN_W : Math.min(size.w, MAX_W);
   const innerH = size.h / scale;
   const isFirst = screenIndex === 0;
   const isLast = screenIndex === flow.screens.length - 1;
-  // The bottom bar is the main way through on a phone, so it carries on across flows
+  // The player keeps going across flows, so ‹ › never dead-end mid-prototype
   const hasPrevFlow = flowIndex > 0;
   const hasNextFlow = flowIndex < prototype.flows.length - 1;
   const goPrev = () => {
+    showChrome();
     if (!isFirst) onPrev();
     else if (hasPrevFlow) onJump(flowIndex - 1, prototype.flows[flowIndex - 1].screens.length - 1);
   };
   const goNext = () => {
+    showChrome();
     if (!isLast) onNext();
     else if (hasNextFlow) onJump(flowIndex + 1, 0);
   };
-
   const openFlows = () => {
     setExpandedFlow(flowIndex);
     setSheet("flows");
@@ -139,27 +197,11 @@ export default function PrototypeMobile({
 
   return (
     <div className={styles.root} role="dialog" aria-modal="true" aria-label={`${prototype.name} interactive prototype`}>
-      <header className={styles.topBar}>
-        <button ref={closeRef} type="button" className={styles.iconBtn} onClick={onClose} aria-label="Close prototype">
-          <X size={20} />
-        </button>
-        <button type="button" className={styles.titleBtn} onClick={openFlows} aria-label="Switch flow or app">
-          <span className={styles.titleApp}>
-            {prototype.name}
-            <ChevronDown size={14} />
-          </span>
-          <span className={styles.titleFlow}>{flow.title}</span>
-        </button>
-        <button type="button" className={styles.iconBtn} onClick={openFlows} aria-label="All flows">
-          <ListTree size={19} />
-        </button>
-      </header>
-
-      <div className={styles.stage} ref={stageRef}>
+      <div className={styles.stage} ref={stageRef} onClickCapture={onStageTap}>
         {size.w > 0 && (
           <div className={styles.screenSlot} style={{ width: innerW * scale, height: size.h }}>
             <div
-              className={`${styles.screen} ${lato.variable}`}
+              className={`${styles.screen} ${lato.variable} ${flash ? styles.flash : ""}`}
               style={{ width: innerW, height: innerH, transform: scale < 1 ? `scale(${scale})` : undefined }}
             >
               <AnimatePresence mode="popLayout" initial={false} custom={direction}>
@@ -177,57 +219,88 @@ export default function PrototypeMobile({
             </div>
           </div>
         )}
-        {landscape && (
-          <div className={styles.rotate} role="status">
-            <Smartphone size={40} className={styles.rotateIcon} />
-            <b>Rotate your phone</b>
-            <span>{prototype.name} is a portrait phone app. Turn your phone upright to try it.</span>
-          </div>
-        )}
-        <AnimatePresence>
-          {hint && !landscape && (
-            <motion.button
-              type="button"
-              className={styles.hint}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 12 }}
-              onClick={() => setHint(false)}
-            >
-              <span className={styles.hintDot} />
-              Tap the glowing areas to move through the app. The PM note for each screen is below.
-            </motion.button>
-          )}
-        </AnimatePresence>
       </div>
 
-      <footer className={styles.bottomBar}>
-        <button
-          type="button"
-          className={styles.navBtn}
-          onClick={goPrev}
-          disabled={isFirst && !hasPrevFlow}
-          aria-label={isFirst ? "Previous flow" : "Previous screen"}
-        >
-          <ChevronLeft size={22} />
-        </button>
-        <button type="button" className={styles.noteBtn} onClick={() => setSheet("note")} aria-label="Show PM note for this screen">
-          <span className={styles.noteCount}>
-            {screenIndex + 1} / {flow.screens.length}
-          </span>
-          <span className={styles.noteTitle}>{screen.title}</span>
-          <span className={styles.noteCta}>PM note</span>
-        </button>
-        <button
-          type="button"
-          className={`${styles.navBtn} ${styles.navNext}`}
-          onClick={goNext}
-          disabled={isLast && !hasNextFlow}
-          aria-label={isLast ? `Next flow: ${hasNextFlow ? prototype.flows[flowIndex + 1].title : ""}` : "Next screen"}
-        >
-          <ChevronRight size={22} />
-        </button>
-      </footer>
+      {landscape && (
+        <div className={styles.rotate} role="status">
+          <Smartphone size={40} className={styles.rotateIcon} />
+          <b>Rotate your phone</b>
+          <span>{prototype.name} is a portrait phone app. Turn your phone upright to try it.</span>
+          <button type="button" className={styles.rotateClose} onClick={onClose}>
+            Close prototype
+          </button>
+        </div>
+      )}
+
+      <AnimatePresence>
+        {hint && !landscape && (
+          <motion.button
+            type="button"
+            className={styles.hint}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            onClick={() => setHint(false)}
+          >
+            <span className={styles.hintDot} />
+            <span>
+              <b>You&apos;re in the app.</b> Tap glowing areas to move through it. Tap any empty spot to bring back
+              these controls, the PM notes and all flows.
+            </span>
+          </motion.button>
+        )}
+      </AnimatePresence>
+
+      {/* Floating player controls: a dark glass pill, like Figma's mobile prototype toolbar */}
+      <AnimatePresence>
+        {chrome && !sheet && !landscape && (
+          <motion.div
+            ref={toolbarRef}
+            className={styles.toolbar}
+            role="toolbar"
+            aria-label="Prototype controls"
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 24 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            onPointerDown={showChrome}
+          >
+            <button type="button" className={styles.tbBtn} onClick={onClose} aria-label="Close prototype">
+              <X size={19} />
+            </button>
+            <button
+              type="button"
+              className={styles.tbBtn}
+              onClick={goPrev}
+              disabled={isFirst && !hasPrevFlow}
+              aria-label={isFirst ? "Previous flow" : "Previous screen"}
+            >
+              <ChevronLeft size={21} />
+            </button>
+            <button type="button" className={styles.tbCenter} onClick={() => setSheet("note")} aria-label="PM note for this screen">
+              <span className={styles.tbFlow}>
+                {flow.title} · {screenIndex + 1}/{flow.screens.length}
+              </span>
+              <span className={styles.tbScreen}>
+                <span>{screen.title}</span>
+                <em>Note</em>
+              </span>
+            </button>
+            <button
+              type="button"
+              className={`${styles.tbBtn} ${styles.tbNext}`}
+              onClick={goNext}
+              disabled={isLast && !hasNextFlow}
+              aria-label={isLast ? "Next flow" : "Next screen"}
+            >
+              <ChevronRight size={21} />
+            </button>
+            <button type="button" className={styles.tbBtn} onClick={openFlows} aria-label="All flows">
+              <ListTree size={18} />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {sheet && (
@@ -244,10 +317,21 @@ export default function PrototypeMobile({
             >
               <span className={styles.grabber} />
               <div className={styles.sheetHead}>
-                <b>{sheet === "flows" ? "Flows" : flow.title}</b>
-                <button type="button" className={styles.sheetClose} onClick={() => setSheet(null)} aria-label="Close">
-                  <X size={16} />
-                </button>
+                <span className={styles.sheetTitle}>
+                  <small>{prototype.name}</small>
+                  <b>{sheet === "flows" ? "Flows" : flow.title}</b>
+                </span>
+                <span className={styles.sheetActions}>
+                  {sheet === "flows" && canFullscreen && (
+                    <button type="button" className={styles.sheetPill} onClick={toggleFullscreen}>
+                      {isFullscreen ? <Minimize size={14} /> : <Expand size={14} />}
+                      {isFullscreen ? "Exit full screen" : "Full screen"}
+                    </button>
+                  )}
+                  <button type="button" className={styles.sheetClose} onClick={() => setSheet(null)} aria-label="Close">
+                    <X size={16} />
+                  </button>
+                </span>
               </div>
 
               {sheet === "note" ? (
@@ -271,9 +355,21 @@ export default function PrototypeMobile({
                       </button>
                     ))}
                   </div>
-                  <button type="button" className={styles.restart} onClick={onRestart}>
-                    <RotateCcw size={15} /> Restart this flow
-                  </button>
+                  <div className={styles.noteNav}>
+                    <button type="button" className={styles.restart} onClick={onRestart}>
+                      <RotateCcw size={15} /> Restart flow
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.backToApp}
+                      onClick={() => {
+                        setSheet(null);
+                        setChrome(false);
+                      }}
+                    >
+                      Back to the app
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <div className={styles.sheetBody}>
