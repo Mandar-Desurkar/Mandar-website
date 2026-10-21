@@ -382,7 +382,8 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
   AI scans with every orchestrator step and full reports, scan history / reports tab / chat replay,
   Pratham paywall (trial, failed, expired, success), shop to order tracking, cattle trading (sell +
   ₹49 verification), account, and welcome / login / onboarding. Dead routes documented in
-  `docs/prototype-coverage-plan.md`. Verified in headless Chrome and `next build`. Uncommitted.
+  `docs/prototype-coverage-plan.md`. Verified in headless Chrome and `next build`. Committed as
+  4be32e4 on `dev`, `prod` fast-forwarded, both pushed. The Firebase files were left uncommitted.
   Note: a parallel Firebase analytics change (`src/lib/firebase.ts`, `analytics.ts`,
   `instrumentation-client.ts`) logs `logFirebaseEvent is not defined` and Firebase 400s in the
   browser; it is separate from the prototype work.
