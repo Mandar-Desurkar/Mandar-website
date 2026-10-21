@@ -41,9 +41,11 @@
   transform-origin: top left;
 }
 
-/* Screens are designed in Lato; globals.css forces the system font with !important */
+/* Screens are designed in Lato; globals.css forces the system font with !important. Write the
+   descendant selector as a plain `*`: the compiler silently dropped `.screen :global(*)`, so only
+   the outer box got Lato and every screen rendered in the system font. */
 .screen,
-.screen :global(*) {
+.screen * {
   font-family: var(--font-lato), "Lato", sans-serif !important;
 }
 

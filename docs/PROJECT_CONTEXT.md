@@ -296,6 +296,13 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 
 ## Changelog
 
+- 2026-10-21: **Prototype asset audit** (live site, all 128 screens): every `<img>`, CSS background
+  (weather, satellite, paywall, camera) and SVG `<image>` (farm map) loads and looks right (contact
+  sheets reviewed). Found and fixed: on **phones the prototypes rendered in the system font, not
+  Lato**. The compiler silently dropped `.screen :global(*)` in `PrototypeMobile.module.css`, so only
+  the outer box got Lato and the global `* { font-family: system !important }` won on every element
+  inside. Now `.screen *`. Desktop viewer was unaffected (it already used `.screenContent *`).
+  **Gotcha:** don't use `:global(*)` in CSS modules here; use a plain `*` after a local class.
 - 2026-10-21: "Images not showing" investigation. Live site is **https://mandar-desurkar.vercel.app**
   (the repo's homepage link `mandar-website.vercel.app` is stale: DEPLOYMENT_NOT_FOUND; per-deploy
   URLs are behind Vercel login). Every image is committed with exact case; every section and all
