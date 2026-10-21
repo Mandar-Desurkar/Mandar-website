@@ -7,12 +7,12 @@ import { FaLinkedin } from "react-icons/fa";
 export default function Contact() {
   return (
     <section id="contact" className={styles.contactSection}>
-      <div className={`container ${styles.container}`}>
+      <div className={styles.container}>
         
         <div className={styles.doodleBox}>
           <div className={styles.headerBox}>
             <h2 className="hand-heading-2" style={{ marginBottom: 0 }}>
-              Let's Connect
+              Let&apos;s Connect
             </h2>
           </div>
           
@@ -23,6 +23,7 @@ export default function Contact() {
           <div style={{ margin: '1.5rem 0', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', fontSize: '1rem' }}>
             <p style={{ margin: '0.5rem 0' }}><strong>Email:</strong> mandardesurkar3@gmail.com</p>
             <p style={{ margin: '0.5rem 0' }}><strong>Phone:</strong> +91 8073118693</p>
+            <p style={{ margin: '0.5rem 0' }}><strong>Location:</strong> Bangalore, India</p>
           </div>
           
           <div className={styles.socials}>
@@ -36,12 +37,12 @@ export default function Contact() {
               <Phone size={16} style={{ verticalAlign: 'middle', marginRight: '5px' }}/> CALL
             </a>
           </div>
-          
-          <div className={styles.footer}>
-            <p>SYSTEM HALTED. End of file.</p>
-          </div>
         </div>
         
+      </div>
+
+      <div className={styles.footer}>
+        <p>SYSTEM HALTED. End of file.</p>
       </div>
     </section>
   );

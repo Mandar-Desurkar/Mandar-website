@@ -12,6 +12,7 @@ import DraggableWindow from "@/components/DraggableWindow";
 import DesktopIcon from "@/components/DesktopIcon";
 import { WindowProvider, useWindow } from "@/context/WindowContext";
 import Image from "next/image";
+import { AnimatePresence } from "framer-motion";
 
 function ActiveSection() {
   const { activeTab } = useWindow();
@@ -39,23 +40,25 @@ function WindowTitle() {
 }
 
 function DesktopEnvironment() {
-  const { activeTab } = useWindow();
+  const { activeTab, isClosed } = useWindow();
   
   return (
     <>
       <div className="desktop-grid">
-        <DesktopIcon id="about" title="About Me" icon={<Image src="/icons/Folder.svg" alt="About Me" width={56} height={56} className="drop-shadow-md" />} />
-        <DesktopIcon id="experience" title="Experience" icon={<Image src="/icons/Folder2.svg" alt="Experience" width={56} height={56} className="drop-shadow-md" />} />
-        <DesktopIcon id="education" title="Education" icon={<Image src="/icons/Folder3.svg" alt="Education" width={56} height={56} className="drop-shadow-md" />} />
-        <DesktopIcon id="projects" title="Projects" icon={<Image src="/icons/Folder4.svg" alt="Projects" width={56} height={56} className="drop-shadow-md" />} />
-        <DesktopIcon id="contact" title="Contact" icon={<Image src="/icons/Folder5.svg" alt="Contact" width={56} height={56} className="drop-shadow-md" />} />
+        <DesktopIcon id="about" title="About Me" dotColor="#3BA7FF" icon={<Image src="/icons/Folder.svg" alt="About Me" width={56} height={56} className="drop-shadow-md" />} />
+        <DesktopIcon id="experience" title="Experience" dotColor="#32D74B" icon={<Image src="/icons/Folder2.svg" alt="Experience" width={56} height={56} className="drop-shadow-md" />} />
+        <DesktopIcon id="education" title="Education" dotColor="#32D74B" icon={<Image src="/icons/Folder3.svg" alt="Education" width={56} height={56} className="drop-shadow-md" />} />
+        <DesktopIcon id="projects" title="Projects" dotColor="#FFD60A" icon={<Image src="/icons/Folder4.svg" alt="Projects" width={56} height={56} className="drop-shadow-md" />} />
+        <DesktopIcon id="contact" title="Contact" dotColor="#FF9F0A" icon={<Image src="/icons/Folder5.svg" alt="Contact" width={56} height={56} className="drop-shadow-md" />} />
       </div>
 
-      <DraggableWindow title={<WindowTitle />}>
-        <ActiveSection />
-      </DraggableWindow>
-      
-      <Dock />
+      <AnimatePresence>
+        {!isClosed && (
+          <DraggableWindow key="main-window" title={<WindowTitle />}>
+            <ActiveSection />
+          </DraggableWindow>
+        )}
+      </AnimatePresence>
     </>
   );
 }
@@ -64,9 +67,9 @@ export default function Home() {
   return (
     <main>
       <BootScreen />
-      <Navbar />
       
       <WindowProvider>
+        <Navbar />
         <DesktopEnvironment />
       </WindowProvider>
     </main>

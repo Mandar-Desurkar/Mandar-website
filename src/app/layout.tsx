@@ -1,22 +1,11 @@
 import type { Metadata } from "next";
-import { Caveat, VT323 } from "next/font/google";
 import "./globals.css";
 import NoInspect from "@/components/NoInspect";
-
-const caveat = Caveat({
-  subsets: ["latin"],
-  variable: "--font-handwriting",
-});
-
-const vt323 = VT323({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-system",
-});
+import { profile } from "@/data/resume";
 
 export const metadata: Metadata = {
-  title: "Mandar Desurkar | Product Pioneer",
-  description: "Product Manager executing strategy with a 90s builder mentality.",
+  title: `${profile.name} | ${profile.role}`,
+  description: profile.metaDescription,
 };
 
 export default function RootLayout({
@@ -26,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${caveat.variable} ${vt323.variable}`}>
+      <body>
         <NoInspect />
         {children}
       </body>

@@ -12,7 +12,7 @@ export default function Dock() {
   const [mounted, setMounted] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const { activeTab, setActiveTab, isMinimized, setIsMinimized } = useWindow();
+  const { activeTab, setActiveTab, isMinimized, setIsMinimized, setIsClosed } = useWindow();
 
   useEffect(() => {
     setMounted(true);
@@ -36,6 +36,7 @@ export default function Dock() {
     if (isMinimized) {
       setIsMinimized(false);
     }
+    setIsClosed(false);
   };
 
   const handleSettings = () => {

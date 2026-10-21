@@ -67,7 +67,8 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
 - [ ] **Security/UX:** `NoInspect.tsx` blocks copy (including the email); `Dock.tsx`
       `window.open` lacks `noopener`.
 - [ ] Add `src/app/not-found.tsx` (OS-themed 404).
-- [x] Commit and push the Claude setup and pending UI work to `prod` and `dev` (2026-10-21).
+- [ ] Push `prod` and `dev` to origin. Committed locally on 2026-10-21; the push was rejected (403)
+      because git was signed in as `mandar-desurkar3`, not the repo owner `Mandar-Desurkar`.
 
 ## Changelog
 
@@ -81,4 +82,4 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
   Skills & Toolkit card; Contact adds location; page title and description updated.
   `tsc` and `next build` pass.
 - 2026-10-21: Committed everything (Claude setup + UI/content) on `prod`, fast-forwarded
-  `dev`, and pushed both to origin.
+  `dev` locally. Push pending a GitHub account switch.

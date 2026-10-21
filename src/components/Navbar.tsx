@@ -4,11 +4,13 @@ import { useState, useEffect, useRef } from "react";
 import styles from "./Navbar.module.css";
 import Link from "next/link";
 import { BatteryMedium, Menu, X, Bluetooth, Wifi, Search, SlidersHorizontal } from "lucide-react";
+import { useWindow } from "@/context/WindowContext";
 
 export default function Navbar() {
   const [currentTime, setCurrentTime] = useState<Date | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const { setActiveTab, setIsMinimized } = useWindow();
 
   useEffect(() => {
     // Only set time on client to avoid hydration mismatch
@@ -31,11 +33,19 @@ export default function Navbar() {
   }, [isMenuOpen]);
 
   const navLinks = [
-    { name: "Experience", href: "#experience" },
-    { name: "Education", href: "#education" },
-    { name: "Products", href: "#projects" },
-    { name: "Contact", href: "#contact" },
+    { name: "About Me", id: "about" as const },
+    { name: "Experience", id: "experience" as const },
+    { name: "Education", id: "education" as const },
+    { name: "Products", id: "projects" as const },
+    { name: "Contact", id: "contact" as const },
   ];
+
+  const handleNavClick = (e: React.MouseEvent, id: 'about' | 'experience' | 'education' | 'projects' | 'contact') => {
+    e.preventDefault();
+    setActiveTab(id);
+    setIsMinimized(false);
+    setIsMenuOpen(false);
+  };
 
   return (
     <header className={styles.menubar}>
@@ -54,9 +64,14 @@ export default function Navbar() {
         {/* Desktop inline menu */}
         <div className={styles.desktopLinks}>
           {navLinks.map((link) => (
-            <Link key={link.name} href={link.href} className={styles.menuItem}>
+            <a 
+              key={link.name} 
+              href={`#${link.id}`} 
+              className={styles.menuItem}
+              onClick={(e) => handleNavClick(e, link.id)}
+            >
               {link.name}
-            </Link>
+            </a>
           ))}
         </div>
 
@@ -66,14 +81,14 @@ export default function Navbar() {
             <div className={styles.dropdownHeader}>Mandar Desurkar</div>
             <div className={styles.dropdownDivider}></div>
             {navLinks.map((link) => (
-              <Link 
+              <a 
                 key={link.name} 
-                href={link.href} 
+                href={`#${link.id}`} 
                 className={styles.dropdownItem}
-                onClick={() => setIsMenuOpen(false)}
+                onClick={(e) => handleNavClick(e, link.id)}
               >
                 {link.name}
-              </Link>
+              </a>
             ))}
           </div>
         )}

@@ -1,5 +1,5 @@
 .contactSection {
-  padding: calc(var(--line-height) * 2) 0 calc(var(--line-height) * 3) 0;
+  padding: 2.5rem 0 4rem 0;
 }
 
 .container {
@@ -80,8 +80,7 @@
 
 .footer {
   text-align: center;
-  border-top: 2px solid var(--ink-blue);
-  padding-top: var(--line-height);
+  padding-top: 2rem;
   color: var(--ink-blue);
   font-size: 1.2rem;
 }

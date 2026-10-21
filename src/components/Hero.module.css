@@ -61,6 +61,50 @@
   max-width: 600px;
 }
 
+.kpiGrid {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  width: 100%;
+  max-width: 600px;
+}
+
+.kpiCard {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  transition: all 0.2s ease;
+  cursor: default;
+}
+
+.kpiCard:hover {
+  background: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  transform: translateY(-2px);
+  border-color: rgba(0,0,0,0.08);
+}
+
+.kpiValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--ink-red);
+  line-height: 1.2;
+  margin-bottom: 0.25rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.kpiLabel {
+  font-size: 0.85rem;
+  color: #666;
+  font-weight: 500;
+}
+
 .ctaGroup {
   display: flex;
   flex-direction: column;
@@ -87,41 +131,25 @@
   transform: rotate(2deg);
 }
 
-/* Polaroid Style */
-.polaroid {
-  background: white;
-  padding: 10px 10px 30px 10px;
-  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.2);
-  transform: rotate(-5deg);
+/* Polaroid Image Frame */
+.profileFrame {
   position: relative;
-  z-index: 2; /* Below the alert box */
-  transition: transform 0.3s ease;
+  z-index: 2;
   width: 220px;
-}
-
-.polaroid:hover {
-  transform: rotate(-2deg) scale(1.05);
-  z-index: 10;
-}
-
-.tape {
-  position: absolute;
-  top: -10px;
-  left: 50%;
-  transform: translateX(-50%) rotate(-3deg);
-  width: 80px;
-  height: 25px;
-  background-color: rgba(255, 255, 255, 0.6);
-  border: 1px solid rgba(0,0,0,0.1);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  z-index: 12;
+  height: 260px; /* Taller for the bottom text area */
+  border-radius: 2px;
+  background: white;
+  padding: 10px 10px 40px 10px; /* Thicker bottom border */
+  box-shadow: 2px 5px 15px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0,0,0,0.05);
+  transform: rotate(3deg); /* Slight tilt */
 }
 
 .photoWrapper {
-  width: 200px;
-  height: 200px;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
-  background: #ccc;
+  border-radius: 1px;
+  background: #222; /* Dark background before image loads */
 }
 
 .profileImage {
@@ -129,3 +157,12 @@
   height: 100%;
   object-fit: cover;
 }
+
+.sparkDoodle {
+  position: absolute;
+  top: -25px;
+  right: -30px;
+  z-index: 10;
+  pointer-events: none;
+}
+

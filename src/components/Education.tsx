@@ -1,12 +1,22 @@
 "use client";
 
 import styles from "./Education.module.css";
+import { skills } from "@/data/resume";
 
-const educationLogs = [
+const educationLogs: {
+  degree: string;
+  school: string;
+  period: string;
+  grade?: string;
+  description: string;
+  skills: string;
+  link?: string;
+}[] = [
   {
-    degree: "Bachelor of Engineering - BE, Information Science",
-    school: "Ramaiah Institute Of Technology",
-    period: "Jan 2021 - Jun 2025",
+    degree: "B.E. in Information Science and Engineering",
+    school: "M. S. Ramaiah Institute of Technology, Bangalore",
+    period: "Jan 2021 - Jul 2025",
+    grade: "CGPA: 8.30",
     description: "My interest in technology and problem-solving started in 7th grade when I worked on a school project involving programming. I didn't fully understand how code worked, but I realized it was all about building systems that scale.",
     skills: "Python, MySQL, +5 skills",
     link: "https://www.google.com/maps/place/Ramaiah+Institute+of+Technology/@13.0307875,77.5624144,961m/data=!3m2!1e3!4b1!4m6!3m5!1s0x3bae17dedd4dcca9:0x6075bd8d8aed97ab!8m2!3d13.0307823!4d77.5649893!16zL20vMDVuM185?entry=ttu&g_ep=EgoyMDI2MDgyNi4wIKXMDSoASAFQAw%3D%3D",
@@ -52,6 +62,7 @@ export default function Education() {
                   </>
                 )}
                 <span className={styles.period}>({edu.period})</span>
+                {edu.grade && <span className={styles.grade}>{edu.grade}</span>}
               </div>
               
               <p className={styles.description}>{edu.description}</p>
@@ -62,6 +73,15 @@ export default function Education() {
               
               
             </div>
+          ))}
+        </div>
+
+        <div className={styles.toolkitCard}>
+          <h3 className={styles.toolkitTitle}>Skills & Toolkit</h3>
+          {skills.map((group) => (
+            <p key={group.label} className={styles.toolkitRow}>
+              <span className={styles.skillsLabel}>{group.label}:</span> {group.items}
+            </p>
           ))}
         </div>
       </div>

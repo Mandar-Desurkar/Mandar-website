@@ -5,6 +5,10 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 type WindowContextType = {
   isMinimized: boolean;
   setIsMinimized: (value: boolean) => void;
+  isMaximized: boolean;
+  setIsMaximized: (value: boolean) => void;
+  isClosed: boolean;
+  setIsClosed: (value: boolean) => void;
   activeTab: string;
   setActiveTab: (tab: string) => void;
 };
@@ -13,10 +17,17 @@ const WindowContext = createContext<WindowContextType | undefined>(undefined);
 
 export function WindowProvider({ children }: { children: ReactNode }) {
   const [isMinimized, setIsMinimized] = useState(false);
+  const [isMaximized, setIsMaximized] = useState(false);
+  const [isClosed, setIsClosed] = useState(false);
   const [activeTab, setActiveTab] = useState('about');
 
   return (
-    <WindowContext.Provider value={{ isMinimized, setIsMinimized, activeTab, setActiveTab }}>
+    <WindowContext.Provider value={{ 
+      isMinimized, setIsMinimized, 
+      isMaximized, setIsMaximized,
+      isClosed, setIsClosed,
+      activeTab, setActiveTab 
+    }}>
       {children}
     </WindowContext.Provider>
   );

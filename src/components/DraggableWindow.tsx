@@ -13,25 +13,54 @@ export default function DraggableWindow({
   children: React.ReactNode
 }) {
   const dragControls = useDragControls();
-  const { isMinimized, activeTab } = useWindow();
+  const { isMinimized, isMaximized, activeTab } = useWindow();
   
   const [hasMounted, setHasMounted] = useState(false);
   const windowRef = useRef<HTMLDivElement>(null);
   
   // Custom resize state
-  const [size, setSize] = useState({ width: '76vw', height: 'fit-content' });
+  const [size, setSize] = useState({ width: '60vw', height: '70vh' });
   const [isResizing, setIsResizing] = useState(false);
 
   useEffect(() => {
     setHasMounted(true);
   }, []);
 
-  // Reset to auto-fit when changing tabs
+  // Change window size dynamically based on the active tab
   useEffect(() => {
-    setSize({ width: '76vw', height: 'fit-content' });
+    let newWidth = '60vw';
+    let newHeight = '70vh';
+
+    switch (activeTab) {
+      case 'about':
+        newWidth = '60vw';
+        newHeight = '70vh';
+        break;
+      case 'experience':
+        newWidth = '70vw';
+        newHeight = '80vh';
+        break;
+      case 'education':
+        newWidth = '65vw';
+        newHeight = '65vh';
+        break;
+      case 'projects':
+        newWidth = '75vw';
+        newHeight = '80vh';
+        break;
+      case 'contact':
+        newWidth = '50vw';
+        newHeight = '60vh';
+        break;
+      default:
+        newWidth = '60vw';
+        newHeight = '70vh';
+    }
+
+    setSize({ width: newWidth, height: newHeight });
   }, [activeTab]);
 
-  const handleResizeStart = (e: React.PointerEvent, edge: 'bottom' | 'right' | 'bottom-right') => {
+  const handleResizeStart = (e: React.PointerEvent, edge: 'bottom' | 'right' | 'bottom-right' | 'left' | 'bottom-left' | 'top' | 'top-left' | 'top-right') => {
     e.preventDefault();
     e.stopPropagation(); // prevent drag from taking over
     setIsResizing(true);
@@ -50,11 +79,16 @@ export default function DraggableWindow({
       let newWidth = startWidth;
       let newHeight = startHeight;
 
-      if (edge === 'right' || edge === 'bottom-right') {
+      if (edge.includes('right')) {
         newWidth = Math.max(400, startWidth + deltaX);
+      } else if (edge.includes('left')) {
+        newWidth = Math.max(400, startWidth - deltaX);
       }
-      if (edge === 'bottom' || edge === 'bottom-right') {
+      
+      if (edge.includes('bottom')) {
         newHeight = Math.max(300, startHeight + deltaY);
+      } else if (edge.includes('top')) {
+        newHeight = Math.max(300, startHeight - deltaY);
       }
 
       setSize({
@@ -80,7 +114,21 @@ export default function DraggableWindow({
       scale: 1, 
       y: 0, 
       x: 0,
+      width: size.width,
+      height: size.height,
+      borderRadius: 12,
       transition: hasMounted ? { duration: 0.4, type: "spring", bounce: 0.2 } : { duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] } 
+    },
+    maximized: {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      x: 0,
+      width: '100vw',
+      height: '100vh',
+      maxWidth: 'none',
+      borderRadius: 0,
+      transition: { duration: 0.4, type: "spring", bounce: 0.1 }
     },
     minimized: { 
       opacity: 0, 
@@ -88,25 +136,35 @@ export default function DraggableWindow({
       y: 600,
       x: 0,
       transition: { duration: 0.5, type: "spring", bounce: 0.1 } 
+    },
+    closed: {
+      opacity: 0,
+      scale: 0.8,
+      transition: { duration: 0.2 }
     }
   };
 
   return (
     <motion.div 
       ref={windowRef}
-      className="os-window absolute-window"
+      className={`os-window ${isMaximized ? 'maximized-window' : 'absolute-window'}`}
       variants={variants}
       initial="initial"
-      animate={isMinimized ? "minimized" : "open"}
-      drag={!isMinimized}
+      animate={isMinimized ? "minimized" : isMaximized ? "maximized" : "open"}
+      exit="closed"
+      drag={!isMinimized && !isMaximized}
       dragControls={dragControls}
       dragListener={false}
       dragMomentum={false}
       style={{ 
         position: 'absolute', 
-        zIndex: 10,
-        width: size.width,
-        height: size.height,
+        zIndex: isMaximized ? 9999 : 10,
+        margin: isMaximized ? 0 : undefined,
+        top: isMaximized ? 0 : undefined,
+        left: isMaximized ? 0 : undefined,
+        maxWidth: isMaximized ? 'none' : undefined,
+        // When not maximizing or opening (e.g. initial), width/height are handled by variants
+        // but we keep size in state. Framer motion overrides these with variant values
       }}
     >
       <div 
@@ -129,19 +187,40 @@ export default function DraggableWindow({
       </div>
 
       {/* Resize Handles */}
-      {!isMinimized && (
+      {!isMinimized && !isMaximized && (
         <>
           <div 
             className="resize-handle-right"
             onPointerDown={(e) => handleResizeStart(e, 'right')}
           />
           <div 
+            className="resize-handle-left"
+            onPointerDown={(e) => handleResizeStart(e, 'left')}
+          />
+          <div 
             className="resize-handle-bottom"
             onPointerDown={(e) => handleResizeStart(e, 'bottom')}
           />
           <div 
-            className="resize-handle-corner"
+            className="resize-handle-top"
+            onPointerDown={(e) => handleResizeStart(e, 'top')}
+          />
+          
+          <div 
+            className="resize-handle-corner-br"
             onPointerDown={(e) => handleResizeStart(e, 'bottom-right')}
+          />
+          <div 
+            className="resize-handle-corner-bl"
+            onPointerDown={(e) => handleResizeStart(e, 'bottom-left')}
+          />
+          <div 
+            className="resize-handle-corner-tr"
+            onPointerDown={(e) => handleResizeStart(e, 'top-right')}
+          />
+          <div 
+            className="resize-handle-corner-tl"
+            onPointerDown={(e) => handleResizeStart(e, 'top-left')}
           />
         </>
       )}

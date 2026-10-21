@@ -8,15 +8,17 @@ interface DesktopIconProps {
   id: string;
   title: string;
   icon: React.ReactNode;
+  dotColor?: string;
 }
 
-export default function DesktopIcon({ id, title, icon }: DesktopIconProps) {
-  const { setActiveTab, setIsMinimized } = useWindow();
+export default function DesktopIcon({ id, title, icon, dotColor }: DesktopIconProps) {
+  const { setActiveTab, setIsMinimized, setIsClosed } = useWindow();
 
   const handleClick = () => {
     if (typeof window !== "undefined" && window.innerWidth < 768) {
       setActiveTab(id);
       setIsMinimized(false);
+      setIsClosed(false);
     }
   };
 
@@ -24,6 +26,7 @@ export default function DesktopIcon({ id, title, icon }: DesktopIconProps) {
     if (typeof window !== "undefined" && window.innerWidth >= 768) {
       setActiveTab(id);
       setIsMinimized(false);
+      setIsClosed(false);
     }
   };
 
@@ -37,7 +40,10 @@ export default function DesktopIcon({ id, title, icon }: DesktopIconProps) {
       <div className={styles.iconWrapper}>
         {icon}
       </div>
-      <span className={styles.iconLabel}>{title}</span>
+      <div className={styles.labelContainer}>
+        {dotColor && <span className={styles.dot} style={{ backgroundColor: dotColor }} />}
+        <span className={styles.iconLabel}>{title}</span>
+      </div>
     </div>
   );
 }

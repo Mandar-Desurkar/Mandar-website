@@ -1,26 +1,30 @@
 :root {
   color-scheme: light;
   /* Modern macOS UI Colors */
-  --os-bg: #1a4c8a; /* Aqua blue (unused) */
-  --os-window: rgba(250, 250, 250, 0.85); /* Frosted metal */
-  --os-titlebar: rgba(246, 246, 246, 0.7);
-  --os-border: rgba(0, 0, 0, 0.1);
-  --os-text: #222;
+  --os-bg: #1a4c8a;
+  --os-window: rgba(255, 255, 255, 0.95); /* Bright frosted metal */
+  --os-titlebar: rgba(246, 246, 246, 0.85);
+  --os-border: rgba(0, 0, 0, 0.08);
+  --os-text: #1d1d1f;
   
-  /* Notebook Colors */
-  --paper-bg: #faf9f6; /* Clean off-white */
-  --ink-black: #1a1a1a;
-  --ink-blue: #007aff;
+  /* Standard macOS Content Colors */
+  --paper-bg: #ffffff; /* Pure white content area */
+  --ink-black: #1d1d1f; /* Apple standard dark text */
+  --ink-blue: #0066cc; /* Modern Apple link blue */
   --ink-red: #ff3b30;
   
-  --line-height: 1.6;
+  --line-height: 1.5;
+
+  /* Universal Apple System Font Stack */
+  --font-system: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
-* {
+*, *::before, *::after {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
   cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='24'%3E%3Cpath d='M1 1 L13 13 L8.5 13.5 L11.5 20.5 L9 21.5 L6 14.5 L2 18 Z' fill='black' stroke='white' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E") 1 1, auto;
+  font-family: var(--font-system) !important;
 }
 
 html,
@@ -54,36 +58,31 @@ a {
   text-decoration: none;
 }
 
-/* Notebook styling to be applied to a specific container */
+/* Window content area styling */
 .notebook-bg {
   background-color: var(--paper-bg);
+  background-image: radial-gradient(rgba(0, 0, 0, 0.08) 1px, transparent 1px);
+  background-size: 20px 20px;
+  background-position: 0 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   line-height: var(--line-height);
   color: var(--ink-black);
   position: relative;
-  min-height: 100%; /* Stretch to fill window height when resized */
+  min-height: 100%;
   display: flex;
   flex-direction: column;
 }
 
 .apple-note-date {
-  text-align: center;
-  color: #8e8e93; /* Apple standard gray */
-  font-size: 0.85rem;
-  font-weight: 500;
-  padding-top: 1rem;
-  padding-bottom: 0.5rem;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
-
-.notebook-bg::before {
-  display: none;
+  display: none; /* Removed for modern Mac look */
 }
 
 /* Container inside notebook */
 .container {
   width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
   padding: 0 1rem 0 2.5rem;
 }
 
@@ -95,19 +94,17 @@ a {
 
 /* Typography utilities */
 .hand-heading-1 {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-size: clamp(2rem, 5vw, 3.5rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
+  font-weight: 700;
+  letter-spacing: -0.04em;
   line-height: 1.1;
   margin-bottom: 1rem;
   color: var(--ink-black);
 }
 
 .hand-heading-2 {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-size: clamp(1.5rem, 4vw, 2.5rem);
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.2;
   margin-bottom: 1rem;
@@ -129,12 +126,12 @@ a {
 .os-window {
   width: 100%;
   max-width: 1200px;
-  margin: 44px auto 80px auto; /* 32px navbar + 12px gap at top, 80px at bottom for dock space */
+  margin: 44px auto 80px auto;
   background: var(--os-window);
   border-radius: 12px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255,255,255,0.1);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 0 0 0.5px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -181,6 +178,16 @@ a {
   z-index: 20;
 }
 
+.resize-handle-left {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 10px;
+  cursor: ew-resize !important;
+  z-index: 20;
+}
+
 .resize-handle-bottom {
   position: absolute;
   left: 0;
@@ -191,10 +198,50 @@ a {
   z-index: 20;
 }
 
-.resize-handle-corner {
+.resize-handle-top {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  height: 10px;
+  cursor: ns-resize !important;
+  z-index: 20;
+}
+
+.resize-handle-corner-br {
   position: absolute;
   right: 0;
   bottom: 0;
+  width: 15px;
+  height: 15px;
+  cursor: nwse-resize !important;
+  z-index: 30;
+}
+
+.resize-handle-corner-bl {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 15px;
+  height: 15px;
+  cursor: nesw-resize !important;
+  z-index: 30;
+}
+
+.resize-handle-corner-tr {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 15px;
+  height: 15px;
+  cursor: nesw-resize !important;
+  z-index: 30;
+}
+
+.resize-handle-corner-tl {
+  position: absolute;
+  left: 0;
+  top: 0;
   width: 15px;
   height: 15px;
   cursor: nwse-resize !important;
@@ -214,11 +261,11 @@ a {
     max-width: none; 
     min-height: 300px;
     min-width: 400px;
-    max-height: 90vh; /* Prevent resizing completely off screen */
+    max-height: calc(100vh - 84px); /* Prevent colliding with navbar and screen bottom */
     overflow: hidden; /* Important: hide overflow so the handles don't scroll and content stays inside */
-    /* Center it perfectly */
-    top: 0;
-    bottom: 0;
+    /* Center it perfectly between navbar and bottom */
+    top: 20px;
+    bottom: 20px;
     left: 0;
     right: 0;
     margin: auto;
@@ -229,7 +276,7 @@ a {
   position: absolute;
   top: 44px; /* below navbar */
   right: 16px;
-  bottom: 80px; /* above dock */
+  bottom: 20px; /* dock removed */
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -286,23 +333,23 @@ a {
   gap: 8px;
 }
 
-/* Aqua Glossy Button */
+/* Aqua Glossy Button -> Modern macOS Flat Button */
 .os-btn {
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(0,0,0,0.1);
-  border-radius: 6px; /* Modern rounded square for buttons */
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  padding: 0.35rem 1.2rem;
-  color: #333;
+  background: #007aff;
+  border: none;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  padding: 0.4rem 1.2rem;
+  color: #fff;
   font-size: 0.95rem;
   font-weight: 500;
   transition: all 0.1s ease;
+  cursor: pointer;
 }
 
 .os-btn:active {
-  background: rgba(230, 230, 230, 0.9);
-  box-shadow: none;
+  background: #0062cc;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
 }
 
 /* Mac OS Traffic Lights */
