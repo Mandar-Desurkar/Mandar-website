@@ -4,6 +4,7 @@
 // product moments autocapture can't: which section, from where, for how long, and why.
 // Naming: Title Case, past-tense action. Add new events here first so the plan stays complete.
 import * as amplitude from "@amplitude/unified";
+import { logFirebaseEvent } from "@/lib/firebase";
 import type { OpenSource, SectionId } from "@/context/WindowContext";
 
 export type MusicTrigger = "autoplay" | "first_interaction" | "play_button" | "unmute" | "media_key" | "track_change";
@@ -84,8 +85,12 @@ export type AnalyticsEvents = {
 };
 
 export function trackEvent<E extends keyof AnalyticsEvents>(event: E, properties: AnalyticsEvents[E]) {
-  if (typeof window === "undefined") return; // client-only; Amplitude isn't initialized on the server
+  if (typeof window === "undefined") return; // client-only; analytics isn't initialized on the server
   amplitude.track(event, properties);
+
+  // Also log to Firebase Analytics (convert "Viewed Prototype Screen" -> "viewed_prototype_screen")
+  const firebaseEventName = event.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
+  logFirebaseEvent(firebaseEventName, properties as Record<string, string | number | boolean | undefined>);
 }
 
 export const secondsSince = (start: number) => Math.round((performance.now() - start) / 1000);
