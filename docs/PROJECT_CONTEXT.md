@@ -30,6 +30,8 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
   AltQube (06/2023–09/2025); B.E. ISE, M. S. Ramaiah Institute of Technology (CGPA 8.30);
   former Team India open-water swimmer.
 - Project Claude skills live in `.claude/skills/` (index in `CLAUDE.md`).
+- Mobile: phones and touch tablets get a full-width sheet + dock and an edge-to-edge prototype
+  viewer (see "Mobile & responsive layout").
 - Context auto-sync: a Stop hook (`.claude/hooks/update-context.sh`, registered in
   `.claude/settings.json`) makes Claude update this file before ending any response in which
   project files changed.
@@ -47,12 +49,17 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
 | 2026-10-21 | Music lives in a desktop widget, not the menu bar | Owner's call: a visible widget is discoverable at a glance, while a menu-bar icon hid the player behind a click. Matches macOS Sonoma desktop widgets |
 | 2026-10-21 | Kept the "Future CPO / Founder (TBD)" Experience entry | Intentional easter egg by the owner; flagged as a possible credibility risk, owner to decide |
 | 2026-10-21 | Enforce context updates with a Stop hook, triggered only when files changed | Owner wants context kept after every response; a hook is guaranteed, unlike a CLAUDE.md instruction; skipping pure Q&A turns keeps the file free of noise |
+| 2026-10-21 | Phones and touch tablets get their own layout (full-width window sheet + iOS-style dock), not a shrunken desktop | Most visits come from LinkedIn on a phone; drag, resize and double-click are mouse interactions |
+| 2026-10-21 | Sections size to their window with container queries (`@container window`), not the viewport | The window is a fraction of the screen on desktop, so viewport queries clipped the hero at ~1024px |
+| 2026-10-21 | On phones the prototype app fills the screen edge to edge (no iPhone mock) with bars + bottom sheets | The visitor's phone is the device; a phone-in-a-phone mock was unreadable |
 
 ## Backlog (from the first `ship-check` run, 2026-10-21)
 
-- [ ] **Perf:** `public/` is 48.8 MB. Folder SVGs (0.6–10 MB each) embed raster images; convert
-      them to small PNG/WebP. Compress `wallpaper.jpg` (1.3 MB). Delete unused `Folder6–8.svg`
-      and the default Next SVGs.
+- [x] **Perf (2026-10-21):** the 8 folder SVGs (~48 MB, raster inside SVG) were replaced by five
+      ~1.8 KB WebPs (`public/icons/folder*.webp`, rendered from the SVGs in headless Chrome), so
+      `public/` went 48.8 MB → 11 MB. Phones get a 17 KB `wallpaper-mobile.webp` instead of the
+      1.3 MB `wallpaper.jpg`. Still open: compress `wallpaper.jpg` for desktop; delete the default
+      Next SVGs.
 - [ ] **Lint:** remaining errors elsewhere (e.g. setState in effect, `Navbar.tsx:17`). Fixed on
       2026-10-21: the unused `Terminal` import in Hero and the unescaped apostrophe in Contact.
 - [x] **Content:** placeholder projects replaced with 5 real products from the resume (2026-10-21).
@@ -81,6 +88,35 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
       `window.open` lacks `noopener`.
 - [ ] Add `src/app/not-found.tsx` (OS-themed 404).
 - [x] Pushed `prod` and `dev` to origin (2026-10-21) using the Mandar-Desurkar account.
+
+## Mobile & responsive layout (2026-10-21)
+
+- **One "phone layout" query**, used by the structural CSS and by `src/hooks/useIsMobile.ts`:
+  `(max-width: 767.98px), (max-width: 1023.98px) and (pointer: coarse), (max-height: 500px) and
+  (pointer: coarse)`, i.e. phones, touch tablets in portrait, and phones in landscape. Keep JS and
+  CSS identical if it changes (globals.css, `MobileDock`, `DesktopIcon` modules).
+- **Phone layout:** `DraggableWindow` renders a fixed full-width sheet (`.mobile-window`, top 40px,
+  above the dock; no drag/resize; only the red Close, with a 44px touch target). `MobileDock.tsx` is an
+  iOS-style dock with the five sections (re-tapping the open one scrolls it to top). With the window
+  closed the folders form a 4-column home screen. Desktop icons open with one tap on any touch screen
+  and are keyboard-accessible.
+- **Sections use container queries** on the window (`.window-content-scroll { container: window /
+  inline-size }`): `< 600px` phone tuning, `≥ 600px` desktop padding and row CTAs, `≥ 800px`
+  side-by-side hero, Projects 2/3 columns at `640/960px`. The hero shows a compact "identity row"
+  (small polaroid + Apps I've built) below 800px so the headline, KPIs and CTA are in the first screen.
+- **Music widget:** only on mouse screens ≥ 1100px (it collided with the centred window below that);
+  nothing streams where it's hidden.
+- **Prototype viewer on phones:** `PrototypeMobile.tsx` (state stays in `PrototypeViewer`). App screen
+  edge to edge (no fake status bar or bezel), scaled down below 375px wide, capped at 430px and shown
+  as a rounded card on tablets. Top bar: close · app/flow · flows; bottom bar: ‹ · "n / N title, PM
+  note" · › (continues into the next/previous flow). Bottom sheets for PM notes (screen chips, restart)
+  and flows (Kissan/Gau switch, every screen). One-time coach mark (localStorage
+  `prototype-mobile-hint-seen`). Landscape phones get a "rotate your phone" prompt.
+- **Viewport:** `layout.tsx` exports `viewport` with `viewportFit: "cover"` so bars respect safe areas.
+- **Verified** (headless Chrome, touch emulation): every Kissan (52) and Gau (76) screen at 375×667,
+  site sections at 375×667 and 393×852, viewer at 360×740 and 430×932, landscape 852×393, iPad
+  768×1024 / 1024×768, desktop 1024 / 1280 / 1440. No horizontal overflow. Still to do: a check on a
+  real phone over the LAN (`npm run dev -- -H 0.0.0.0`).
 
 ## Kissan Sampurna interactive prototype
 
@@ -377,6 +413,12 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 - 2026-10-21: Replaced the prototype viewer with an authentic, minimal **Figma Prototype Presentation UI** based directly on the user's Figma desktop screenshots: top Figma document tab strip (`⌂`, `Kissan Sampurna App - Prototype`, `Gau Sampurna Mobile App`), presentation bar with Figma logo, collapsible sidebar toggle `[| ]`, centered title dropdown (`Kissan Sampurna App ˅`), avatar `MD`, blue `Share prototype` button, clean collapsible `Flows` sidebar with `✓ Active flow` and `Description` PM notes, pure deep-dark canvas (no dot grid, no bottom floating pill), centered iPhone frame, and seamless switching between Kissan and Gau. Removed unnecessary static tabs.
 - 2026-10-21: Enhanced prototype sidebar UX: added screen count badges per flow (`5 screens`, etc.), nested list of all screen frames with active blue indicator and direct 1-click switching, plus quick interactive screen selector pills `[1] [2] [3]...` in the Description section.
 - 2026-10-21: Polished prototype viewer UI: added macOS traffic light controls (close, minimize, maximize) on the top-left tab strip beside the home icon, eliminated the duplicate `#` in the screen list (`# 1. Crop Doctor`), removed the redundant bottom `< Screen 1 of 5 >` stepper in favor of the quick pills, and eliminated sidebar scrollbar clutter.
+- 2026-10-21: **Mobile & responsive pass** (owner: "make sure it works properly on mobile, especially
+  the prototype"). See "Mobile & responsive layout". Also fixed: a prototype bug where an auto-advancing
+  screen's timer, still running during its exit animation, pulled the viewer back to the previous flow
+  (`goTo` now ignores calls from a screen that is no longer current); hero clipping at ~1024px
+  (container queries); 48 MB of folder SVGs replaced by WebPs. The `responsive-design` skill now
+  documents the shared phone query, container queries and the built phone layout. Uncommitted.
 - 2026-10-21: **Gau Sampurna full coverage** (owner: "add all the flows, screens and design"). Rebuilt
   the prototype from the prod repo route by route: 13 flows / 76 screens covering home, herd, all five
   AI scans with every orchestrator step and full reports, scan history / reports tab / chat replay,

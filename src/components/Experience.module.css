@@ -213,3 +213,18 @@
   font-weight: 700;
   color: var(--ink-black);
 }
+
+@container window (max-width: 599.98px) {
+  .experienceSection {
+    padding: 1.5rem 0 2rem;
+  }
+
+  .bulletList,
+  .beyondWorkList {
+    padding-left: 1.1rem;
+  }
+
+  .beyondWorkCard {
+    padding: 1.1rem;
+  }
+}

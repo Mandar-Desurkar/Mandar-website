@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import "./globals.css";
 import NoInspect from "@/components/NoInspect";
@@ -9,6 +9,14 @@ const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || "G-
 export const metadata: Metadata = {
   title: `${profile.name} | ${profile.role}`,
   description: profile.metaDescription,
+};
+
+// viewport-fit=cover lets the mobile dock and prototype bars respect the iPhone safe areas
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#1c1530",
 };
 
 export default function RootLayout({

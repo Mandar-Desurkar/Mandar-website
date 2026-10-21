@@ -8,6 +8,8 @@ import { lato } from "./fonts";
 import { trackEvent } from "@/lib/analytics";
 import type { Prototype } from "@/data/prototypes/kissanSampurna";
 import type { ScreenProps } from "./kissan/KissanScreens";
+import PrototypeMobile from "./PrototypeMobile";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 const SCREEN_W = 375;
 const SCREEN_H = 812;
@@ -103,6 +105,8 @@ export default function PrototypeViewer({ prototype, screens, onClose, onSwitchP
   const [hotspotsEnabled, setHotspotsEnabled] = useState(true);
   const [copied, setCopied] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
+  // Phones get an edge-to-edge layout (PrototypeMobile) instead of the Figma desktop window
+  const isMobile = useIsMobile();
 
   const stageRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -116,12 +120,18 @@ export default function PrototypeViewer({ prototype, screens, onClose, onSwitchP
 
   const isKissan = prototype.id === "kissan-sampurna";
 
+  // The live position. A screen that is animating out keeps its old callbacks, so its
+  // auto-advance timers could otherwise pull the viewer back to the flow the visitor just left.
+  const position = useRef("0/0");
+
   const goTo = useCallback(
     (targetFlow: number, index: number, method: NavMethod) => {
+      if (position.current !== `${flowIndex}/${screenIndex}`) return;
       const f = prototype.flows[targetFlow];
       const target = Math.max(0, Math.min(f.screens.length - 1, index));
       if (targetFlow === flowIndex && target === screenIndex) return;
       setDirection(targetFlow !== flowIndex || target >= screenIndex ? 1 : -1);
+      position.current = `${targetFlow}/${target}`;
       setFlowIndex(targetFlow);
       setScreenIndex(target);
       const id = f.screens[target].id;
@@ -213,7 +223,7 @@ export default function PrototypeViewer({ prototype, screens, onClose, onSwitchP
     });
     observer.observe(el);
     return () => observer.disconnect();
-  }, [mounted, sidebarOpen]);
+  }, [mounted, sidebarOpen, isMobile]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -227,6 +237,28 @@ export default function PrototypeViewer({ prototype, screens, onClose, onSwitchP
   }, [close, goTo, flowIndex, screenIndex, restart]);
 
   if (!mounted) return null;
+
+  if (isMobile) {
+    return createPortal(
+      <MotionConfig reducedMotion="user">
+        <PrototypeMobile
+          prototype={prototype}
+          flowIndex={flowIndex}
+          screenIndex={screenIndex}
+          direction={direction}
+          onPrev={() => goTo(flowIndex, screenIndex - 1, "prev_button")}
+          onNext={() => goTo(flowIndex, screenIndex + 1, "next_button")}
+          onJump={(fi, si) => goTo(fi, si, "list")}
+          onRestart={restart}
+          onClose={close}
+          onSwitchPrototype={onSwitchPrototype}
+        >
+          <Screen next={next} back={back} restart={restart} go={go} goToFlow={goToFlow} />
+        </PrototypeMobile>
+      </MotionConfig>,
+      document.body
+    );
+  }
 
   return createPortal(
     <MotionConfig reducedMotion="user">

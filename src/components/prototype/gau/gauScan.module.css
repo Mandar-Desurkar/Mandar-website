@@ -777,11 +777,18 @@
 /* ANALYZING */
 .analyzeBody {
   flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 22px;
   padding: 28px 24px;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.analyzeBody > * {
+  flex-shrink: 0;
 }
 
 .ringWrap {

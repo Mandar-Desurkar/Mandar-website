@@ -10,8 +10,9 @@ import { trackEvent, type MusicTrigger } from "@/lib/analytics";
 type Status = "idle" | "playing" | "paused" | "unavailable";
 
 const PAUSED_KEY = "music-paused";
-// The widget is hidden below this width (see CSS), so don't stream audio there either.
-const DESKTOP_QUERY = "(min-width: 768px)";
+// Matches the CSS: the widget shows only on mouse screens 1100px+ wide (it would collide with the
+// centred window below that), and nothing streams where it is hidden.
+const DESKTOP_QUERY = "(min-width: 1100px) and (pointer: fine)";
 const SEEK_STEP_S = 5;
 
 // SF Symbols-style glyphs: sharp shapes with slightly rounded corners (stroke + round join).

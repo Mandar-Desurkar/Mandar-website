@@ -53,3 +53,24 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* Phone home screen: iOS-sized icons and labels that fit "Experience" */
+@media (max-width: 767.98px), (max-width: 1023.98px) and (pointer: coarse), (max-height: 500px) and (pointer: coarse) {
+  .desktopIcon {
+    width: 82px;
+    gap: 5px;
+  }
+
+  .iconWrapper {
+    width: 58px;
+    height: 58px;
+  }
+
+  .dot {
+    display: none;
+  }
+
+  .iconLabel {
+    font-size: 0.75rem;
+  }
+}

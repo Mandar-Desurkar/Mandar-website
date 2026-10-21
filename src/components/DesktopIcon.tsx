@@ -14,16 +14,15 @@ interface DesktopIconProps {
 export default function DesktopIcon({ id, title, icon, dotColor }: DesktopIconProps) {
   const { openSection } = useWindow();
 
+  // Touch screens (phones and tablets) open with one tap; mouse users double-click like macOS
+  const isTouch = () => typeof window !== "undefined" && window.matchMedia("(hover: none)").matches;
+
   const handleClick = () => {
-    if (typeof window !== "undefined" && window.innerWidth < 768) {
-      openSection(id, "desktop_icon");
-    }
+    if (isTouch() || window.innerWidth < 768) openSection(id, "desktop_icon");
   };
 
   const handleDoubleClick = () => {
-    if (typeof window !== "undefined" && window.innerWidth >= 768) {
-      openSection(id, "desktop_icon");
-    }
+    if (!isTouch() && window.innerWidth >= 768) openSection(id, "desktop_icon");
   };
 
   return (
@@ -31,6 +30,14 @@ export default function DesktopIcon({ id, title, icon, dotColor }: DesktopIconPr
       className={styles.desktopIcon}
       onClick={handleClick}
       onDoubleClick={handleDoubleClick}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openSection(id, "desktop_icon");
+        }
+      }}
+      role="button"
+      tabIndex={0}
       title={`Open ${title}`}
     >
       <div className={styles.iconWrapper}>

@@ -5,6 +5,8 @@ import TrafficLights from "./TrafficLights";
 import { useWindow } from "@/context/WindowContext";
 import { trackEvent } from "@/lib/analytics";
 import { useEffect, useState, useRef } from "react";
+import { useIsMobile } from "@/hooks/useIsMobile";
+import { SECTION_SCROLL_TOP } from "./MobileDock";
 
 export default function DraggableWindow({ 
   title, 
@@ -18,6 +20,9 @@ export default function DraggableWindow({
   
   const [hasMounted, setHasMounted] = useState(false);
   const windowRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  // Phones get a full-width sheet between the menu bar and the dock: no drag, no resize
+  const isMobile = useIsMobile();
   
   // Custom resize state
   const [size, setSize] = useState({ width: '60vw', height: '70vh' });
@@ -25,6 +30,13 @@ export default function DraggableWindow({
 
   useEffect(() => {
     setHasMounted(true);
+  }, []);
+
+  // Re-tapping the open section in the mobile dock scrolls it back to the top
+  useEffect(() => {
+    const toTop = () => scrollRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+    window.addEventListener(SECTION_SCROLL_TOP, toTop);
+    return () => window.removeEventListener(SECTION_SCROLL_TOP, toTop);
   }, []);
 
   // Change window size dynamically based on the active tab
@@ -59,6 +71,8 @@ export default function DraggableWindow({
     }
 
     setSize({ width: newWidth, height: newHeight });
+    // A new section starts at its top, not wherever the previous one was scrolled to
+    scrollRef.current?.scrollTo({ top: 0 });
   }, [activeTab]);
 
   const handleResizeStart = (e: React.PointerEvent, edge: 'bottom' | 'right' | 'bottom-right' | 'left' | 'bottom-left' | 'top' | 'top-left' | 'top-right') => {
@@ -149,6 +163,34 @@ export default function DraggableWindow({
     }
   };
 
+  const mobileVariants: Variants = {
+    initial: { opacity: 0, y: 24, scale: 1 },
+    open: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.32, ease: [0.16, 1, 0.3, 1] } },
+    minimized: { opacity: 0, y: 80, transition: { duration: 0.2 } },
+    closed: { opacity: 0, y: 40, transition: { duration: 0.18 } },
+  };
+
+  if (isMobile) {
+    return (
+      <motion.div
+        className="os-window mobile-window"
+        variants={mobileVariants}
+        initial="initial"
+        animate={isMinimized ? "minimized" : "open"}
+        exit="closed"
+        style={{ position: "fixed", zIndex: 10 }}
+      >
+        <div className="os-titlebar mobile-titlebar">
+          <TrafficLights />
+          <span>{title}</span>
+        </div>
+        <div className="window-content-scroll" ref={scrollRef}>
+          <div className="notebook-bg">{children}</div>
+        </div>
+      </motion.div>
+    );
+  }
+
   return (
     <motion.div 
       ref={windowRef}
@@ -185,7 +227,7 @@ export default function DraggableWindow({
         <span>{title}</span>
       </div>
       
-      <div className="window-content-scroll">
+      <div className="window-content-scroll" ref={scrollRef}>
         <div className="notebook-bg">
           <div className="apple-note-date">August 31, 2026 at 9:41 AM</div>
           {children}

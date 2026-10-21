@@ -69,10 +69,16 @@
   opacity: 1;
 }
 
-/* Touch screens have no hover: keep the close button visible */
+/* Touch screens have no hover: keep the close button visible, with a 44px touch target */
 @media (hover: none) {
   .close {
     opacity: 1;
+  }
+
+  .close::after {
+    content: "";
+    position: absolute;
+    inset: -12px;
   }
 }
 

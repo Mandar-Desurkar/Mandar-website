@@ -135,3 +135,20 @@
   font-weight: 600;
   color: var(--ink-black);
 }
+@container window (max-width: 599.98px) {
+  .educationSection {
+    padding: 1.5rem 0 2rem;
+  }
+
+  .entry {
+    margin-bottom: 1.75rem;
+  }
+
+  .toolkitCard {
+    padding: 1.1rem;
+  }
+
+  .toolkitTitle {
+    font-size: 0.95rem;
+  }
+}

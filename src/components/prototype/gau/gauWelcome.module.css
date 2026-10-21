@@ -291,16 +291,26 @@
 
 .slide {
   flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 0 24px;
+  overflow-y: auto;
+  scrollbar-width: none;
   animation: rise 0.35s ease-out both;
 }
 
+.slide > * {
+  flex-shrink: 0;
+}
+
+/* The art gives way first on short phones so the copy and the Next button stay on screen */
 .slide img {
-  width: 280px;
-  height: 280px;
+  flex: 0 1 280px;
+  width: 100%;
+  max-width: 280px;
+  min-height: 120px;
   margin-bottom: 16px;
   object-fit: contain;
 }

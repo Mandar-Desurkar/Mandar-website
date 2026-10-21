@@ -4,7 +4,7 @@ import React, { createContext, useContext, useEffect, useRef, useState, ReactNod
 import { trackEvent, secondsSince } from '@/lib/analytics';
 
 export type SectionId = 'about' | 'experience' | 'education' | 'projects' | 'contact';
-export type OpenSource = 'desktop_icon' | 'menu_bar' | 'system_menu' | 'hero_cta' | 'notification';
+export type OpenSource = 'desktop_icon' | 'menu_bar' | 'system_menu' | 'hero_cta' | 'notification' | 'mobile_dock';
 
 type WindowContextType = {
   isMinimized: boolean;

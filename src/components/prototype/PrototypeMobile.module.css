@@ -1,0 +1,532 @@
+/* Phone prototype viewer: edge-to-edge app screen between two slim bars, sheets for flows/notes. */
+
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: 10050;
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  background: #0e0e10;
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ---------- Top bar ---------- */
+.topBar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: calc(6px + env(safe-area-inset-top)) 8px 6px;
+  background: #0e0e10;
+  border-bottom: 1px solid #222226;
+}
+
+.iconBtn {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 12px;
+  background: none;
+  color: #e5e5ea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconBtn:active {
+  background: #26262a;
+}
+
+.titleBtn {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 4px 0;
+  border: 0;
+  background: none;
+  color: inherit;
+}
+
+.titleApp {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.titleFlow {
+  max-width: 100%;
+  font-size: 12px;
+  color: #8e8e93;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---------- Stage ---------- */
+.stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  background: #000;
+}
+
+.screenSlot {
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  background: #fff;
+  color: #111;
+  transform-origin: top left;
+}
+
+/* Screens are designed in Lato; globals.css forces the system font with !important */
+.screen,
+.screen :global(*) {
+  font-family: var(--font-lato), "Lato", sans-serif !important;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+}
+
+.hint {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 14px;
+  z-index: 60;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 0;
+  border-radius: 14px;
+  background: rgba(20, 20, 24, 0.94);
+  color: #f2f2f7;
+  font-size: 13.5px;
+  line-height: 1.4;
+  text-align: left;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+}
+
+.hintDot {
+  flex-shrink: 0;
+  width: 12px;
+  height: 12px;
+  margin-top: 3px;
+  border-radius: 50%;
+  border: 2px solid #d3d800;
+  box-shadow: 0 0 0 4px rgba(211, 216, 0, 0.25);
+}
+
+/* ---------- Bottom bar ---------- */
+.bottomBar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
+  background: #0e0e10;
+  border-top: 1px solid #222226;
+}
+
+.navBtn {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 14px;
+  background: #1e1e22;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navNext {
+  background: #0d99ff;
+}
+
+.navBtn:disabled {
+  opacity: 0.3;
+}
+
+.navBtn:not(:disabled):active {
+  transform: scale(0.94);
+}
+
+.noteBtn {
+  flex: 1;
+  min-width: 0;
+  height: 48px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  align-items: center;
+  column-gap: 8px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 14px;
+  background: #1e1e22;
+  color: #fff;
+  text-align: left;
+}
+
+.noteCount {
+  grid-row: span 2;
+  padding: 3px 7px;
+  border-radius: 7px;
+  background: #2c2c30;
+  color: #c7c7cc;
+  font-size: 11.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.noteTitle {
+  font-size: 13.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.noteCta {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #0d99ff;
+}
+
+/* ---------- Sheets ---------- */
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.sheet {
+  max-height: 82dvh;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0 calc(12px + env(safe-area-inset-bottom));
+  border-radius: 20px 20px 0 0;
+  background: #1c1c1f;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.grabber {
+  align-self: center;
+  width: 38px;
+  height: 5px;
+  margin-bottom: 6px;
+  border-radius: 3px;
+  background: #3a3a3e;
+}
+
+.sheetHead {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 16px 10px;
+}
+
+.sheetHead b {
+  font-size: 17px;
+}
+
+.sheetClose {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: #2c2c30;
+  color: #c7c7cc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sheetBody {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 16px 8px;
+}
+
+.noteMeta {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #8e8e93;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.noteHeading {
+  display: block;
+  margin-top: 4px;
+  font-size: 20px;
+}
+
+.noteText {
+  margin: 10px 0 16px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: #d1d1d6;
+}
+
+.chips {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+
+.chips::-webkit-scrollbar {
+  display: none;
+}
+
+.chip {
+  flex-shrink: 0;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid #2f2f33;
+  border-radius: 18px;
+  background: #242428;
+  color: #d1d1d6;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.chipOn {
+  border-color: #0d99ff;
+  background: rgba(13, 153, 255, 0.16);
+  color: #fff;
+  font-weight: 600;
+}
+
+.restart {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  min-height: 40px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #0d99ff;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.segment {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+  padding: 4px;
+  border-radius: 12px;
+  background: #2a2a2e;
+}
+
+.segBtn {
+  flex: 1;
+  min-height: 38px;
+  border: 0;
+  border-radius: 9px;
+  background: none;
+  color: #c7c7cc;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.segOn {
+  background: #3a3a3f;
+  color: #fff;
+}
+
+.flowList,
+.screenList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.flowRow {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 56px;
+  padding: 8px 4px;
+  border: 0;
+  border-bottom: 1px solid #2a2a2e;
+  background: none;
+  color: #fff;
+  text-align: left;
+}
+
+.flowText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.flowText b {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.flowText small {
+  font-size: 12.5px;
+  color: #8e8e93;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.flowCurrent .flowText b {
+  color: #0d99ff;
+}
+
+.flowCount {
+  min-width: 24px;
+  padding: 2px 7px;
+  border-radius: 10px;
+  background: #2c2c30;
+  color: #c7c7cc;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.rotated {
+  transform: rotate(180deg);
+}
+
+.screenList {
+  padding: 6px 0 10px;
+}
+
+.screenRow {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 10px;
+  background: none;
+  color: #d1d1d6;
+  font-size: 14.5px;
+  text-align: left;
+}
+
+.screenRow span {
+  width: 24px;
+  color: #636366;
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.screenOn {
+  background: rgba(13, 153, 255, 0.16);
+  color: #fff;
+  font-weight: 600;
+}
+
+.screenOn span {
+  color: #0d99ff;
+}
+
+.iconBtn:focus-visible,
+.titleBtn:focus-visible,
+.navBtn:focus-visible,
+.noteBtn:focus-visible,
+.chip:focus-visible,
+.flowRow:focus-visible,
+.screenRow:focus-visible {
+  outline: 2px solid #0d99ff;
+  outline-offset: 2px;
+}
+
+/* Landscape phones: the app is portrait, so ask to rotate rather than show a sliver */
+.rotate {
+  position: absolute;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 24px;
+  background: #0e0e10;
+  text-align: center;
+}
+
+.rotate b {
+  font-size: 18px;
+}
+
+.rotate span {
+  max-width: 340px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: #a1a1a6;
+}
+
+.rotateIcon {
+  color: #0d99ff;
+  animation: tilt 2.4s ease-in-out infinite;
+}
+
+@keyframes tilt {
+  0%, 30% { transform: rotate(-90deg); }
+  60%, 100% { transform: rotate(0deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rotateIcon { animation: none; }
+}
+
+/* Tablets: the phone-width app sits in a rounded card with breathing room instead of hard edges */
+@media (min-width: 600px) {
+  .stage {
+    padding: 16px 0;
+  }
+
+  .screenSlot {
+    border-radius: 28px;
+    box-shadow: 0 0 0 1px #2c2c30, 0 20px 60px rgba(0, 0, 0, 0.6);
+  }
+}

@@ -7,11 +7,11 @@ import Education from "@/components/Education";
 import Projects from "@/components/Projects";
 import Contact from "@/components/Contact";
 import BootScreen from "@/components/BootScreen";
-import Dock from "@/components/Dock";
 import DraggableWindow from "@/components/DraggableWindow";
 import DesktopIcon from "@/components/DesktopIcon";
 import MusicPlayer from "@/components/MusicPlayer";
 import HiringNotification from "@/components/HiringNotification";
+import MobileDock from "@/components/MobileDock";
 import { WindowProvider, useWindow } from "@/context/WindowContext";
 import Image from "next/image";
 import { AnimatePresence } from "framer-motion";
@@ -42,19 +42,21 @@ function WindowTitle() {
 }
 
 function DesktopEnvironment() {
-  const { activeTab, isClosed } = useWindow();
+  const { isClosed } = useWindow();
   
   return (
     <>
       <MusicPlayer />
 
       <div className="desktop-grid">
-        <DesktopIcon id="about" title="About Me" dotColor="#3BA7FF" icon={<Image src="/icons/Folder.svg" alt="About Me" width={56} height={56} className="drop-shadow-md" />} />
-        <DesktopIcon id="experience" title="Experience" dotColor="#32D74B" icon={<Image src="/icons/Folder2.svg" alt="Experience" width={56} height={56} className="drop-shadow-md" />} />
-        <DesktopIcon id="education" title="Education" dotColor="#32D74B" icon={<Image src="/icons/Folder3.svg" alt="Education" width={56} height={56} className="drop-shadow-md" />} />
-        <DesktopIcon id="projects" title="Projects" dotColor="#FFD60A" icon={<Image src="/icons/Folder4.svg" alt="Projects" width={56} height={56} className="drop-shadow-md" />} />
-        <DesktopIcon id="contact" title="Contact" dotColor="#FF9F0A" icon={<Image src="/icons/Folder5.svg" alt="Contact" width={56} height={56} className="drop-shadow-md" />} />
+        <DesktopIcon id="about" title="About Me" dotColor="#3BA7FF" icon={<Image src="/icons/folder.webp" alt="About Me" width={56} height={56} className="drop-shadow-md" />} />
+        <DesktopIcon id="experience" title="Experience" dotColor="#32D74B" icon={<Image src="/icons/folder2.webp" alt="Experience" width={56} height={56} className="drop-shadow-md" />} />
+        <DesktopIcon id="education" title="Education" dotColor="#32D74B" icon={<Image src="/icons/folder3.webp" alt="Education" width={56} height={56} className="drop-shadow-md" />} />
+        <DesktopIcon id="projects" title="Projects" dotColor="#FFD60A" icon={<Image src="/icons/folder4.webp" alt="Projects" width={56} height={56} className="drop-shadow-md" />} />
+        <DesktopIcon id="contact" title="Contact" dotColor="#FF9F0A" icon={<Image src="/icons/folder5.webp" alt="Contact" width={56} height={56} className="drop-shadow-md" />} />
       </div>
+
+      <MobileDock />
 
       <AnimatePresence>
         {!isClosed && (

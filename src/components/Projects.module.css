@@ -18,13 +18,13 @@
   padding: 1rem;
 }
 
-@media (min-width: 768px) {
+@container window (min-width: 640px) {
   .grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (min-width: 1024px) {
+@container window (min-width: 960px) {
   .grid {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -148,4 +148,32 @@
   padding: 0.25rem 0.6rem;
   border-radius: 12px;
   font-weight: 500;
+}
+
+/* Phone: cards use the full width instead of sitting inside an extra 1rem gutter */
+@container window (max-width: 599.98px) {
+  .projectsSection {
+    padding: 1.5rem 0 2rem;
+  }
+
+  .headerBox {
+    margin-bottom: 1rem;
+  }
+
+  .grid {
+    gap: 1.25rem;
+    padding: 0;
+  }
+
+  .card {
+    padding: 1.25rem;
+  }
+
+  .card:hover {
+    transform: none;
+  }
+
+  .cardHeader {
+    margin-top: 0;
+  }
 }
