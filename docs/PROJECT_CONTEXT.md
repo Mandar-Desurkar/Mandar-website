@@ -326,7 +326,7 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
   against source, incl. Gau Account/Profile, scan top bar (22/600), language/contact/about/welcome
   (RFValue tokens), shop/checkout/trading/report/notification rows and Kissan crop-guide and
   farm-report rows. Verified: 0 overflow / clipped text on all 128 screens at 320/393/430pt; `tsc`,
-  lint, `next build` pass. Uncommitted.
+  lint, `next build` pass. Committed as 304f979, pushed to `dev` and `prod`; verified on the live site.
 - 2026-10-21: **Prototype asset audit** (live site, all 128 screens): every `<img>`, CSS background
   (weather, satellite, paywall, camera) and SVG `<image>` (farm map) loads and looks right (contact
   sheets reviewed). Found and fixed: on **phones the prototypes rendered in the system font, not
