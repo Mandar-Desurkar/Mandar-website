@@ -103,8 +103,8 @@
   display: block;
   max-width: 90%;
   font-size: 26px;
-  line-height: 1.25;
-  font-weight: 800;
+  line-height: 37px;
+  font-weight: 700;
   color: #0f172a;
 }
 
@@ -142,7 +142,7 @@
 }
 
 .phoneBox span {
-  font-size: 16px;
+  font-size: 15px;
   color: #475569;
 }
 
@@ -177,8 +177,8 @@
   border-radius: 16px;
   background: #004691;
   color: #fff;
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 15px;
+  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -214,7 +214,7 @@
   border: 1.5px solid #cbd5e1;
   font: inherit;
   font-size: 26px;
-  font-weight: 800;
+  font-weight: 700;
   text-align: center;
   color: #0f172a;
   outline: none;
@@ -229,14 +229,14 @@
   align-self: flex-start;
   margin-bottom: 14px;
   color: #64748b;
-  font-size: 12.5px;
+  font-size: 12px;
   text-decoration: underline;
 }
 
 .resend {
   margin-top: 16px;
   text-align: center;
-  font-size: 14px;
+  font-size: 15px;
   color: #64748b;
 }
 
@@ -269,8 +269,8 @@
 .terms {
   flex-shrink: 0;
   padding: 0 24px 22px;
-  font-size: 12px;
-  line-height: 20px;
+  font-size: 13px;
+  line-height: 19px;
   color: #94a3b8;
   text-align: center;
 }
@@ -286,7 +286,7 @@
 .skip {
   color: #64748b;
   font-size: 15px;
-  font-weight: 700;
+  font-weight: 400;
 }
 
 .slide {

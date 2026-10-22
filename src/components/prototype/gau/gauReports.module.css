@@ -80,8 +80,8 @@
   margin: 0;
   padding: 2px 0 2px 10px;
   border-left: 3px solid #008026;
-  font-size: 13.5px;
-  line-height: 1.45;
+  font-size: 12px;
+  line-height: 18px;
   color: #333;
 }
 
@@ -158,7 +158,7 @@
   align-items: center;
   gap: 8px;
   color: #94a3b8;
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .handlePill {
@@ -435,8 +435,9 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 12.5px;
+  font-size: 12px;
   color: #666;
+  font-weight: 500;
 }
 
 .dxStatus {
@@ -746,7 +747,7 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: #555;
 }
 
@@ -758,12 +759,13 @@
 .legend small {
   float: right;
   color: #94a3b8;
+  font-size: inherit;
 }
 
 .legendOn {
   background: #e8f5e9;
   color: #1b5e20;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .econGrid {
@@ -783,7 +785,7 @@
 
 .econGrid small,
 .marketRow small {
-  font-size: 11.5px;
+  font-size: 11px;
   color: #666;
 }
 
@@ -1014,8 +1016,8 @@
 
 .disclaimer {
   margin: 0;
-  font-size: 11.5px;
-  line-height: 1.5;
+  font-size: 10px;
+  line-height: 16px;
   color: #94a3b8;
 }
 
@@ -1560,4 +1562,16 @@
 .guideRow small {
   font-size: 13px;
   color: #4b5563;
+}
+
+.handleLeft small {
+  font-size: inherit;
+}
+
+.buyRec small {
+  font-size: 10px;
+}
+
+.statusTop small {
+  font-size: inherit;
 }

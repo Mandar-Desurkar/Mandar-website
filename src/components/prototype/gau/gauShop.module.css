@@ -324,13 +324,16 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 12.5px;
+  font-size: 11px;
   color: #64748b;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
 }
 
 .brandRow em {
   font-style: normal;
-  font-weight: 700;
+  font-weight: 600;
   color: #a98b2f;
 }
 
@@ -344,7 +347,7 @@
   align-items: center;
   gap: 4px;
   color: #004691;
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 600;
 }
 
@@ -354,8 +357,8 @@
   gap: 6px;
   margin: 0;
   padding: 0 0 0 18px;
-  font-size: 13.5px;
-  line-height: 1.45;
+  font-size: 13px;
+  line-height: 18px;
   color: #334155;
 }
 
@@ -372,6 +375,7 @@
 
 .stars small {
   color: #64748b;
+  font-size: inherit;
 }
 
 .variants {
@@ -406,8 +410,8 @@
 
 .variant em {
   font-style: normal;
-  font-size: 11.5px;
-  font-weight: 700;
+  font-size: 10px;
+  font-weight: 600;
   color: #16a34a;
 }
 
@@ -464,7 +468,7 @@
 }
 
 .priceBlock small {
-  font-size: 12.5px;
+  font-size: 11px;
   color: #4b5563;
 }
 
@@ -490,8 +494,9 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: #4b5563;
+  line-height: 18px;
 }
 
 .locRow b {
@@ -620,7 +625,8 @@
 
 .reviewsHead small {
   color: #004691;
-  font-weight: 700;
+  font-weight: 600;
+  font-size: 13px;
 }
 
 .review {
@@ -857,8 +863,9 @@
 }
 
 .payBody b {
-  font-size: 14.5px;
+  font-size: 15px;
   color: #0f172a;
+  font-weight: 600;
 }
 
 .payBody em {
@@ -866,9 +873,9 @@
   border-radius: 4px;
   background: #dcfce7;
   color: #15803d;
-  font-size: 10.5px;
+  font-size: 10px;
   font-style: normal;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .payBody small {
@@ -914,7 +921,7 @@
 .bill > span {
   display: flex;
   justify-content: space-between;
-  font-size: 13.5px;
+  font-size: 14px;
   color: #334155;
 }
 
@@ -951,12 +958,12 @@
 }
 
 .policy b {
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .policy small {
-  font-size: 12.5px;
-  line-height: 1.45;
+  font-size: 13px;
+  line-height: 19px;
   color: #64748b;
 }
 
@@ -987,16 +994,17 @@
 }
 
 .addrCard small {
-  font-size: 11.5px;
+  font-size: 12px;
   color: #64748b;
 }
 
 .addrCard b {
-  font-size: 13px;
+  font-size: 14px;
   color: #0f172a;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-weight: 600;
 }
 
 .change {
@@ -1537,8 +1545,8 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  font-size: 13.5px;
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 500;
   color: #0f172a;
 }
 
@@ -1551,7 +1559,7 @@
 .allLoaded,
 .empty {
   text-align: center;
-  font-size: 12.5px;
+  font-size: 12px;
   color: #94a3b8;
 }
 

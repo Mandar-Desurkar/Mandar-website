@@ -72,7 +72,7 @@ function ScanTopBar({ kind, onBack }: { kind: ScanKind; onBack: () => void }) {
   return (
     <div className={s.topBar}>
       <button type="button" className={`${u.btnReset} ${s.back}`} onClick={onBack} aria-label="Back">
-        <ArrowLeft size={18} />
+        <ArrowLeft size={26} />
       </button>
       <span className={s.topTitles}>
         <b>{SCAN_TITLE[kind]}</b>

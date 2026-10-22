@@ -9,6 +9,9 @@ export const gauSampurnaPrototype: Prototype = {
   name: "Gau Sampurna",
   tagline: "AI dairy farming app",
   logo: "/prototypes/gau-sampurna/logo.png",
+  // code/helpers/responsive.js: a 375 × 812 base, with padding, margins, widths and font sizes
+  // scaled by the window width (fonts by min(width, height) ratio, the same on phones)
+  device: { width: 375, height: 812, scaling: "linear" },
   flows: [
     {
       id: "gs-home",

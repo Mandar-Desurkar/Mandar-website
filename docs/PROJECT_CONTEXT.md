@@ -212,7 +212,27 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
 - [ ] **Confidentiality:** confirm Silo Fortune is OK with showing these screens and assets
   publicly before deploying.
 
-## Gau Sampurna interactive prototype
+## Prototype sizing & typography (how the real apps size things)
+
+Measured from the apps' own source on 2026-10-22; follow this for any new prototype screen.
+
+- **Kissan** (`code/helpers/scaled.js`, react-native-size-matters): designs are drawn on a **393 × 852**
+  iPhone 15/16 Pro and nearly every size is `'N@ms'` (moderate scale 0.5). On a phone W pt wide a value
+  renders at `N × (0.5 + W/786)`, exact at 393. Write the **design number N** in CSS.
+- **Gau** (`code/helpers/responsive.js`): a **375 × 812** base, `responsive.*` scales linearly with width.
+  Design-system tokens (`theme.typography.*`, `FontSize.*`, `TopBarNew`, `Button`, `TextInput`,
+  `OtpInput`, language / contact / about / login / OTP / register screens) go through `RFValue`, which
+  already renders them ~8% larger on the base phone: **write `round(N × 734/680)`** (12→13, 14→15,
+  16→17, 20→22, 24→26). Raw `fontSize: N` / `responsive.fontSize(N)` stay N. Half-point sizes (10.5,
+  12.5, 13.5) are real in some Gau components (home, quick actions, herd value), so check the source.
+- The model lives in each prototype's `device` (`src/data/prototypes/*.ts`) and `deviceFit.ts`
+  (`fitToPhone`); the phone viewer and the desktop frame both use it.
+- **Fonts:** Lato everywhere (Regular / Bold / Black; weights map 500→Regular, 600→Bold, 800–900→Black
+  as in the apps). **Poppins** only on Gau Account + Edit Profile (`.poppins` class). Fonts are
+  Latin-subset WOFF2 in `src/components/prototype/fonts/` (OFL); Indian-script text falls back to the
+  system font, as on device. Subset new fonts with `pyftsubset` (needs `brotli`).
+
+
 
 - **Reference repo:** `silo-prod/gausampurna-react-app`, `prod` branch, shallow-cloned read-only to
   `_external/gausampurna-app-prod/` (git/tsc/eslint ignore it). It contains Firebase config files
@@ -296,6 +316,17 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 
 ## Changelog
 
+- 2026-10-22: **Prototype design size, font size and family pass** (owner: "make sure the font size and
+  family is correct"). (1) Kissan was scaled as a 375pt linear design; it is a 393pt `@ms` design, so
+  text was 4.8% too big on the reference iPhone, 9.5% on a 430pt Pro Max and 6% too small at 320pt.
+  Now matches the app's formula exactly at every width (measured). Gau already used the right linear
+  model. Desktop frame is the app's own device (Kissan 393 × 852, Gau 375 × 812). (2) Lato Black added
+  (141 heavy texts on 40 screens rendered as Bold), Poppins added for Gau Account/Edit Profile, fonts
+  moved to subset WOFF2 (113 KB for 7 faces vs 148 KB for 2 TTFs). (3) ~110 text styles corrected
+  against source, incl. Gau Account/Profile, scan top bar (22/600), language/contact/about/welcome
+  (RFValue tokens), shop/checkout/trading/report/notification rows and Kissan crop-guide and
+  farm-report rows. Verified: 0 overflow / clipped text on all 128 screens at 320/393/430pt; `tsc`,
+  lint, `next build` pass. Uncommitted.
 - 2026-10-21: **Prototype asset audit** (live site, all 128 screens): every `<img>`, CSS background
   (weather, satellite, paywall, camera) and SVG `<image>` (farm map) loads and looks right (contact
   sheets reviewed). Found and fixed: on **phones the prototypes rendered in the system font, not

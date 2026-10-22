@@ -9,10 +9,10 @@ import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } fro
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, ChevronLeft, ChevronRight, Expand, ListTree, Minimize, RotateCcw, Smartphone, X } from "lucide-react";
 import styles from "./PrototypeMobile.module.css";
-import { lato } from "./fonts";
+import { lato, poppins } from "./fonts";
+import { fitToPhone } from "./deviceFit";
 import type { Prototype } from "@/data/prototypes/kissanSampurna";
 
-const DESIGN_W = 375; // screens are built for a 375pt-wide phone
 const HINT_KEY = "prototype-mobile-hint-seen";
 const CHROME_MS = 3500;
 // A swipe that starts inside a sideways-only scroller (banner carousel, chips, product rows) must
@@ -110,8 +110,7 @@ export default function PrototypeMobile({
     return () => clearTimeout(t);
   }, [chrome, chromeTick, sheet]);
 
-  // Fit the app screen to the stage: full width up to 430pt; narrower phones scale the 375pt
-  // design down so layouts keep their proportions.
+  // Track the stage size; the screen is fitted to it with the app's own sizing rules (fitToPhone)
   useEffect(() => {
     const el = stageRef.current;
     if (!el) return;
@@ -183,12 +182,14 @@ export default function PrototypeMobile({
     else document.documentElement.requestFullscreen().catch(() => {});
   };
 
+  // Phones: the app fills the screen at the sizes that phone shows in the real app. Tablets: the
+  // app's design device, as a card scaled to fit the height.
+  const { device } = prototype;
   const isTablet = size.w >= 600;
-  const scale = isTablet
-    ? Math.min(1, (size.h - 32) / 812)
-    : (size.w > 0 ? size.w / DESIGN_W : 1);
-  const innerW = DESIGN_W;
-  const innerH = isTablet ? 812 : (size.h > 0 ? size.h / scale : 812);
+  const fit = fitToPhone(device, size.w > 0 ? size.w : device.width);
+  const scale = isTablet ? Math.min(1, (size.h - 32) / device.height) : fit.scale;
+  const innerW = isTablet ? device.width : fit.layoutWidth;
+  const innerH = isTablet ? device.height : size.h > 0 ? size.h / scale : device.height;
   const isFirst = screenIndex === 0;
   const isLast = screenIndex === flow.screens.length - 1;
   // The player keeps going across flows, so ‹ › never dead-end mid-prototype
@@ -237,7 +238,7 @@ export default function PrototypeMobile({
         {size.w > 0 && (
           <div className={styles.screenSlot} style={{ width: innerW * scale, height: size.h }}>
             <div
-              className={`${styles.screen} ${lato.variable} ${flash ? styles.flash : ""}`}
+              className={`${styles.screen} ${lato.variable} ${poppins.variable} ${flash ? styles.flash : ""}`}
               style={{
                 width: innerW,
                 height: innerH,

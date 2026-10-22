@@ -67,7 +67,7 @@ function Account({ go, goToFlow }: ScreenProps) {
   const [logout, setLogout] = useState(false);
   const toast = useToast();
   return (
-    <div className={`${u.screen} ${a.grey}`}>
+    <div className={`${u.screen} ${a.grey} ${a.poppins}`}>
       <div className={a.profileHeader}>
         <span className={a.refreshRow}>
           <button type="button" className={`${u.btnReset} ${a.icon}`} onClick={() => toast.show("Cows and subscription updated.")} aria-label="Refresh">
@@ -162,7 +162,7 @@ function Account({ go, goToFlow }: ScreenProps) {
 function Profile({ back }: ScreenProps) {
   const toast = useToast();
   return (
-    <div className={`${u.screen} ${a.grey}`}>
+    <div className={`${u.screen} ${a.grey} ${a.poppins}`}>
       <Header title="Edit Profile" onBack={back} />
       <div className={`${u.scroll} ${a.formBody}`}>
         <div className={a.photo}>
@@ -193,7 +193,7 @@ function Profile({ back }: ScreenProps) {
         </div>
       </div>
       <div className={u.footer}>
-        <button type="button" className={`${u.btnReset} ${u.primary} ${u.hotspot}`} onClick={() => toast.show("Profile updated")}>
+        <button type="button" className={`${u.btnReset} ${u.primary} ${u.hotspot} ${a.saveBtn}`} onClick={() => toast.show("Profile updated")}>
           Save Changes
         </button>
       </div>

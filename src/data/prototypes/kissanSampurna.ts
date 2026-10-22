@@ -6,11 +6,17 @@
 
 export type PrototypeScreen = { id: string; title: string; note: string };
 export type PrototypeFlow = { id: string; title: string; summary: string; screens: PrototypeScreen[] };
+// The phone an app is designed on and how its sizes adapt to other phones, taken from the app's own
+// sizing helpers, so the prototype draws text and spacing at the size that phone really shows.
+//   "moderate": react-native-size-matters `@ms` (sizes grow at half the width ratio)
+//   "linear":   sizes scale in proportion to the width
+export type PrototypeDevice = { width: number; height: number; scaling: "moderate" | "linear" };
 export type Prototype = {
   id: string;
   name: string;
   tagline: string;
   logo: string;
+  device: PrototypeDevice;
   flows: PrototypeFlow[];
 };
 
@@ -19,6 +25,9 @@ export const kissanSampurnaPrototype: Prototype = {
   name: "Kissan Sampurna",
   tagline: "AI farming app for Indian farmers",
   logo: "/prototypes/kissan-sampurna/logo.webp",
+  // code/helpers/scaled.js: designs are drawn on a 393 × 852 iPhone 15/16 Pro and almost every size
+  // is `@ms` (moderate scale 0.5), so the design numbers are exact on a 393pt-wide phone
+  device: { width: 393, height: 852, scaling: "moderate" },
   flows: [
     {
       id: "home-weather",

@@ -4,18 +4,16 @@ import { useCallback, useEffect, useRef, useState, type ComponentType } from "re
 import { createPortal } from "react-dom";
 import { AnimatePresence, MotionConfig, motion } from "framer-motion";
 import styles from "./PrototypeViewer.module.css";
-import { lato } from "./fonts";
+import { lato, poppins } from "./fonts";
 import { trackEvent } from "@/lib/analytics";
 import type { Prototype } from "@/data/prototypes/kissanSampurna";
 import type { ScreenProps } from "./kissan/KissanScreens";
 import PrototypeMobile from "./PrototypeMobile";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
-const SCREEN_W = 375;
-const SCREEN_H = 812;
+// The phone frame is the app's own design device (Kissan 393 × 852, Gau 375 × 812), so screens
+// render at exactly their design sizes before the whole phone is scaled to fit the stage
 const BEZEL = 12;
-const PHONE_W = SCREEN_W + BEZEL * 2;
-const PHONE_H = SCREEN_H + BEZEL * 2;
 
 type NavMethod = "tap" | "next_button" | "prev_button" | "list" | "keyboard" | "restart" | "cross_flow";
 
@@ -98,6 +96,8 @@ export default function PrototypeViewer({ prototype, screens, onClose, onSwitchP
   const [screenIndex, setScreenIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const [scale, setScale] = useState(0.7);
+  const phoneW = prototype.device.width + BEZEL * 2;
+  const phoneH = prototype.device.height + BEZEL * 2;
   const [mounted, setMounted] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [titleDropdownOpen, setTitleDropdownOpen] = useState(false);
@@ -219,11 +219,11 @@ export default function PrototypeViewer({ prototype, screens, onClose, onSwitchP
     const el = stageRef.current;
     const observer = new ResizeObserver(([entry]) => {
       const { width, height } = entry.contentRect;
-      setScale(Math.min(1, (height - 60) / PHONE_H, (width - 40) / PHONE_W));
+      setScale(Math.min(1, (height - 60) / phoneH, (width - 40) / phoneW));
     });
     observer.observe(el);
     return () => observer.disconnect();
-  }, [mounted, sidebarOpen, isMobile]);
+  }, [mounted, sidebarOpen, isMobile, phoneW, phoneH]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -593,11 +593,14 @@ export default function PrototypeViewer({ prototype, screens, onClose, onSwitchP
             <div className={styles.stage} ref={stageRef}>
               <div
                 className={styles.phoneSlot}
-                style={{ width: PHONE_W * scale, height: PHONE_H * scale }}
+                style={{ width: phoneW * scale, height: phoneH * scale }}
                 onClick={handleStageClick}
               >
-                <div className={styles.phone} style={{ transform: `scale(${scale})` }}>
-                  <div className={`${styles.screenArea} ${lato.variable}`}>
+                <div className={styles.phone} style={{ width: phoneW, height: phoneH, transform: `scale(${scale})` }}>
+                  <div
+                    className={`${styles.screenArea} ${lato.variable} ${poppins.variable}`}
+                    style={{ width: prototype.device.width, height: prototype.device.height }}
+                  >
                     {/* Native iOS Status Bar */}
                     <div className={styles.statusBar} aria-hidden="true">
                       <span>9:41</span>

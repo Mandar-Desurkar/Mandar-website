@@ -784,8 +784,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 399px; /* 375 + 2 x 12 bezel */
-  height: 836px; /* 812 + 2 x 12 bezel */
+  /* width / height are set inline: the app's design device + 2 × 12px bezel */
   padding: 12px;
   border-radius: 58px;
   background: #141416;
@@ -796,10 +795,9 @@
   transform-origin: top left;
 }
 
+/* width / height are set inline from the app's design device (Kissan 393 × 852, Gau 375 × 812) */
 .screenArea {
   position: relative;
-  width: 375px;
-  height: 812px;
   display: flex;
   flex-direction: column;
   overflow: hidden;

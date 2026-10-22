@@ -37,12 +37,14 @@
 }
 
 .topTitles b {
-  font-size: 17px;
+  font-size: 22px;
   color: #0f172a;
+  font-weight: 600;
+  line-height: 30px;
 }
 
 .topTitles small {
-  font-size: 12.5px;
+  font-size: 11px;
   color: #64748b;
 }
 
@@ -241,15 +243,16 @@
 }
 
 .routineCard b {
-  font-size: 17px;
+  font-size: 18px;
   line-height: 23px;
   color: #081322;
 }
 
 .routineCard small {
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 500;
   color: #59697d;
+  line-height: 18px;
 }
 
 .timePill {
