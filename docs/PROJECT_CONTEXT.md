@@ -16,7 +16,7 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
 
 ## Current state (2026-10-31)
 
-- **Desktop (redesigned 2026-10-31, uncommitted):** dawn wallpaper (`public/wallpaper-desktop.webp`,
+- **Desktop (redesigned 2026-10-31):** dawn wallpaper (`public/wallpaper-desktop.webp`,
   static), sunrise loader, a minimal menu bar (name and clock), and one icon column on the right (five
   sections, then Kissan and Gau, which open their prototypes). Every window is translucent dark glass,
   themed once in `globals.css` (`.os-window:not(.ios-app)`). About is `AboutCard.tsx`. Old About concepts
@@ -342,6 +342,8 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 
 ## Changelog
 
+- 2026-10-31: Committed all work above as 4c905ba on `dev`, fast-forwarded `prod`, pushed both. Preflight: build, secrets and
+  links pass; lint errors and asset warnings are existing backlog items.
 - 2026-10-31: All desktop windows now open centred and slightly above the middle (`bottom: 9vh`), not
   only About. True centre applies from 1280px wide on tall screens and 1500px on short ones; smaller
   laptops centre left of the icons so nothing is covered. Uncommitted.
