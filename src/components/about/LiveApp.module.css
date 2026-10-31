@@ -1,0 +1,20 @@
+.stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slot {
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* The viewer's phone, with a shadow for a dark window */
+.phone {
+  box-shadow:
+    0 0 0 1.5px #3a3a3e,
+    0 0 0 3px #1a1a1c,
+    0 40px 90px -20px rgba(10, 92, 184, 0.75);
+}

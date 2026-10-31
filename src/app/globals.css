@@ -12,12 +12,37 @@
   --ink-black: #1d1d1f; /* Apple standard dark text */
   --ink-blue: #0066cc; /* Modern Apple link blue */
   --ink-red: #ff3b30;
+  --ink-soft: #424245; /* Long-form text */
+  --text-secondary: #6e6e73; /* Apple secondary label */
+  --hairline: rgba(0, 0, 0, 0.1);
+  --accent-tint: rgba(0, 122, 255, 0.1); /* Tinted secondary button */
+  --accent-tint-hover: rgba(0, 122, 255, 0.16);
+  --status-green: #34c759;
+  /* The About text's coloured words and the matching dots on the desktop */
+  --tag-build: #3b82f6;
+  --tag-grow: #2ea44f;
+  --tag-write: #d9820f;
   
   --line-height: 1.5;
 
-  /* Universal Apple System Font Stack */
-  /* SF Pro on iPhone/Mac (-apple-system), Roboto on Android (system-ui), Segoe UI on Windows */
-  --font-system: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  /* Typography: Apple's SF Pro on Apple devices, Inter (the closest open match, self-hosted via
+     next/font in layout.tsx) everywhere else. SF Pro can't be served as a web font (Apple's
+     licence), so it is reached through the system font, which only Apple platforms map to SF. */
+  --font-emoji: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-system: var(--font-inter), "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, var(--font-emoji);
+}
+
+/* Apple devices: the system font is SF Pro (Text/Display optical sizes switch automatically).
+   `.apple` is set before first paint by a script in layout.tsx (needed for Chrome on a Mac);
+   @supports covers Safari and every iOS browser even without JavaScript. */
+:root.apple {
+  --font-system: -apple-system, BlinkMacSystemFont, system-ui, var(--font-inter), sans-serif, var(--font-emoji);
+}
+
+@supports (font: -apple-system-body) {
+  :root {
+    --font-system: -apple-system, BlinkMacSystemFont, system-ui, var(--font-inter), sans-serif, var(--font-emoji);
+  }
 }
 
 *, *::before, *::after {
@@ -33,13 +58,13 @@ body {
   max-width: 100vw;
   overflow-x: hidden;
   /* OS Desktop Wallpaper */
-  background: url('/wallpaper.jpg') no-repeat center center fixed;
+  background: #000 url('/wallpaper-desktop.webp') no-repeat center center fixed;
   background-size: cover;
   background-attachment: fixed;
   min-height: 100vh;
   height: 100%;
   color: var(--os-text);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: var(--font-system);
   scroll-behavior: smooth;
   user-select: none;
   -webkit-user-select: none;
@@ -62,10 +87,7 @@ a {
 /* Window content area styling */
 .notebook-bg {
   background-color: var(--paper-bg);
-  background-image: radial-gradient(rgba(0, 0, 0, 0.08) 1px, transparent 1px);
-  background-size: 20px 20px;
-  background-position: 0 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: var(--font-system);
   font-size: 1.05rem;
   line-height: var(--line-height);
   color: var(--ink-black);
@@ -266,32 +288,59 @@ a {
 }
 
 @media (min-width: 768px) {
-  .absolute-window {
+  .os-window.absolute-window {
     max-width: none; 
     min-height: 300px;
     min-width: 400px;
-    max-height: calc(100vh - 84px); /* Prevent colliding with navbar and screen bottom */
+    max-height: calc(100vh - 56px); /* Prevent colliding with the menu bar and screen bottom */
     overflow: hidden; /* Important: hide overflow so the handles don't scroll and content stays inside */
-    /* Center it perfectly between navbar and bottom */
-    top: 20px;
-    bottom: 20px;
+    /* Centred left of the desktop items, and a little above the middle, where the eye settles. Wider
+       screens below use true centre. */
+    top: 28px;
+    bottom: 9vh;
     left: 0;
-    right: 0;
+    right: 136px;
     margin: auto;
   }
 }
 
+/* Fills downward from the top right and wraps to a new column on the left, like Mac desktop icons */
 .desktop-grid {
   position: absolute;
-  top: 44px; /* below navbar */
+  top: 36px; /* below navbar */
   right: 16px;
-  bottom: 20px; /* dock removed */
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  align-items: flex-end;
+  flex-wrap: wrap-reverse;
+  align-content: flex-start;
+  gap: 2px 4px;
+  width: 220px;
+  height: calc(100vh - 44px);
   z-index: 5; /* behind windows */
-  padding: 16px 0;
+  pointer-events: none;
+}
+
+.desktop-grid > * {
+  pointer-events: auto;
+}
+
+/* Too short for one column: the five sections stay together and the apps sit beside them, and
+   large windows centre in the space left of both columns */
+@media (max-height: 829.98px) {
+  .desktop-grid {
+    height: 530px;
+  }
+
+  .os-window.absolute-window {
+    right: 248px;
+  }
+}
+
+/* True screen centre wherever a 1040px window clears the icons (one column or two) */
+@media (min-width: 1280px) and (min-height: 830px), (min-width: 1500px) {
+  .os-window.absolute-window {
+    right: 0;
+  }
 }
 
 /* Phone home screen: an iOS-style 4-column grid of the section folders (shown when no window is open) */
@@ -326,7 +375,7 @@ a {
   display: flex;
   justify-content: center; /* Title in center for Mac */
   align-items: center;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: var(--font-system);
   font-size: 0.95rem;
   font-weight: 600;
   text-shadow: none;
@@ -384,7 +433,7 @@ a {
 .traffic-light::before {
   content: "";
   display: none;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: var(--font-system);
   font-size: 8px;
   font-weight: 800;
   line-height: 1;
@@ -394,6 +443,38 @@ a {
 .traffic-light-container:hover .traffic-light::before {
   display: block;
 }
+
+/* Every desktop window: translucent dark glass over the wallpaper. Phones keep their iOS apps. */
+.os-window:not(.ios-app) {
+  background: rgba(13, 17, 27, 0.72);
+  -webkit-backdrop-filter: blur(36px) saturate(190%);
+  backdrop-filter: blur(36px) saturate(190%);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.16), 0 40px 120px rgba(0, 0, 0, 0.65);
+}
+
+.os-window:not(.ios-app) .os-titlebar {
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  font-weight: 400;
+  color: rgba(245, 245, 247, 0.72);
+}
+
+.os-window:not(.ios-app) .notebook-bg {
+  background: none;
+  color: rgba(245, 245, 247, 0.84);
+}
+
+.os-window:not(.ios-app) .hand-heading-2 {
+  font-size: 1.875rem;
+  letter-spacing: -0.024em;
+  color: #fff;
+}
+
+.traffic-red { background: #FF5F56; }
+.traffic-light-container:hover .traffic-yellow { background: #FFBD2E; }
+.traffic-light-container:hover .traffic-green { background: #27C93F; }
 
 .traffic-red { background: #FF5F56; }
 .traffic-red::before { content: "✕"; margin-bottom: 0px; }
@@ -430,7 +511,7 @@ a {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: var(--font-system);
 }
 
 .popup-header {
@@ -468,8 +549,8 @@ a {
     min-height: 100dvh;
     /* iOS ignores fixed backgrounds and repaints a stretched wallpaper on every scroll */
     background-attachment: scroll;
-    /* A 17 KB portrait crop instead of the 1.3 MB desktop wallpaper */
-    background-image: url('/wallpaper-mobile.webp');
+    /* A portrait crop of the desktop wallpaper, keeping the moon and the horizon */
+    background-image: url('/wallpaper-phone.webp');
   }
 
   /* Phones have their own status bar, so the fake macOS menu bar and desktop icons give way to
@@ -494,7 +575,7 @@ a {
     box-shadow: none;
     background: #fff;
     transform-origin: 50% 40%;
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
+    font-family: var(--font-system);
   }
 
   @media (orientation: landscape) and (max-height: 500px) {

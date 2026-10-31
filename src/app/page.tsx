@@ -9,10 +9,12 @@ import Contact from "@/components/Contact";
 import BootScreen from "@/components/BootScreen";
 import DraggableWindow from "@/components/DraggableWindow";
 import DesktopIcon from "@/components/DesktopIcon";
-import MusicPlayer from "@/components/MusicPlayer";
+import iconStyles from "@/components/DesktopIcon.module.css";
+import { shippedApps } from "@/data/resume";
 import HiringNotification from "@/components/HiringNotification";
 import MobileDock from "@/components/MobileDock";
 import MobileHome from "@/components/MobileHome";
+import PhoneBack from "@/components/PhoneBack";
 import PrototypeHost from "@/components/prototype/PrototypeHost";
 import { WindowProvider, useWindow } from "@/context/WindowContext";
 import Image from "next/image";
@@ -37,25 +39,34 @@ function WindowTitle() {
     case 'about': return 'About Me';
     case 'experience': return 'Experience';
     case 'education': return 'Education';
-    case 'projects': return 'Projects';
+    case 'projects': return 'Case Studies';
     case 'contact': return 'Contact';
     default: return 'Product Notebook';
   }
 }
 
 function DesktopEnvironment() {
-  const { isClosed } = useWindow();
+  const { isClosed, openPrototype } = useWindow();
   
   return (
     <>
-      <MusicPlayer />
-
       <div className="desktop-grid">
-        <DesktopIcon id="about" title="About Me" dotColor="#3BA7FF" icon={<Image src="/icons/folder.webp" alt="About Me" width={56} height={56} className="drop-shadow-md" />} />
-        <DesktopIcon id="experience" title="Experience" dotColor="#32D74B" icon={<Image src="/icons/folder2.webp" alt="Experience" width={56} height={56} className="drop-shadow-md" />} />
-        <DesktopIcon id="education" title="Education" dotColor="#32D74B" icon={<Image src="/icons/folder3.webp" alt="Education" width={56} height={56} className="drop-shadow-md" />} />
-        <DesktopIcon id="projects" title="Projects" dotColor="#FFD60A" icon={<Image src="/icons/folder4.webp" alt="Projects" width={56} height={56} className="drop-shadow-md" />} />
-        <DesktopIcon id="contact" title="Contact" dotColor="#FF9F0A" icon={<Image src="/icons/folder5.webp" alt="Contact" width={56} height={56} className="drop-shadow-md" />} />
+        <DesktopIcon id="about" title="About Me" thumb="/profile-photo.jpg" />
+        <DesktopIcon id="experience" title="Experience" icon={<Image src="/icons/folder2.webp" alt="" width={56} height={56} />} />
+        <DesktopIcon id="education" title="Education" icon={<Image src="/icons/folder3.webp" alt="" width={56} height={56} />} />
+        <DesktopIcon id="projects" title="Case Studies" icon={<Image src="/icons/folder4.webp" alt="" width={56} height={56} />} />
+        <DesktopIcon id="contact" title="Contact" icon={<Image src="/icons/folder5.webp" alt="" width={56} height={56} />} />
+        {shippedApps.map(
+          (app) =>
+            app.prototype && (
+              <DesktopIcon
+                key={app.name}
+                title={app.name}
+                icon={<Image src={app.icon} alt="" width={116} height={116} className={iconStyles.appIcon} />}
+                onOpen={() => app.prototype && openPrototype(app.prototype, "desktop")}
+              />
+            ),
+        )}
       </div>
 
       <MobileHome />
@@ -82,6 +93,7 @@ export default function Home() {
         <DesktopEnvironment />
         <HiringNotification />
         <PrototypeHost />
+        <PhoneBack />
       </WindowProvider>
     </main>
   );

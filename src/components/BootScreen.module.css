@@ -1,105 +1,137 @@
 .bootScreen {
   position: fixed;
   inset: 0;
+  z-index: 9999;
+  overflow: hidden;
   width: 100%;
   height: 100dvh;
-  background-color: #dddddd; /* Classic Mac OS light grey */
-  z-index: 9999;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  color: #333333;
+  background-color: #000;
+  color: #fff;
+}
+
+/* ---------- Desktop: sunrise over Earth ---------- */
+
+.sunrise {
+  --horizon: 66vh;
+  position: absolute;
+  inset: 0;
+}
+
+/* A planet far larger than the screen, so only its curved limb shows */
+.planet {
+  position: absolute;
+  left: 50%;
+  top: var(--horizon);
+  width: 260vmax;
+  height: 260vmax;
+  margin-left: -130vmax;
+  border-radius: 50%;
+  background: #020409;
+  box-shadow:
+    0 -1px 2px rgba(214, 232, 255, 0.95),
+    0 -8px 30px 2px rgba(96, 160, 255, 0.6),
+    0 -40px 120px 22px rgba(38, 92, 214, 0.32);
+  opacity: 0;
+  animation: limb 1.3s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+}
+
+@keyframes limb {
+  from { opacity: 0; transform: translateY(36px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* The sun breaking over the limb */
+.sun {
+  position: absolute;
+  left: 50%;
+  top: var(--horizon);
+  width: 62vw;
+  height: 90px;
+  margin: -45px 0 0 -31vw;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, #fff 0%, #ffe9c7 9%, rgba(255, 186, 110, 0.75) 26%, rgba(255, 150, 80, 0.2) 56%, transparent 100%);
+  opacity: 0;
+  animation: sunrise 1.5s cubic-bezier(0.3, 0, 0.2, 1) 0.45s forwards;
+}
+
+@keyframes sunrise {
+  0% { opacity: 0; transform: scale(0.12, 0.3); }
+  65% { opacity: 1; transform: scale(0.8, 0.7); }
+  100% { opacity: 1; transform: scale(1.5, 1.7); }
+}
+
+.name {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 44vh;
+  font-size: 1.625rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  text-align: center;
+  opacity: 0;
+  animation: name 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards;
+}
+
+@keyframes name {
+  from { opacity: 0; transform: translateY(8px); filter: blur(6px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
 }
 
 .content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: min(300px, calc(100vw - 48px));
-  padding: 0 16px;
+  display: none;
 }
 
-.icon {
-  color: #555555;
-  margin-bottom: 2rem;
+@media (prefers-reduced-motion: reduce) {
+  .planet,
+  .name {
+    opacity: 1;
+    animation: none;
+  }
+
+  .sun {
+    opacity: 1;
+    transform: scale(0.8, 0.7);
+    animation: none;
+  }
 }
 
-.title {
-  font-size: 1.5rem;
-  margin-bottom: 2rem;
-  text-shadow: 0 1px 0 rgba(255,255,255,0.8);
-  text-align: center;
-}
+/* ---------- Phone: boots like an iPhone ---------- */
 
-.progressContainer {
-  width: 100%;
-  height: 16px;
-  background-color: #ffffff;
-  border: 1px solid #999999;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
-  margin-bottom: 1rem;
-}
-
-.progressBar {
-  height: 100%;
-  background: repeating-linear-gradient(
-    -45deg,
-    #4f9eea,
-    #4f9eea 10px,
-    #316ac5 10px,
-    #316ac5 20px
-  );
-  transition: width 0.1s linear;
-  box-shadow: inset 0 2px 2px rgba(255,255,255,0.4);
-}
-
-.statusText {
-  font-size: 0.9rem;
-  color: #666666;
-}
-
-/* Phone: boots like an iPhone, a white glyph and a thin progress bar on black, no text */
 @media (max-width: 767.98px), (max-width: 1023.98px) and (pointer: coarse), (max-height: 500px) and (pointer: coarse) {
+  .sunrise,
+  .name {
+    display: none;
+  }
+
   .bootScreen {
-    background-color: #000;
-    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .icon {
-    color: #fff;
     margin-bottom: 56px;
-  }
-
-  .title {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
+    color: #fff;
   }
 
   .progressContainer {
+    overflow: hidden;
     width: 150px;
     height: 4px;
-    border: 0;
     border-radius: 2px;
     background-color: #3a3a3c;
-    box-shadow: none;
-    margin-bottom: 0;
   }
 
   .progressBar {
+    height: 100%;
     background: #fff;
-    box-shadow: none;
-  }
-
-  .statusText {
-    display: none;
+    transition: width 0.1s linear;
   }
 }

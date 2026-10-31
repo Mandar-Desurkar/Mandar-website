@@ -81,7 +81,7 @@ export default function Dock() {
             <div className={`${styles.dot} ${activeTab === 'education' ? styles.active : ''} ${isMinimized && activeTab === 'education' ? styles.minimizedIndicator : ''}`}></div>
           </div>
 
-          <div className={styles.dockItem} onClick={() => handleIconClick('projects', 'Projects')}>
+          <div className={styles.dockItem} onClick={() => handleIconClick('projects', 'Case Studies')}>
             <span className={styles.tooltip}>Shipped Products</span>
             <div className={`${styles.iconBg} ${styles.safari}`}>
               <Rocket size={28} color="white" />

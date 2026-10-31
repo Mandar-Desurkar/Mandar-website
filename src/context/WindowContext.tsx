@@ -3,10 +3,13 @@
 import React, { createContext, useContext, useEffect, useRef, useState, ReactNode } from 'react';
 import { trackEvent, secondsSince } from '@/lib/analytics';
 
+// `projects` is shown as "Case Studies"; the id stays so analytics history stays comparable
 export type SectionId = 'about' | 'experience' | 'education' | 'projects' | 'contact';
+const SECTION_IDS: SectionId[] = ['about', 'experience', 'education', 'projects', 'contact'];
+const isSectionId = (v: string | null): v is SectionId => SECTION_IDS.includes(v as SectionId);
 export type PrototypeId = 'kissan-sampurna' | 'gau-sampurna';
-export type PrototypePlacement = 'hero' | 'experience' | 'projects' | 'home_screen' | 'deep_link' | 'spotlight';
-export type OpenSource = 'desktop_icon' | 'menu_bar' | 'system_menu' | 'hero_cta' | 'notification' | 'mobile_dock' | 'home_widget' | 'spotlight';
+export type PrototypePlacement = 'hero' | 'desktop' | 'experience' | 'projects' | 'home_screen' | 'deep_link' | 'spotlight';
+export type OpenSource = 'desktop_icon' | 'menu_bar' | 'system_menu' | 'hero_cta' | 'notification' | 'mobile_dock' | 'home_widget' | 'spotlight' | 'deep_link';
 
 type WindowContextType = {
   isMinimized: boolean;
@@ -27,13 +30,19 @@ type WindowContextType = {
   openPrototype: (id: PrototypeId, placement: PrototypePlacement) => void;
   switchPrototype: (id: PrototypeId) => void;
   closePrototype: () => void;
+  // Phone Search (Spotlight). Lives here so the Back button can close it.
+  searchOpen: boolean;
+  setSearchOpen: (open: boolean) => void;
 };
 
 function setPrototypeParam(id: PrototypeId | null) {
   const url = new URL(window.location.href);
   if (id) url.searchParams.set('prototype', id);
-  else url.searchParams.delete('prototype');
-  window.history.replaceState({}, '', url.toString());
+  else {
+    url.searchParams.delete('prototype');
+    url.searchParams.delete('flow');
+  }
+  window.history.replaceState(window.history.state, '', url.toString());
 }
 
 const WindowContext = createContext<WindowContextType | undefined>(undefined);
@@ -45,6 +54,7 @@ export function WindowProvider({ children }: { children: ReactNode }) {
   const [activeTab, setActiveTab] = useState<SectionId>('about');
   const [hasOpenedContact, setHasOpenedContact] = useState(false);
   const [prototype, setPrototype] = useState<PrototypeId | null>(null);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   const openPrototype = (id: PrototypeId, placement: PrototypePlacement) => {
     trackEvent('Opened Prototype', { prototype: id, placement });
@@ -69,6 +79,22 @@ export function WindowProvider({ children }: { children: ReactNode }) {
       const raf = requestAnimationFrame(() => {
         trackEvent('Opened Prototype', { prototype: protoId, placement: 'deep_link' });
         setPrototype(protoId);
+      });
+      return () => cancelAnimationFrame(raf);
+    }
+
+    // ?section=… (e.g. "Back to case studies" from a case study page) opens that section, on
+    // phones too, then drops the parameter so a refresh starts normally
+    const sectionId = params.get('section');
+    if (isSectionId(sectionId)) {
+      const raf = requestAnimationFrame(() => {
+        trackEvent('Opened Section', { section: sectionId, source: 'deep_link', previous_section: 'about', window_was_open: false });
+        setActiveTab(sectionId);
+        setIsMinimized(false);
+        setIsClosed(false);
+        const url = new URL(window.location.href);
+        url.searchParams.delete('section');
+        window.history.replaceState(window.history.state, '', url.toString());
       });
       return () => cancelAnimationFrame(raf);
     }
@@ -144,6 +170,7 @@ export function WindowProvider({ children }: { children: ReactNode }) {
       openSection,
       hasOpenedContact,
       prototype, openPrototype, switchPrototype, closePrototype,
+      searchOpen, setSearchOpen,
     }}>
       {children}
     </WindowContext.Provider>

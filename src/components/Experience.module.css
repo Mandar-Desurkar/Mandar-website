@@ -373,3 +373,102 @@
   letter-spacing: 0.4px;
   color: #6d6d72;
 }
+
+/* ==================== Desktop window ====================
+   On the shared dark glass (globals.css). `.ios-app` marks the phone shell, so this is desktop only. */
+:global(.os-window:not(.ios-app)) .experienceSection {
+  padding: 30px 0 36px;
+}
+
+:global(.os-window:not(.ios-app)) .container {
+  max-width: none;
+  padding: 0 36px;
+}
+
+:global(.os-window:not(.ios-app)) .headerBox {
+  margin-bottom: 24px;
+}
+
+:global(.os-window:not(.ios-app)) .entry {
+  margin-bottom: 28px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+:global(.os-window:not(.ios-app)) .role {
+  font-size: 1.1875rem;
+  font-weight: 700;
+  letter-spacing: -0.012em;
+  color: #fff;
+}
+
+:global(.os-window:not(.ios-app)) .atSymbol {
+  color: rgba(235, 235, 245, 0.45);
+}
+
+:global(.os-window:not(.ios-app)) .company {
+  font-size: 0.9375rem;
+  color: rgba(245, 245, 247, 0.88);
+}
+
+:global(.os-window:not(.ios-app)) .period {
+  font-size: 0.8125rem;
+  color: rgba(235, 235, 245, 0.6);
+}
+
+:global(.os-window:not(.ios-app)) .description,
+:global(.os-window:not(.ios-app)) .bulletList,
+:global(.os-window:not(.ios-app)) .beyondWorkList {
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: rgba(235, 235, 245, 0.76);
+}
+
+:global(.os-window:not(.ios-app)) .bulletList strong,
+:global(.os-window:not(.ios-app)) .beyondWorkList strong {
+  font-weight: 600;
+  color: #fff;
+}
+
+:global(.os-window:not(.ios-app)) .groupTitle {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #b4d2ff;
+}
+
+:global(.os-window:not(.ios-app)) .groupTitleButton .groupTitle {
+  text-decoration-color: rgba(180, 210, 255, 0.4);
+}
+
+:global(.os-window:not(.ios-app)) .prototypePill {
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.18);
+  color: #f5f5f7;
+}
+
+:global(.os-window:not(.ios-app)) .groupTitleButton:hover .prototypePill {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+:global(.os-window:not(.ios-app)) .groupTitleButton:focus-visible {
+  outline-color: #fff;
+}
+
+:global(.os-window:not(.ios-app)) .beyondWorkCard {
+  border: 0;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.12);
+}
+
+:global(.os-window:not(.ios-app)) .beyondWorkHeader {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+:global(.os-window:not(.ios-app)) .beyondWorkTitle {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: rgba(235, 235, 245, 0.66);
+}

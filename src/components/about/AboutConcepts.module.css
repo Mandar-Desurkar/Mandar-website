@@ -1,0 +1,907 @@
+/* The hero fills the window, and every concept is centred in it */
+@media (min-width: 768px) {
+  :global(.window-content-scroll):has(.concept) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  :global(.notebook-bg):has(.concept) {
+    flex: 1 0 auto;
+    justify-content: center;
+    background-image: none;
+  }
+}
+
+/* ---------- Shared ---------- */
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.primary {
+  background: #007aff;
+  color: #fff;
+}
+
+.primary:hover {
+  background: #0071eb;
+}
+
+.secondary {
+  background: var(--accent-tint);
+  color: var(--ink-blue);
+}
+
+.secondary:hover {
+  background: var(--accent-tint-hover);
+}
+
+.pill {
+  min-height: 36px;
+  padding: 0 16px;
+  border-radius: 999px;
+  font-size: 0.875rem;
+}
+
+.primary:focus-visible,
+.secondary:focus-visible,
+.concept button:focus-visible {
+  outline: 2px solid var(--ink-blue);
+  outline-offset: 2px;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.8125rem;
+  line-height: 1.3;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.statusDot {
+  flex-shrink: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--status-green);
+  box-shadow: 0 0 0 2px rgba(52, 199, 89, 0.22);
+}
+
+.concept h1,
+.concept h2,
+.concept p,
+.concept ul,
+.concept dl,
+.concept dd {
+  margin: 0;
+  padding: 0;
+}
+
+.concept ul {
+  list-style: none;
+}
+
+/* ---------- 0. Live ---------- */
+
+/* A dark window so the app is the brightest thing on the desktop, title bar included */
+:global(.os-window):has(.dark) :global(.os-titlebar) {
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+  background: #171b23;
+  color: #e5e5ea;
+}
+
+:global(.os-window):has(.dark) {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14), 0 30px 80px rgba(0, 0, 0, 0.7);
+}
+
+:global(.notebook-bg):has(.dark) {
+  background-color: #0a0e16;
+}
+
+.live {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  width: 100%;
+  min-height: 500px;
+  background: radial-gradient(560px 460px at 76% 52%, rgba(10, 92, 184, 0.55), transparent 72%), #0a0e16;
+}
+
+.liveText {
+  align-self: center;
+  padding: 28px 40px 28px 48px;
+}
+
+.liveEntrance {
+  display: flex;
+}
+
+.dark .identityName,
+.dark .statRow dd {
+  color: #f5f5f7;
+}
+
+.dark .showcaseTitle {
+  color: #fff;
+}
+
+.dark .intro {
+  color: rgba(235, 235, 245, 0.72);
+}
+
+.dark .status,
+.dark .statRow dt {
+  color: rgba(235, 235, 245, 0.6);
+}
+
+.dark .statRow {
+  border-top-color: rgba(255, 255, 255, 0.12);
+}
+
+.dark .primary {
+  background: #fff;
+  color: #0a0e16;
+}
+
+.dark .primary:hover {
+  background: #e8e8ed;
+}
+
+.dark .secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.dark .secondary:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.dark button:focus-visible,
+.dark .primary:focus-visible {
+  outline-color: #fff;
+}
+
+.liveDemo {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  padding: 20px 28px 20px 0;
+}
+
+.liveStage {
+  position: relative;
+  align-self: stretch;
+  flex-shrink: 0;
+  width: clamp(190px, 24cqi, 300px);
+}
+
+.poster {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.poster img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 13% / 6%;
+}
+
+.tapHint {
+  /* Sits in the empty space beside the greeting, so it hides nothing on the home screen */
+  position: absolute;
+  top: 37%;
+  right: 4%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 11px 6px 9px;
+  border-radius: 999px;
+  background: rgba(10, 14, 22, 0.88);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  color: #fff;
+  pointer-events: none;
+}
+
+.tapRing {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #d3d800;
+  animation: tapPulse 1.6s ease-out infinite;
+}
+
+@keyframes tapPulse {
+  from { box-shadow: 0 0 0 0 rgba(211, 216, 0, 0.6); }
+  to { box-shadow: 0 0 0 10px rgba(211, 216, 0, 0); }
+}
+
+.rail {
+  width: 170px;
+  color: #f5f5f7;
+}
+
+.railLabel {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.liveDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #d3d800;
+  box-shadow: 0 0 10px rgba(211, 216, 0, 0.9);
+}
+
+.railNote {
+  margin-top: 4px !important;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: rgba(235, 235, 245, 0.6);
+}
+
+.appSwitch {
+  display: grid;
+  gap: 4px;
+  margin-top: 18px;
+}
+
+.appSwitch button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 7px 8px;
+  border: 0;
+  border-radius: 10px;
+  background: none;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-align: left;
+  color: rgba(235, 235, 245, 0.6);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.appSwitch button:hover {
+  color: #fff;
+}
+
+.appSwitch .appOn {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.appSwitch img {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+}
+
+.features {
+  display: grid;
+  gap: 1px;
+  margin-top: 14px !important;
+  padding-top: 12px !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.features button {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 5px 8px 5px 14px;
+  border: 0;
+  background: none;
+  font-size: 0.8125rem;
+  text-align: left;
+  color: rgba(235, 235, 245, 0.6);
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.features button:hover,
+.features .featureOn {
+  color: #fff;
+}
+
+.features .featureOn {
+  font-weight: 600;
+}
+
+.features .featureOn::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 7px;
+  bottom: 7px;
+  width: 2.5px;
+  border-radius: 2px;
+  background: #d3d800;
+}
+
+.openFull {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-top: 12px;
+  padding: 0 0 0 14px;
+  border: 0;
+  background: none;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(235, 235, 245, 0.6);
+  cursor: pointer;
+}
+
+.openFull:hover {
+  color: #fff;
+}
+
+/* ---------- 1. Showcase ---------- */
+
+.showcase {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 46%);
+  width: 100%;
+  min-height: 500px;
+}
+
+.showcaseText {
+  align-self: center;
+  padding: 32px 44px 32px 52px;
+}
+
+.identity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 0 0.5px var(--hairline);
+}
+
+.identityName {
+  font-size: 0.9375rem;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+.showcaseTitle {
+  margin-bottom: 14px !important;
+  font-size: clamp(2.25rem, 5.3cqi, 3.25rem);
+  line-height: 1.06;
+  font-weight: 700;
+  letter-spacing: -0.028em;
+}
+
+.intro {
+  margin-bottom: 24px !important;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  text-wrap: pretty;
+  color: var(--ink-soft);
+}
+
+/* The proof gets its own row: value first, label under it, on a shared hairline */
+.statRow {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  justify-content: space-between;
+  margin-bottom: 24px !important;
+  padding-top: 16px !important;
+  border-top: 1px solid var(--hairline);
+}
+
+.statRow > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.statRow dd {
+  font-size: 1.375rem;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  color: var(--ink-black);
+}
+
+.statRow dt {
+  margin-top: 2px;
+  font-size: 0.75rem;
+  line-height: 1.3;
+  white-space: nowrap;
+  color: var(--text-secondary);
+}
+
+/* Two whole phones, staggered: each label sits on the side its phone leaves open, so the pair reads
+   as one composition. Sized from the panel, so they fit at any window size. */
+.showcasePanel {
+  container-type: size;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5cqw;
+  overflow: hidden;
+  background:
+    radial-gradient(420px 320px at 80% 10%, rgba(64, 150, 240, 0.6), transparent 70%),
+    linear-gradient(160deg, #0a4ea3 0%, #052f66 100%);
+}
+
+.showcasePhone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  flex: 0 0 auto;
+  width: min(42cqw, calc(46cqh - 44px));
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.showcasePhone:first-child {
+  transform: translateY(-3.6cqh);
+}
+
+.showcasePhone:last-child {
+  flex-direction: column-reverse;
+  transform: translateY(3.6cqh);
+}
+
+.bezel {
+  display: block;
+  width: 100%;
+  padding: 2.2%;
+  /* Elliptical radii keep the corners circular for a ~1:2.17 phone at any width */
+  border-radius: 14% / 6.45%;
+  background: #0d0e10;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14), 0 20px 36px -12px rgba(0, 0, 0, 0.55);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bezel img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12% / 5.55%;
+}
+
+.showcasePhone:hover .bezel {
+  transform: translateY(-6px);
+}
+
+.tryChip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8125rem;
+  line-height: 1.2;
+  font-weight: 600;
+  white-space: nowrap;
+  color: #fff;
+}
+
+.tryWord {
+  margin-right: -6px; /* the gap belongs after the icon only */
+}
+
+/* ---------- 2. App Store ---------- */
+
+.store {
+  width: 100%;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 28px 40px 26px;
+}
+
+.storeHeader {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.storeIcon {
+  flex-shrink: 0;
+  width: 104px;
+  height: 104px;
+  border-radius: 23px;
+  object-fit: cover;
+  object-position: 50% 30%;
+  box-shadow: 0 0 0 0.5px var(--hairline), 0 6px 18px -6px rgba(0, 0, 0, 0.3);
+}
+
+.storeTitle {
+  flex: 1;
+  min-width: 0;
+}
+
+.storeTitle h1 {
+  font-size: 1.75rem;
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.storeTitle p {
+  margin-top: 3px;
+  font-size: 0.9375rem;
+  line-height: 1.35;
+  color: var(--ink-soft);
+}
+
+.storeTitle .storeSeller {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+
+.storeActions {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.storeInfo {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin-top: 20px !important;
+  padding: 12px 0 !important;
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.storeInfo > div {
+  padding: 0 12px;
+  text-align: center;
+}
+
+.storeInfo > div + div {
+  border-left: 1px solid var(--hairline);
+}
+
+.storeInfo dt {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.storeInfo dd {
+  font-size: 0.75rem;
+  line-height: 1.3;
+  white-space: nowrap;
+  color: var(--text-secondary);
+}
+
+.storeInfo b {
+  display: block;
+  font-size: 1.375rem;
+  line-height: 1.3;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink-black);
+}
+
+.storeHeading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 18px 0 10px;
+}
+
+.storeHeading h2 {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.storeHeading button {
+  border: 0;
+  background: none;
+  font-size: 0.875rem;
+  color: var(--ink-blue);
+  cursor: pointer;
+}
+
+.storeHeading button:hover {
+  text-decoration: underline;
+}
+
+.storeShots {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.storeShots button {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.storeShot {
+  position: relative;
+  display: block;
+  aspect-ratio: 1 / 0.86;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #eef2f7;
+  box-shadow: 0 0 0 0.5px var(--hairline);
+}
+
+/* Starts below the status bar, so each card shows the app and not the phone */
+.storeShot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: -13%;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.storeShots button:hover img {
+  transform: translateY(-5%);
+}
+
+/* The crop fades out, so it never looks like text was cut off by accident */
+.storeShot::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 30%;
+  background: linear-gradient(rgba(255, 255, 255, 0), #fff);
+}
+
+.storeCaption {
+  display: block;
+  margin-top: 7px;
+  font-size: 0.75rem;
+  line-height: 1.3;
+  color: var(--text-secondary);
+}
+
+.storeCaption b {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ink-black);
+}
+
+/* ---------- 3. About This Mac ---------- */
+
+.native {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 24px 32px;
+  text-align: center;
+}
+
+.nativePhoto {
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: 50% 28%;
+  box-shadow: 0 0 0 0.5px var(--hairline), 0 10px 26px -10px rgba(0, 0, 0, 0.35);
+}
+
+.native h1 {
+  margin-top: 14px;
+  font-size: 1.75rem;
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.nativeModel {
+  margin-top: 2px !important;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.specs {
+  display: grid;
+  gap: 7px;
+  width: min(100%, 560px);
+  margin: 20px 0 22px !important;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.specs > div {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 14px;
+  align-items: baseline;
+  text-align: left;
+}
+
+.specs dt {
+  font-weight: 600;
+  text-align: right;
+}
+
+.specs dd {
+  color: var(--ink-soft);
+}
+
+.specApps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 16px;
+}
+
+.specApps button {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ink-blue);
+  cursor: pointer;
+}
+
+.specApps button:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Medium windows (a 1024px laptop) ---------- */
+
+@container window (max-width: 959.98px) {
+  .liveText {
+    padding: 24px 28px 24px 36px;
+  }
+
+  .liveDemo {
+    gap: 18px;
+    padding-right: 20px;
+  }
+
+  .rail {
+    width: 150px;
+  }
+}
+
+@container window (max-width: 799.98px) {
+  .liveText {
+    padding: 22px 20px 22px 28px;
+  }
+
+  /* The app switch moves above the phone; the rest of the rail needs a wider window */
+  .liveDemo {
+    flex-direction: column-reverse;
+    gap: 12px;
+    padding: 14px 18px 14px 0;
+  }
+
+  .liveStage {
+    flex: 1;
+    align-self: center;
+  }
+
+  .rail {
+    width: 200px;
+  }
+
+  .railLabel,
+  .railNote,
+  .features,
+  .openFull {
+    display: none;
+  }
+
+  .appSwitch {
+    margin-top: 0;
+  }
+
+  .dark .actions > * {
+    padding: 0 14px;
+    font-size: 0.875rem;
+  }
+
+  .showcaseText {
+    padding: 24px 24px 24px 32px;
+  }
+
+  .tryWord {
+    display: none;
+  }
+
+  .tryChip {
+    font-size: 0.6875rem;
+  }
+
+  .statRow dd {
+    font-size: 1.125rem;
+  }
+
+  .store {
+    padding: 22px 24px;
+  }
+
+  .storeHeader {
+    flex-wrap: wrap;
+  }
+
+  .storeActions {
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .storeInfo > div:nth-child(5) {
+    display: none;
+  }
+
+  .storeInfo {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .storeInfo > div {
+    padding: 0 6px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bezel,
+  .storeShot img {
+    transition: none;
+  }
+
+  .tapRing {
+    animation: none;
+  }
+}

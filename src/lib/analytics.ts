@@ -42,12 +42,16 @@ export type AnalyticsEvents = {
   "Dismissed Hiring Notification": { method: "close_button" | "timeout" };
 
   // Interactive app prototypes (e.g. Kissan Sampurna)
-  "Opened Prototype": { prototype: string; placement: "hero" | "experience" | "projects" | "home_screen" | "deep_link" | "spotlight" };
+  "Opened Prototype": { prototype: string; placement: "hero" | "desktop" | "experience" | "projects" | "home_screen" | "deep_link" | "spotlight" };
   // Phone home screen: the iOS Search pill opens Spotlight over the sections, apps and contact actions
   "Opened Spotlight": Record<string, never>;
+  // Case studies (the Case Studies window lists them; each is a page at /case-studies/<slug>)
+  "Opened Case Study": { slug: string; placement: "case_studies" | "spotlight" | "desktop" };
+  "Viewed Case Study": { slug: string };
+  "Clicked Case Study CTA": { slug: string; cta: "prototype" | "back" | "source" };
   // Phone home screen has two pages (apps, then the clock/calendar); page is 1-based
   "Viewed Home Screen Page": { page: number; method: "swipe" | "dots" };
-  "Selected Spotlight Result": { result: string; kind: "section" | "app" | "contact"; query_length: number };
+  "Selected Spotlight Result": { result: string; kind: "section" | "app" | "case_study" | "contact"; query_length: number };
   // Mobile section nav bar: native share sheet, or the copied link where sharing isn't supported
   "Shared Profile": { method: "native" | "copy"; section: string };
   "Viewed Prototype Screen": {

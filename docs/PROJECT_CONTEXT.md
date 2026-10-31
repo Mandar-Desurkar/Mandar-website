@@ -14,12 +14,30 @@ Personal portfolio for **Mandar Desurkar (Product Manager)**, styled as a macOS 
 wallpaper, desktop folder icons, a draggable/resizable window per section, a dock and a menu
 bar. Audience: recruiters and hiring managers, many arriving on mobile via LinkedIn.
 
-## Current state (2026-10-21)
+## Current state (2026-10-31)
 
+- **Desktop (redesigned 2026-10-31, uncommitted):** dawn wallpaper (`public/wallpaper-desktop.webp`,
+  static), sunrise loader, a minimal menu bar (name and clock), and one icon column on the right (five
+  sections, then Kissan and Gau, which open their prototypes). Every window is translucent dark glass,
+  themed once in `globals.css` (`.os-window:not(.ios-app)`). About is `AboutCard.tsx`. Old About concepts
+  remain at `/?about=live | showcase | store | native | classic` until the owner confirms the design;
+  then remove them, the `?about` checks in `Hero.tsx` and `DraggableWindow.tsx`, and unused
+  `public/about/*`. The music widget is no longer rendered.
+- **Phone:** dawn wallpaper crop (`public/wallpaper-phone.webp`, moon placed in the gap between the two
+  small widgets) and the Back button in `PhoneBack.tsx`. Keep in-app overlays in `depth` there.
 - Stack: Next.js 16.3 App Router, React 19.2, TypeScript, CSS Modules + tokens in
   `src/app/globals.css`, framer-motion, lucide-react, react-icons.
 - Sections (tab ids in `WindowContext.activeTab`): `about`, `experience`, `education`,
-  `projects`, `contact`.
+  `projects` (shown as **Case Studies** since 2026-10-30), `contact`.
+- **Case studies** (2026-10-30): content in `src/data/caseStudies.ts` (typed; every public statistic
+  has a `source` id pointing at a verified URL), one statically generated page per slug at
+  `/case-studies/<slug>` (`src/app/case-studies/[slug]/page.tsx` + `CaseStudy.module.css`). The Case
+  Studies window lists them as feature cards above "Products I've shipped" (the old project cards),
+  and Spotlight has a "Case studies" group. **To add one:** append an entry to `caseStudies`, add
+  screenshots under `public/case-studies/<slug>/` (captured from the desktop prototype viewer at 2×),
+  and run `next build` (the page prerenders via `generateStaticParams`). Deep links:
+  `/?section=projects` opens the window (phones too); `/?prototype=<id>&flow=<flow-id>` opens a
+  prototype on a given flow. Events: `Opened Case Study`, `Viewed Case Study`, `Clicked Case Study CTA`.
 - Branches: `main` (default), `dev`, `prod` (release). Remote: GitHub `Mandar-Desurkar/Mandar-website`.
 - Profile photo (2026-10-21): `public/profile-photo.jpg` (640px, full frame) for the About hero /
   desktop polaroid, and `public/profile-avatar.jpg` (320px head-and-shoulders crop) for the round
@@ -48,8 +66,14 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-31 | Phone exit uses a history guard added on the first tap; the second Back on home is the browser's own | A site can't close itself, and Chrome skips history entries added without a user gesture |
+| 2026-10-31 | All windows sit centred, a little above the middle; they shift left only where they would cover the icons | Owner's call: one consistent position, without hiding the desktop items on small laptops |
+| 2026-10-30 | Site font: Apple's **SF Pro** on Apple devices (system font), **Inter** elsewhere (self-hosted via `next/font`) | SF Pro's licence forbids web hosting; most visitors are on Android, where the old stack fell back to Roboto. Platform-aware stack because Chrome maps `BlinkMacSystemFont` to `system-ui` everywhere |
+| 2026-10-30 | "Projects" renamed **Case Studies** in the UI only; the tab id stays `projects` | Keeps analytics (`Opened Section` history) comparable and avoids touching every wiring point |
+| 2026-10-30 | Case studies are real routes (`/case-studies/<slug>`), not views inside the window | Shareable on LinkedIn/email on their own, crawlable, readable long-form on phones |
+| 2026-10-30 | Case study personas are labelled composites; outcomes use only verified facts (resume, engine doc, shipped product) | No fake metrics or invented interviewees; adoption added from the resume on 2026-10-31 (7.7K+ MAU at peak) |
 | 2026-10-21 | Write `-webkit-backdrop-filter` **before** `backdrop-filter` in every CSS file | Lightning CSS (Next's CSS pipeline) merges the two and keeps only the last one; with `-webkit-` last, Chrome/Android got no blur at all on any glass surface |
-| 2026-10-21 | Phone home keeps the owner's widget/icon positions and mountain wallpaper; only the components were modernised (iOS 26 Liquid Glass, filled glyphs, Search pill) | Owner tried an iOS-grid re-layout with a pastel wallpaper and preferred the original arrangement |
+| 2026-10-21 | Phone home keeps the owner's widget/icon positions; only the components were modernised (iOS 26 Liquid Glass, filled glyphs, Search pill) | Owner tried an iOS-grid re-layout with a pastel wallpaper and preferred the original arrangement. Wallpaper changed to the dawn photo on 2026-10-31 at the owner's request |
 | 2026-10-21 | Keep project knowledge in-repo (`CLAUDE.md`, this file, `.claude/skills/`) | Survives switching Claude accounts and machines; git versions it |
 | 2026-10-21 | Added 10 project skills + `preflight.sh` / `asset-report.sh` | Consistent expert workflow for SEO, a11y, perf, content, deploy |
 | 2026-10-21 | Hero KPIs = 250K+ installs, 3× trial conversion, ₹1 Cr+ monthly sales | Replaced unverifiable "12+ products / 1M+ users / 4+ years"; every number now traces to the resume |
@@ -73,8 +97,7 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
 - [x] **Content:** placeholder projects replaced with 5 real products from the resume (2026-10-21).
 - [ ] **Content:** add live links for projects (Play Store links for Kissan/Gau Sampurna?) via
       the optional `link` field in `src/data/resume.ts`. Decide whether to keep the "TBD" future entry.
-- [ ] **Resume:** export the PDF from Overleaf to `public/resume.pdf` (the hero button is built and appears automatically; fix the stray `z` in the LaTeX first); put the
-      deployed site URL into the resume's `YOUR-PORTFOLIO-LINK` placeholder.
+- [ ] **Resume:** export the PDF from Overleaf to `public/resume.pdf` (the hero button is built and appears automatically). The LaTeX now has the live site URL.
 - [x] **Music licensing → decided 2026-10-21: local only.** The Jailer 2 songs and covers are
       git-ignored (`/public/music/one-sun-one-moon.*`, `/public/music/ala-bolelo.*`) and marked
       `localOnly` in `src/data/music.ts`, so production builds list only `track.mp3` (verified:
@@ -95,6 +118,9 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
 - [ ] **Security/UX:** `NoInspect.tsx` blocks copy (including the email); `Dock.tsx`
       `window.open` lacks `noopener`.
 - [ ] Add `src/app/not-found.tsx` (OS-themed 404).
+- [ ] **Phone Back:** test on a real Android phone, including in-app browsers such as LinkedIn's.
+- [ ] **Before pushing:** owner to confirm Silo Fortune is OK with public app screens, the install-to-signup
+      "3%" wording, and whether Contact keeps "SYSTEM HALTED".
 - [x] Pushed `prod` and `dev` to origin (2026-10-21) using the Mandar-Desurkar account.
 
 ## Mobile & responsive layout (2026-10-21)
@@ -301,7 +327,7 @@ Measured from the apps' own source on 2026-10-22; follow this for any new protot
 
 Goal: turn visits into interviews. North star = resume downloads + "Send a memo" clicks per visitor.
 
-- **Now:** ~~analytics~~ (Amplitude added 2026-10-21); resume PDF + "Hire me" CTA; 2–3 case studies (Sampurna freemium funnel 2.4→8%,
+- **Now:** ~~analytics~~ (Amplitude added 2026-10-21); resume PDF + "Hire me" CTA; 2–3 case studies (Sampurna freemium funnel 2.4→7.2%,
   CRM routing, Rider app) as a `PRD.app` / Notes window; fix the
   40 MB of SVG icons; remove `NoInspect` (blocks copying the email).
 - **Next:** working Spotlight (⌘K command palette, using the existing search icon);
@@ -316,6 +342,183 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 
 ## Changelog
 
+- 2026-10-31: All desktop windows now open centred and slightly above the middle (`bottom: 9vh`), not
+  only About. True centre applies from 1280px wide on tall screens and 1500px on short ones; smaller
+  laptops centre left of the icons so nothing is covered. Uncommitted.
+- 2026-10-31: **Phone Back button** (`PhoneBack.tsx`): Back closes the open prototype, section or Search
+  and lands on home; on home the first press shows "Press back again to exit" and the second leaves the
+  site. Uses a history guard added on the visitor's first tap (Chrome skips entries added without a
+  gesture, so before any tap one Back leaves, as on any site). `searchOpen` moved to `WindowContext`.
+  History writes now keep `history.state`. Phone wallpaper is a portrait crop of the desktop photo,
+  `public/wallpaper-phone.webp`, cropped so the moon sits between the two small widgets (replaces the
+  mountain, which stays on disk for pages loaded before this deploy). Uncommitted.
+- 2026-10-31: **One window theme on desktop:** the translucent dark glass from Case Studies now lives in
+  `globals.css` (`.os-window:not(.ios-app)`) and applies to every window. Experience, Education and
+  Contact got dark-theme text and cards in their own `.os-window:not(.ios-app)` blocks; Contact lost the
+  tilted dashed box and red underline and is now a 560px fit-to-content note with one row of actions.
+  Phones unchanged. Uncommitted.
+- 2026-10-31: **Case Studies window redesigned (desktop):** dark glass matching About Me; Crop Guide is
+  a brand-blue feature with a fan of three real screens and a three-number proof row (`card.stats`);
+  "Products I've shipped" is a hairline list instead of boxed cards. All in a
+  `.os-window:not(.ios-app)` block in `Projects.module.css`, so the phone layout is untouched. In windows
+  under 900px wide one phone replaces the fan; on screens under 830px tall large windows centre left of
+  both icon columns. Uncommitted.
+- 2026-10-31: Desktop icon and window title say "About Me" again. Uncommitted.
+- 2026-10-31: Added Kissan Sampurna and Gau Sampurna to the desktop with their app icons; one click opens
+  the prototype. `.desktop-grid` fills downward; below 830px tall the five sections stay in one column
+  and the two apps sit in a second column on their left. Uncommitted.
+- 2026-10-31: New desktop wallpaper `public/wallpaper-desktop.webp` from the owner's Unsplash photo
+  (replaces black and the Earth photo, whose webp was deleted). The About window's prototype buttons are
+  now a plain row: "View prototype", then the two app names as text links, no icons or boxes. Wallpaper
+  is 2880px at WebP quality 92 (321 KB) because the sky gradient bands when compressed harder; the
+  window glass is deeper so small text stays readable over the bright horizon. Uncommitted.
+- 2026-10-31: Removed the desktop work items (Kissan, Gau, Crop Guide, Freemium Growth); the desktop is
+  one column of sections. With nothing to point at, the light beams and dots went too. The coloured
+  words in the About text are now plain links: products opens Kissan, PRD the Crop Guide case study,
+  growth the Case Studies window. Uncommitted.
+- 2026-10-31: Menu bar is translucent grey; the travelling light on the About window's edge is gone (a
+  plain thin border replaces it). Uncommitted.
+- 2026-10-31: Desktop wallpaper set to solid black at the owner's request (`body` background in
+  `globals.css`), and the loader no longer waits for an image (1.75s). `public/wallpaper-earth.webp` is
+  kept in case the Earth photo returns. Phones keep the mountain wallpaper. Uncommitted.
+- 2026-10-31: **New desktop loader:** a sunrise over a dark Earth limb with the owner's name, opening onto
+  the wallpaper (replaces the light grey retro screen and its fake progress bar). It waits for the
+  wallpaper to decode (1.75s minimum, 3s maximum). Both layouts are in the markup and CSS picks one, so a
+  phone never flashes the desktop version; the phone keeps its approved iOS boot. Uncommitted.
+- 2026-10-31: About window hierarchy pass: reading order is who → what → proof → next step. Name is
+  the largest text and the stats step down; the subtitle no longer repeats the job title; spacing groups
+  stats with the app buttons; "Get in touch" is the single solid action, with LinkedIn and Email as
+  quiet links. Window raised slightly (`bottom: 9vh`). Uncommitted.
+- 2026-10-31: About window moved to true screen centre from 1100px wide (owner's call; below that it
+  would overlap the desktop items, so it centres in the free space); larger section windows stay
+  centred in the free space beside the desktop items so they don't cover them. All windows are now
+  vertically centred. Added two "View prototype" buttons (Kissan, Gau) under the stats. Uncommitted.
+- 2026-10-31: About window: photo enlarged to 112px with no ring; the words products, PRD and growth
+  are plain coloured text with no box (they glow on hover and still send their beams). Uncommitted.
+- 2026-10-31: About text restyled for reading (same words): first sentence leads at 17px, the current
+  role follows smaller and muted; the coloured words are soft tinted highlights on the text baseline,
+  not filled pills, with 1.75 line height so they never touch across lines. Uncommitted.
+- 2026-10-31: About text now uses the owner's approved description word for word (`profile.about`
+  mirrors `profile.intro`; `{tag:word}` marks the pills: products, PRD, growth). The Team India line is
+  gone from the window. Wallpaper is static again (owner's call): `Wallpaper.tsx` removed, the image is
+  back on `<body>` only. Uncommitted.
+- 2026-10-31: **About window, wow pass** (owner: the quiet version "looks plain", also asked which
+  position is better). Dark frosted-glass window with a travelling rim of light and a pointer glow
+  (`AboutCard.module.css`, styled through `.os-window:has(.card)`); turning status ring on the portrait;
+  stats with count-up (`CountUp.tsx`, shared with the phone hero). Hovering a pill draws beams of light
+  to the matching desktop items, behind the glass so they never cross the text. **Position decision:** windows are
+  centred in the free space left of the desktop items, slightly above the middle (optical centre),
+  rather than in the corner. Fixed section padding that used `calc(var(--line-height) * 1.5)` (unitless,
+  so the browser dropped it). Uncommitted.
+- 2026-10-31: **Desktop redesigned in a quiet "note on a desktop" style** (owner's reference: Samuel Lo's
+  portfolio; style only, content is the owner's). About is now a 468px light window in the top-left
+  (`AboutCard.tsx`, text in `profile.about`) with margin labels, plain prose and coloured pills. Pills
+  match the dots on desktop work items (`--tag-build/grow/write`, `DesktopTag`): hovering lights them up
+  via `html[data-tag]`. `.desktop-grid` is two columns: work as screenshot thumbnails on the left,
+  sections on the right; items open on one click. Menu bar is only the name and a clock with seconds
+  (section links and dropdown removed). All windows anchor top-left, traffic lights are grey until
+  hovered, dotted background removed. Phones unchanged. Earlier concepts remain at
+  `/?about=live | showcase | store | native | classic` until the owner confirms, then remove them and
+  the `?about` checks in `Hero.tsx` and `DraggableWindow.tsx`. Also fixed section padding that used
+  `calc(var(--line-height) * 1.5)`: `--line-height` is unitless, so the browser dropped the rule.
+  Uncommitted.
+- 2026-10-31: Removed the desktop music widget at the owner's request (no longer rendered in `page.tsx`;
+  `MusicPlayer.tsx`, `src/data/music.ts` and `public/music/` are kept, so it can return). New desktop
+  wallpaper `public/wallpaper-earth.webp` (NASA, Earth at night, Unsplash photo from the owner, 2880px,
+  195 KB). `wallpaper.jpg` stays for pages loaded before this deploy. Phones keep the approved mountain wallpaper. The new wallpaper has bright streaks,
+  so desktop folder labels sit on dark glass, the selected tile is dark glass with a bright rim, and
+  tiles are 112px wide so no label clips. The menu bar is now dark with light text, as macOS draws it
+  over a dark wallpaper, and the dark window has a light rim to separate it from the night sky.
+  Uncommitted.
+- 2026-10-31: **About window is now a live app** (owner: "still not impressed"; static layouts were not
+  enough). `AboutLive`, the desktop default: a dark window with the real prototype running in a phone
+  (`about/LiveApp.tsx`, code loaded on demand, poster until then). The rail switches Kissan/Gau and
+  jumps to features, opening on each feature's best screen (reports, not hubs); tapping inside the
+  phone updates the rail. Screen maps moved to `prototype/{kissan,gau}/screenMap.ts`, shared with the
+  viewer. Dark title bar via `.os-window:has(.dark)`. Older concepts stay reachable at
+  `/?about=showcase | store | native | classic` until the owner confirms. Uncommitted.
+- 2026-10-31: **About window, three concepts** (owner rejected the cleaned-up classic hero: "explore
+  more"). Built in `components/about/AboutConcepts.tsx`: **Showcase** (default: real app screens on a
+  brand panel), **App Store** (Mandar as a product page: info row + 4 screenshots), **About This Mac**
+  (spec sheet). Compare on desktop at `/?about=showcase | store | native | classic`; the switch lives in
+  `Hero.tsx`. Remove the unused concepts and the switch once the owner picks. Phones keep `ClassicHero`
+  (the iOS layout). Screens captured from the prototypes at 2× into `public/about/`. Showcase layout
+  then rebalanced (owner: "improve the layout"): two whole staggered phones sized from the panel, each
+  label on the side its phone leaves open, a smaller headline, and KPIs on their own hairline row.
+  Uncommitted.
+- 2026-10-31: **About window redesign + selected folder** (owner: "think like an expert UI/UX
+  designer"). Desktop icons stay highlighted while their window is on screen (`aria-current`; cleared
+  on minimize/close). Hero: one blue accent instead of red, whole-line entrance (per-letter spans broke
+  kerning), no sparkle or dotted background, clean rounded photo with an "Open to PM roles" badge
+  (`profile.availability`), KPIs as a hairline strip with no fake hover lift, matching CTA pair, larger
+  app links. New tokens in `globals.css`. About window height is now `max(64vh, 580px)`. Menu bar text
+  no longer wraps at 1024 and the tray spacing tightens below 1100px. Phone tab bar gives "Case Studies"
+  a wider column below 400px (it truncated at 320 and 360). Phone About keeps its layout; only the
+  accent, entrance motion and KPI label changed. Uncommitted.
+- 2026-10-31: **Content synced with the owner's updated LaTeX resume.** `resume.ts`: 25K+ MAU; peak
+  usage added (satellite 9.8K+ MAU / 1.6K+ DAU, crop guide 7.7K+ MAU, crop diagnosis 4.8K+ MAU);
+  funnel figures replaced (onboarding-to-trial 2.4% → 7.2%, trial-to-paid 27% → 30%, install-to-signup
+  +3%; previously 2.4% → 8%, 55%, 26% → 32%); tools now list Mixpanel + Amplitude instead of Power BI +
+  Exotel; fuller summary. Crop Guide case study uses 7.7K+ MAU in the card, glance and outcomes; the
+  "national scale" headline was dropped. Kissan paywall PM note corrected. Uncommitted.
+- 2026-10-31: **Solution section explains the product feature by feature** (owner: take inspiration
+  from esh.works/teachup). The sideways strip of 7 screens became cards with the phone beside a named
+  feature, "What it does" and "Why it works this way" (`FeatureList`, data `solution.beforeReport` /
+  `afterReport`, either side of the annotated report; hero phones moved to `heroScreens`). Only
+  existing verified facts; TeachUp's primary-research evidence was not copied because the owner has
+  not supplied any. Verified at 320 / 393 / 768 / 1024 / 1440: no overflow, no broken images.
+  Uncommitted.
+- 2026-10-30: At-a-glance simplified, consulting-style (owner: "minimal, simple, intuitive"):
+  **The challenge → Our approach → The impact**, one thin progress line with a dot per beat (last
+  dot filled), small blue label, one plain takeaway with numbers bold in place, one supporting
+  sentence. No icons, colour-coding or big numbers; single accent. Vertical line on phones. Gotcha:
+  `.page ol { padding: 0 }` outranks a single class, so the panel uses `.glance .glancePanel`.
+  Uncommitted.
+- 2026-10-30: **At-a-glance panel + Apple font fix.** The Problem / Solution / Outcome strip is now
+  one white panel lifted over the hero's bottom edge: tinted icon, one defining number (42% /
+  3 questions / 655K+), caption, sentence; arrow chips on the dividers; stacks on phones. Data moved
+  from `tldr` to `glance` in `caseStudies.ts`. **Font fix:** the Apple-detection script used
+  `next/script beforeInteractive`, which Next queues in its JS runtime, so Chrome on a Mac painted
+  Inter first. It is now a plain inline `<script>` in `<head>` (`layout.tsx`). Verified: with all
+  Next JS blocked Chrome/macOS renders `.SF NS` (SF Pro); Safari engine (WebKit, iPhone + Mac)
+  measures as the system font, not Inter; Android/Windows render Inter. Uncommitted.
+- 2026-10-30: **Case study page redesign** (owner: "rich design components, shouldn't look vibe
+  designed"). New design language, an editorial "field report": full-bleed brand hero (Kissan blue
+  canvas, field-row texture, three phones in bezels), At-a-glance strip, sticky "On this page"
+  contents with scroll-spy + reading-progress bar (`components/case-study/ReadingNav.tsx`), section
+  headlines that state the takeaway (`headlines` in the data), hairline rules instead of cards.
+  Purpose-built figures: 10×10 **waffle chart** (42.2% advice access), stat strip, pull-quote problem
+  statement, lime-highlighted HMW, persona fact sheets, **journey map** with stages as columns and an
+  SVG emotion curve (marked "illustrative"; vertical timeline on phones), numbered principle rows,
+  numbered flow of device-framed screens, **annotated report** (markers in the margin with leader
+  lines; `anatomy.callouts` x/y are % of the screenshot), engine **funnel** (100+ crops → filter →
+  score → rank → top 5), decision log (D1–D4), navy outcomes panel, measurement-plan table, CTA with
+  a phone bleeding off the edge. Gotcha: grid items with an explicit row and column are placed
+  before auto-placed ones, so the journey steps need explicit columns or the curve pushes them into
+  implicit columns. Verified desktop 1440 and phone 393 section by section; no overflow, no errors.
+  Uncommitted.
+- 2026-10-30: **Apple typography site-wide.** `--font-system` is now platform-aware: Apple devices
+  render SF Pro (verified `.SF NS` in Chrome on macOS), Android/Windows render **Inter** (verified,
+  previously Roboto/Segoe UI). `layout.tsx` adds Inter (`next/font/google`, one 48 KB variable
+  woff2, preloaded) and a pre-paint script that sets `html.apple`; `@supports (font:
+  -apple-system-body)` covers Safari/iOS without JS. Six duplicated stacks in `globals.css` now use
+  the variable. Prototypes keep Lato. Case study top bar no longer wraps on phones (name hidden
+  below 520px). `ui-design-system` skill updated. `tsc` and `next build` pass; lint unchanged.
+  Uncommitted.
+- 2026-10-30: **Case Studies + first case study (Crop Guide)**. Renamed Projects → Case Studies
+  (window title, desktop folder, menu bar, phone app with an `IoReader` glyph, Spotlight). New page
+  `/case-studies/crop-guide`: problem with 7 checked sources (PIB/Agriculture Census, NSO 77th round,
+  IDinsight 2019 + 2020 RCT, Hortidaily 2025 glut, Prem Chand et al. 2021), 3 composite personas, the
+  current crop-choice journey with pain points, insight→principle mapping, the solution (7 real
+  prototype screenshots, the engine's filter→score→rank logic from the owner's scoring reference v4,
+  a decisions/trade-offs table), outcomes, what to measure next, learnings, and a CTA into the
+  prototype. Fixed along the way: the new `?flow=` deep link initially froze prototype navigation
+  because `goTo`'s position ref was hard-coded to `0/0`; it is now seeded from the starting flow.
+  Desktop folder labels wrap to two lines like macOS instead of truncating ("Case St…",
+  "Experien…"). Verified desktop 1440 and phone 393/320 (no overflow, no errors), Spotlight,
+  `?section=` on both layouts, 404 for unknown slugs; `tsc` and `next build` (SSG) pass; lint
+  unchanged. Uncommitted. **Owner to confirm:** the reason for dropping risk/fodder/labour in v3
+  (written as "kept the questionnaire short").
 - 2026-10-22: **Prototype design size, font size and family pass** (owner: "make sure the font size and
   family is correct"). (1) Kissan was scaled as a 375pt linear design; it is a 393pt `@ms` design, so
   text was 4.8% too big on the reference iPhone, 9.5% on a 430pt Pro Max and 6% too small at 320pt.
@@ -527,8 +730,6 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
   Free trial & plan (3-step paywall + ₹1 trial). Shared UI in `kissan/KissanShared.tsx` (tab bar,
   CustomAlert, sheet). Viewer `ScreenProps` gained `back()` and `go(screenId)` for branches. Fixed a
   hydration error in `Hero.tsx` from the `?prototype=` deep link (now read after mount).
-- [ ] Pre-existing: on shorter screens (e.g. 1440×780) the About text column alone (505px) is
-  taller than the 64vh window, so the window scrolls. Consider a min height for About.
   2026-10-21: Added the Gau Sampurna prototype (prod branch). See its section.
   2026-10-21: Committed all work since 44e86cd to `prod` and fast-forwarded `dev`, then **pushed
   both to GitHub** (e577dc2). Pushing requires the repo owner account: `gh auth switch --user

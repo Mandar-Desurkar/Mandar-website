@@ -351,7 +351,7 @@ export const kissanSampurnaPrototype: Prototype = {
           id: "pw-intro",
           title: "Story & trust",
           note:
-            "Sell the outcome before the price. A short farmer video in the user's language, then a rotating strip of trust signals (50,000+ farmers, built with agri scientists, a farmer quote, Amruth Organic, local-language support). Part of the paywall redesign that lifted free-to-paid conversion from 2.4% to 8%.",
+            "Sell the outcome before the price. A short farmer video in the user's language, then a rotating strip of trust signals (50,000+ farmers, built with agri scientists, a farmer quote, Amruth Organic, local-language support). Part of the paywall redesign that lifted onboarding-to-trial conversion from 2.4% to 7.2%.",
         },
         {
           id: "pw-features",

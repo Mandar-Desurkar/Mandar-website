@@ -22,7 +22,7 @@
   .heroContainer {
     flex-direction: row-reverse;
     align-items: center;
-    gap: 4rem;
+    gap: 3.5rem;
   }
 }
 
@@ -40,7 +40,9 @@
 
 @container window (min-width: 800px) {
   .visualsGroup {
-    min-width: 300px;
+    flex-shrink: 0;
+    width: 248px;
+    gap: 1.25rem;
     order: 0;
     margin-top: 0;
   }
@@ -52,7 +54,8 @@
 }
 
 .highlight {
-  color: var(--ink-red);
+  color: var(--ink-blue);
+  white-space: nowrap;
 }
 
 .description {
@@ -85,21 +88,12 @@
   flex-direction: column;
   justify-content: flex-start; /* keep values on one baseline even if a label wraps */
   align-items: flex-start;
-  transition: all 0.2s ease;
-  cursor: default;
-}
-
-.kpiCard:hover {
-  background: white;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  transform: translateY(-2px);
-  border-color: rgba(0,0,0,0.08);
 }
 
 .kpiValue {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--ink-red);
+  color: var(--ink-black);
   line-height: 1.2;
   margin-bottom: 0.25rem;
   font-variant-numeric: tabular-nums;
@@ -160,8 +154,13 @@
 }
 
 .linkScribble:hover {
-  color: var(--ink-red);
-  transform: rotate(2deg);
+  background: var(--accent-tint-hover);
+}
+
+.ctaPrimary:focus-visible,
+.linkScribble:focus-visible {
+  outline: 2px solid var(--ink-blue);
+  outline-offset: 2px;
 }
 
 /* "Apps I've built" under the photo: a quiet list, same width as the photo, no boxes */
@@ -285,24 +284,21 @@
   border-radius: 3px;
 }
 
-/* Polaroid Image Frame */
+/* Profile photo. The phone layout turns it into a round portrait */
 .profileFrame {
   position: relative;
   z-index: 2;
-  width: 220px;
-  height: 260px; /* Taller for the bottom text area */
-  border-radius: 2px;
-  background: white;
-  padding: 10px 10px 40px 10px; /* Thicker bottom border */
-  box-shadow: 2px 5px 15px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0,0,0,0.05);
-  transform: rotate(3deg); /* Slight tilt */
+  width: 100%;
+  height: 232px;
+  border-radius: 16px;
+  box-shadow: 0 0 0 0.5px var(--hairline), 0 14px 32px -14px rgba(0, 0, 0, 0.32);
 }
 
 .photoWrapper {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  border-radius: 1px;
+  border-radius: 16px;
   background: #222; /* Dark background before image loads */
 }
 
@@ -310,28 +306,173 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: 50% 30%;
 }
 
-.sparkDoodle {
+/* A recruiter's first question, answered on the face of the page */
+.statusBadge {
   position: absolute;
-  top: -25px;
-  right: -30px;
-  z-index: 10;
-  pointer-events: none;
+  left: 10px;
+  bottom: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px 5px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.86);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  backdrop-filter: blur(12px) saturate(160%);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.16);
+  font-size: 0.75rem;
+  line-height: 1.2;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--ink-black);
 }
 
+.statusDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--status-green);
+  box-shadow: 0 0 0 2px rgba(52, 199, 89, 0.25);
+}
+
+/* ==================== Desktop window ====================
+   One accent, one primary action, no boxes around the numbers. Hierarchy comes from size and space.
+   The phone layout below keeps its own iOS treatment. */
+:global(.notebook-bg):has(.heroSection) {
+  background-image: none;
+}
+
+/* Centre the hero in the window, whatever height it was resized to */
+@media (min-width: 768px) {
+  :global(.window-content-scroll):has(.heroSection) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  :global(.notebook-bg):has(.heroSection) {
+    flex: 1 0 auto;
+    justify-content: center;
+  }
+}
+
+@container window (min-width: 600px) {
+  .heroSection {
+    width: 100%;
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+  }
+
+  .heroSection .heroContainer {
+    max-width: 1040px;
+    padding: 0 3.5rem;
+  }
+
+  .heroContent :global(.hand-heading-1) {
+    margin-bottom: 1.125rem;
+    font-size: clamp(2.1rem, 5cqi, 3rem);
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+  }
+
+  .description {
+    max-width: 34em;
+    margin-bottom: 1.75rem;
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+
+  .kpiGrid {
+    gap: 0;
+    margin-bottom: 1.75rem;
+  }
+
+  .kpiCard {
+    flex: 0 1 auto;
+    padding: 0.1rem 1.75rem;
+    border: 0;
+    border-radius: 0;
+    background: none;
+  }
+
+  .kpiCard:first-child {
+    padding-left: 0;
+  }
+
+  .kpiCard + .kpiCard {
+    border-left: 1px solid var(--hairline);
+  }
+
+  .kpiValue {
+    margin-bottom: 0.125rem;
+    font-size: 1.75rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+  }
+
+  .kpiLabel {
+    font-size: 0.8125rem;
+    font-weight: 400;
+    white-space: nowrap;
+    color: var(--text-secondary);
+  }
+
+  .ctaGroup {
+    gap: 0.75rem;
+  }
+
+  /* Same height and shape, so the pair reads as primary and secondary */
+  .ctaPrimary,
+  .linkScribble {
+    min-height: 44px;
+    padding: 0 1.25rem;
+    border-radius: 10px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    transition: background-color 0.15s ease;
+  }
+
+  .ctaPrimary:hover {
+    background: #0071eb;
+  }
+
+  .linkScribble {
+    background: var(--accent-tint);
+  }
+
+  .linkScribble:hover {
+    background: var(--accent-tint-hover);
+  }
+
+  .appsShelf {
+    width: 100%;
+  }
+
+  .appsCaption {
+    font-size: 0.8125rem;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--text-secondary);
+  }
+
+  .appName {
+    font-size: 0.875rem;
+  }
+
+  .appLink,
+  .linkDot {
+    font-size: 0.8125rem;
+  }
+}
 
 /* ==================== Phone (< 768px) ====================
    An identity row (small polaroid beside "Apps I've built") so the headline, KPIs and the primary
    CTA land in the first screen instead of after a full-screen photo. */
 @container window (max-width: 599.98px) {
-  .sparkDoodle {
-    width: 32px;
-    height: 32px;
-    top: -18px;
-    right: -14px;
-  }
-
   .heroSection {
     padding-top: 1.25rem;
     padding-bottom: 1.75rem;
@@ -354,7 +495,6 @@
     flex-shrink: 0;
     width: 112px;
     height: 134px;
-    padding: 6px 6px 22px;
   }
 
   .appsShelf {
@@ -388,10 +528,6 @@
     padding: 0.7rem 0.65rem;
   }
 
-  .kpiCard:hover {
-    transform: none;
-  }
-
   .kpiValue {
     font-size: 1.3rem;
     white-space: nowrap;
@@ -423,6 +559,15 @@
 /* Medium windows (600–800px, e.g. a 1024px laptop or a tablet): the same identity row, a little
    larger, so the headline isn't pushed below a full-size photo */
 @container window (min-width: 600px) and (max-width: 799.98px) {
+  .heroSection {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .heroContainer {
+    gap: 1.25rem;
+  }
+
   .visualsGroup {
     flex-direction: row;
     align-items: center;
@@ -433,15 +578,19 @@
 
   .profileFrame {
     flex-shrink: 0;
-    width: 150px;
-    height: 180px;
-    padding: 8px 8px 30px;
+    width: 148px;
+    height: 124px;
   }
 
   .appsShelf {
     flex: 1;
     width: auto;
     min-width: 0;
+    gap: 8px;
+  }
+
+  .appsList {
+    gap: 8px;
   }
 }
 
@@ -466,9 +615,9 @@
     padding-left: 0;
   }
 
-  /* The apps list lives on the phone home screen; the sparkle is decoration */
+  /* The apps list lives on the phone home screen; the badge won't fit a round portrait */
   .appsShelf,
-  .sparkDoodle {
+  .statusBadge {
     display: none;
   }
 
@@ -477,11 +626,8 @@
   .profileFrame {
     width: 88px;
     height: 88px;
-    padding: 0;
     border-radius: 50%;
-    background: none;
     box-shadow: 0 0 0 3px #fff, 0 0 0 3.5px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.14);
-    transform: none;
   }
 
   .photoWrapper {
@@ -525,11 +671,6 @@
 
   .kpiCard + .kpiCard {
     border-left: 0.5px solid rgba(60, 60, 67, 0.18);
-  }
-
-  .kpiCard:hover {
-    background: none;
-    box-shadow: none;
   }
 
   .kpiValue {

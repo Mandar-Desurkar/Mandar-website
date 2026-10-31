@@ -27,7 +27,7 @@ export default function Contact() {
             Looking to launch a new product, scale an existing one, or just chat about strategy? Drop me a line!
           </p>
           
-          <div style={{ margin: '1.5rem 0', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', fontSize: '1rem' }}>
+          <div className={styles.details}>
             <p style={{ margin: '0.5rem 0' }}><strong>Email:</strong> mandardesurkar3@gmail.com</p>
             <p style={{ margin: '0.5rem 0' }}><strong>Phone:</strong> +91 8073118693</p>
             <p style={{ margin: '0.5rem 0' }}><strong>Location:</strong> Bangalore, India</p>
@@ -35,13 +35,13 @@ export default function Contact() {
           
           <div className={styles.socials}>
             <a href="mailto:mandardesurkar3@gmail.com" className="os-btn" onClick={() => trackEvent("Clicked Contact Method", { method: "email", placement: "contact_window" })}>
-              <Mail size={16} style={{ verticalAlign: 'middle', marginRight: '5px' }}/> EMAIL
+              <Mail size={16} style={{ verticalAlign: 'middle', marginRight: '5px' }}/> Email
             </a>
             <a href="https://www.linkedin.com/in/mandar-desurkar/" target="_blank" rel="noopener noreferrer" className="os-btn" onClick={() => trackEvent("Clicked Contact Method", { method: "linkedin", placement: "contact_window" })}>
-              <FaLinkedin size={16} style={{ verticalAlign: 'middle', marginRight: '5px' }}/> LINKEDIN
+              <FaLinkedin size={16} style={{ verticalAlign: 'middle', marginRight: '5px' }}/> LinkedIn
             </a>
             <a href="tel:+918073118693" className="os-btn" onClick={() => trackEvent("Clicked Contact Method", { method: "phone", placement: "contact_window" })}>
-              <Phone size={16} style={{ verticalAlign: 'middle', marginRight: '5px' }}/> CALL
+              <Phone size={16} style={{ verticalAlign: 'middle', marginRight: '5px' }}/> Call
             </a>
           </div>
         </div>

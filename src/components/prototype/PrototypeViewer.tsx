@@ -92,7 +92,12 @@ function FigmaHomeIcon() {
 }
 
 export default function PrototypeViewer({ prototype, screens, onClose, onSwitchPrototype }: Props) {
-  const [flowIndex, setFlowIndex] = useState(0);
+  // ?flow=<id> (e.g. from a case study's "Try the prototype") starts on that flow. The viewer
+  // only mounts on the client after a prototype is opened, so reading the URL here is safe.
+  const [flowIndex, setFlowIndex] = useState(() => {
+    const id = new URLSearchParams(window.location.search).get("flow");
+    return Math.max(0, prototype.flows.findIndex((f) => f.id === id));
+  });
   const [screenIndex, setScreenIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const [scale, setScale] = useState(0.7);
@@ -122,7 +127,8 @@ export default function PrototypeViewer({ prototype, screens, onClose, onSwitchP
 
   // The live position. A screen that is animating out keeps its old callbacks, so its
   // auto-advance timers could otherwise pull the viewer back to the flow the visitor just left.
-  const position = useRef("0/0");
+  // Seeded with the starting flow, which ?flow= can set.
+  const position = useRef(`${flowIndex}/0`);
 
   const goTo = useCallback(
     (targetFlow: number, index: number, method: NavMethod) => {

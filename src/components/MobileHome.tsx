@@ -33,13 +33,12 @@ const [lead, ...rest] = kpis;
 const PAGES = 2;
 
 export default function MobileHome() {
-  const { isClosed, isMinimized, openSection, openPrototype } = useWindow();
-  const [searching, setSearching] = useState(false);
+  const { isClosed, isMinimized, openSection, openPrototype, searchOpen, setSearchOpen } = useWindow();
   const searchRef = useRef<HTMLButtonElement>(null);
   const closeSearch = useCallback(() => {
-    setSearching(false);
+    setSearchOpen(false);
     searchRef.current?.focus();
-  }, []);
+  }, [setSearchOpen]);
   const pagerRef = useRef<HTMLDivElement>(null);
   const [page, setPage] = useState(0);
   const viaDots = useRef(false);
@@ -152,7 +151,7 @@ export default function MobileHome() {
         aria-haspopup="dialog"
         onClick={() => {
           trackEvent("Opened Spotlight", {});
-          setSearching(true);
+          setSearchOpen(true);
         }}
       >
         <IoSearch size={13} aria-hidden="true" /> Search
@@ -173,7 +172,7 @@ export default function MobileHome() {
         ))}
       </nav>
 
-      {searching && <Spotlight onClose={closeSearch} />}
+      {searchOpen && <Spotlight onClose={closeSearch} />}
     </div>
   );
 }

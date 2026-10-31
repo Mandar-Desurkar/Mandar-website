@@ -73,24 +73,25 @@ export default function DraggableWindow({
 
     switch (activeTab) {
       case 'about':
-        newWidth = '65vw'; // wide enough for "I'm a product builder." on one line
-        newHeight = '64vh'; // hugs hero, KPIs and CTAs with no empty space below
+        // A short note. The concept comparison (?about=) still needs the wide window.
+        newWidth = new URLSearchParams(window.location.search).has('about') ? '65vw' : '540px';
+        newHeight = new URLSearchParams(window.location.search).has('about') ? 'max(64vh, 580px)' : 'fit-content';
         break;
       case 'experience':
-        newWidth = '70vw';
+        newWidth = 'min(70vw, 1040px)';
         newHeight = '80vh';
         break;
       case 'education':
-        newWidth = '65vw';
+        newWidth = 'min(65vw, 960px)';
         newHeight = '65vh';
         break;
       case 'projects':
-        newWidth = '75vw';
+        newWidth = 'min(75vw, 1040px)';
         newHeight = '80vh';
         break;
       case 'contact':
-        newWidth = '55vw';
-        newHeight = '68vh'; // fits the card and footer without clipping
+        newWidth = '560px';
+        newHeight = 'fit-content';
         break;
       default:
         newWidth = '60vw';

@@ -8,13 +8,14 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { IoChevronForward, IoCloseCircle, IoSearch } from "react-icons/io5";
 import { useWindow } from "@/context/WindowContext";
 import { experiences, profile, projects, shippedApps, skills } from "@/data/resume";
+import { caseStudies } from "@/data/caseStudies";
 import { trackEvent } from "@/lib/analytics";
 import { AppTile } from "./AppIcon";
 import { CONTACT_APPS } from "./contactApps";
 import { SECTION_APPS, glyphSize } from "./sections";
 import styles from "./Spotlight.module.css";
 
-type Kind = "app" | "section" | "contact";
+type Kind = "app" | "case_study" | "section" | "contact";
 type Result = {
   id: string;
   kind: Kind;
@@ -29,22 +30,24 @@ type Result = {
 
 const GROUPS: { kind: Kind; title: string }[] = [
   { kind: "app", title: "Apps I've built" },
+  { kind: "case_study", title: "Case studies" },
   { kind: "section", title: "Portfolio" },
   { kind: "contact", title: "Get in touch" },
 ];
 
 const current = experiences.find((e) => !e.isFuture);
+const CASE_APP = SECTION_APPS.find((a) => a.id === "projects")!;
 const SECTION_SUBTITLES: Record<string, string> = {
   about: `${profile.role} · ${profile.location}`,
   experience: current ? `${current.role}, ${current.company.replace(/ Private Limited$/, "")}` : "Roles",
   education: "B.E. ISE · Skills & toolkit",
-  projects: projects.map((p) => p.title).join(" · "),
+  projects: [...caseStudies.map((c) => c.title.split(":")[0]), "Products I've shipped"].join(" · "),
   contact: "Email, phone, LinkedIn",
 };
 const SECTION_KEYWORDS: Record<string, string> = {
   experience: experiences.map((e) => `${e.role} ${e.company} ${e.groups?.map((g) => g.title).join(" ") ?? ""}`).join(" "),
   education: skills.map((s) => s.items).join(" "),
-  projects: projects.map((p) => `${p.title} ${p.context} ${p.tags.join(" ")}`).join(" "),
+  projects: [...projects.map((p) => `${p.title} ${p.context} ${p.tags.join(" ")}`), ...caseStudies.map((c) => `${c.title} ${c.tags.join(" ")}`)].join(" "),
 };
 
 export default function Spotlight({ onClose }: { onClose: () => void }) {
@@ -69,6 +72,16 @@ export default function Spotlight({ onClose }: { onClose: () => void }) {
         keywords: "prototype demo app play store agritech",
         tile: <AppTile image={app.icon} size={38} />,
         run: () => app.prototype && openPrototype(app.prototype, "spotlight"),
+      })),
+      ...caseStudies.map((c) => ({
+        id: `case-${c.slug}`,
+        kind: "case_study" as const,
+        title: `${c.title.split(":")[0]} case study`,
+        subtitle: c.card.problem,
+        keywords: `${c.title} ${c.subtitle} ${c.tags.join(" ")} case study`,
+        tile: <AppTile size={38} colors={CASE_APP.colors} glyph={<CASE_APP.Glyph size={glyphSize(CASE_APP)} />} />,
+        href: `/case-studies/${c.slug}`,
+        run: () => trackEvent("Opened Case Study", { slug: c.slug, placement: "spotlight" }),
       })),
       ...SECTION_APPS.map((app) => ({
         id: app.id,

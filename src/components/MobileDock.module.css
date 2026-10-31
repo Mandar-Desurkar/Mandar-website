@@ -83,6 +83,13 @@
   outline-offset: -2px;
 }
 
+/* Narrower phones: "Case Studies" is the longest label, so its tab gets the extra room */
+@media (max-width: 399.98px) {
+  .tabBar {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 1.25fr) minmax(0, 1fr);
+  }
+}
+
 /* 320pt phones: tighter capsule so "Experience" and "Education" keep their labels */
 @media (max-width: 359.98px) {
   .tabBar {

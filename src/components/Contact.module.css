@@ -120,3 +120,87 @@
     transform: scale(0.98);
   }
 }
+
+/* ==================== Desktop window ====================
+   On the shared dark glass (globals.css). The phone renders its own iOS card. */
+:global(.os-window:not(.ios-app)) .contactSection {
+  padding: 34px 36px 26px;
+}
+
+:global(.os-window:not(.ios-app)) .doodleBox {
+  padding: 0;
+  border: 0;
+  transform: none;
+}
+
+:global(.os-window:not(.ios-app)) .headerBox {
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+:global(.os-window:not(.ios-app)) .headerBox::after {
+  display: none;
+}
+
+:global(.os-window:not(.ios-app)) .description {
+  max-width: none;
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  text-align: left;
+  color: rgba(245, 245, 247, 0.84);
+}
+
+:global(.os-window:not(.ios-app)) .details {
+  margin: 22px 0;
+  padding: 16px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(235, 235, 245, 0.76);
+}
+
+:global(.os-window:not(.ios-app)) .details strong {
+  font-weight: 600;
+  color: #fff;
+}
+
+:global(.os-window:not(.ios-app)) .socials {
+  display: flex;
+  justify-content: flex-start;
+  gap: 8px;
+  margin: 0;
+}
+
+:global(.os-window:not(.ios-app)) .socials :global(.os-btn) {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.18);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #f5f5f7;
+}
+
+:global(.os-window:not(.ios-app)) .socials :global(.os-btn):hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+:global(.os-window:not(.ios-app)) .socials :global(.os-btn):first-child {
+  background: #fff;
+  box-shadow: none;
+  color: #0d111b;
+}
+
+:global(.os-window:not(.ios-app)) .socials :global(.os-btn):first-child:hover {
+  background: #e8e8ed;
+}
+
+:global(.os-window:not(.ios-app)) .footer {
+  padding-top: 22px;
+  font-size: 0.8125rem;
+  text-align: left;
+  color: rgba(235, 235, 245, 0.45);
+}

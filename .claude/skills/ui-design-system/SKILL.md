@@ -51,8 +51,14 @@ Rules:
 
 ## Typography
 
-- One family: the system stack (`--font-system`). No extra web fonts unless they add something
-  real, and then only via `next/font`.
+- One family, `--font-system`: Apple's **SF Pro** on Apple devices, **Inter** everywhere else.
+  SF Pro can't be served as a web font (Apple's licence limits it to Apple-platform mock-ups), so it
+  is reached through the system font. Chrome folds `BlinkMacSystemFont` into `system-ui`, which is
+  Roboto/Segoe UI off Apple, so the stack is platform-aware: `:root.apple` (set before first paint by
+  a script in `layout.tsx`) and `@supports (font: -apple-system-body)` switch to the system font;
+  the default is Inter (`next/font/google`, variable `--font-inter`). Never self-host SF Pro files.
+- Prototype screens are the exception: they use the apps' own fonts (Lato, Poppins) via
+  `src/components/prototype/fonts.ts`.
 - Scale (rem): 0.8125 caption · 0.9375 secondary · 1.05 body (current) · 1.25 h3 · 1.75 h2 · 2.5+ h1.
 - Line length 60–80ch for paragraphs inside windows. Body line-height `var(--line-height)`.
 - Weight carries hierarchy (600 for titles, 400 for body). Avoid ALL CAPS for anything longer

@@ -7,8 +7,8 @@ import { PiHandshake, PiHandshakeFill } from "react-icons/pi";
 import {
   IoBriefcase,
   IoBriefcaseOutline,
-  IoLayers,
-  IoLayersOutline,
+  IoReader,
+  IoReaderOutline,
   IoPerson,
   IoPersonOutline,
   IoSchool,
@@ -36,7 +36,7 @@ export const SECTION_APPS: SectionApp[] = [
   { id: "about", label: "About", title: "About", Glyph: IoPerson, Outline: IoPersonOutline, colors: ["#5AC8FA", "#0A7AFF"], keywords: "profile intro impact installs bio", glyphScale: 1.06 },
   { id: "experience", label: "Experience", title: "Experience", Glyph: IoBriefcase, Outline: IoBriefcaseOutline, colors: ["#FFC24A", "#FF8A00"], keywords: "work jobs roles career silo fortune altqube" },
   { id: "education", label: "Education", title: "Education", Glyph: IoSchool, Outline: IoSchoolOutline, colors: ["#8E8BFF", "#5145E5"], keywords: "degree college ramaiah cgpa skills toolkit swimming" },
-  { id: "projects", label: "Projects", title: "Projects", Glyph: IoLayers, Outline: IoLayersOutline, colors: ["#5EE07A", "#1DB447"], keywords: "products case studies crm rider erp freemium" },
+  { id: "projects", label: "Case Studies", title: "Case Studies", Glyph: IoReader, Outline: IoReaderOutline, colors: ["#5EE07A", "#1DB447"], keywords: "case study projects products crm rider erp freemium" },
   { id: "contact", label: "Contact", title: "Contact", Glyph: PiHandshakeFill, Outline: PiHandshake, colors: ["#4FE0CF", "#0E9F9F"], keywords: "email phone linkedin hire reach", glyphScale: 1.18 },
 ];
 
