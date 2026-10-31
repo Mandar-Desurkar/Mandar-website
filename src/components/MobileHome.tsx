@@ -15,7 +15,7 @@ import { profile, kpis, shippedApps, experiences } from "@/data/resume";
 import { trackEvent } from "@/lib/analytics";
 import AppIcon from "./ios/AppIcon";
 import ClockWidget from "./ios/ClockWidget";
-import Spotlight from "./ios/Spotlight";
+import dynamic from "next/dynamic";
 import { CONTACT_APPS } from "./ios/contactApps";
 import { SECTION_APPS, glyphSize } from "./ios/sections";
 import styles from "./MobileHome.module.css";
@@ -31,6 +31,9 @@ const since = (() => {
 const fmt = (k: (typeof kpis)[number]) => `${k.prefix}${k.value}${k.suffix}`;
 const [lead, ...rest] = kpis;
 const PAGES = 2;
+
+// Search is rarely used on arrival, and it carries every section's keywords
+const Spotlight = dynamic(() => import("./ios/Spotlight"), { ssr: false });
 
 export default function MobileHome() {
   const { isClosed, isMinimized, openSection, openPrototype, searchOpen, setSearchOpen } = useWindow();

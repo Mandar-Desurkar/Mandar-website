@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 import NoInspect from "@/components/NoInspect";
 import { profile } from "@/data/resume";
@@ -15,7 +14,6 @@ const inter = Inter({ subsets: ["latin"], display: "swap", variable: "--font-int
 // Roboto/Segoe UI; Safari and iOS are also covered without JS by @supports in globals.css.
 const APPLE_PLATFORM_SCRIPT = `try{var p=(navigator.userAgentData&&navigator.userAgentData.platform)||navigator.platform||"";if(/mac|iphone|ipad|ipod/i.test(p)||/iPhone|iPad|iPod/.test(navigator.userAgent))document.documentElement.classList.add("apple")}catch(e){}`;
 
-const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || "G-JKRX4FZQRD";
 
 export const metadata: Metadata = {
   title: `${profile.name} | ${profile.role}`,
@@ -42,24 +40,6 @@ export default function RootLayout({
         {/* A plain inline script, not next/script: it must run while the HTML is parsed, before the
             first paint, or Chrome on a Mac would briefly show Inter before switching to SF Pro */}
         <script dangerouslySetInnerHTML={{ __html: APPLE_PLATFORM_SCRIPT }} />
-        <Script
-          strategy="afterInteractive"
-          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-        />
-        <Script
-          id="google-analytics"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', '${GA_MEASUREMENT_ID}', {
-                page_path: window.location.pathname,
-              });
-            `,
-          }}
-        />
       </head>
       <body>
         <NoInspect />

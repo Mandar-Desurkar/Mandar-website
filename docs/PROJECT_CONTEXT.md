@@ -342,6 +342,12 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 
 ## Changelog
 
+- 2026-10-31: **Phone loading.** Same sunrise loader on phones, on the wallpaper's horizon; it counts
+  from the start of the page load and ends as soon as the app is ready. Sections, Search and old About
+  concepts load on demand. Amplitude and Firebase load after the page settles (`lib/analyticsClient.ts`);
+  events wait and arrive in order, so session replay starts slightly later. Removed the second copy of
+  gtag from `layout.tsx`: Firebase Analytics already loads it, and both sent page views. On throttled 4G
+  the wait for the home screen went from ~6.3s to ~3.0s and JS from 1,111 KB to ~630 KB.
 - 2026-10-31: Committed all work above as 4c905ba on `dev`, fast-forwarded `prod`, pushed both. Preflight: build, secrets and
   links pass; lint errors and asset warnings are existing backlog items.
 - 2026-10-31: All desktop windows now open centred and slightly above the middle (`bottom: 9vh`), not

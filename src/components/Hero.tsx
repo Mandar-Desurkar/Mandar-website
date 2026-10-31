@@ -9,7 +9,7 @@ import { useWindow } from "@/context/WindowContext";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import AboutCard from "./AboutCard";
 import CountUp from "./CountUp";
-import { AboutLive, AboutNative, AboutShowcase, AboutStore } from "./about/AboutConcepts";
+import dynamic from "next/dynamic";
 import { trackEvent } from "@/lib/analytics";
 import RichText from "./RichText";
 import { FileText, Globe, Smartphone } from "lucide-react";
@@ -234,6 +234,13 @@ function ClassicHero() {
 }
 
 const noSubscribe = () => () => {};
+
+const concept = (name: "AboutLive" | "AboutNative" | "AboutShowcase" | "AboutStore") =>
+  dynamic(() => import("./about/AboutConcepts").then((m) => m[name]));
+const AboutLive = concept("AboutLive");
+const AboutNative = concept("AboutNative");
+const AboutShowcase = concept("AboutShowcase");
+const AboutStore = concept("AboutStore");
 
 // Desktop concept comparison: /?about=live | showcase | store | native | classic. Phones keep the iOS hero.
 export default function Hero() {

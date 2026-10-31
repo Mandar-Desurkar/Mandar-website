@@ -51,7 +51,7 @@
   border-radius: 50%;
   background: radial-gradient(closest-side, #fff 0%, #ffe9c7 9%, rgba(255, 186, 110, 0.75) 26%, rgba(255, 150, 80, 0.2) 56%, transparent 100%);
   opacity: 0;
-  animation: sunrise 1.5s cubic-bezier(0.3, 0, 0.2, 1) 0.45s forwards;
+  animation: sunrise 1.5s cubic-bezier(0.3, 0, 0.2, 1) 0.45s forwards, breathe 1.6s ease-in-out 1.95s infinite alternate;
 }
 
 @keyframes sunrise {
@@ -78,8 +78,37 @@
   to { opacity: 1; transform: translateY(0); filter: blur(0); }
 }
 
-.content {
-  display: none;
+/* A slow breath, so a long wait on a slow connection still looks alive */
+@keyframes breathe {
+  from { opacity: 1; }
+  to { opacity: 0.72; }
+}
+
+/* ---------- Phone ---------- */
+
+@media (max-width: 767.98px), (max-width: 1023.98px) and (pointer: coarse), (max-height: 500px) and (pointer: coarse) {
+  .sunrise {
+    --horizon: 65.5vh;
+  }
+
+  .planet {
+    animation-duration: 0.8s;
+    animation-delay: 0s;
+  }
+
+  .sun {
+    width: 120vw;
+    height: 70px;
+    margin: -35px 0 0 -60vw;
+    animation: sunrise 0.9s cubic-bezier(0.3, 0, 0.2, 1) 0.15s forwards, breathe 1.4s ease-in-out 1.05s infinite alternate;
+  }
+
+  .name {
+    top: 46vh;
+    font-size: 1.375rem;
+    animation-duration: 0.6s;
+    animation-delay: 0.1s;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -93,45 +122,5 @@
     opacity: 1;
     transform: scale(0.8, 0.7);
     animation: none;
-  }
-}
-
-/* ---------- Phone: boots like an iPhone ---------- */
-
-@media (max-width: 767.98px), (max-width: 1023.98px) and (pointer: coarse), (max-height: 500px) and (pointer: coarse) {
-  .sunrise,
-  .name {
-    display: none;
-  }
-
-  .bootScreen {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .icon {
-    margin-bottom: 56px;
-    color: #fff;
-  }
-
-  .progressContainer {
-    overflow: hidden;
-    width: 150px;
-    height: 4px;
-    border-radius: 2px;
-    background-color: #3a3a3c;
-  }
-
-  .progressBar {
-    height: 100%;
-    background: #fff;
-    transition: width 0.1s linear;
   }
 }

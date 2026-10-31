@@ -2,10 +2,6 @@
 
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import Experience from "@/components/Experience";
-import Education from "@/components/Education";
-import Projects from "@/components/Projects";
-import Contact from "@/components/Contact";
 import BootScreen from "@/components/BootScreen";
 import DraggableWindow from "@/components/DraggableWindow";
 import DesktopIcon from "@/components/DesktopIcon";
@@ -18,7 +14,14 @@ import PhoneBack from "@/components/PhoneBack";
 import PrototypeHost from "@/components/prototype/PrototypeHost";
 import { WindowProvider, useWindow } from "@/context/WindowContext";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import { AnimatePresence } from "framer-motion";
+
+// Each section's code loads when it is opened, so a phone landing on the home screen doesn't pay for them
+const Experience = dynamic(() => import("@/components/Experience"));
+const Education = dynamic(() => import("@/components/Education"));
+const Projects = dynamic(() => import("@/components/Projects"));
+const Contact = dynamic(() => import("@/components/Contact"));
 
 function ActiveSection() {
   const { activeTab } = useWindow();
