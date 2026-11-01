@@ -955,6 +955,16 @@
   justify-self: center;
 }
 
+/* The whole report as one long screen: fixed corner radii, since % radii scale with the height */
+.deviceLong {
+  padding: 6px;
+  border-radius: 40px;
+}
+
+.deviceLong img {
+  border-radius: 34px;
+}
+
 /* A callout spans from the margin (outside the phone) to the element it points at */
 .callout {
   position: absolute;
@@ -1608,7 +1618,7 @@
 
   .anatomy {
     grid-template-columns: 300px 1fr;
-    align-items: center;
+    align-items: start;
     gap: 72px;
     padding-left: 48px;
   }

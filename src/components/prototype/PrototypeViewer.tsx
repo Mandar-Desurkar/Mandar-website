@@ -195,6 +195,7 @@ export default function PrototypeViewer({ prototype, screens, onClose, onSwitchP
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
       });
+      trackEvent("Shared Prototype", { prototype: prototype.id, method: "copy" });
     }
   };
 
@@ -318,7 +319,12 @@ export default function PrototypeViewer({ prototype, screens, onClose, onSwitchP
             <button
               type="button"
               className={`${styles.tabItem} ${isKissan ? styles.tabItemActive : ""}`}
-              onClick={() => onSwitchPrototype && onSwitchPrototype("kissan-sampurna")}
+              onClick={() => {
+                if (!isKissan && onSwitchPrototype) {
+                  trackEvent("Switched Prototype", { from_prototype: prototype.id, to_prototype: "kissan-sampurna" });
+                  onSwitchPrototype("kissan-sampurna");
+                }
+              }}
             >
               <span className={styles.tabPlayIcon}>▶</span>
               <span>Kissan Sampurna App - Prototype</span>
@@ -328,7 +334,12 @@ export default function PrototypeViewer({ prototype, screens, onClose, onSwitchP
             <button
               type="button"
               className={`${styles.tabItem} ${!isKissan ? styles.tabItemActive : ""}`}
-              onClick={() => onSwitchPrototype && onSwitchPrototype("gau-sampurna")}
+              onClick={() => {
+                if (isKissan && onSwitchPrototype) {
+                  trackEvent("Switched Prototype", { from_prototype: prototype.id, to_prototype: "gau-sampurna" });
+                  onSwitchPrototype("gau-sampurna");
+                }
+              }}
             >
               <span className={styles.tabPlayIcon}>▶</span>
               <span>Gau Sampurna Mobile App - Prototype</span>

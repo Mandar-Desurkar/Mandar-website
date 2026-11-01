@@ -18,6 +18,9 @@
   --accent-tint: rgba(0, 122, 255, 0.1); /* Tinted secondary button */
   --accent-tint-hover: rgba(0, 122, 255, 0.16);
   --status-green: #34c759;
+  /* How much the tone layer calms the wallpaper: 1 = full colour, 0 = no dimming */
+  --wallpaper-saturation: 0.7;
+  --wallpaper-dim: 0.3;
   /* The About text's coloured words and the matching dots on the desktop */
   --tag-build: #3b82f6;
   --tag-grow: #2ea44f;
@@ -190,6 +193,10 @@ a {
 }
 
 /* Sections size themselves to the window, not the screen (@container window …) */
+.window-content-scroll:focus {
+  outline: none;
+}
+
 .window-content-scroll {
   container: window / inline-size;
   flex: 1;
@@ -304,6 +311,24 @@ a {
   }
 }
 
+/* A tone layer over the wallpaper, so its colour stays behind the content. Adjust it with
+   --wallpaper-saturation and --wallpaper-dim. `isolation` keeps the layer's negative z-index above the
+   wallpaper, which is painted on <body>, and below everything inside the page. */
+.desktop-scene {
+  isolation: isolate;
+}
+
+.desktop-scene::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: rgba(6, 9, 18, var(--wallpaper-dim));
+  -webkit-backdrop-filter: saturate(var(--wallpaper-saturation));
+  backdrop-filter: saturate(var(--wallpaper-saturation));
+  pointer-events: none;
+}
+
 /* Fills downward from the top right and wraps to a new column on the left, like Mac desktop icons */
 .desktop-grid {
   position: absolute;
@@ -382,6 +407,10 @@ a {
   border-bottom: 1px solid var(--os-border);
   position: relative;
   cursor: grab !important;
+}
+
+.os-titlebar:active {
+  cursor: grabbing !important;
 }
 
 .os-titlebar:active {

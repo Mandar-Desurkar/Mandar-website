@@ -15,6 +15,7 @@ import PrototypeHost from "@/components/prototype/PrototypeHost";
 import { WindowProvider, useWindow } from "@/context/WindowContext";
 import Image from "next/image";
 import dynamic from "next/dynamic";
+import { useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 
 // Each section's code loads when it is opened, so a phone landing on the home screen doesn't pay for them
@@ -48,8 +49,27 @@ function WindowTitle() {
   }
 }
 
+const TAB_TITLES: Record<string, string> = {
+  about: "About Me",
+  experience: "Experience",
+  education: "Education",
+  projects: "Case Studies",
+  contact: "Contact",
+};
+
+// The browser tab names the open window, so a recruiter with many tabs can find this one
+function useTabTitle() {
+  const { activeTab, isClosed, isMinimized } = useWindow();
+  useEffect(() => {
+    const base = document.title.split(" · ").pop() ?? document.title;
+    const section = !isClosed && !isMinimized && activeTab !== "about" ? TAB_TITLES[activeTab] : null;
+    document.title = section ? `${section} · ${base}` : base;
+  }, [activeTab, isClosed, isMinimized]);
+}
+
 function DesktopEnvironment() {
   const { isClosed, openPrototype } = useWindow();
+  useTabTitle();
   
   return (
     <>
@@ -88,7 +108,7 @@ function DesktopEnvironment() {
 
 export default function Home() {
   return (
-    <main>
+    <main className="desktop-scene">
       <BootScreen />
       
       <WindowProvider>

@@ -19,7 +19,7 @@ export default function DraggableWindow({
   children: React.ReactNode
 }) {
   const dragControls = useDragControls();
-  const { isMinimized, isMaximized, activeTab, setIsClosed } = useWindow();
+  const { isMinimized, isMaximized, setIsMaximized, isClosed, activeTab, setIsClosed, prototype } = useWindow();
   const [toast, setToast] = useState<string | null>(null);
   // Phone: the large title has scrolled under the nav bar, so the inline title and hairline show
   const [scrolled, setScrolled] = useState(false);
@@ -59,6 +59,29 @@ export default function DraggableWindow({
     setHasMounted(true);
   }, []);
 
+  // Desktop: an opened or switched window takes keyboard focus, so Tab continues inside its content
+  useEffect(() => {
+    if (isMobile || isClosed || isMinimized) return;
+    const el = scrollRef.current;
+    if (!el || el.contains(document.activeElement)) return;
+    el.focus({ preventScroll: true });
+  }, [activeTab, isMobile, isClosed, isMinimized]);
+
+  // Desktop: Esc closes the front window, as in a macOS sheet or Quick Look. A prototype or a full-size
+  // photo on top handles Esc itself, so it closes first.
+  useEffect(() => {
+    if (isMobile) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape" || isClosed || isMinimized || prototype) return;
+      if (document.querySelector('[role="dialog"]')) return;
+      if ((e.target as HTMLElement | null)?.closest("input, textarea, select")) return;
+      trackEvent("Closed Window", { section: activeTab, method: "escape" });
+      setIsClosed(true);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isMobile, isClosed, isMinimized, prototype, activeTab, setIsClosed]);
+
   // Re-tapping the open section in the mobile dock scrolls it back to the top
   useEffect(() => {
     const toTop = () => scrollRef.current?.scrollTo({ top: 0, behavior: "smooth" });
@@ -78,12 +101,14 @@ export default function DraggableWindow({
         newHeight = new URLSearchParams(window.location.search).has('about') ? 'max(64vh, 580px)' : 'fit-content';
         break;
       case 'experience':
-        newWidth = 'min(70vw, 1040px)';
-        newHeight = '80vh';
+        // wide enough for the swimming feature; never so wide it covers the desktop icons
+        // the desktop icons take ~224px on the right, so a centred window can span 100vw − 2 × 240px
+        newWidth = 'min(84vw, 1180px, calc(100vw - 480px))';
+        newHeight = '88vh';
         break;
       case 'education':
         newWidth = 'min(65vw, 960px)';
-        newHeight = '65vh';
+        newHeight = '80vh';
         break;
       case 'projects':
         newWidth = 'min(75vw, 1040px)';
@@ -284,14 +309,20 @@ export default function DraggableWindow({
         onPointerDown={(e) => {
           dragControls.start(e);
         }}
-        style={{ cursor: "grab", touchAction: "none" }}
-        title="Drag to move"
+        // macOS: double-clicking the title bar zooms the window
+        onDoubleClick={(e) => {
+          if ((e.target as HTMLElement).closest("button")) return;
+          trackEvent(isMaximized ? "Restored Window" : "Maximized Window", { section: activeTab, method: "title_double_click" });
+          setIsMaximized(!isMaximized);
+        }}
+        style={{ touchAction: "none" }}
+        title="Drag to move · double-click to zoom"
       >
         <TrafficLights />
         <span>{title}</span>
       </div>
       
-      <div className="window-content-scroll" ref={scrollRef}>
+      <div className="window-content-scroll" ref={scrollRef} tabIndex={-1} role="region" aria-label={typeof title === "string" ? title : "Window"}>
         <div className="notebook-bg">
           <div className="apple-note-date">August 31, 2026 at 9:41 AM</div>
           {children}

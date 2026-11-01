@@ -17,7 +17,7 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
 ## Current state (2026-10-31)
 
 - **Desktop (redesigned 2026-10-31):** dawn wallpaper (`public/wallpaper-desktop.webp`,
-  static), sunrise loader, a minimal menu bar (name and clock), and one icon column on the right (five
+  static), sunrise loader, a slim menu bar (sections, battery, Wi-Fi, clock), and one icon column on the right (five
   sections, then Kissan and Gau, which open their prototypes). Every window is translucent dark glass,
   themed once in `globals.css` (`.os-window:not(.ios-app)`). About is `AboutCard.tsx`. Old About concepts
   remain at `/?about=live | showcase | store | native | classic` until the owner confirms the design;
@@ -79,7 +79,7 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
 | 2026-10-21 | Hero KPIs = 250K+ installs, 3× trial conversion, ₹1 Cr+ monthly sales | Replaced unverifiable "12+ products / 1M+ users / 4+ years"; every number now traces to the resume |
 | 2026-10-21 | Music autoplays muted, never with sound | Unexpected sound is the top complaint about portfolio audio (recruiters open links at work), and browsers only allow muted autoplay |
 | 2026-10-21 | Music lives in a desktop widget, not the menu bar | Owner's call: a visible widget is discoverable at a glance, while a menu-bar icon hid the player behind a click. Matches macOS Sonoma desktop widgets |
-| 2026-10-21 | Kept the "Future CPO / Founder (TBD)" Experience entry | Intentional easter egg by the owner; flagged as a possible credibility risk, owner to decide |
+| 2026-10-31 | Removed the "Future CPO / Founder (TBD)" Experience entry | Owner's call (it had been kept since 2026-10-21 as an easter egg, flagged as a credibility risk) |
 | 2026-10-21 | Enforce context updates with a Stop hook, triggered only when files changed | Owner wants context kept after every response; a hook is guaranteed, unlike a CLAUDE.md instruction; skipping pure Q&A turns keeps the file free of noise |
 | 2026-10-21 | Phones and touch tablets get their own layout (full-width window sheet + iOS-style dock), not a shrunken desktop | Most visits come from LinkedIn on a phone; drag, resize and double-click are mouse interactions |
 | 2026-10-21 | Sections size to their window with container queries (`@container window`), not the viewport | The window is a fraction of the screen on desktop, so viewport queries clipped the hero at ~1024px |
@@ -96,7 +96,7 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
       2026-10-21: the unused `Terminal` import in Hero and the unescaped apostrophe in Contact.
 - [x] **Content:** placeholder projects replaced with 5 real products from the resume (2026-10-21).
 - [ ] **Content:** add live links for projects (Play Store links for Kissan/Gau Sampurna?) via
-      the optional `link` field in `src/data/resume.ts`. Decide whether to keep the "TBD" future entry.
+      the optional `link` field in `src/data/resume.ts`. 
 - [ ] **Resume:** export the PDF from Overleaf to `public/resume.pdf` (the hero button is built and appears automatically). The LaTeX now has the live site URL.
 - [x] **Music licensing → decided 2026-10-21: local only.** The Jailer 2 songs and covers are
       git-ignored (`/public/music/one-sun-one-moon.*`, `/public/music/ala-bolelo.*`) and marked
@@ -111,13 +111,19 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
       ("Desktop Lo-fi", 49s, 770 KB). Swap in the owner's chosen owned or royalty-free track
       (~128 kbps, < 4 MB) and update the title and artist in `src/data/music.ts`.
 - [x] **Hero CTAs** now open the Projects / Contact windows via `setActiveTab` (2026-10-21).
-- [ ] **SEO:** add `metadataBase`, OG image, `sitemap.ts`, `robots.ts`, `icon.png`, JSON-LD.
+- [x] **SEO (2026-10-31):** `metadataBase`, OG/Twitter image, `sitemap.ts`, `robots.ts`, JSON-LD done; `icon.png` still open.
       Only the active tab is in server HTML, so other sections aren't crawlable.
 - [ ] **A11y:** desktop icons/dock items are clickable `div`s (no keyboard access);
       no reduced-motion handling.
 - [ ] **Security/UX:** `NoInspect.tsx` blocks copy (including the email); `Dock.tsx`
       `window.open` lacks `noopener`.
-- [ ] Add `src/app/not-found.tsx` (OS-themed 404).
+- [x] Add `src/app/not-found.tsx` (OS-themed 404), 2026-10-31.
+- [ ] **Crop Guide report** also changed in the repo (compare options card, blue icons); prototype not yet updated.
+- [ ] **Content:** Education's "Python, MySQL, +5 skills" lines are vague; list the skills or drop the line.
+- [ ] **Content:** the FINA certificate says **World Junior** Open Water Swimming Championships, Eilat,
+      September 2018; the resume and site say "World Open Water Championships 2018". Owner to confirm wording.
+- [ ] **Owner to decide:** remove `NoInspect` copy, text-selection and screenshot blocking; add a dock for
+      minimized windows.
 - [ ] **Phone Back:** test on a real Android phone, including in-app browsers such as LinkedIn's.
 - [ ] **Before pushing:** owner to confirm Silo Fortune is OK with public app screens, the install-to-signup
       "3%" wording, and whether Contact keeps "SYSTEM HALTED".
@@ -342,6 +348,99 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 
 ## Changelog
 
+- 2026-11-01: **Expanded Amplitude & Firebase analytics tracking for user interactions:**
+  Added tracking for untracked user actions: `Opened Photo Lightbox` and `Closed Photo Lightbox` in Beyond Work (records photo URL, caption, and method click vs escape), `Clicked Case Study TOC` (section wayfinding navigation in sticky contents), `Scrolled Case Study` (reading depth milestones at 25%, 50%, 75%, 100%), `Clicked Case Study Footnote` (citation links to sources), `Shared Prototype` (copying prototype link in the viewer), `Switched Prototype` (switching between Kissan and Gau prototypes on desktop and mobile), `Dismissed Prototype Hint` (closing the mobile prototype coachmark), and `Downloaded vCard` (saving contact to phone). Sanitized Firebase event parameter processing to filter out undefined values.
+- 2026-10-31: **Sharing and search basics:** `metadataBase` and canonical URLs (`src/data/site.ts`), Open
+  Graph and Twitter cards with a generated 1200 × 630 preview (`opengraph-image.tsx`, `twitter-image.tsx`:
+  photo, name, role, "Open to PM roles", the three KPIs), Person JSON-LD, `sitemap.ts` and `robots.ts`;
+  case study pages use their cover as the preview. Also: "Copy" beside the email in Contact, and an opened
+  window takes keyboard focus. Check the card after the next push with LinkedIn's Post Inspector (locally
+  the og:image points at localhost). Uncommitted.
+- 2026-10-31: **Desktop UX pass.** Esc closes the front window (prototype, photo viewer and other dialogs
+  close first); double-clicking the title bar zooms, as on macOS; grabbing cursor while dragging;
+  the browser tab names the open window ("Experience · Mandar Desurkar | …"); "Copy email" with a
+  "Copied" confirmation in About Me (event method `copy_email`); traffic lights have tooltips and the
+  green one says Maximize or Restore; OS-styled `src/app/not-found.tsx`. Window events record `method`.
+  Uncommitted.
+- 2026-10-31: Swimming photo gallery made compact (owner: "isn't this section big?"): all five photos in one
+  justified row on desktop (~160px tall instead of two rows ~600px), and a sideways-scrolling 150px strip
+  on phones. Photo widths come from a `--ratio` custom property (an `!important` flex shorthand on phones
+  would otherwise override an inline `flex-grow` and collapse them to 0). Uncommitted.
+- 2026-10-31: Swimming video made smaller (owner: "looks very big"): video and a 2 × 2 numbers grid side by
+  side again, video 60% wide (`align-items: start` prevents the old overflow). "11-member Team India"
+  replaced with facts from the press: **12 km trained every day** (two sessions; All About Belgaum,
+  28 Aug 2018) and **Gold, national junior champion, Malpe 2017, qualified for World Juniors** (owner's pick; STEPP, "Age 5", "1 of 5 boys" and "50+ nations" were tried and dropped); "5 km" stays in the video headline.
+  Uncommitted.
+- 2026-10-31: Swimming video and numbers redesigned for hierarchy: the video leads at full width with the
+  sharp `maxresdefault` thumbnail, a "Race video" badge, and a short headline + meta (`video.headline`,
+  `video.meta`) instead of the long YouTube title; the four numbers sit in one strip joined to the video's
+  bottom edge (number → label → context). The poster text sits top-left because the thumbnail has FINA's
+  logo baked into its bottom-left. Fixed the old side column, where `aspect-ratio` plus grid
+  stretch made the video overflow under the stat cards. Uncommitted.
+- 2026-10-31: Removed the "Chief Product Officer / Founder (TBD)" entry from Experience (owner's call), so the
+  timeline starts at the current role. The tall Experience window is centred vertically under the menu
+  bar (`bottom: 0`), with even space above and below, per the owner's screenshot. Uncommitted.
+- 2026-10-31: **Beyond Work redesigned as the swimming feature.** Desktop: full window width with a warm
+  glow, big headline, the race video beside a column of four numbers (`beyondWork.stats`: 7+ years,
+  3 national golds, 11-member Team India, 5 km), then story and press side by side, then the photos.
+  Phone: the same pieces stack (numbers as a 2 × 2 grid). Experience window enlarged to
+  `min(84vw, 1180px, 100vw − 480px)` × 88vh (480 = twice the icon area, so it stays clear even centred).
+  Story at reading width, press as a two-column list; on phones a 16px gap separates the numbers from the
+  story.
+  Uncommitted.
+- 2026-10-31: Beyond Work embeds the owner's race video (YouTube `sGlckZy6Bdk`, "5 km race at the FINA World
+  Junior Open Water Swimming Championship 2018, Israel, Part 2", his own upload). Click to play: only the
+  thumbnail loads until then, and the player is youtube-nocookie. New event `Played Video`. The title
+  confirms the 5 km event. Uncommitted.
+- 2026-10-31: Beyond Work has an "In the press" list above the photos (`beyondWork.press`, 5 links): two
+  All About Belgaum articles (FINA World Junior selection, 28 Aug 2018; STEPP Karnataka-2018 talent,
+  4 Jan 2019), read and matched, plus three of its Facebook posts (national junior gold, Swimathon 5 km
+  third place, "International swimmer…"). Facebook couldn't be opened, so those lines come from the post
+  links and carry no date. Clicks: `Clicked External Link`, `link_type: press`. Uncommitted.
+- 2026-10-31: Beyond Work shows five of the owner's swimming photos (race start, Team India portrait, medal
+  and trophy, India jersey, FINA certificate) in two justified rows with no cropping
+  (`public/beyond-work/*.webp`, rows in `beyondWork.photos`); a tap opens any full size (Esc or click
+  closes), captions show on hover. The viewer renders into `document.body`, since the window's backdrop-filter would trap a fixed
+  overlay inside it. On desktop and phone. Uncommitted.
+- 2026-10-31: Owner's Ramaiah and KLE International School logos added (`public/logos/ramaiah.png`, the
+  shield mark only since the wordmark is unreadable at icon size; `public/logos/kle.png`, the full crest)
+  and shown in the Education timeline rail via a `logo` field on each entry. Uncommitted.
+- 2026-10-31: **Education window redesigned (desktop)**, matching the Experience timeline: a rail with an
+  icon, dates and length; each school as a glass card with a map link icon, a CGPA badge and skill chips;
+  Skills & Toolkit as a 2 × 2 grid of chip groups; "+N skills" shown as muted text. Education window is
+  now 80vh tall, like Experience. Phone layout unchanged. Uncommitted.
+- 2026-10-31: Owner's Silo Fortune and AltQube logos added (`public/logos/*.png`, 160px squares on white,
+  from the images he sent) and shown in the Experience timeline rail via the new `logo` field in
+  `resume.ts`; initials remain the fallback. Uncommitted.
+- 2026-10-31: **Experience window redesigned (desktop):** a timeline with a sticky left rail (company
+  initials, dates, length computed from the period), a node per role (green for current), each product
+  group as its own card, custom bullets and a warm Beyond Work card. Company initials take capitals for
+  one-word names ("AltQube" → AQ). Phone layout unchanged (rail, badge and intro are hidden outside the
+  desktop window). Uncommitted.
+- 2026-10-31: Case study "Anatomy of a recommendation" now shows the full Crop Guide report as one long
+  screenshot (`05-report-full.webp`, 786 × 6630, stitched from the prototype), with five new callouts for
+  compare, weather, risks, tips and soil/income. Uncommitted.
+- 2026-10-31: **Farm Monitoring report synced with the repo's latest `dev` (eb2acde).** Reference clone
+  `_external/kissansampurna-app` fast-forwarded (read-only). Report now: white body, header with date
+  and a collapsible Farm Details, map tabs Growth / Moisture / Nutrition with per-tab red-yellow-green
+  legends, Do This cards with a tone accent, zone and map chips, Mark as done and no speaker, four
+  vitals in one neutral tone, stage sheet with Growth Stage → Sub-Stage → Day dropdowns, and the
+  menu's new labels (Rename Farm, Irrigation Method, Update Location). Sample values. Uncommitted.
+- 2026-10-31: About subtitle is just "Product builder", with no city (owner is open to roles anywhere).
+  Contact still lists Bangalore as his location. Uncommitted.
+- 2026-10-31: New lead sentence in the desktop About window (`profile.about[0]`), which sells an outcome
+  rather than listing PM duties. The owner asked to change that sentence only, so the "Currently…" line
+  and the phone `profile.intro` keep their earlier wording. Uncommitted.
+- 2026-10-31: Added a tone layer over the wallpaper (`.desktop-scene::before`), which calms its colour on
+  desktop and phone. Adjust with `--wallpaper-saturation` and `--wallpaper-dim` in `globals.css`. It needs
+  `isolation: isolate` on `.desktop-scene`, or the wallpaper on `<body>` paints over it. Uncommitted.
+- 2026-10-31: Menu bar: removed the status and LinkedIn link, added Wi-Fi and a battery icon. The battery
+  shows the visitor's real level where the browser shares it (`navigator.getBattery`, Chromium only),
+  otherwise full. Section links now hide below 800px. Uncommitted.
+- 2026-10-31: Desktop menu bar improved: name, section menu with the open window highlighted (source
+  `menu_bar`), "Open to PM roles" status, a LinkedIn link and the clock, on refined translucent glass.
+  The status hides below 1100px and the menu below 900px. `Clicked Contact Method` gained placement
+  `menu_bar`. Uncommitted.
 - 2026-10-31: **Phone loading.** Same sunrise loader on phones, on the wallpaper's horizon; it counts
   from the start of the page load and ends as soon as the app is ready. Sections, Search and old About
   concepts load on demand. Amplitude and Firebase load after the page settles (`lib/analyticsClient.ts`);

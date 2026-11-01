@@ -9,7 +9,7 @@ import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { ArrowLeft, ArrowUpRight, Play } from "lucide-react";
 import RichText from "@/components/RichText";
-import { CaseStudyView, TrackedLink } from "@/components/case-study/CaseStudyTracking";
+import { CaseStudyView, TrackedCite, TrackedLink } from "@/components/case-study/CaseStudyTracking";
 import { ReadingProgress, TableOfContents, type TocItem } from "@/components/case-study/ReadingNav";
 import { caseStudies, getCaseStudy, type CaseStudy, type CaseStudyFeature } from "@/data/caseStudies";
 import { profile } from "@/data/resume";
@@ -28,7 +28,8 @@ export async function generateMetadata({ params }: PageProps<"/case-studies/[slu
   return {
     title: `${cs.title} | ${profile.name}`,
     description: cs.subtitle,
-    openGraph: { title: cs.title, description: cs.subtitle, type: "article" },
+    alternates: { canonical: `/case-studies/${cs.slug}` },
+    openGraph: { title: cs.title, description: cs.subtitle, type: "article", images: [{ url: cs.cover, alt: cs.title }] },
   };
 }
 
@@ -50,9 +51,7 @@ function Cite({ cs, id }: { cs: CaseStudy; id?: string }) {
   const n = cs.sources.findIndex((s) => s.id === id) + 1;
   if (!n) return null;
   return (
-    <a href={`#source-${n}`} className={styles.cite} aria-label={`Source ${n}`}>
-      {n}
-    </a>
+    <TrackedCite slug={cs.slug} sourceId={id} n={n} className={styles.cite} />
   );
 }
 
@@ -219,7 +218,7 @@ export default async function CaseStudyPage({ params }: PageProps<"/case-studies
           <Play size={13} aria-hidden="true" />
           <span>Try the prototype</span>
         </TrackedLink>
-        <ReadingProgress />
+        <ReadingProgress slug={cs.slug} />
       </header>
 
       {/* ---------- Hero: brand canvas ---------- */}
@@ -271,7 +270,7 @@ export default async function CaseStudyPage({ params }: PageProps<"/case-studies
 
       <div className={styles.layout}>
         <aside className={styles.tocCol}>
-          <TableOfContents items={toc} />
+          <TableOfContents items={toc} slug={cs.slug} />
         </aside>
 
         <article className={styles.main}>
@@ -398,7 +397,15 @@ export default async function CaseStudyPage({ params }: PageProps<"/case-studies
             <p>{cs.solution.anatomy.intro}</p>
             <figure className={styles.anatomy}>
               <div className={styles.anatomyShot}>
-                <Device src={cs.solution.anatomy.image} alt="The Crop Guide report, annotated" sizes="(max-width: 767px) 80vw, 320px" />
+                <span className={`${styles.device} ${styles.deviceLong}`}>
+                  <Image
+                    src={cs.solution.anatomy.image}
+                    alt="The full Crop Guide report, annotated"
+                    width={cs.solution.anatomy.width}
+                    height={cs.solution.anatomy.height}
+                    sizes="(max-width: 767px) 72vw, 300px"
+                  />
+                </span>
                 {/* Markers sit in the margin beside the phone, with a leader to the element they explain */}
                 {cs.solution.anatomy.callouts.map((c, i) => {
                   const left = c.x < 50;

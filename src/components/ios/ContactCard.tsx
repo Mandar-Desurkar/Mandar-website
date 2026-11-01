@@ -90,7 +90,10 @@ export default function ContactCard() {
           href={`data:text/vcard;charset=utf-8,${encodeURIComponent(vcard)}`}
           download={`${profile.name.replace(/\s+/g, "-")}.vcf`}
           className={`${styles.row} ${styles.button}`}
-          onClick={() => track("vcard")}
+          onClick={() => {
+            track("vcard");
+            trackEvent("Downloaded vCard", { placement: "contact_window" });
+          }}
         >
           <IoPersonAdd size={20} aria-hidden="true" />
           Add to Contacts

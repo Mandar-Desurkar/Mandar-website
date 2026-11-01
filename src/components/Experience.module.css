@@ -374,75 +374,590 @@
   color: #6d6d72;
 }
 
-/* ==================== Desktop window ====================
-   On the shared dark glass (globals.css). `.ios-app` marks the phone shell, so this is desktop only. */
-:global(.os-window:not(.ios-app)) .experienceSection {
-  padding: 30px 0 36px;
+/* The video leads; the numbers sit under it as one strip (2 × 2 on the phone, 4 across on desktop) */
+.swimFeature {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-:global(.os-window:not(.ios-app)) .container {
-  max-width: none;
-  padding: 0 36px;
+.swimStats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-:global(.os-window:not(.ios-app)) .headerBox {
-  margin-bottom: 24px;
+.swimStats li {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #f2f2f7;
 }
 
-:global(.os-window:not(.ios-app)) .entry {
-  margin-bottom: 28px;
-  padding-bottom: 28px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
-}
-
-:global(.os-window:not(.ios-app)) .role {
-  font-size: 1.1875rem;
+.swimStats b {
+  font-size: 26px;
+  line-height: 1.05;
   font-weight: 700;
-  letter-spacing: -0.012em;
+  letter-spacing: -0.02em;
+  color: #000;
+}
+
+.statLabel {
+  margin-top: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1c1c1e;
+}
+
+.statNote {
+  margin-top: 1px;
+  font-size: 12px;
+  color: #8e8e93;
+}
+
+.swimStory {
+  margin-top: 16px;
+}
+
+/* Race video: a 16:9 poster that becomes the player on click */
+.video {
+  position: relative;
+  margin-top: 14px;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  background: #000;
+}
+
+.video iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.videoPoster {
+  position: absolute;
+  inset: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.videoPoster img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* The thumbnail has FINA's logo baked into its bottom-left, so the text sits top-left on open water */
+.videoPoster::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(0, 0, 0, 0.62), transparent 58%);
+}
+
+.playButton {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  margin: -30px 0 0 -30px;
+  padding-left: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+  color: #0d111b;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.videoBadge {
+  position: absolute;
+  z-index: 1;
+  left: 12px;
+  top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   color: #fff;
 }
 
-:global(.os-window:not(.ios-app)) .atSymbol {
-  color: rgba(235, 235, 245, 0.45);
+.videoCaption {
+  position: absolute;
+  z-index: 1;
+  left: 14px;
+  right: 14px;
+  top: 44px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  color: #fff;
+}
+
+.videoHeadline {
+  font-size: 15px;
+  line-height: 1.25;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+}
+
+.videoMeta {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.videoPoster:hover img {
+  transform: scale(1.03);
+}
+
+.videoPoster:hover .playButton {
+  transform: scale(1.08);
+}
+
+.videoPoster:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: -4px;
+}
+
+/* Phone: the photos scroll sideways at one height instead of shrinking to slivers */
+.photoRow {
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+
+.photoRow .photo {
+  flex: 0 0 auto !important;
+  height: 150px;
+  scroll-snap-align: start;
+}
+
+/* Press coverage: one card, a row per link */
+.pressList {
+  margin-top: 14px;
+  padding: 12px 14px 4px;
+  border-radius: 12px;
+  background: #f2f2f7;
+}
+
+.pressList ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pressList li + li {
+  border-top: 0.5px solid rgba(60, 60, 67, 0.2);
+}
+
+.pressTitle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #8e8e93;
+}
+
+.press {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  text-decoration: none;
+  color: inherit;
+}
+
+.pressArrow {
+  flex-shrink: 0;
+  color: #8e8e93;
+}
+
+.pressText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pressMeta {
+  font-size: 12px;
+  color: #8e8e93;
+}
+
+.pressHeadline {
+  font-size: 14px;
+  line-height: 1.35;
+  font-weight: 600;
+  color: #000;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+/* Beyond Work photos: justified rows (each photo grows with its aspect ratio, so a row shares one height
+   and nothing is cropped). A tap opens one full size; the caption shows on hover. */
+.photos {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.photoRow {
+  display: flex;
+  gap: 8px;
+}
+
+.photo {
+  position: relative;
+  flex-basis: 0;
+  min-width: 0;
+  overflow: hidden;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: #1c1c1e;
+  font: inherit;
+  text-align: left;
+  cursor: zoom-in;
+}
+
+.photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.photoCaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 18px 10px 8px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.72));
+  font-size: 11px;
+  line-height: 1.3;
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.photo:hover .photoCaption,
+.photo:focus-visible .photoCaption {
+  opacity: 1;
+}
+
+.photo:hover img {
+  transform: scale(1.03);
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 10050;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 32px;
+  background: rgba(0, 0, 0, 0.82);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  cursor: zoom-out;
+}
+
+.lightbox img {
+  max-width: min(100%, 1100px);
+  max-height: calc(100% - 48px);
+  width: auto;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
+}
+
+.lightbox p {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Desktop-only pieces; the phone keeps its iOS cards */
+.rail,
+.currentBadge,
+.headerIntro {
+  display: none;
+}
+
+/* Tall window: centred in the full space under the menu bar, not lifted like the shorter ones */
+:global(.os-window.absolute-window):has(.experienceSection) {
+  bottom: 0;
+}
+
+/* ==================== Desktop window ====================
+   On the shared dark glass (globals.css). A timeline: when and where on the left, the role on the
+   right, each product as its own card. `.ios-app` marks the phone shell, so this is desktop only. */
+:global(.os-window:not(.ios-app)) .experienceSection {
+  padding: 30px 0 40px;
+}
+
+:global(.os-window:not(.ios-app)) .container {
+  max-width: 1100px;
+  padding: 0 44px;
+}
+
+:global(.os-window:not(.ios-app)) .headerBox {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  margin-bottom: 34px;
+}
+
+:global(.os-window:not(.ios-app)) .headerIntro {
+  display: block;
+  font-size: 0.9375rem;
+  color: rgba(235, 235, 245, 0.62);
+}
+
+:global(.os-window:not(.ios-app)) .entries {
+  position: relative;
+}
+
+:global(.os-window:not(.ios-app)) .entry {
+  display: grid;
+  grid-template-columns: 132px minmax(0, 1fr);
+  column-gap: 40px;
+  margin: 0;
+  padding-bottom: 40px;
+}
+
+/* The timeline: a hairline down the gap between the columns, a node at each role */
+:global(.os-window:not(.ios-app)) .entry::before {
+  content: "";
+  position: absolute;
+  left: 152px;
+  top: 14px;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+:global(.os-window:not(.ios-app)) .entry:last-child::before {
+  display: none;
+}
+
+:global(.os-window:not(.ios-app)) .entry::after {
+  content: "";
+  position: absolute;
+  left: 148px;
+  top: 8px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #0d111b;
+  box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.45);
+}
+
+:global(.os-window:not(.ios-app)) .currentEntry::after {
+  background: var(--status-green);
+  box-shadow: 0 0 0 4px rgba(52, 199, 89, 0.18), 0 0 12px rgba(52, 199, 89, 0.6);
+}
+
+:global(.os-window:not(.ios-app)) .futureEntry {
+  opacity: 1;
+}
+
+:global(.os-window:not(.ios-app)) .futureEntry::after {
+  box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.3);
+}
+
+:global(.os-window:not(.ios-app)) .futureEntry .entryBody {
+  padding: 16px 18px;
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  border-radius: 14px;
+}
+
+:global(.os-window:not(.ios-app)) .futureEntry .rail,
+:global(.os-window:not(.ios-app)) .futureEntry .entryBody {
+  opacity: 0.62;
+}
+
+:global(.os-window:not(.ios-app)) .rail {
+  position: sticky;
+  top: 18px;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+:global(.os-window:not(.ios-app)) .companyMark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  margin-bottom: 8px;
+  border-radius: 10px;
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.05));
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.2);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #fff;
+}
+
+/* A real logo sits on white, like an app icon */
+:global(.os-window:not(.ios-app)) .companyLogo {
+  width: 44px;
+  height: 44px;
+  overflow: hidden;
+  border-radius: 11px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+:global(.os-window:not(.ios-app)) .companyLogo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+:global(.os-window:not(.ios-app)) .railPeriod {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: rgba(245, 245, 247, 0.86);
+}
+
+:global(.os-window:not(.ios-app)) .railLength {
+  font-size: 0.75rem;
+  color: rgba(235, 235, 245, 0.5);
+}
+
+:global(.os-window:not(.ios-app)) .entryBody {
+  min-width: 0;
+}
+
+:global(.os-window:not(.ios-app)) .entryTitle {
+  align-items: center;
+  gap: 10px;
+}
+
+:global(.os-window:not(.ios-app)) .role {
+  font-size: 1.3125rem;
+  font-weight: 700;
+  letter-spacing: -0.016em;
+  color: #fff;
+}
+
+:global(.os-window:not(.ios-app)) .currentBadge {
+  display: inline-flex;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: rgba(52, 199, 89, 0.14);
+  box-shadow: inset 0 0 0 0.5px rgba(52, 199, 89, 0.4);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #7ee2a0;
+}
+
+/* The rail already says when, so the line under the title is just the company */
+:global(.os-window:not(.ios-app)) .atSymbol,
+:global(.os-window:not(.ios-app)) .period {
+  display: none;
+}
+
+:global(.os-window:not(.ios-app)) .metaData {
+  margin: 2px 0 10px;
 }
 
 :global(.os-window:not(.ios-app)) .company {
   font-size: 0.9375rem;
-  color: rgba(245, 245, 247, 0.88);
+  font-weight: 500;
+  color: rgba(245, 245, 247, 0.72);
 }
 
-:global(.os-window:not(.ios-app)) .period {
-  font-size: 0.8125rem;
-  color: rgba(235, 235, 245, 0.6);
-}
-
-:global(.os-window:not(.ios-app)) .description,
-:global(.os-window:not(.ios-app)) .bulletList,
-:global(.os-window:not(.ios-app)) .beyondWorkList {
+:global(.os-window:not(.ios-app)) .description {
+  max-width: 64ch;
   font-size: 0.9375rem;
-  line-height: 1.55;
-  color: rgba(235, 235, 245, 0.76);
+  line-height: 1.6;
+  color: rgba(235, 235, 245, 0.72);
 }
 
-:global(.os-window:not(.ios-app)) .bulletList strong,
-:global(.os-window:not(.ios-app)) .beyondWorkList strong {
-  font-weight: 600;
-  color: #fff;
+/* Each product is a card, so a long role reads as a few short pieces */
+:global(.os-window:not(.ios-app)) .group {
+  max-width: none;
+  margin-top: 14px;
+  padding: 16px 20px 6px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.045);
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.1);
 }
 
 :global(.os-window:not(.ios-app)) .groupTitle {
+  margin-bottom: 10px;
   font-size: 0.9375rem;
   font-weight: 600;
-  color: #b4d2ff;
+  letter-spacing: -0.005em;
+  color: #fff;
+}
+
+:global(.os-window:not(.ios-app)) .groupTitleButton {
+  width: 100%;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
 
 :global(.os-window:not(.ios-app)) .groupTitleButton .groupTitle {
-  text-decoration-color: rgba(180, 210, 255, 0.4);
+  margin: 0;
+  text-decoration: none;
 }
 
 :global(.os-window:not(.ios-app)) .prototypePill {
+  padding: 4px 11px;
   background: rgba(255, 255, 255, 0.1);
   box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.18);
+  font-size: 0.75rem;
   color: #f5f5f7;
 }
 
@@ -454,21 +969,325 @@
   outline-color: #fff;
 }
 
-:global(.os-window:not(.ios-app)) .beyondWorkCard {
-  border: 0;
-  border-radius: 16px;
+:global(.os-window:not(.ios-app)) .bulletList,
+:global(.os-window:not(.ios-app)) .beyondWorkList {
+  max-width: none;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: rgba(235, 235, 245, 0.74);
+}
+
+:global(.os-window:not(.ios-app)) .bulletList li,
+:global(.os-window:not(.ios-app)) .beyondWorkList li {
+  position: relative;
+  margin-bottom: 10px;
+  padding-left: 18px;
+}
+
+:global(.os-window:not(.ios-app)) .bulletList li::before,
+:global(.os-window:not(.ios-app)) .beyondWorkList li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 0.62em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(180, 210, 255, 0.7);
+}
+
+:global(.os-window:not(.ios-app)) .bulletList strong,
+:global(.os-window:not(.ios-app)) .beyondWorkList strong {
+  font-weight: 600;
+  color: #fff;
+}
+
+
+
+:global(.os-window:not(.ios-app)) .photos {
+  gap: 10px;
+  margin: 10px 0 12px;
+}
+
+:global(.os-window:not(.ios-app)) .photoRow {
+  gap: 10px;
+}
+
+:global(.os-window:not(.ios-app)) .photo {
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.12), 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+:global(.os-window:not(.ios-app)) .photoCaption {
+  font-size: 0.75rem;
+}
+
+:global(.os-window:not(.ios-app)) .photo:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+:global(.os-window:not(.ios-app)) .pressList {
+  margin: 8px 0 6px;
+  padding: 14px 18px 4px;
   background: rgba(255, 255, 255, 0.05);
   box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.12);
 }
 
+:global(.os-window:not(.ios-app)) .pressList li + li {
+  border-top-color: rgba(255, 255, 255, 0.08);
+}
+
+:global(.os-window:not(.ios-app)) .pressTitle {
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  color: #ffd59a;
+}
+
+:global(.os-window:not(.ios-app)) .press {
+  margin: 0 -8px;
+  padding: 11px 8px;
+  border-radius: 8px;
+  transition: background-color 0.15s ease;
+}
+
+:global(.os-window:not(.ios-app)) .press:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+:global(.os-window:not(.ios-app)) .press:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 0;
+}
+
+:global(.os-window:not(.ios-app)) .pressArrow {
+  color: rgba(235, 235, 245, 0.5);
+  transition: transform 0.2s ease;
+}
+
+:global(.os-window:not(.ios-app)) .press:hover .pressArrow {
+  transform: translate(2px, -2px);
+  color: #fff;
+}
+
+:global(.os-window:not(.ios-app)) .pressMeta {
+  font-size: 0.75rem;
+  color: rgba(235, 235, 245, 0.55);
+}
+
+:global(.os-window:not(.ios-app)) .pressHeadline {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+:global(.os-window:not(.ios-app)) .video {
+  margin: 10px 0 4px;
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.12), 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+:global(.os-window:not(.ios-app)) .videoCaption {
+  left: 18px;
+  bottom: 16px;
+  font-size: 0.9375rem;
+}
+
+/* ==================== Beyond Work, desktop: a feature, not a footnote ====================
+   Full width of the window, set off from the timeline by a warm glow. Video and numbers side by side,
+   then the story and the press in two columns, then the photos. */
+:global(.os-window:not(.ios-app)) .beyondWorkCard {
+  position: relative;
+  margin: 24px -44px 0;
+  padding: 44px 44px 40px;
+  border: 0;
+  border-radius: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    radial-gradient(700px 300px at 15% 0%, rgba(255, 176, 80, 0.13), transparent 70%),
+    radial-gradient(600px 300px at 95% 30%, rgba(60, 140, 255, 0.1), transparent 70%);
+  box-shadow: none;
+}
+
 :global(.os-window:not(.ios-app)) .beyondWorkHeader {
-  border-bottom-color: rgba(255, 255, 255, 0.1);
+  margin-bottom: 10px;
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+:global(.os-window:not(.ios-app)) .beyondWorkHeader svg {
+  color: #ffc45c !important;
 }
 
 :global(.os-window:not(.ios-app)) .beyondWorkTitle {
-  font-size: 0.9375rem;
+  font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0;
-  text-transform: none;
-  color: rgba(235, 235, 245, 0.66);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #ffd59a;
+}
+
+:global(.os-window:not(.ios-app)) .beyondWorkCard .role {
+  font-size: clamp(1.75rem, 3.4cqi, 2.4rem);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+}
+
+:global(.os-window:not(.ios-app)) .beyondWorkCard .metaData {
+  margin: 6px 0 28px !important;
+}
+
+:global(.os-window:not(.ios-app)) .beyondWorkCard .company {
+  font-size: 1rem;
+  color: rgba(245, 245, 247, 0.78);
+}
+
+:global(.os-window:not(.ios-app)) .beyondWorkCard .period {
+  display: inline;
+  font-size: 0.875rem;
+  color: rgba(235, 235, 245, 0.55);
+}
+
+/* Video and numbers side by side at a moderate size: the video leads, the numbers back it up.
+   align-items: start, or the grid would stretch the video's height and its aspect-ratio would widen it. */
+:global(.os-window:not(.ios-app)) .swimFeature {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 14px;
+}
+
+:global(.os-window:not(.ios-app)) .video {
+  margin: 0;
+  border-radius: 16px;
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.14), 0 14px 40px rgba(0, 0, 0, 0.45);
+}
+
+:global(.os-window:not(.ios-app)) .videoBadge {
+  left: 16px;
+  top: 14px;
+}
+
+:global(.os-window:not(.ios-app)) .videoCaption {
+  left: 16px;
+  right: 16px;
+  top: 46px;
+}
+
+:global(.os-window:not(.ios-app)) .videoHeadline {
+  font-size: clamp(1rem, 1.9cqi, 1.25rem);
+  letter-spacing: -0.015em;
+}
+
+:global(.os-window:not(.ios-app)) .videoMeta {
+  font-size: 0.8125rem;
+}
+
+:global(.os-window:not(.ios-app)) .playButton {
+  width: 60px;
+  height: 60px;
+  margin: -30px 0 0 -30px;
+}
+
+/* 2 × 2, matching the video's height */
+:global(.os-window:not(.ios-app)) .swimStats {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  height: 100%;
+}
+
+:global(.os-window:not(.ios-app)) .swimStats li {
+  justify-content: center;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.12);
+}
+
+:global(.os-window:not(.ios-app)) .swimStats b {
+  font-size: 1.5rem;
+  background: linear-gradient(180deg, #fff 35%, #ffd59a 140%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+:global(.os-window:not(.ios-app)) .statLabel {
+  margin-top: 4px;
+  font-size: 0.8125rem;
+  color: #f5f5f7;
+}
+
+:global(.os-window:not(.ios-app)) .statNote {
+  font-size: 0.75rem;
+  color: rgba(235, 235, 245, 0.5);
+}
+
+/* The story at reading width, then the press as a two-column list */
+:global(.os-window:not(.ios-app)) .swimStory {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin: 28px 0 26px;
+}
+
+:global(.os-window:not(.ios-app)) .swimStory .beyondWorkList {
+  max-width: 78ch;
+  font-size: 0.9375rem;
+}
+
+:global(.os-window:not(.ios-app)) .swimStory .pressList {
+  margin: 0;
+}
+
+:global(.os-window:not(.ios-app)) .swimStory .pressList ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 28px;
+}
+
+:global(.os-window:not(.ios-app)) .swimStory .pressList li + li {
+  border-top: 0;
+}
+
+:global(.os-window:not(.ios-app)) .swimStory .pressList li {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+:global(.os-window:not(.ios-app)) .swimStory .pressList li:nth-child(-n + 2) {
+  border-top: 0;
+}
+
+:global(.os-window:not(.ios-app)) .photos {
+  margin: 0;
+}
+
+/* Narrower windows: numbers go under the video, story and press stack */
+@container window (max-width: 899.98px) {
+  :global(.os-window:not(.ios-app)) .swimFeature {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  :global(.os-window:not(.ios-app)) .swimStats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  :global(.os-window:not(.ios-app)) .swimStory .pressList ul {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  :global(.os-window:not(.ios-app)) .swimStory .pressList li:nth-child(2) {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+}
+
+/* Desktop: all five in one justified row, so the gallery is a strip, not a wall */
+:global(.os-window:not(.ios-app)) .photoRow {
+  overflow: visible;
+}
+
+/* Each photo grows with its aspect ratio, so the row shares one height and nothing is cropped */
+:global(.os-window:not(.ios-app)) .photoRow .photo {
+  flex: var(--ratio) 1 0 !important;
+  height: auto;
 }

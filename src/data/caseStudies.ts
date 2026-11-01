@@ -62,7 +62,8 @@ export type CaseStudy = {
     beforeReport: CaseStudyFeature[];
     afterReport: CaseStudyFeature[];
     // Annotated screenshot: callout positions are % of the image
-    anatomy: { image: string; intro: string; callouts: CaseStudyCallout[] };
+    // The whole report as one long screenshot; width and height are its pixels
+    anatomy: { image: string; width: number; height: number; intro: string; callouts: CaseStudyCallout[] };
     engineIntro: string;
     pipeline: { input: string; stages: CaseStudyStage[]; output: string };
     engineRules: string[];
@@ -309,16 +310,23 @@ export const caseStudies: CaseStudy[] = [
         },
       ],
       anatomy: {
-        image: `${IMG}/05-report.webp`,
-        intro: "The report is where trust is won or lost. Every element answers a question a farmer would ask before spending a season on it.",
-        // x, y: the element the callout points at, as % of the screenshot
+        image: `${IMG}/05-report-full.webp`,
+        width: 786,
+        height: 6630,
+        intro: "The report is where trust is won or lost. Every element answers a question a farmer would ask before spending a season on it. This is the whole report, top to bottom.",
+        // x, y: the element the callout points at, as % of the full-length screenshot
         callouts: [
-          { x: 9, y: 21, title: "The decision first", body: "One crop, named in the largest type on the screen. Details come after the answer, not before it." },
-          { x: 10, y: 31.7, title: "Suitability, not a promise", body: "The % is the crop's score out of the maximum, labelled 'match'. It never claims a yield." },
-          { x: 76, y: 37.3, title: "Something to do this week", body: "A sowing window turns a recommendation into an action with a date range." },
-          { x: 92, y: 47.3, title: "The reasons, at a glance", body: "Five checks (soil, water, season, budget, profit) passed or failed, each in one word." },
-          { x: 92.5, y: 73.3, title: "Honest about money", body: "Profit potential carries its own level, so the farmer knows how sure we are." },
-          { x: 8, y: 93.5, title: "Answer becomes a relationship", body: "One tap tracks the crop on the farm in Farm Monitoring for the rest of the season." },
+          { x: 9, y: 5.4, title: "The decision first", body: "One crop, named in the largest type on the screen. Details come after the answer, not before it." },
+          { x: 10, y: 8.15, title: "Suitability, not a promise", body: "The % is the crop's score out of the maximum, labelled 'match'. It never claims a yield." },
+          { x: 76, y: 9.59, title: "Something to do this week", body: "A sowing window turns a recommendation into an action with a date range." },
+          { x: 92, y: 12.16, title: "The reasons, at a glance", body: "Five checks (soil, water, season, budget, profit) passed or failed, each in one word." },
+          { x: 92.5, y: 18.84, title: "Honest about money", body: "Profit potential carries its own level, so the farmer knows how sure we are." },
+          { x: 8, y: 24.03, title: "Answer becomes a relationship", body: "One tap tracks the crop on the farm in Farm Monitoring for the rest of the season." },
+          { x: 10, y: 26.8, title: "The trade-offs in view", body: "The rest of the top 5, each with its match, one tap from its own report." },
+          { x: 73, y: 45.4, title: "The weather it needs", body: "Temperature, rainfall and humidity ranges for the crop, each marked against the farmer's area." },
+          { x: 10, y: 58.7, title: "Risks, with the fix", body: "The pests and diseases to expect, each with what to do about it." },
+          { x: 78.7, y: 72.9, title: "Tips ranked by impact", body: "Practical tips tagged High or Medium, so the farmer knows where to start." },
+          { x: 10, y: 85.8, title: "Why it pays beyond one season", body: "What the crop does for the soil and for income, beyond this harvest." },
         ],
       },
       engineIntro:

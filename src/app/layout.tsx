@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import NoInspect from "@/components/NoInspect";
 import { profile } from "@/data/resume";
+import { SITE_URL } from "@/data/site";
 
 // Typography: Apple devices render Apple's own system font, SF Pro (its licence doesn't allow
 // serving it as a web font). Everyone else gets Inter, the closest open-source match, self-hosted
@@ -16,9 +17,34 @@ const APPLE_PLATFORM_SCRIPT = `try{var p=(navigator.userAgentData&&navigator.use
 
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: `${profile.name} | ${profile.role}`,
   description: profile.metaDescription,
+  alternates: { canonical: "/" },
+  // Link previews on LinkedIn, WhatsApp and Slack; the images come from opengraph-image.tsx
+  openGraph: {
+    type: "profile",
+    url: "/",
+    siteName: profile.name,
+    title: `${profile.name} | ${profile.role}`,
+    description: profile.metaDescription,
+  },
+  twitter: { card: "summary_large_image", title: `${profile.name} | ${profile.role}`, description: profile.metaDescription },
 };
+
+// Structured data, so search engines show the name, role and profiles
+const PERSON_JSON_LD = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: profile.name,
+  jobTitle: profile.role,
+  url: SITE_URL,
+  image: `${SITE_URL}/profile-photo.jpg`,
+  worksFor: { "@type": "Organization", name: "Silo Fortune" },
+  alumniOf: { "@type": "CollegeOrUniversity", name: "M. S. Ramaiah Institute of Technology" },
+  address: { "@type": "PostalAddress", addressLocality: "Bangalore", addressCountry: "IN" },
+  sameAs: [profile.linkedin],
+});
 
 // viewport-fit=cover lets the mobile dock and prototype bars respect the iPhone safe areas
 export const viewport: Viewport = {
@@ -40,6 +66,7 @@ export default function RootLayout({
         {/* A plain inline script, not next/script: it must run while the HTML is parsed, before the
             first paint, or Chrome on a Mac would briefly show Inter before switching to SF Pro */}
         <script dangerouslySetInnerHTML={{ __html: APPLE_PLATFORM_SCRIPT }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: PERSON_JSON_LD.replace(/</g, "\\u003c") }} />
       </head>
       <body>
         <NoInspect />

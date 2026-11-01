@@ -255,6 +255,30 @@
   color: #fff;
 }
 
+.copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(245, 245, 247, 0.6);
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.copy:hover {
+  color: #fff;
+}
+
+.copy:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
 .contact:focus-visible,
 .links a:focus-visible {
   outline: 2px solid #fff;

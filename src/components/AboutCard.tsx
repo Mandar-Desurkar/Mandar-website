@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Check, Copy } from "lucide-react";
 import { kpis, profile, shippedApps } from "@/data/resume";
 import { useWindow } from "@/context/WindowContext";
 import { trackEvent } from "@/lib/analytics";
@@ -53,6 +53,7 @@ export default function AboutCard() {
   const [delay] = useState(isFirstMount ? 1.8 : 0);
   // The resume link appears once the PDF is deployed, so it never 404s
   const [hasResume, setHasResume] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     isFirstMount = false;
@@ -90,7 +91,7 @@ export default function AboutCard() {
         </span>
         <div>
           <h1>{profile.name}</h1>
-          <p>Product builder in {profile.location.split(",")[0]}</p>
+          <p>Product builder</p>
           <p className={styles.status}>
             <span className={styles.statusDot} aria-hidden="true" />
             {profile.availability}
@@ -143,6 +144,22 @@ export default function AboutCard() {
         <a href={`mailto:${profile.email}`} onClick={() => trackEvent("Clicked Contact Method", { method: "email", placement: "hero" })}>
           Email
         </a>
+        {/* Many recruiters paste the address into their own mail tool rather than open a mail app */}
+        <button
+          type="button"
+          className={styles.copy}
+          onClick={() => {
+            navigator.clipboard?.writeText(profile.email).then(() => {
+              setCopied(true);
+              window.setTimeout(() => setCopied(false), 1800);
+            });
+            trackEvent("Clicked Contact Method", { method: "copy_email", placement: "hero" });
+          }}
+          aria-label={`Copy email address ${profile.email}`}
+        >
+          {copied ? <Check size={14} aria-hidden="true" /> : <Copy size={14} aria-hidden="true" />}
+          <span>{copied ? "Copied" : "Copy email"}</span>
+        </button>
         {hasResume && (
           <a href={profile.resumeUrl} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent("Opened Resume", { placement: "hero" })}>
             Resume

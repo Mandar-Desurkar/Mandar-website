@@ -1,7 +1,8 @@
 "use client";
 
 import styles from "./Contact.module.css";
-import { Mail, Phone } from "lucide-react";
+import { useState } from "react";
+import { Check, Copy, Mail, Phone } from "lucide-react";
 import { FaLinkedin } from "react-icons/fa";
 import { trackEvent } from "@/lib/analytics";
 import { useIsMobile } from "@/hooks/useIsMobile";
@@ -10,6 +11,7 @@ import ContactCard from "./ios/ContactCard";
 export default function Contact() {
   // Phones get an iOS Contacts card instead of the notebook doodle
   const isMobile = useIsMobile();
+  const [copied, setCopied] = useState(false);
   if (isMobile) return <ContactCard />;
 
   return (
@@ -28,7 +30,24 @@ export default function Contact() {
           </p>
           
           <div className={styles.details}>
-            <p style={{ margin: '0.5rem 0' }}><strong>Email:</strong> mandardesurkar3@gmail.com</p>
+            <p style={{ margin: '0.5rem 0' }}>
+              <strong>Email:</strong> mandardesurkar3@gmail.com{" "}
+              <button
+                type="button"
+                className={styles.copyBtn}
+                onClick={() => {
+                  navigator.clipboard?.writeText("mandardesurkar3@gmail.com").then(() => {
+                    setCopied(true);
+                    window.setTimeout(() => setCopied(false), 1800);
+                  });
+                  trackEvent("Clicked Contact Method", { method: "copy_email", placement: "contact_window" });
+                }}
+                aria-label="Copy email address"
+              >
+                {copied ? <Check size={13} aria-hidden="true" /> : <Copy size={13} aria-hidden="true" />}
+                {copied ? "Copied" : "Copy"}
+              </button>
+            </p>
             <p style={{ margin: '0.5rem 0' }}><strong>Phone:</strong> +91 8073118693</p>
             <p style={{ margin: '0.5rem 0' }}><strong>Location:</strong> Bangalore, India</p>
           </div>

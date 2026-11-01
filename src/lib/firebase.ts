@@ -50,7 +50,15 @@ export async function logFirebaseEvent(
   try {
     const analytics = await getFirebaseAnalytics();
     if (analytics) {
-      logEvent(analytics, eventName, eventParams);
+      const cleanParams: Record<string, string | number | boolean> = {};
+      if (eventParams) {
+        for (const [key, value] of Object.entries(eventParams)) {
+          if (value !== undefined) {
+            cleanParams[key] = value;
+          }
+        }
+      }
+      logEvent(analytics, eventName, cleanParams);
     }
   } catch (err) {
     console.warn(`[Firebase Analytics] failed to log event "${eventName}":`, err);

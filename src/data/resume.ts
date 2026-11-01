@@ -10,10 +10,9 @@ export const profile = {
   linkedin: "https://www.linkedin.com/in/mandar-desurkar/",
   // Status badge on the About photo
   availability: "Open to PM roles",
-  // The About window: `intro` with coloured words. {tag:word} renders a link to that work, so keep
-  // the wording in step with `intro`.
+  // The About window, desktop only. {tag:word} renders a coloured link to that work.
   about: [
-    "I take AI-powered {build:products} from 0→1, from the first {write:PRD} to launch, {grow:growth} and monetization.",
+    "I build AI {build:products} people actually pay for, and I own them from the first {write:PRD} through launch and {grow:growth}.",
     "Currently Associate PM at Silo Fortune, building agritech apps for India's farmers.",
   ],
   // Export the resume PDF from Overleaf to public/resume.pdf. Until it exists, the hero
@@ -80,23 +79,18 @@ export type Experience = {
   company: string;
   period: string;
   summary: string;
+  // Company logo on a white square (public/logos), shown in the desktop Experience timeline
+  logo?: string;
   groups?: ExperienceGroup[];
   isFuture?: boolean;
 };
 
 export const experiences: Experience[] = [
   {
-    role: "Chief Product Officer / Founder",
-    company: "TBD",
-    period: "Future",
-    summary:
-      "Building the next generation of intuitive tech. Leading product vision, scaling teams, and shipping category-defining products.",
-    isFuture: true,
-  },
-  {
     role: "Associate Product Manager",
     company: "Silo Fortune Private Limited",
     period: "09/2025 - Present",
+    logo: "/logos/silo-fortune.png",
     summary:
       "Owning AI-powered 0→1 farmer apps and the sales and last-mile stack behind them, working with engineering, design and data science.",
     groups: [
@@ -144,6 +138,7 @@ export const experiences: Experience[] = [
     role: "Product Management Intern",
     company: "AltQube",
     period: "06/2023 - 09/2025",
+    logo: "/logos/altqube.png",
     summary:
       "Built a hyper-personalized wealth management platform from 0→1 alongside engineers, designers, data scientists and economists.",
     groups: [
@@ -167,6 +162,66 @@ export const beyondWork = {
     "Competed professionally for **7+ years**, representing India at the **World Open Water Championships 2018** (Israel) in the 5 km event against 200+ elite athletes from 50+ countries.",
     "Led the **Indian National Relay Team** at international competition.",
     "Won **3 National Gold**, 2 Silver and 1 Bronze medals in open water swimming.",
+  ],
+  // Headline numbers for the swimming story, all from the resume and the press coverage
+  stats: [
+    { value: "7+", label: "years competing", note: "2013 – 2020" },
+    { value: "3", label: "national golds", note: "plus 2 silver, 1 bronze" },
+    // All About Belgaum, 28 Aug 2018: "two daily sessions covering 10 to 12 km"
+    { value: "12 km", label: "trained every day", note: "in two sessions" },
+    // All About Belgaum, 28 Aug 2018: gold at the 1st National Junior Open Water Swimming Championship,
+    // Malpe, 30–31 Dec 2017, the result that earned his World Juniors selection
+    { value: "Gold", label: "national junior champion", note: "Malpe 2017 · qualified for World Juniors" },
+  ],
+  // The owner's own upload of his race; plays in place on the page (youtube-nocookie)
+  video: {
+    id: "sGlckZy6Bdk",
+    title: "Mandar Desurkar's 5 km race at the FINA World Junior Open Water Swimming Championship 2018, Israel (Part 2)",
+    // On the poster: what it is, then where and when
+    headline: "My 5 km race at the FINA World Junior Championships",
+    meta: "Eilat, Israel · 2018 · Part 2",
+  },
+  // Press coverage, shown as a list of links above the photos. Articles were read and match their
+  // headline and date; the Facebook posts couldn't be opened, so their lines come from the post links
+  // and they carry no date.
+  press: [
+    {
+      headline: "Mandar to participate in FINA World Junior Open Water Swimming Championship to be held at Israel",
+      source: "All About Belgaum",
+      date: "28 Aug 2018",
+      url: "https://allaboutbelgaum.com/sports/mandar-to-participate-in-fina-world-junior-open-water-swimming-championship-to-be-held-at-israel/",
+    },
+    {
+      headline: "Mandar Desurkar bagged another gold at the 1st National Junior Open Water Swimming Championship",
+      source: "All About Belgaum on Facebook",
+      url: "https://www.facebook.com/allaboutbelgaum/posts/mandar-desurkar-bagged-another-gold-at-the-1st-national-junior-open-water-swimmi/10155313174758553/",
+    },
+    {
+      headline: "Mandar Desurkar amongst sports talent under STEPP Karnataka-2018 initiative",
+      source: "All About Belgaum",
+      date: "4 Jan 2019",
+      url: "https://allaboutbelgaum.com/news/mandar-desurkar-amongst-sports-talent-under-stepp-karnataka-2018-initiative/",
+    },
+    {
+      headline: "Mandar Desurkar secured third place in the open category 5 km at the Swimathon",
+      source: "All About Belgaum on Facebook",
+      url: "https://www.facebook.com/allaboutbelgaum/photos/mandar-desurkar-secured-third-place-in-the-open-category-5-km-at-the-swimathon-2/10155456911103553/",
+    },
+    {
+      headline: "International swimmer Master Mandar Maruti Desurkar of KLE's International School",
+      source: "All About Belgaum on Facebook",
+      url: "https://www.facebook.com/allaboutbelgaum/posts/international-swimmer-master-mandar-maruti-desurkar-of-kles-international-school/10156648727653553/",
+    },
+  ] as { headline: string; source: string; date?: string; url: string }[],
+  // Photos the owner supplied, as one compact justified row (no cropping); any photo opens full size
+  photos: [
+    [
+      { src: "/beyond-work/race-start-eilat.webp", width: 1440, height: 806, caption: "Race start, FINA World Junior Open Water Championships, Eilat 2018" },
+      { src: "/beyond-work/team-india-portrait.webp", width: 800, height: 1200, caption: "Team India, 2018" },
+      { src: "/beyond-work/medal-trophy.webp", width: 643, height: 933, caption: "With a medal and trophy" },
+      { src: "/beyond-work/team-india.webp", width: 1200, height: 900, caption: "Representing India, Eilat 2018" },
+      { src: "/beyond-work/fina-certificate.webp", width: 1600, height: 1131, caption: "FINA certificate, Eilat 2018" },
+    ],
   ],
 };
 

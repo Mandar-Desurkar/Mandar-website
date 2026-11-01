@@ -669,15 +669,75 @@
 }
 
 /* change-stage-sheet.jsx */
+/* change-stage-sheet.jsx: title, then stage → sub-stage → day dropdowns, then Submit */
+.stageSheet {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 12px 24px 32px;
+}
+
 .stageSheetHead {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 20px;
-  color: #0f2942;
-  font-size: 20px;
+  max-width: 100%;
+  color: #004691;
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 28px;
+  letter-spacing: -0.24px;
+}
+
+.stageField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stageFieldLabel {
+  font-size: 13px;
   font-weight: 700;
+  color: #374151;
+}
+
+.dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown select {
+  width: 100%;
+  height: 50px;
+  padding: 0 44px 0 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  background: #fff;
+  font: inherit;
+  font-size: 15px;
+  color: #111827;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+.dropdown select:invalid,
+.dropdown select:has(option[value=""]:checked) {
+  color: #9ca3af;
+}
+
+.dropdown svg {
+  position: absolute;
+  right: 14px;
+  pointer-events: none;
+}
+
+.dropdownOff select {
+  background: #f9fafb;
+  cursor: not-allowed;
 }
 
 .sheetClose {

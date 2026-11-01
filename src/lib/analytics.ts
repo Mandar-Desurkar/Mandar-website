@@ -28,10 +28,10 @@ export type AnalyticsEvents = {
   "Opened System Menu": Record<string, never>;
 
   // Window chrome: do visitors play with the desktop metaphor?
-  "Closed Window": { section: SectionId };
+  "Closed Window": { section: SectionId; method?: "button" | "escape" };
   "Minimized Window": { section: SectionId };
-  "Maximized Window": { section: SectionId };
-  "Restored Window": { section: SectionId };
+  "Maximized Window": { section: SectionId; method?: "button" | "title_double_click" };
+  "Restored Window": { section: SectionId; method?: "button" | "title_double_click" };
   "Moved Window": { section: SectionId };
   "Resized Window": { section: SectionId; width: number; height: number };
 
@@ -42,12 +42,18 @@ export type AnalyticsEvents = {
 
   // Interactive app prototypes (e.g. Kissan Sampurna)
   "Opened Prototype": { prototype: string; placement: "hero" | "desktop" | "experience" | "projects" | "home_screen" | "deep_link" | "spotlight" };
+  "Switched Prototype": { from_prototype: string; to_prototype: string };
+  "Shared Prototype": { prototype: string; method: "copy" | "native" };
+  "Dismissed Prototype Hint": Record<string, never>;
   // Phone home screen: the iOS Search pill opens Spotlight over the sections, apps and contact actions
   "Opened Spotlight": Record<string, never>;
   // Case studies (the Case Studies window lists them; each is a page at /case-studies/<slug>)
   "Opened Case Study": { slug: string; placement: "case_studies" | "spotlight" | "desktop" };
   "Viewed Case Study": { slug: string };
   "Clicked Case Study CTA": { slug: string; cta: "prototype" | "back" | "source" };
+  "Clicked Case Study TOC": { slug: string; section: string };
+  "Scrolled Case Study": { slug: string; milestone: 25 | 50 | 75 | 100 };
+  "Clicked Case Study Footnote": { slug: string; source_id: string };
   // Phone home screen has two pages (apps, then the clock/calendar); page is 1-based
   "Viewed Home Screen Page": { page: number; method: "swipe" | "dots" };
   "Selected Spotlight Result": { result: string; kind: "section" | "app" | "case_study" | "contact"; query_length: number };
@@ -61,11 +67,18 @@ export type AnalyticsEvents = {
   };
   "Closed Prototype": { prototype: string; screens_viewed: number; seconds_open: number };
 
+  // Beyond Work Photo Lightbox
+  "Opened Photo Lightbox": { photo: string; caption: string };
+  "Closed Photo Lightbox": { photo: string; method: "click" | "escape" };
+
   // Conversion: the north star
-  "Clicked Contact Method": { method: "email" | "linkedin" | "phone" | "sms" | "vcard"; placement: "contact_window" | "hero" | "home_widget" | "home_dock" | "spotlight" };
-  "Opened Resume": { placement: "hero" };
+  "Clicked Contact Method": { method: "email" | "linkedin" | "phone" | "sms" | "vcard" | "copy_email"; placement: "contact_window" | "hero" | "home_widget" | "home_dock" | "spotlight" | "menu_bar" };
+  "Opened Resume": { placement: "hero" | "spotlight" | "menu_bar" };
+  "Downloaded vCard": { placement: "contact_window" };
+  // Beyond Work: the race video starts playing on the page
+  "Played Video": { video: string };
   "Clicked External Link": {
-    link_type: "school_map" | "project" | "app_website";
+    link_type: "school_map" | "project" | "app_website" | "press";
     label: string;
     placement?: "hero_icon" | "hero_chip";
   };

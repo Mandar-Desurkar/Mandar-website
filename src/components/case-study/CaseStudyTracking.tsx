@@ -46,3 +46,26 @@ export function TrackedLink({
     </Link>
   );
 }
+
+export function TrackedCite({
+  slug,
+  sourceId,
+  n,
+  className,
+}: {
+  slug: string;
+  sourceId: string;
+  n: number;
+  className?: string;
+}) {
+  return (
+    <a
+      href={`#source-${n}`}
+      className={className}
+      aria-label={`Source ${n}`}
+      onClick={() => trackEvent("Clicked Case Study Footnote", { slug, source_id: sourceId })}
+    >
+      {n}
+    </a>
+  );
+}

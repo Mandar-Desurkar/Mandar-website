@@ -786,12 +786,18 @@
 }
 
 /* ---------- Farm Monitoring: report ---------- */
+/* farm-report-screen.jsx: white body, 20pt sides, 20pt between every block */
 .fmReportBody {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 8px 16px 28px;
-  background: #f8fafc;
+  gap: 20px;
+  padding: 12px 20px 24px;
+  background: #fff;
+}
+
+.fmReportBody .card {
+  border-color: #e2e8f0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
 }
 
 .naHeader {
@@ -807,17 +813,16 @@
 }
 
 .warnIcon {
-  padding: 8px 10px;
+  display: flex;
+  padding: 10px;
   border-radius: 12px;
   background: #fef2f2;
-  color: #dc2626;
-  font-size: 18px;
 }
 
 .naTitle {
-  font-size: 21px;
-  font-weight: 700;
-  line-height: 1.15;
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 24px;
   color: #dc2626;
 }
 
@@ -829,6 +834,9 @@
 }
 
 .syncPill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   padding: 4px 10px;
   border: 1px solid #fde68a;
   border-radius: 100px;
@@ -839,24 +847,48 @@
 }
 
 .updated {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
   font-size: 11px;
-  color: #94a3b8;
+  color: #64748b;
+}
+
+.naInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.naDate {
+  font-size: 14px;
+  color: #001933;
+}
+
+.detailsToggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f2942;
 }
 
 .cropArea {
   font-size: 20px;
   font-weight: 700;
-  color: #0f2a4a;
+  color: #0f2942;
 }
 
 .farmLocation {
   font-size: 14px;
-  color: #94a3b8;
+  color: #64748b;
 }
 
 .naDescription {
   font-size: 14px;
-  line-height: 1.45;
+  line-height: 20px;
   color: #475569;
 }
 
@@ -884,6 +916,10 @@
   color: #0f2a4a;
 }
 
+.yourFarm {
+  gap: 12px;
+}
+
 .yourFarmTitle {
   font-size: 18px;
   font-weight: 700;
@@ -902,19 +938,20 @@
   background: #e2e8f0;
   font: inherit;
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 400;
   color: #004691;
   cursor: pointer;
 }
 
 .tabActive {
+  font-weight: 700;
   background: #004691;
   color: #fff;
 }
 
 .overlayWrap {
   position: relative;
-  height: 165px;
+  height: 160px;
   border-radius: 12px;
   overflow: hidden;
 }
@@ -928,7 +965,9 @@
 
 .legend {
   display: flex;
-  gap: 16px;
+  flex-wrap: wrap;
+  column-gap: 16px;
+  row-gap: 6px;
   font-size: 12px;
   color: #475569;
 }
@@ -946,21 +985,34 @@
 }
 
 .sectionTitle {
-  margin-bottom: -6px;
   font-size: 18px;
   font-weight: 700;
-  color: #0f2a4a;
+  color: #111827;
 }
 
+/* Left accent in the card's tone, as recommendation-card.jsx */
 .recCard {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 10px;
-  padding: 14px;
+  gap: 12px;
+  padding: 16px;
+  border-left: 4px solid transparent;
   border-radius: 16px;
   background: #fff;
-  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.06);
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1), 0 0 0 0.5px rgba(0, 0, 0, 0.04);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.hrRec {
+  align-self: stretch;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.1);
 }
 
 .recTop {
@@ -973,7 +1025,7 @@
 .recTitleGroup {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .recIcon {
@@ -988,6 +1040,7 @@
 }
 
 .recTitle {
+  flex: 1;
   font-size: 15px;
   font-weight: 700;
   color: #0f172a;
@@ -1010,15 +1063,17 @@
 }
 
 .zonePill {
-  padding: 3px 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
   border-radius: 999px;
   font-size: 11px;
-  font-weight: 700;
 }
 
 .recBody {
   font-size: 14px;
-  line-height: 1.45;
+  line-height: 20px;
   color: #475569;
 }
 
@@ -1036,27 +1091,29 @@
 }
 
 .doneBtn {
-  align-self: center;
-  padding: 7px 16px;
-  border: 1px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 24px;
+  border: 1px solid rgba(0, 42, 87, 0.25);
   border-radius: 999px;
   background: #fff;
   font: inherit;
   font-size: 13px;
-  font-weight: 700;
   color: #002a57;
   cursor: pointer;
 }
 
 .doneBtnDone {
-  border-color: #15803d;
-  background: #e7f6ec;
-  color: #15803d;
+  border-color: #16a34a;
+  background: #16a34a;
+  color: #fff;
 }
 
 .accordion {
   width: 100%;
   display: flex;
+  align-items: center;
   justify-content: space-between;
   padding: 0;
   border: none;
@@ -1067,15 +1124,17 @@
   cursor: pointer;
 }
 
+/* farm-vitals-card.jsx: two per row, the tile above its label */
 .vitalsGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: 24px 16px;
+  border-width: 1.5px;
 }
 
 .vital {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 12px;
 }
 
@@ -1094,17 +1153,18 @@
 .vitalText {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
 }
 
 .vitalLabel {
-  font-size: 13px;
+  font-size: 14px;
   color: #475569;
 }
 
 .vitalValue {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
+  color: #1e3a8a;
 }
 
 .stageHeader {

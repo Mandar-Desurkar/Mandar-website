@@ -11,6 +11,7 @@ import { ChevronDown, ChevronLeft, ChevronRight, Expand, ListTree, Minimize, Rot
 import styles from "./PrototypeMobile.module.css";
 import { lato, poppins } from "./fonts";
 import { fitToPhone } from "./deviceFit";
+import { trackEvent } from "@/lib/analytics";
 import type { Prototype } from "@/data/prototypes/kissanSampurna";
 
 const HINT_KEY = "prototype-mobile-hint-seen";
@@ -285,7 +286,10 @@ export default function PrototypeMobile({
             initial={{ opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -16 }}
-            onClick={() => setHint(false)}
+            onClick={() => {
+              trackEvent("Dismissed Prototype Hint", {});
+              setHint(false);
+            }}
             aria-label="Dismiss hint"
           >
             <span className={styles.hintDot} />
@@ -456,7 +460,12 @@ export default function PrototypeMobile({
                           role="tab"
                           aria-selected={a.id === prototype.id}
                           className={`${styles.segBtn} ${a.id === prototype.id ? styles.segOn : ""}`}
-                          onClick={() => a.id !== prototype.id && onSwitchPrototype(a.id)}
+                          onClick={() => {
+                            if (a.id !== prototype.id) {
+                              trackEvent("Switched Prototype", { from_prototype: prototype.id, to_prototype: a.id });
+                              onSwitchPrototype(a.id);
+                            }
+                          }}
                         >
                           {a.label}
                         </button>

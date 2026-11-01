@@ -15,19 +15,24 @@ import {
   ChevronDown,
   ChevronRight,
   ChevronUp,
+  Clock,
   Cloud,
   Droplets,
+  FlaskConical,
+  Flower2,
   Info,
   Leaf,
   Locate,
   MapPin,
   Pencil,
   PlusCircle,
+  RefreshCw,
   Search,
   Sprout,
   Sun,
   Thermometer,
   Trash2,
+  TriangleAlert,
   X,
 } from "lucide-react";
 import base from "./kissan.module.css";
@@ -661,9 +666,9 @@ function FarmMenu({ onClose, onSelect }: { onClose: () => void; onSelect: (a: st
             <div className={f.subItems}>
               {[
                 ["crop", "Crop"],
-                ["rename", "Rename"],
-                ["water", "Water Irrigation"],
-                ["map", "Map Change"],
+                ["rename", "Rename Farm"],
+                ["water", "Irrigation Method"],
+                ["map", "Update Location"],
               ].map(([id, label]) => (
                 <button key={id} type="button" role="menuitem" className={`${ui.btnReset} ${f.subItem}`} onClick={() => onSelect(id)}>
                   {label}
@@ -826,47 +831,159 @@ function useFarmActions(go: ScreenProps["go"], goToFlow: ScreenProps["goToFlow"]
 
 // ---------- Farm report, growing (farm-report-screen.jsx + components/farm-report/*) ----------
 
-const TABS = ["Growth", "Water", "Food"] as const;
+// your-farm-card.jsx: three map layers on one red / yellow / green scale; only the labels change
+const MAP_TABS = [
+  { id: "growth", label: "Growth", legend: ["Low Vigour", "Medium Vigour", "High Vigour"] },
+  { id: "water", label: "Moisture", legend: ["Dry", "Moderate Moisture", "High Moisture"] },
+  { id: "food", label: "Nutrition", legend: ["Low Nutrient Level", "Medium Nutrient Level", "High Nutrient Level"] },
+] as const;
+const LEGEND_COLORS = ["#E53935", "#FFE082", "#219653"];
 
-const RECOMMENDATIONS = [
+// recommendation-card.jsx tones and the v5 advisory cards' zone + map chips (colours as the API sends them)
+const TONES = {
+  red: { accent: "#DC2626", tint: "rgba(255, 0, 0, 0.08)", icon: "#DC2626" },
+  blue: { accent: "#0066FF", tint: "rgba(0, 102, 255, 0.1)", icon: "#0066FF" },
+  orange: { accent: "#FFA500", tint: "rgba(255, 165, 0, 0.1)", icon: "#D97706" },
+};
+
+type Chip = { label: string; bg: string; color: string; Icon: ComponentType<{ size?: number; color?: string }> };
+const RECOMMENDATIONS: {
+  id: string;
+  tone: keyof typeof TONES;
+  Icon: ComponentType<{ size?: number; color?: string }>;
+  title: string;
+  chips: Chip[];
+  body: string;
+  howWeKnow: string;
+}[] = [
   {
     id: "nitrogen",
+    tone: "red",
+    Icon: FlaskConical,
     title: "Add nitrogen to the red zone",
-    zone: { label: "Red zone", color: "#DC2626", bg: "#FEF2F2" },
-    tone: { icon: "#DC2626", tint: "#FEE2E2" },
+    chips: [
+      { label: "Red zone", bg: "rgba(255, 0, 0, 0.08)", color: "#DC2626", Icon: MapPin },
+      { label: "Nutrition", bg: "#E3E8EF", color: "#1B458C", Icon: FlaskConical },
+    ],
     body: "Spread urea on the north-east patch at the recommended dose, then irrigate lightly.",
     howWeKnow: "Satellite greenness in this zone has stayed well below the rest of your field for two weeks.",
   },
   {
     id: "water",
+    tone: "orange",
+    Icon: Droplets,
     title: "Water the yellow zone",
-    zone: { label: "Yellow zone", color: "#B45309", bg: "#FFFBEB" },
-    tone: { icon: "#D97706", tint: "#FEF3C7" },
+    chips: [
+      { label: "Yellow zone", bg: "rgba(255, 255, 0, 0.3)", color: "#676700", Icon: MapPin },
+      { label: "Moisture", bg: "#E3E8EF", color: "#1B458C", Icon: Droplets },
+    ],
     body: "Soil moisture is low near the east boundary. Run drip a little longer for the next 3 days.",
     howWeKnow: "Moisture readings for this zone are below the level wheat needs at this stage.",
   },
+  {
+    id: "growth",
+    tone: "blue",
+    Icon: Leaf,
+    title: "Keep an eye on new growth",
+    chips: [
+      { label: "Whole farm", bg: "#EEF1F4", color: "#3A4553", Icon: MapPin },
+      { label: "Growth", bg: "#E3E8EF", color: "#1B458C", Icon: Sprout },
+    ],
+    body: "The rest of the field is growing evenly. Walk the field once this week and check the lower leaves.",
+    howWeKnow: "Greenness across the field has risen steadily since the last report.",
+  },
 ];
 
+// farm-vitals-card.jsx: v6 reports have four readings, all in one neutral tone
 const VITALS = [
-  { label: "Crop growth", value: "Moderate", color: "#D97706", bg: "#FEF3C7", icon: "🌱" },
-  { label: "Nitrogen", value: "Low", color: "#DC2626", bg: "#FEE2E2", icon: "N" },
-  { label: "Soil moisture", value: "32%", color: "#2563EB", bg: "#DBEAFE", icon: "💧" },
-  { label: "Root zone temp", value: "24°C", color: "#059669", bg: "#D1FAE5", icon: "🌡" },
-  { label: "Leaf hydration", value: "Good", color: "#059669", bg: "#D1FAE5", icon: "🍃" },
+  { label: "Crop growth", value: "Moderate", bg: "#EEFBF7", color: "#059669", Icon: Leaf },
+  { label: "Nitrogen", value: "Low", bg: "#FEF9EC", color: "#D97706", Icon: Flower2 },
+  { label: "Soil moisture", value: "32%", bg: "#FDF2F2", color: "#DC2626", Icon: Droplets },
+  { label: "Root zone temp", value: "24°C", bg: "#EFF6FF", color: "#1E3A8A", Icon: Thermometer },
 ];
 
 const STAGES = ["Sow", "Vegetative", "Flower", "Fruit set", "Harvest"];
-const STAGE_OPTIONS = ["Sowing", "Germination", "Seedling", "Vegetative", "Flowering", "Fruit", "Grain", "Maturity", "Harvest"];
+const SEASON_DAYS = 120;
+
+// change-stage-sheet.jsx: growth stage → sub-stage → day, from the harvest service's stage rows
+// (wheat, illustrative day spans)
+const STAGE_ROWS = [
+  { phase: "Germination", bar: 0, subs: [{ name: "Emergence", from: 1, to: 10 }] },
+  {
+    phase: "Vegetative",
+    bar: 1,
+    subs: [
+      { name: "Tillering", from: 21, to: 35 },
+      { name: "Stem extension", from: 36, to: 55 },
+    ],
+  },
+  {
+    phase: "Reproductive",
+    bar: 2,
+    subs: [
+      { name: "Heading", from: 56, to: 70 },
+      { name: "Flowering", from: 71, to: 80 },
+    ],
+  },
+  {
+    phase: "Grain filling",
+    bar: 3,
+    subs: [
+      { name: "Milk", from: 81, to: 95 },
+      { name: "Dough", from: 96, to: 105 },
+    ],
+  },
+  { phase: "Maturity", bar: 4, subs: [{ name: "Ripening", from: 106, to: 120 }] },
+];
+
+function StageField({ label, value, placeholder, options, disabled, onChange }: { label: string; value: string; placeholder: string; options: string[]; disabled?: boolean; onChange: (v: string) => void }) {
+  return (
+    <label className={f.stageField}>
+      <span className={f.stageFieldLabel}>{label}</span>
+      <span className={`${f.dropdown} ${disabled ? f.dropdownOff : ""}`}>
+        <select value={value} disabled={disabled} onChange={(e) => onChange(e.target.value)}>
+          <option value="" disabled>
+            {placeholder}
+          </option>
+          {options.map((o) => (
+            <option key={o} value={o}>
+              {o}
+            </option>
+          ))}
+        </select>
+        <ChevronDown size={18} color={disabled ? "#9CA3AF" : "#004691"} />
+      </span>
+    </label>
+  );
+}
 
 function FarmReport({ go, goToFlow }: ScreenProps) {
-  const [tab, setTab] = useState<(typeof TABS)[number]>("Growth");
+  const [tab, setTab] = useState<(typeof MAP_TABS)[number]["id"]>("growth");
   const [done, setDone] = useState<string[]>([]);
-  const [speaking, setSpeaking] = useState<string | null>(null);
   const [open, setOpen] = useState<string | null>(null);
+  const [detailsOpen, setDetailsOpen] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
   const [sheet, setSheet] = useState(false);
-  const [stagePick, setStagePick] = useState("Vegetative");
+  // what the report shows: phase (bar) and day of the season
+  const [stage, setStage] = useState({ phase: "Vegetative", bar: 1, day: 46 });
+  const [pick, setPick] = useState({ phase: "", sub: "", day: "" });
   const { openMenu, overlays } = useFarmActions(go, goToFlow);
+
+  const mapTab = MAP_TABS.find((t) => t.id === tab)!;
+  const phaseRow = STAGE_ROWS.find((r) => r.phase === pick.phase);
+  const subRow = phaseRow?.subs.find((x) => x.name === pick.sub);
+  const dayOptions = subRow ? Array.from({ length: subRow.to - subRow.from + 1 }, (_, i) => `Day ${i + 1}`) : [];
+
+  const openSheet = () => {
+    setPick({ phase: stage.phase, sub: "", day: "" });
+    setSheet(true);
+  };
+  const submitStage = () => {
+    if (!phaseRow || !subRow || !pick.day) return;
+    setStage({ phase: phaseRow.phase, bar: phaseRow.bar, day: subRow.from + Number(pick.day.replace("Day ", "")) - 1 });
+    setSheet(false);
+    setConfirmed(true);
+  };
 
   return (
     <div className={base.screen} style={{ position: "relative" }}>
@@ -876,46 +993,54 @@ function FarmReport({ go, goToFlow }: ScreenProps) {
         <div className={s.card}>
           <div className={s.naHeader}>
             <span className={s.naTitleStack}>
-              <span className={s.warnIcon}>⚠</span>
-              <span className={s.naTitle}>
-                Needs
-                <br />
-                Attention
+              <span className={s.warnIcon}>
+                <TriangleAlert size={22} color="#DC2626" />
               </span>
+              <span className={s.naTitle}>Needs Attention</span>
             </span>
             <span className={s.syncStack}>
-              <span className={s.syncPill}>↻ Sync</span>
-              <span className={s.updated}>🕒 Updated 2 hr ago</span>
+              <span className={s.syncPill}>
+                <RefreshCw size={12} /> Sync
+              </span>
+              <span className={s.updated}>
+                <Clock size={12} /> Updated 2 hr ago
+              </span>
             </span>
           </div>
-          <div>
+          <div className={s.naInfo}>
             <p className={s.cropArea}>Wheat · 2.4 acre</p>
             <p className={s.farmLocation}>Lakshmi Farm · Tumakuru, Karnataka</p>
           </div>
           <p className={s.naDescription}>Growth is uneven in the north-east corner, and nitrogen looks low there.</p>
-          <span className={s.hr} />
-          <div className={s.details}>
-            {[
-              ["Stage", `${stagePick}, 2 of 5`],
-              ["Irrigation", "Drip"],
-              ["Soil", "Red loam"],
-              ["Sowing date", "12 Nov 2025"],
-            ].map(([label, value]) => (
-              <span key={label} className={s.detail}>
-                <span className={s.detailLabel}>{label}</span>
-                <span className={s.detailValue}>{value}</span>
-              </span>
-            ))}
-          </div>
+          <p className={s.naDate}>Sun, 28 Dec 2025</p>
+          <span className={s.hrLight} />
+          <button type="button" className={`${ui.btnReset} ${s.detailsToggle}`} onClick={() => setDetailsOpen((v) => !v)}>
+            Farm Details {detailsOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+          </button>
+          {detailsOpen && (
+            <div className={s.details}>
+              {[
+                ["Stage", `${stage.phase}, ${stage.bar + 1} of 5`],
+                ["Irrigation", "Drip"],
+                ["Soil", "Red loam"],
+                ["Sowing date", "12 Nov 2025"],
+              ].map(([label, value]) => (
+                <span key={label} className={s.detail}>
+                  <span className={s.detailLabel}>{label}</span>
+                  <span className={s.detailValue}>{value}</span>
+                </span>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* your-farm-card.jsx */}
-        <div className={s.card}>
+        <div className={`${s.card} ${s.yourFarm}`}>
           <p className={s.yourFarmTitle}>Your Farm</p>
           <div className={s.tabs} role="tablist">
-            {TABS.map((t) => (
-              <button key={t} type="button" role="tab" aria-selected={tab === t} className={`${s.tab} ${tab === t ? s.tabActive : ""}`} onClick={() => setTab(t)}>
-                {t}
+            {MAP_TABS.map((t) => (
+              <button key={t.id} type="button" role="tab" aria-selected={tab === t.id} className={`${s.tab} ${tab === t.id ? s.tabActive : ""}`} onClick={() => setTab(t.id)}>
+                {t.label}
               </button>
             ))}
           </div>
@@ -931,77 +1056,75 @@ function FarmReport({ go, goToFlow }: ScreenProps) {
               </defs>
               <Illustration />
               <rect x={765} y={111} width={320} height={170} fill="rgba(15, 23, 42, 0.18)" />
-              {/* Satellite-index zones, clipped to the farm boundary */}
+              {/* Satellite-index zones on the legend's red / yellow / green scale, clipped to the farm */}
               <g clipPath="url(#ks-field)">
-                <polygon points={FIELD_POINTS} fill="rgba(34, 197, 94, 0.45)" />
+                <polygon points={FIELD_POINTS} fill="rgba(33, 150, 83, 0.6)" />
                 <g filter="url(#ks-soft)">
-                  {tab === "Growth" && (
+                  {tab === "growth" && (
                     <>
-                      <ellipse cx={935} cy={180} rx={38} ry={20} fill="rgba(220, 38, 38, 0.9)" />
-                      <ellipse cx={995} cy={248} rx={30} ry={14} fill="rgba(234, 179, 8, 0.9)" />
+                      <ellipse cx={935} cy={180} rx={38} ry={20} fill="rgba(229, 57, 53, 0.9)" />
+                      <ellipse cx={995} cy={248} rx={30} ry={14} fill="rgba(255, 224, 130, 0.95)" />
                     </>
                   )}
-                  {tab === "Water" && (
+                  {tab === "water" && (
                     <>
-                      <ellipse cx={995} cy={246} rx={34} ry={16} fill="rgba(234, 179, 8, 0.9)" />
-                      <ellipse cx={860} cy={215} rx={40} ry={22} fill="rgba(37, 99, 235, 0.7)" />
+                      <ellipse cx={995} cy={246} rx={34} ry={16} fill="rgba(229, 57, 53, 0.85)" />
+                      <ellipse cx={930} cy={205} rx={44} ry={22} fill="rgba(255, 224, 130, 0.95)" />
                     </>
                   )}
-                  {tab === "Food" && <ellipse cx={930} cy={176} rx={46} ry={24} fill="rgba(220, 38, 38, 0.85)" />}
+                  {tab === "food" && (
+                    <>
+                      <ellipse cx={930} cy={176} rx={46} ry={24} fill="rgba(229, 57, 53, 0.85)" />
+                      <ellipse cx={880} cy={232} rx={30} ry={14} fill="rgba(255, 224, 130, 0.95)" />
+                    </>
+                  )}
                 </g>
               </g>
               <polygon points={FIELD_POINTS} fill="none" stroke="#fff" strokeWidth={2} strokeLinejoin="round" />
             </svg>
           </div>
           <div className={s.legend}>
-            <span>
-              <i className={s.dot} style={{ background: "#DC2626" }} /> Low nutrition
-            </span>
-            <span>
-              <i className={s.dot} style={{ background: "#22C55E" }} /> Sufficient
-            </span>
+            {mapTab.legend.map((label, i) => (
+              <span key={label}>
+                <i className={s.dot} style={{ background: LEGEND_COLORS[i] }} /> {label}
+              </span>
+            ))}
           </div>
         </div>
 
         {/* recommendation-card.jsx */}
         <p className={s.sectionTitle}>Do This</p>
-        {RECOMMENDATIONS.map((rec) => {
+        {RECOMMENDATIONS.map((rec, i) => {
           const isDone = done.includes(rec.id);
+          const tone = TONES[rec.tone];
           return (
-            <div key={rec.id} className={s.recCard}>
-              <div className={s.recTop}>
-                <span className={s.recTitleGroup}>
-                  <span className={s.recIcon} style={{ background: rec.tone.tint, color: rec.tone.icon }}>
-                    ●
-                  </span>
-                  <span className={s.recTitle}>{rec.title}</span>
+            <div key={rec.id} className={s.recCard} style={{ borderLeftColor: tone.accent }}>
+              <span className={s.recTitleGroup}>
+                <span className={s.recIcon} style={{ background: tone.tint }}>
+                  <rec.Icon size={14} color={tone.icon} />
                 </span>
-                <button
-                  type="button"
-                  className={`${s.audioBtn} ${speaking === rec.id ? s.audioActive : ""}`}
-                  aria-label={speaking === rec.id ? "Stop reading aloud" : "Read aloud"}
-                  onClick={() => setSpeaking((cur) => (cur === rec.id ? null : rec.id))}
-                >
-                  {speaking === rec.id ? "■" : "🔊"}
-                </button>
-              </div>
-              <span className={s.zonePill} style={{ background: rec.zone.bg, color: rec.zone.color }}>
-                📍 {rec.zone.label}
+                <span className={s.recTitle}>{rec.title}</span>
+              </span>
+              <span className={s.chips}>
+                {rec.chips.map((chip) => (
+                  <span key={chip.label} className={s.zonePill} style={{ background: chip.bg, color: chip.color }}>
+                    <chip.Icon size={12} color={chip.color} /> {chip.label}
+                  </span>
+                ))}
               </span>
               <p className={s.recBody}>{rec.body}</p>
-              <button type="button" className={s.scanBtn} onClick={() => goToFlow("crop-doctor")}>
-                📷 Not sure? Scan with Crop Doctor
-              </button>
               <button
                 type="button"
-                className={`${s.doneBtn} ${isDone ? s.doneBtnDone : ""} ${!done.length && rec.id === "nitrogen" ? base.hotspot : ""}`}
+                role="checkbox"
+                aria-checked={isDone}
+                className={`${s.doneBtn} ${isDone ? s.doneBtnDone : ""} ${!done.length && i === 0 ? base.hotspot : ""}`}
                 onClick={() => setDone((cur) => (isDone ? cur.filter((x) => x !== rec.id) : [...cur, rec.id]))}
               >
-                ✓ {isDone ? "Done" : "Mark as done"}
+                {isDone ? <CheckCircle2 size={14} /> : <Check size={14} />} {isDone ? "Done" : "Mark as done"}
               </button>
-              <span className={s.hrLight} />
+              <span className={s.hrRec} />
               <button type="button" className={s.accordion} onClick={() => setOpen((cur) => (cur === rec.id ? null : rec.id))}>
-                How we know this {open === rec.id ? "⌃" : "⌄"}
+                How we know this {open === rec.id ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
               </button>
               {open === rec.id && <p className={s.recBody}>{rec.howWeKnow}</p>}
             </div>
@@ -1013,14 +1136,12 @@ function FarmReport({ go, goToFlow }: ScreenProps) {
         <div className={`${s.card} ${s.vitalsGrid}`}>
           {VITALS.map((v) => (
             <span key={v.label} className={s.vital}>
-              <span className={s.vitalTile} style={{ background: v.bg, color: v.color }}>
-                {v.icon}
+              <span className={s.vitalTile} style={{ background: v.bg }}>
+                <v.Icon size={20} color={v.color} />
               </span>
               <span className={s.vitalText}>
                 <span className={s.vitalLabel}>{v.label}</span>
-                <span className={s.vitalValue} style={{ color: v.color }}>
-                  {v.value}
-                </span>
+                <span className={s.vitalValue}>{v.value}</span>
               </span>
             </span>
           ))}
@@ -1031,26 +1152,26 @@ function FarmReport({ go, goToFlow }: ScreenProps) {
           <div className={s.stageHeader}>
             <span className={s.stageIcon}>✿</span>
             <span className={s.stageTitleGroup}>
-              <span className={s.stageBadge}>CROP STAGE · 40%</span>
-              <span className={s.stageName}>{stagePick}</span>
+              <span className={s.stageBadge}>CROP STAGE · {(stage.bar + 1) * 20}%</span>
+              <span className={s.stageName}>{stage.phase}</span>
             </span>
           </div>
           <div className={s.bars}>
             {STAGES.map((st, i) => (
-              <span key={st} className={s.bar} style={{ background: i < 1 ? "#059669" : i === 1 ? "#0F2942" : "#E2E8F0" }} />
+              <span key={st} className={s.bar} style={{ background: i < stage.bar ? "#059669" : i === stage.bar ? "#0F2942" : "#E2E8F0" }} />
             ))}
           </div>
           <div className={s.stageLabels}>
             {STAGES.map((st, i) => (
-              <span key={st} className={i === 1 ? s.stageLabelBold : undefined}>
+              <span key={st} className={i === stage.bar ? s.stageLabelBold : undefined}>
                 {st}
               </span>
             ))}
           </div>
           <span className={s.hr} />
           <div className={s.timing}>
-            <span className={s.dayText}>📅 Day 46 of 120</span>
-            <span className={s.countdown}>⏱ 74 days to harvest</span>
+            <span className={s.dayText}>📅 Day {stage.day} of {SEASON_DAYS}</span>
+            <span className={s.countdown}>⏱ {SEASON_DAYS - stage.day} days to harvest</span>
           </div>
           {confirmed ? (
             <p className={s.thanks}>✓ Thanks for confirming</p>
@@ -1064,7 +1185,7 @@ function FarmReport({ go, goToFlow }: ScreenProps) {
                 </span>
               </div>
               <div className={s.confirmActions}>
-                <button type="button" className={s.pillOutline} onClick={() => setSheet(true)}>
+                <button type="button" className={s.pillOutline} onClick={openSheet}>
                   Change stage
                 </button>
                 <button type="button" className={s.pillSolid} onClick={() => setConfirmed(true)}>
@@ -1087,7 +1208,7 @@ function FarmReport({ go, goToFlow }: ScreenProps) {
 
       {sheet && (
         <div className={f.backdrop} style={{ alignItems: "flex-end", padding: 0 }} onClick={() => setSheet(false)} role="presentation">
-          <div className={ui.sheet} style={{ width: "100%" }} role="dialog" aria-label="Change crop stage" onClick={(e) => e.stopPropagation()}>
+          <div className={`${ui.sheet} ${f.stageSheet}`} role="dialog" aria-label="Change crop stage" onClick={(e) => e.stopPropagation()}>
             <div className={ui.sheetHandle} />
             <div className={f.stageSheetHead}>
               What stage is your crop actually in?
@@ -1095,22 +1216,23 @@ function FarmReport({ go, goToFlow }: ScreenProps) {
                 <X size={14} />
               </button>
             </div>
-            <div className={f.stageChips}>
-              {STAGE_OPTIONS.map((o) => (
-                <button key={o} type="button" className={`${ui.btnReset} ${f.stageChip} ${o === stagePick ? f.stageChipOn : ""}`} onClick={() => setStagePick(o)}>
-                  {o}
-                </button>
-              ))}
-            </div>
-            <button
-              type="button"
-              className={`${ui.btnReset} ${f.solidPill}`}
-              style={{ width: "100%" }}
-              onClick={() => {
-                setSheet(false);
-                setConfirmed(true);
-              }}
-            >
+            <StageField
+              label="Growth Stage"
+              placeholder="Select Stage"
+              value={pick.phase}
+              options={STAGE_ROWS.map((r) => r.phase)}
+              onChange={(v) => setPick({ phase: v, sub: "", day: "" })}
+            />
+            <StageField
+              label="Sub-Stage"
+              placeholder="Select Sub-Stage"
+              value={pick.sub}
+              options={phaseRow?.subs.map((x) => x.name) ?? []}
+              disabled={!phaseRow}
+              onChange={(v) => setPick((p) => ({ ...p, sub: v, day: "" }))}
+            />
+            <StageField label="Day in Stage" placeholder="Select Day" value={pick.day} options={dayOptions} disabled={!subRow} onChange={(v) => setPick((p) => ({ ...p, day: v }))} />
+            <button type="button" className={`${ui.btnReset} ${f.solidPill}`} style={{ width: "100%" }} disabled={!pick.day} onClick={submitStage}>
               Submit
             </button>
           </div>
