@@ -32,6 +32,14 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
 - **First visit (desktop, 2026-11-02):** a Mission Control overview of every window (`MissionControl.tsx`)
   that tours them automatically in grid order, then opens About Me; later visits reach it from the menu
   bar's Show all windows button, with hover peeks only.
+- **Resume (2026-11-02):** `/resume` shows the owner's LaTeX resume as a PDF-style document: two US Letter
+  pages styled after the owner's LaTeX template (Libertinus Serif, navy + gold, pt/in sizing) on a grey viewer with a dark toolbar (back, file name, page n / 2, zoom −/+/
+  fit, download, print); phones fit the page width and pinch-zoom. Text is real and copyable (NoInspect lets
+  copy and right-click through inside `[data-allow-copy]`). Content: `src/data/resumeDocument.ts`, word for
+  word from the LaTeX export (the four Silo group headings, lost in that export, come from `resume.ts`).
+  Download serves `public/Mandar_Desurkar_Resume.pdf` (79 KB). **After changing the resume, regenerate
+  the PDF:** open `/resume` in Chrome → Print → Save as PDF (paper Letter, margins none, background graphics
+  on), save over that file. Linked from About Me ("View resume", new tab) and the phone hero ("View Resume").
 - **Case studies** (2026-10-30; Farm Monitoring added 2026-10-31, AI Crop Doctor 2026-11-01): content in `src/data/caseStudies.ts` (typed; every public statistic
   has a `source` id pointing at a verified URL), one statically generated page per slug at
   `/case-studies/<slug>` (`src/app/case-studies/[slug]/page.tsx` + `CaseStudy.module.css`). The Case
@@ -100,7 +108,7 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
 - [x] **Content:** placeholder projects replaced with 5 real products from the resume (2026-10-21).
 - [ ] **Content:** add live links for projects (Play Store links for Kissan/Gau Sampurna?) via
       the optional `link` field in `src/data/resume.ts`. 
-- [ ] **Resume:** export the PDF from Overleaf to `public/resume.pdf` (the hero button is built and appears automatically). The LaTeX now has the live site URL.
+- [x] **Resume (2026-11-02):** built as the `/resume` viewer plus a generated PDF instead (see Current state).
 - [x] **Music licensing → decided 2026-10-21: local only.** The Jailer 2 songs and covers are
       git-ignored (`/public/music/one-sun-one-moon.*`, `/public/music/ala-bolelo.*`) and marked
       `localOnly` in `src/data/music.ts`, so production builds list only `track.mp3` (verified:
@@ -353,6 +361,28 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 
 ## Changelog
 
+- 2026-11-02: **Resume restyled to the owner's LaTeX template** (owner sent its PDF: take the font, sizes,
+  colours and spacing, not the content). Libertinus Serif (open continuation of Linux Libertine) via
+  next/font; the → comes from a 5 KB Libertinus Math subset (`components/resume/fonts/`), since Google's
+  Latin subset lacks it (Next's metric fallback is off so the arrow font is reached). Sizes calibrated by
+  matching the template's string widths: 32pt regular navy name, 14.4pt bold navy headings, 11pt body on
+  13.75pt lines, 11pt bold entries and navy product lines; one gold rule under the name and each heading;
+  entries indented 11pt, "-" dashes at 21pt; US Letter with the template's margins and its page break (after
+  the CRM group). Landmarks within 2–4px of the template. PDF regenerated: 2 Letter pages, 79 KB, only
+  Libertinus fonts, live links. Committed with the resume viewer and pushed to `dev` and `prod`.
+- 2026-11-02: **Resume viewer** (owner sent the LaTeX resume as HTML: "view resume" CTA, PDF look, phone and
+  desktop). New `/resume` route (`src/app/resume/`, `components/resume/ResumeViewer.tsx`, data
+  `src/data/resumeDocument.ts`), typeset like the LaTeX source: centred name between 0.6pt rules, small-caps
+  section rules, bold title / right-aligned dates, italic group lines, justified bullets; page 1 holds the
+  header, Education and all of Silo Fortune, page 2 AltQube, Beyond Work and Skills. Viewer: Chrome-style
+  toolbar, page counter from scroll, CSS `zoom` (fit width, never above 100%), Download (the PDF) and Print;
+  phones hide zoom and print. Print CSS gives one A4 sheet per page and a white body (the wallpaper on
+  `<body>` had made the PDF 3.2 MB). `public/Mandar_Desurkar_Resume.pdf` printed from the page (2 pages, live
+  links). `profile.resumeUrl` is now `/resume`; the PDF HEAD checks in AboutCard and Hero are gone, so the
+  CTAs always show: About Me gets a "View resume" pill beside Get in touch (Copy email became an icon by
+  Email so the row stays one line), the phone hero shows View Resume + LinkedIn. Events `Viewed Resume`,
+  `Downloaded Resume` {download | print}; `/resume` added to the sitemap; the overview's About Me preview
+  re-captured. Uncommitted.
 - 2026-11-02: Tour shortened to **6.67s** (owner asked for 6.4–7s; it was 21s, then 12.6s): 7 stops × 0.95s
   (`STOP_MS`), a 50ms tour clock (`TICK_MS`; the old 100ms tick rounded each stop up to 1s), first stop 0.8s
   after the overview opens; page load to About Me ~10.7s. In the tour each peek runs at 0.33× its hover

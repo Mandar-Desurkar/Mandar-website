@@ -7,6 +7,7 @@ export default function NoInspect() {
   useEffect(() => {
     // Disable right-click context menu
     const handleContextMenu = (e: MouseEvent) => {
+      if ((e.target as Element | null)?.closest?.("[data-allow-copy]")) return; // the resume is meant to be copied
       e.preventDefault();
       trackEvent("Hit Content Protection", { action: "context_menu" });
     };
@@ -75,6 +76,9 @@ export default function NoInspect() {
 
     // Prevent Copying text
     const handleCopy = (e: ClipboardEvent) => {
+      const from = document.getSelection()?.anchorNode;
+      const el = from instanceof Element ? from : from?.parentElement;
+      if (el?.closest("[data-allow-copy]")) return; // the resume is meant to be copied
       e.preventDefault();
       trackEvent("Hit Content Protection", { action: "copy" });
       alert("Copying text is disabled on this portfolio.");

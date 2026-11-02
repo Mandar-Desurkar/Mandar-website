@@ -27,25 +27,6 @@ const rise = {
 function ClassicHero() {
   const [initialDelay] = useState(isFirstMount ? 1.8 : 0);
   const { openSection, openPrototype } = useWindow();
-  // Show "View Resume" only once the PDF is actually deployed, so the CTA never 404s.
-  const [hasResume, setHasResume] = useState(false);
-
-  useEffect(() => {
-    let cancelled = false;
-    fetch(profile.resumeUrl, { method: "HEAD" })
-      .then((res) => {
-        const isPdf = (res.headers.get("content-type") ?? "").includes("pdf");
-        if (!cancelled) setHasResume(res.ok && isPdf);
-      })
-      .catch(() => {
-        // offline or blocked: keep the LinkedIn fallback
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
   const linkedinCta = (primary: boolean) => (
     <motion.a
       href={profile.linkedin}
@@ -55,7 +36,8 @@ function ClassicHero() {
       onClick={() => trackEvent("Clicked Contact Method", { method: "linkedin", placement: "hero" })}
       whileTap={{ scale: 0.97 }}
     >
-      <FaLinkedin size={16} aria-hidden="true" /> Connect on LinkedIn
+      {/* Beside View Resume there's only room for the name */}
+      <FaLinkedin size={16} aria-hidden="true" /> {primary ? "Connect on LinkedIn" : "LinkedIn"}
     </motion.a>
   );
 
@@ -199,7 +181,7 @@ function ClassicHero() {
             className={styles.ctaGroup}
             variants={rise}
           >
-            {hasResume ? (
+            {profile.resumeUrl ? (
               <>
                 <motion.a
                   href={profile.resumeUrl}

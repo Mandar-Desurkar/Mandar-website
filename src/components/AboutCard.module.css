@@ -238,6 +238,25 @@
   background: #e8e8ed;
 }
 
+/* The second action: as easy to find as Get in touch, quieter than it */
+.links a.resume {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.28);
+  font-weight: 600;
+  color: #fff;
+  transition: background-color 0.15s ease;
+}
+
+.links a.resume:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
 .links a {
   font-size: 0.875rem;
   font-weight: 500;
@@ -253,7 +272,8 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 0;
+  margin-left: -10px; /* sits with Email, the address it copies */
+  padding: 4px;
   border: 0;
   background: none;
   font: inherit;

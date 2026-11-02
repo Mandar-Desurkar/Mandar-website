@@ -15,9 +15,8 @@ export const profile = {
     "I build AI {build:products} people actually pay for, and I own them from the first {write:PRD} through launch and {grow:growth}.",
     "Currently Associate PM at Silo Fortune, building agritech apps for India's farmers.",
   ],
-  // Export the resume PDF from Overleaf to public/resume.pdf. Until it exists, the hero
-  // falls back to "Connect on LinkedIn" + "Get in touch".
-  resumeUrl: "/resume.pdf",
+  // The PDF-style resume viewer (src/app/resume); its Download button serves the generated PDF
+  resumeUrl: "/resume",
   // Short hero line; keep it to about 3 lines so the About window fits without scrolling.
   // Supports **bold** via RichText.
   intro:

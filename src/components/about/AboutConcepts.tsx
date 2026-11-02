@@ -82,15 +82,14 @@ function useEntrance() {
   return delay;
 }
 
-// Shows "View Resume" only once the PDF is deployed, so the CTA never 404s
+// Shows "View Resume" only if the resume page answers, so the CTA never 404s
 function useHasResume() {
   const [hasResume, setHasResume] = useState(false);
   useEffect(() => {
     let cancelled = false;
     fetch(profile.resumeUrl, { method: "HEAD" })
       .then((res) => {
-        const isPdf = (res.headers.get("content-type") ?? "").includes("pdf");
-        if (!cancelled) setHasResume(res.ok && isPdf);
+        if (!cancelled) setHasResume(res.ok);
       })
       .catch(() => {});
     return () => {

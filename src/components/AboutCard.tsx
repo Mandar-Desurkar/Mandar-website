@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Check, Copy } from "lucide-react";
+import { ArrowRight, Check, Copy, FileText } from "lucide-react";
 import { kpis, profile, shippedApps } from "@/data/resume";
 import { useWindow } from "@/context/WindowContext";
 import { trackEvent } from "@/lib/analytics";
@@ -51,21 +51,10 @@ export default function AboutCard() {
   const { openSection, openPrototype } = useWindow();
   const card = useRef<HTMLElement>(null);
   const [delay] = useState(isFirstMount ? 1.8 : 0);
-  // The resume link appears once the PDF is deployed, so it never 404s
-  const [hasResume, setHasResume] = useState(false);
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     isFirstMount = false;
-    let cancelled = false;
-    fetch(profile.resumeUrl, { method: "HEAD" })
-      .then((res) => {
-        if (!cancelled) setHasResume(res.ok && (res.headers.get("content-type") ?? "").includes("pdf"));
-      })
-      .catch(() => {});
-    return () => {
-      cancelled = true;
-    };
   }, []);
 
   const rise = (order: number) => ({
@@ -138,6 +127,16 @@ export default function AboutCard() {
         <button type="button" className={styles.contact} onClick={() => openSection("contact", "hero_cta")}>
           Get in touch
         </button>
+        {/* Opens the PDF-style resume in a new tab, so the desktop stays where the visitor left it */}
+        <a
+          href={profile.resumeUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.resume}
+          onClick={() => trackEvent("Opened Resume", { placement: "hero" })}
+        >
+          <FileText size={15} aria-hidden="true" /> View resume
+        </a>
         <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent("Clicked Contact Method", { method: "linkedin", placement: "hero" })}>
           LinkedIn
         </a>
@@ -156,15 +155,12 @@ export default function AboutCard() {
             trackEvent("Clicked Contact Method", { method: "copy_email", placement: "hero" });
           }}
           aria-label={`Copy email address ${profile.email}`}
+          title="Copy email address"
         >
+          {/* An icon beside Email, so the row fits one line; it says Copied once used */}
           {copied ? <Check size={14} aria-hidden="true" /> : <Copy size={14} aria-hidden="true" />}
-          <span>{copied ? "Copied" : "Copy email"}</span>
+          {copied && <span>Copied</span>}
         </button>
-        {hasResume && (
-          <a href={profile.resumeUrl} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent("Opened Resume", { placement: "hero" })}>
-            Resume
-          </a>
-        )}
       </motion.p>
     </section>
   );

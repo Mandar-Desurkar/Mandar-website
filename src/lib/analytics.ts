@@ -85,6 +85,9 @@ export type AnalyticsEvents = {
   // Conversion: the north star
   "Clicked Contact Method": { method: "email" | "linkedin" | "phone" | "sms" | "vcard" | "copy_email"; placement: "contact_window" | "hero" | "home_widget" | "home_dock" | "spotlight" | "menu_bar" };
   "Opened Resume": { placement: "hero" | "spotlight" | "menu_bar" };
+  // The PDF-style resume page (/resume): opened, then downloaded as a file or printed
+  "Viewed Resume": Record<string, never>;
+  "Downloaded Resume": { method: "download" | "print" };
   "Downloaded vCard": { placement: "contact_window" };
   // Beyond Work: the race video starts playing on the page
   "Played Video": { video: string };
