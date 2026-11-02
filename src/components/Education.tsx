@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import styles from "./Education.module.css";
-import { ArrowUpRight, BookOpen, GraduationCap } from "lucide-react";
-import { skills } from "@/data/resume";
+import { ArrowUpRight, BookOpen, Code2, Compass, GraduationCap, Layers, LineChart, type LucideIcon } from "lucide-react";
+import { domainProof, skillStages, skills } from "@/data/resume";
 import { trackEvent } from "@/lib/analytics";
 
 // "Jan 2021 - Jul 2025" → "4 yrs 7 mos" (inclusive of both months)
@@ -23,6 +23,14 @@ function duration(period: string) {
 }
 
 const chips = (list: string) => list.split(",").map((s) => s.trim()).filter(Boolean);
+
+// Desktop toolkit cards: an icon and an accent per group
+const GROUP_STYLE: Record<string, { icon: LucideIcon; tone: string }> = {
+  "Product & UX": { icon: Compass, tone: "blue" },
+  Technical: { icon: Code2, tone: "teal" },
+  "Tools & Analytics": { icon: LineChart, tone: "violet" },
+  Domains: { icon: Layers, tone: "amber" },
+};
 
 const educationLogs: {
   degree: string;
@@ -135,18 +143,59 @@ export default function Education() {
               <span className={styles.skillsLabel}>{group.label}:</span> {group.items}
             </p>
           ))}
-          {/* Desktop: each group as a labelled set of chips */}
+          {/* Desktop: a bento of cards. Product & UX, the biggest group, leads by stage of the work;
+              domains name the product each one comes from. */}
           <div className={styles.toolkitGrid}>
-            {skills.map((group) => (
-              <div key={group.label} className={styles.toolkitGroup}>
-                <p className={styles.toolkitLabel}>{group.label}</p>
-                <ul className={styles.chipRow}>
-                  {chips(group.items).map((c) => (
-                    <li key={c}>{c}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+            {skills.map((group) => {
+              const { icon: Icon, tone } = GROUP_STYLE[group.label] ?? { icon: Layers, tone: "blue" };
+              const items = chips(group.items);
+              return (
+                <section
+                  key={group.label}
+                  className={`${styles.toolkitGroup} ${group.label === "Product & UX" ? styles.toolkitLead : ""}`}
+                  data-tone={tone}
+                  aria-label={group.label}
+                >
+                  <header className={styles.toolkitHead}>
+                    <span className={styles.toolkitIcon} aria-hidden="true">
+                      <Icon size={17} />
+                    </span>
+                    <p className={styles.toolkitLabel}>{group.label}</p>
+                    <span className={styles.toolkitCount}>{items.length}</span>
+                  </header>
+
+                  {group.label === "Product & UX" ? (
+                    <div className={styles.stages}>
+                      {skillStages.map((stage) => (
+                        <div key={stage.label} className={styles.stage}>
+                          <p className={styles.stageLabel}>{stage.label}</p>
+                          <ul className={styles.chipRow}>
+                            {stage.items.map((c) => (
+                              <li key={c}>{c}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  ) : group.label === "Domains" ? (
+                    <ul className={styles.domains}>
+                      {items.map((d) => (
+                        <li key={d}>
+                          <span className={styles.domainName}>{d}</span>
+                          {domainProof[d] && <span className={styles.domainProof}>{domainProof[d]}</span>}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <ul className={styles.chipRow}>
+                      {items.map((c) => (
+                        <li key={c}>{c}</li>
+                      ))}
+                    </ul>
+                  )}
+                </section>
+              );
+            })}
           </div>
         </div>
       </div>

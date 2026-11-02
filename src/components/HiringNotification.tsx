@@ -34,6 +34,12 @@ export default function HiringNotification() {
 
     const show = () => {
       if (hasOpenedContactRef.current) return; // already converted: don't nag
+      // Never on top of the first-visit overview or its hints: wait, then check again, since the
+      // hints follow the overview
+      if (document.documentElement.dataset.tour) {
+        window.addEventListener("desktop-tour-end", onTourEnd, { once: true });
+        return;
+      }
       try {
         localStorage.setItem(SEEN_KEY, "1");
       } catch {
@@ -43,6 +49,11 @@ export default function HiringNotification() {
         seconds_on_site: Math.round((performance.now() - startedAt) / 1000),
       });
       setVisible(true);
+    };
+
+    let retry: ReturnType<typeof setTimeout> | undefined;
+    const onTourEnd = () => {
+      retry = setTimeout(show, 1500);
     };
 
     const onVisibilityChange = () => {
@@ -59,6 +70,8 @@ export default function HiringNotification() {
     return () => {
       clearTimeout(timer);
       document.removeEventListener("visibilitychange", onVisibilityChange);
+      window.removeEventListener("desktop-tour-end", onTourEnd);
+      clearTimeout(retry);
     };
   }, []);
 

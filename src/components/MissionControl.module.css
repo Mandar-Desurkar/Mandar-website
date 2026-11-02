@@ -1,0 +1,356 @@
+/* Mission Control-style overview: every window as a preview over the blurred desktop */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10040; /* above windows and the hiring banner; the tour hints sit above this */
+}
+
+/* The blurred desktop behind the previews, on its own layer so it can fade in and out */
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(6, 8, 14, 0.5);
+  -webkit-backdrop-filter: blur(22px) saturate(1.2);
+  backdrop-filter: blur(22px) saturate(1.2);
+  pointer-events: none;
+}
+
+/* Centred by its insets, not a translate: the entrance animation owns this element's transform */
+.header {
+  position: absolute;
+  top: 52px;
+  left: 260px; /* clear of Go to desktop on the right, and even on the left */
+  right: 260px;
+  max-width: 640px;
+  margin: 0 auto;
+  text-align: center;
+  pointer-events: none;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.375rem;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  color: #fff;
+}
+
+.sub {
+  margin: 6px 0 0;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: rgba(235, 235, 245, 0.7);
+}
+
+.done {
+  position: absolute;
+  top: 52px;
+  right: 32px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  padding: 0 8px 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.18);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+}
+
+.done:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.done kbd {
+  padding: 1px 6px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.14);
+  font: inherit;
+  font-size: 0.6875rem;
+  color: rgba(235, 235, 245, 0.75);
+}
+
+/* Windows wrap into centred rows at one height, like Mission Control's even spread */
+.grid {
+  --tile-h: 200px; /* set from the screen size in MissionControl.tsx */
+  position: absolute;
+  top: 132px;
+  right: 40px;
+  bottom: 28px;
+  left: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+  gap: 26px 34px;
+}
+
+.tile {
+  position: relative;
+  min-width: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  /* The lift is on the tile, so it never fights the fly-in animation on the preview */
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.frame {
+  position: relative;
+  display: block;
+  height: var(--tile-h);
+  margin-bottom: 8px;
+  border-radius: 10px;
+  box-shadow: 0 0 0 0.5px rgba(255, 255, 255, 0.2), 0 18px 40px -10px rgba(0, 0, 0, 0.65);
+  transition: box-shadow 0.2s ease;
+  will-change: transform;
+}
+
+.frame img {
+  display: block;
+  width: auto;
+  height: 100%;
+  border-radius: 10px;
+}
+
+/* The system's blue selection ring, on hover and keyboard focus */
+.tile:hover,
+.tile:focus-visible {
+  transform: scale(1.035);
+}
+
+.tile:hover .frame,
+.tile:focus-visible .frame {
+  box-shadow: 0 0 0 3px #0a84ff, 0 22px 48px -10px rgba(0, 0, 0, 0.7);
+}
+
+.tile:focus-visible {
+  outline: none;
+}
+
+.badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: #d3d800;
+  color: #1d1d1f;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  box-shadow: 0 6px 14px -4px rgba(0, 0, 0, 0.5);
+}
+
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.openDot {
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgba(48, 209, 88, 0.18);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #6ee08a;
+}
+
+.note {
+  font-size: 0.75rem;
+  color: rgba(235, 235, 245, 0.6);
+}
+
+/* ---------- Peek: a preview showing what its window does ---------- */
+
+/* The peeking preview grows a little and comes forward; the others step back */
+.tile[data-peek] {
+  z-index: 3;
+  transform: scale(1.12);
+}
+
+.grid .frame {
+  transition: box-shadow 0.2s ease, filter 0.25s ease;
+}
+
+.grid[data-peeking] .tile:not([data-peek]) .frame {
+  filter: brightness(0.55) saturate(0.8);
+}
+
+/* Only the peeking preview looks selected, even if focus sits on another */
+.grid[data-peeking] .tile:not([data-peek]) {
+  transform: none;
+}
+
+.grid[data-peeking] .tile:not([data-peek]) .frame {
+  box-shadow: 0 0 0 0.5px rgba(255, 255, 255, 0.2), 0 18px 40px -10px rgba(0, 0, 0, 0.65);
+}
+
+.tile[data-peek] .frame {
+  box-shadow: 0 0 0 3px #0a84ff, 0 28px 60px -12px rgba(0, 0, 0, 0.75);
+}
+
+.tile[data-peek] .note {
+  color: #9cc4ff;
+}
+
+.peek {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+/* Scroll: a tall capture of the window, panned to the part worth seeing */
+.peekScroll {
+  display: block;
+  width: 100% !important;
+  height: auto !important;
+  border-radius: 0 !important;
+  animation: pan 2.4s cubic-bezier(0.45, 0, 0.2, 1) 0.3s both;
+}
+
+@keyframes pan {
+  to {
+    transform: translateY(var(--to));
+  }
+}
+
+/* Click: the pointer glides to a real control, presses it, and the result appears */
+.peekAfter,
+.peekSlide {
+  object-fit: cover;
+  object-position: top center;
+  border-radius: 0 !important;
+  opacity: 0;
+}
+
+.peekAfter {
+  animation: reveal 0.35s ease 1.35s both;
+}
+
+.peekSlide {
+  animation: reveal 0.35s ease both;
+}
+
+@keyframes reveal {
+  to {
+    opacity: 1;
+  }
+}
+
+.cursor {
+  position: absolute;
+  z-index: 2;
+  width: 18px;
+  height: 22px;
+  margin: -2px 0 0 -2px; /* the arrow's tip sits on the point */
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35));
+  animation: point 1.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s both;
+}
+
+@keyframes point {
+  0% {
+    opacity: 0;
+    transform: translate(70px, 60px);
+  }
+  15% {
+    opacity: 1;
+  }
+  62% {
+    transform: translate(0, 0) scale(1);
+  }
+  70% {
+    transform: translate(0, 0) scale(0.82);
+  }
+  80%,
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+.ripple {
+  position: absolute;
+  z-index: 1;
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  border-radius: 50%;
+  background: rgba(10, 132, 255, 0.45);
+  opacity: 0;
+  animation: ripple 0.6s ease-out 1.1s both;
+}
+
+@keyframes ripple {
+  0% {
+    opacity: 0.9;
+    transform: scale(0.2);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+
+/* Paused tour: the peek holds where it is */
+.overlay[data-paused] .peek *,
+.overlay[data-paused] .peek {
+  animation-play-state: paused;
+}
+
+.done:focus-visible {
+  outline: 2px solid #7db2ff;
+  outline-offset: 2px;
+}
+
+/* Leaving: the previews fly into windows and icons, so the selection ring and lift drop away first */
+.overlay[data-closing] .tile {
+  transform: none;
+  pointer-events: none;
+}
+
+.overlay[data-closing] .frame {
+  box-shadow: 0 0 0 0.5px rgba(255, 255, 255, 0.2), 0 18px 40px -10px rgba(0, 0, 0, 0.65);
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .peek,
+  .peek * {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+  }
+
+  .tile {
+    transition: none;
+  }
+
+  .tile:hover,
+  .tile:focus-visible {
+    transform: none;
+  }
+}

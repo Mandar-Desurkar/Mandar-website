@@ -366,6 +366,189 @@
   min-width: 0;
 }
 
+/* ---------- Reading companion (sidebar, wide screens) ---------- */
+.companion {
+  position: sticky;
+  top: 88px;
+  display: grid;
+  gap: 28px;
+}
+
+.companionLabel {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.nextCase {
+  display: grid;
+  gap: 8px;
+  padding-top: 24px;
+  border-top: 1px solid var(--rule);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+/* The next study's report screen peeks out of a brand-blue tile, like its hero */
+.nextThumb {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  height: 92px;
+  margin-top: 4px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: linear-gradient(160deg, var(--accent-2), var(--accent));
+}
+
+.nextThumb img {
+  width: 84px;
+  height: auto;
+  margin-top: 14px;
+  border-radius: 10px 10px 0 0;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.18), 0 10px 24px rgba(0, 20, 50, 0.35);
+  transition: transform 0.25s ease-out;
+}
+
+.nextCase b {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.nextMeta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: -4px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.nextMeta svg {
+  color: var(--accent);
+  transition: transform 0.2s ease;
+}
+
+.nextCase:hover b {
+  color: var(--accent);
+}
+
+.nextCase:hover .nextThumb img {
+  transform: translateY(-4px);
+}
+
+.nextCase:hover .nextMeta svg {
+  transform: translateX(3px);
+}
+
+.hire {
+  display: grid;
+  gap: 10px;
+  padding-top: 24px;
+  border-top: 1px solid var(--rule);
+}
+
+.hireStatus {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--good);
+}
+
+.hireStatus span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--good);
+  box-shadow: 0 0 0 3px rgba(26, 127, 55, 0.15);
+}
+
+.hireText {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.hireCta {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 36px;
+  margin-top: 2px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+.hireCta:hover {
+  background: var(--accent-2);
+}
+
+.copyLink {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.copyLink:hover {
+  color: var(--ink);
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.nextCase:focus-visible,
+.hireCta:focus-visible,
+.copyLink:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+/* Short laptop screens: drop the pieces that would push the sticky rail past the fold */
+@media (max-height: 860px) {
+  .nextThumb {
+    display: none;
+  }
+}
+
+@media (max-height: 720px) {
+  .hireText,
+  .copyLink {
+    display: none;
+  }
+}
+
+@media (max-height: 620px) {
+  .hire,
+  .nextCase {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nextThumb img,
+  .nextMeta svg {
+    transition: none;
+  }
+}
+
 /* ---------- Sections ---------- */
 
 .section {
@@ -575,290 +758,483 @@
   box-decoration-break: clone;
 }
 
-/* ---------- People: persona sheets ---------- */
+/* ---------- People: persona profile cards ---------- */
 
 .personas {
   display: grid;
-  gap: 0;
+  gap: 16px;
+  margin-top: 24px !important;
 }
 
 .persona {
-  padding: 24px 0;
-  border-top: 1px solid var(--rule);
+  --tone: var(--accent);
+  --tint: #e8f0fa;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 0 0 1px var(--rule), 0 14px 34px -18px rgba(0, 25, 60, 0.28);
+  container: persona / inline-size;
 }
 
+.tone1 {
+  --tone: #1f7a4d;
+  --tint: #e6f4ec;
+}
+
+.tone2 {
+  --tone: #a3560c;
+  --tint: #fbefe2;
+}
+
+.personaInternal {
+  --tone: #5b5b66;
+  --tint: #efeff3;
+}
+
+/* Band across the top, with the avatar sitting on its lower edge */
 .personaHead {
+  position: relative;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   gap: 14px;
+  padding: 44px 20px 0;
+}
+
+.personaBand {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 76px;
+  background:
+    repeating-linear-gradient(-28deg, transparent 0 14px, color-mix(in srgb, var(--tone) 8%, transparent) 14px 15px),
+    linear-gradient(120deg, var(--tint), color-mix(in srgb, var(--tint) 40%, #fff));
 }
 
 .monogram {
-  width: 48px;
-  height: 48px;
+  position: relative;
+  width: 64px;
+  height: 64px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: linear-gradient(160deg, var(--accent-2), var(--accent));
+  background: linear-gradient(160deg, color-mix(in srgb, var(--tone) 70%, #fff), var(--tone));
+  box-shadow: 0 0 0 4px #fff, 0 6px 16px -4px rgba(0, 0, 0, 0.25);
   color: #fff;
-  font-size: 20px;
+  font-size: 26px;
   font-weight: 700;
 }
 
-.monogramInternal {
-  background: #e8e8ed;
-  color: var(--muted);
+.personaId {
+  position: relative;
+  min-width: 0;
+  padding-bottom: 4px;
 }
 
 .persona h3 {
-  font-size: 19px;
+  font-size: 20px;
   font-weight: 700;
-  line-height: 1.25;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
 }
 
-.personaRole {
-  font-size: 14px;
+.personaAge {
+  font-weight: 500;
   color: var(--muted);
 }
 
+.personaRole {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 3px 9px;
+  border-radius: 8px;
+  background: var(--tint);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--tone);
+}
+
+/* Facts as a 2 × 2 grid of small tiles */
 .attrs {
-  margin-top: 16px;
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 18px 20px 0 !important;
 }
 
 .attrs > div {
   display: grid;
-  grid-template-columns: 72px 1fr;
-  gap: 12px;
-  padding: 7px 0;
-  border-bottom: 1px solid var(--rule);
-  font-size: 14px;
-  line-height: 1.4;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  align-content: start;
+  column-gap: 8px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #f6f7f9;
+}
+
+.attrs svg {
+  grid-row: 1 / span 2;
+  margin-top: 1px;
+  color: var(--tone);
 }
 
 .attrs dt {
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--faint);
-  padding-top: 2px;
 }
 
+.attrs dd {
+  margin: 1px 0 0;
+  font-size: 14px;
+  line-height: 1.35;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+/* Narrow cards (three in a row): facts as a single list of rows */
+@container persona (max-width: 339.98px) {
+  .attrs {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+
+  .attrs > div {
+    grid-template-columns: 16px 64px minmax(0, 1fr);
+    grid-template-rows: auto;
+    align-items: baseline;
+    padding: 8px 12px;
+  }
+
+  .attrs svg {
+    grid-row: auto;
+    align-self: center;
+  }
+
+  .attrs dd {
+    margin: 0;
+  }
+}
+
+/* The quote, in the persona's own voice */
 .personaQuote {
-  margin-top: 18px !important;
-  font-size: 17px;
-  line-height: 1.5;
+  position: relative;
+  margin: 16px 20px 0 !important;
+  padding: 14px 16px 14px 44px;
+  border-radius: 14px;
+  background: var(--tint);
+}
+
+.personaQuote svg {
+  position: absolute;
+  left: 14px;
+  top: 15px;
+  color: var(--tone);
+}
+
+.personaQuote p {
+  max-width: none !important;
+  margin: 0 !important;
+  font-size: 16px;
+  line-height: 1.45;
+  font-weight: 500;
   color: var(--ink);
   text-wrap: pretty;
 }
 
 .needs {
-  margin-top: 18px;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px;
+  gap: 16px;
+  margin: 18px 20px 22px;
 }
 
 .needs h4 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   margin-bottom: 8px !important;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--faint);
+}
+
+.wants h4 {
+  color: var(--good);
+}
+
+.struggles h4 {
+  color: var(--bad);
+}
+
+.needs ul {
+  display: grid;
+  gap: 7px;
 }
 
 .needs li {
-  position: relative;
-  padding-left: 14px;
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  align-items: start;
   font-size: 14px;
   line-height: 1.45;
   color: var(--ink-2);
 }
 
-.needs li + li {
-  margin-top: 6px;
-}
-
-.needs li::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.55em;
-  width: 6px;
-  height: 6px;
+.needs li svg {
+  margin-top: 2px;
+  padding: 2px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
-  background: var(--good);
 }
 
-.needs .struggles li::before {
-  background: var(--bad);
+.wants li svg {
+  background: color-mix(in srgb, var(--good) 14%, transparent);
+  color: var(--good);
 }
 
-/* ---------- Today: journey map ---------- */
+.struggles li svg {
+  background: color-mix(in srgb, var(--bad) 12%, transparent);
+  color: var(--bad);
+}
+
+/* ---------- Today: journey as a vertical timeline ---------- */
 
 .journey {
-  margin-top: 32px !important;
+  margin-top: 28px !important;
 }
 
-.rowLabel,
-.curve,
-.curveSlot {
+.toneGood {
+  --t: var(--good);
+}
+
+.toneMid {
+  --t: var(--mid);
+}
+
+.toneBad {
+  --t: var(--bad);
+}
+
+.timelineHead {
   display: none;
 }
 
-.step {
+.timeline {
   position: relative;
-  padding: 0 0 24px 46px;
 }
 
-.step::before {
+/* Phone: the rail on the left, the story to its right */
+.timelineRow {
+  position: relative;
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr);
+  column-gap: 10px;
+  padding-bottom: 26px;
+}
+
+.timelineRow:last-child {
+  padding-bottom: 0;
+}
+
+.tlRail {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* The line runs from this node to the next */
+.timelineRow:not(:last-child) .tlRail::after {
   content: "";
   position: absolute;
-  left: 15px;
-  top: 34px;
-  bottom: 0;
-  width: 1px;
-  background: var(--rule-strong);
+  top: 36px;
+  bottom: -26px;
+  left: 50%;
+  width: 2px;
+  margin-left: -1px;
+  background: linear-gradient(var(--t), color-mix(in srgb, var(--t) 25%, var(--rule)));
+  opacity: 0.45;
 }
 
-.step:last-of-type::before {
-  display: none;
+.tlNode {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: inset 0 0 0 2px var(--t), 0 0 0 4px var(--bg);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--t);
 }
 
-.stage h3 {
+.tlMood {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin-top: 6px;
+  padding: 2px 0;
+  background: var(--bg);
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  color: var(--t);
+}
+
+.tlDoes {
+  grid-column: 2;
+  padding-top: 5px;
+}
+
+.tlDoes h3 {
   font-size: 17px;
   font-weight: 700;
-  line-height: 1.3;
+  line-height: 1.25;
 }
 
-.stage p {
+.tlDoes p {
+  max-width: none !important;
   margin-top: 4px !important;
   font-size: 15px;
   line-height: 1.5;
   color: var(--ink-2);
 }
 
-.stageNum {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 31px;
-  height: 31px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  border: 1px solid var(--rule-strong);
-  background: var(--bg);
-  font-size: 13px;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
+.tlPain {
+  grid-column: 2;
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  gap: 8px;
+  max-width: none !important;
+  margin: 10px 0 0 !important;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--bad) 6%, #fff);
+  box-shadow: inset 3px 0 0 color-mix(in srgb, var(--bad) 55%, transparent);
+  font-size: 14px;
+  line-height: 1.45;
+  color: #7a2d17;
 }
 
-.feeling {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 10px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.feeling::before {
-  content: "";
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: currentColor;
-}
-
-.toneGood {
-  color: var(--good);
-}
-
-.toneMid {
-  color: var(--mid);
-}
-
-.toneBad {
+.tlPain svg {
+  margin-top: 2px;
   color: var(--bad);
 }
 
-.painCell {
-  margin-top: 12px !important;
-  padding: 10px 12px;
-  border-radius: 10px;
-  background: #fbefe9;
-  font-size: 14px;
-  line-height: 1.5;
-  color: #6e2a0d;
-}
-
-/* ---------- Principles ---------- */
-
-.principles li,
-.reflection li {
-  display: grid;
-  grid-template-columns: 52px 1fr;
-  gap: 8px;
-  padding: 22px 0;
-  border-top: 1px solid var(--rule);
-}
-
-.principles li:last-child,
-.reflection li:last-child {
-  border-bottom: 1px solid var(--rule);
-}
-
-.bigNum {
-  font-size: 28px;
-  font-weight: 300;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+.timelineNote {
+  margin-top: 18px;
+  font-size: 12px;
   color: var(--faint);
-  font-variant-numeric: tabular-nums;
 }
 
-.insight,
-.rule {
-  display: block;
+/* ---------- Principles: insight → design rule cards ---------- */
+
+.principles {
+  display: grid;
+  gap: 16px;
 }
 
-.insight span,
-.rule span {
-  display: block;
-  margin-bottom: 4px;
+.principle {
+  position: relative;
+  display: grid;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 0 0 1px var(--rule), 0 8px 24px -16px rgba(0, 25, 60, 0.25);
+}
+
+.principleLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .insight {
+  position: relative;
+  padding: 18px 20px 22px;
+  background: #f5f5f7;
+}
+
+.insight .principleLabel {
+  color: var(--faint);
+}
+
+.insight p {
+  margin-top: 8px !important;
+  padding-right: 36px;
   font-size: 15px;
   line-height: 1.5;
   color: var(--muted);
 }
 
-.insight span {
-  color: var(--faint);
+.principleNum {
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  font-size: 28px;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: rgba(0, 0, 0, 0.16);
+}
+
+/* The hand-off from what we learned to what we do about it */
+.principleArrow {
+  position: absolute;
+  left: 20px;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  top: 0;
+  margin-top: -13px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 0 0 4px #fff;
+  /* sits on the seam between the two halves; top is set by the grid row below */
+  grid-row: 2;
 }
 
 .rule {
-  margin-top: 12px !important;
-  font-size: 18px;
+  grid-row: 2;
+  padding: 24px 20px 20px;
+}
+
+.rule .principleLabel {
+  color: var(--accent);
+}
+
+.rule p {
+  margin-top: 6px !important;
+  font-size: 17px;
   font-weight: 600;
   line-height: 1.4;
   letter-spacing: -0.01em;
   color: var(--ink);
-}
-
-.rule span {
-  color: var(--accent);
 }
 
 /* ---------- Solution: feature cards + anatomy ---------- */
@@ -1076,89 +1452,176 @@
 
 /* ---------- Engine: pipeline ---------- */
 
-.pipeline {
-  position: relative;
-  display: grid;
-  gap: 12px;
-  margin-top: 32px !important;
-  padding: 24px 16px;
-  isolation: isolate;
+/* A real output of the system, framed as evidence */
+.evidence {
+  margin: 28px 0 4px;
 }
 
-/* The funnel: wide at the catalogue, narrow at the five crops that survive */
-.pipeline::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: linear-gradient(180deg, #e3edf9, #c9dcf3);
-  clip-path: polygon(0 0, 100% 0, 78% 100%, 22% 100%);
-  border-radius: 18px;
+.evidence img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 0 0 1px var(--rule), 0 12px 30px -12px rgba(0, 25, 60, 0.25);
 }
 
-.endpoint {
-  justify-self: center;
-  padding: 7px 16px;
-  border-radius: 999px;
+.evidence figcaption {
+  max-width: 680px;
+  margin-top: 12px;
   font-size: 14px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.evidence figcaption b {
+  margin-right: 6px;
+  font-size: 11px;
   font-weight: 700;
-}
-
-.endpointIn {
-  background: #fff;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--accent);
-  box-shadow: inset 0 0 0 1px rgba(0, 70, 145, 0.25);
 }
 
-.endpointOut {
+.pipeline {
+  margin-top: 32px !important;
+  padding: 22px 20px 20px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #fff, var(--accent-soft));
+  box-shadow: inset 0 0 0 1px rgba(0, 70, 145, 0.12);
+}
+
+/* What goes in and what comes out frame the stages */
+.pipeIn,
+.pipeOut {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.pipeIn {
+  color: var(--ink);
+}
+
+.pipeIn span,
+.pipeOut span {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pipeIn span {
+  color: var(--faint);
+}
+
+.pipeOut {
+  flex-wrap: nowrap;
+  align-items: center;
+  margin-top: 18px !important;
+  padding: 13px 16px;
+  border-radius: 12px;
   background: var(--accent);
   color: #fff;
 }
 
+.pipeOut span {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.pipeOut svg {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* Phones: the stages hang off one vertical rail */
+.pipeStages {
+  position: relative;
+  display: grid;
+  gap: 22px;
+  margin-top: 18px !important;
+}
+
+.pipeStages::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  left: 15px;
+  width: 2px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, rgba(0, 70, 145, 0.35), var(--accent));
+}
+
 .pipeStage {
-  padding: 16px 18px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), inset 0 0 0 1px rgba(0, 70, 145, 0.1);
+  position: relative;
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: 14px;
+}
+
+.pipeNode {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: inset 0 0 0 2px var(--accent), 0 0 0 4px var(--accent-soft);
 }
 
 .pipeNum {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--faint);
+  display: none;
 }
 
-.pipeStage h3 {
-  margin-top: 2px !important;
-  font-size: 19px;
+.pipeBody h3 {
+  margin-top: 4px !important;
+  font-size: 18px;
   font-weight: 700;
   color: var(--accent);
 }
 
-.pipeStage p {
-  margin-top: 2px !important;
-  font-size: 14px;
+.pipeBody p {
+  margin-top: 4px !important;
+  font-size: 15px;
   line-height: 1.45;
+  color: var(--ink-2);
+}
+
+.pipeBody ul {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  margin-top: 10px !important;
+  padding-top: 10px;
+  border-top: 1px solid rgba(0, 70, 145, 0.12);
+}
+
+.pipeBody li {
+  position: relative;
+  padding-left: 14px;
+  font-size: 14px;
+  line-height: 1.4;
   color: var(--muted);
 }
 
-.pipeStage ul {
-  margin-top: 10px !important;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.pipeStage li {
-  padding: 3px 9px;
-  border-radius: 6px;
-  background: var(--accent-soft);
-  color: var(--accent);
-  font-size: 12.5px;
-  font-weight: 600;
-  line-height: 1.5;
+.pipeBody li::before {
+  content: "";
+  position: absolute;
+  top: 0.55em;
+  left: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-2);
+  opacity: 0.6;
 }
 
 .ruleNotes {
@@ -1176,45 +1639,88 @@
 
 /* ---------- Decisions: a decision log ---------- */
 
-.decisions li {
+.decisions {
   display: grid;
-  gap: 8px;
-  padding: 22px 0;
-  border-top: 1px solid var(--rule);
+  gap: 16px;
 }
 
-.decisions li:last-child {
-  border-bottom: 1px solid var(--rule);
+.decision {
+  display: grid;
+  gap: 12px;
+  padding: 20px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 0 0 1px var(--rule), 0 8px 24px -16px rgba(0, 25, 60, 0.25);
+}
+
+.decisionHead {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
 }
 
 .decisionId {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  min-width: 34px;
+  height: 26px;
+  padding: 0 8px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
   font-size: 12px;
   font-weight: 700;
-  color: var(--accent);
   font-variant-numeric: tabular-nums;
 }
 
-.decisions h3 {
+.decisionHead h3 {
+  padding-top: 1px;
   font-size: 18px;
   font-weight: 700;
   line-height: 1.35;
   letter-spacing: -0.01em;
 }
 
-.decisions p {
+.decisionWhy,
+.decisionCost {
+  padding: 14px 16px;
+  border-radius: 12px;
+}
+
+.decisionWhy {
+  background: var(--accent-soft);
+}
+
+/* The cost gets its own warm tint, so every choice visibly carries a price */
+.decisionCost {
+  background: #fdf4e3;
+}
+
+.decisionLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.decisionWhy .decisionLabel {
+  color: var(--accent);
+}
+
+.decisionCost .decisionLabel {
+  color: var(--mid);
+}
+
+.decisionWhy p,
+.decisionCost p {
+  margin-top: 6px !important;
   font-size: 15px;
   line-height: 1.5;
   color: var(--ink-2);
-}
-
-.decisions p span {
-  display: block;
-  margin-bottom: 2px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--faint);
 }
 
 /* ---------- Outcomes ---------- */
@@ -1321,16 +1827,54 @@
   color: var(--faint);
 }
 
-/* ---------- Reflection ---------- */
+/* ---------- Reflection: one card per lesson ---------- */
 
-.reflection p {
-  font-size: 17px;
-  line-height: 1.6;
-  color: var(--ink-2);
+.reflection {
+  display: grid;
+  gap: 16px;
 }
 
-.reflection strong {
+.lesson {
+  position: relative;
+  padding: 22px 20px 20px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #fff, var(--accent-soft));
+  box-shadow: inset 0 0 0 1px rgba(0, 70, 145, 0.12);
+}
+
+.lesson::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 20px;
+  width: 36px;
+  height: 3px;
+  border-radius: 0 0 3px 3px;
+  background: var(--lime);
+}
+
+.lessonNum {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+
+.lesson h3 {
+  margin-top: 8px !important;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
   color: var(--ink);
+}
+
+.lesson p {
+  margin-top: 8px !important;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink-2);
 }
 
 /* ---------- CTA ---------- */
@@ -1477,8 +2021,8 @@
 }
 
 @media (max-width: 380px) {
-  .needs {
-    grid-template-columns: 1fr;
+  .attrs {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .outcomeMetrics {
@@ -1551,26 +2095,32 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
+  /* Two or three cards side by side, whatever the case study has */
   .personas {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0 32px;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 20px;
   }
 
-  .persona {
-    border-top: 2px solid var(--ink);
+  /* Two cards a row; an odd last card takes the whole row */
+  .principles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
   }
 
-  .needs {
-    grid-template-columns: 1fr;
+  .principle:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
   }
 
-  .principles li,
-  .reflection li {
-    grid-template-columns: 88px 1fr;
+  /* Subgrid lines up the insight/rule seam across the two cards in a row */
+  .principle {
+    grid-row: span 2;
+    grid-template-rows: subgrid;
+    row-gap: 0;
   }
 
-  .bigNum {
-    font-size: 40px;
+  .reflection {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
   }
 
   .feature {
@@ -1628,33 +2178,90 @@
   }
 
   .pipeline {
-    grid-template-columns: auto repeat(3, minmax(0, 1fr)) auto;
-    align-items: center;
-    gap: 14px;
-    padding: 36px 20px;
+    padding: 26px 28px 24px;
   }
 
-  .pipeline::before {
-    clip-path: polygon(0 0, 100% 26%, 100% 74%, 0 100%);
+  /* Wider screens: the stages sit side by side on one horizontal rail.
+     --stages comes from the page, so it fits any number of stages */
+  .pipeStages {
+    grid-template-columns: repeat(var(--stages, 3), minmax(0, 1fr));
+    grid-template-rows: repeat(5, auto);
+    gap: 0 24px;
+    margin-top: 22px !important;
   }
 
+  .pipeStages::before {
+    top: 15px;
+    bottom: auto;
+    left: 16px;
+    right: 0;
+    width: auto;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(0, 70, 145, 0.35), var(--accent));
+  }
+
+  /* An arrowhead where the rail hands over to the result */
+  .pipeStages::after {
+    content: "";
+    position: absolute;
+    top: 11px;
+    right: 0;
+    border: 5px solid transparent;
+    border-left: 8px solid var(--accent);
+    border-right: 0;
+  }
+
+  /* Subgrid keeps every stage's label, title, caption and list on shared rows,
+     so the dividers line up however long a caption runs */
   .pipeStage {
-    min-height: 100%;
+    grid-row: span 5;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: subgrid;
+    gap: 0;
+  }
+
+  .pipeBody {
+    display: contents;
+  }
+
+  .pipeNode {
+    margin-bottom: 14px;
+  }
+
+  .pipeNum {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  .pipeBody h3 {
+    margin-top: 2px !important;
+  }
+
+  .pipeBody p {
+    font-size: 14px;
+  }
+
+  .pipeBody li {
+    font-size: 13.5px;
   }
 
   .ruleNotes {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(var(--rules, 3), minmax(0, 1fr));
     gap: 28px;
   }
 
-  .decisions li {
-    grid-template-columns: 44px minmax(0, 1fr) minmax(0, 1.2fr) minmax(0, 1.2fr);
-    gap: 24px;
-    align-items: start;
+  .decision {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    padding: 22px 24px 24px;
   }
 
-  .decisions h3 {
-    font-size: 17px;
+  .decisionHead {
+    grid-column: 1 / -1;
   }
 
   .outcomePanel {
@@ -1725,18 +2332,13 @@
   }
 }
 
-/* Journey map as a real map: stages as columns, one emotion curve across them (needs width) */
-@media (min-width: 1000px) {
-  .journeyGrid {
+/* Wider screens: what she does on the left, the rail in the middle, what goes wrong on the right */
+@media (min-width: 720px) {
+  .timelineHead {
     display: grid;
-    grid-template-columns: 92px repeat(var(--cols), minmax(0, 1fr));
-    grid-template-rows: auto 120px auto;
-  }
-
-  .rowLabel {
-    display: block;
-    grid-column: 1;
-    padding: 2px 12px 0 0;
+    grid-template-columns: minmax(0, 1fr) 88px minmax(0, 1fr);
+    column-gap: 24px;
+    margin-bottom: 14px;
     font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.08em;
@@ -1744,92 +2346,40 @@
     color: var(--faint);
   }
 
-  .rowLabel small {
-    display: block;
-    margin-top: 2px;
-    font-size: 10px;
-    letter-spacing: 0.04em;
-    text-transform: none;
-    font-weight: 500;
+  .timelineHead span:nth-child(2) {
+    text-align: center;
   }
 
-  .step {
-    grid-row: 1 / span 3;
-    display: grid;
-    grid-template-rows: subgrid;
-    padding: 0 14px;
-    border-left: 1px solid var(--rule);
+  .timelineRow {
+    grid-template-columns: minmax(0, 1fr) 88px minmax(0, 1fr);
+    column-gap: 24px;
+    align-items: start;
+    padding-bottom: 30px;
   }
 
-  .step::before {
-    display: none;
+  .tlDoes {
+    grid-column: 1;
+    grid-row: 1;
+    text-align: right;
   }
 
-  .stageNum {
-    position: static;
-    width: 26px;
-    height: 26px;
-    margin-bottom: 10px;
-    font-size: 12px;
+  .tlRail {
+    grid-column: 2;
+    grid-row: 1;
   }
 
-  .stage h3 {
-    font-size: 16px;
+  .tlPain {
+    grid-column: 3;
+    grid-row: 1;
+    margin: 4px 0 0 !important;
   }
 
-  .stage p {
-    font-size: 14px;
+  .timelineRow:not(:last-child) .tlRail::after {
+    bottom: -30px;
   }
 
-  .curveSlot {
-    display: block;
-  }
-
-  .curve {
-    display: block;
-    position: relative;
-    z-index: 1;
-    grid-row: 2;
-    grid-column: 2 / -1;
-    margin: 18px 0;
-  }
-
-  .curve svg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-  }
-
-  .curveBase {
-    stroke: var(--rule-strong);
-    stroke-width: 1;
-    stroke-dasharray: 3 4;
-    vector-effect: non-scaling-stroke;
-  }
-
-  .curveLine {
-    fill: none;
-    stroke: var(--accent);
-    stroke-width: 2.5;
-    vector-effect: non-scaling-stroke;
-  }
-
-  .curveDot {
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: currentColor;
-    box-shadow: 0 0 0 3px var(--bg);
-    transform: translate(-50%, -50%);
-  }
-
-  .painCell {
-    margin-top: 0 !important;
-    align-self: start;
-    font-size: 13px;
+  .tlMood {
+    font-size: 11px;
   }
 }
 
@@ -1846,9 +2396,3 @@
   }
 }
 
-/* On phones the journey is a vertical list, so the steps ignore their map column */
-@media (max-width: 999.98px) {
-  .step {
-    grid-column: auto !important;
-  }
-}

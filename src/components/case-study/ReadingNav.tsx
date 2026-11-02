@@ -1,8 +1,10 @@
 "use client";
 
-// Wayfinding for a long case study: a thin reading-progress bar under the top bar, and a sticky
-// table of contents (wide screens) that highlights the section being read.
+// Wayfinding for a long case study: a thin reading-progress bar under the top bar, and a table of
+// contents (wide screens) that highlights the section being read, fills the rail behind it and
+// says how much reading is left.
 import { useEffect, useRef, useState } from "react";
+import { Clock } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
 import styles from "./ReadingNav.module.css";
 
@@ -52,8 +54,37 @@ export function ReadingProgress({ slug }: { slug?: string }) {
   );
 }
 
-export function TableOfContents({ items, slug }: { items: TocItem[]; slug?: string }) {
+// Share of the page scrolled, 0 to 1
+function useScrollProgress() {
+  const [progress, setProgress] = useState(0);
+  useEffect(() => {
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const el = document.documentElement;
+      const max = el.scrollHeight - el.clientHeight;
+      setProgress(max > 0 ? Math.min(1, Math.max(0, el.scrollTop / max)) : 0);
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      cancelAnimationFrame(frame);
+    };
+  }, []);
+  return progress;
+}
+
+export function TableOfContents({ items, slug, minutes }: { items: TocItem[]; slug?: string; minutes?: number }) {
   const [active, setActive] = useState(items[0]?.id);
+  const progress = useScrollProgress();
+  const activeIndex = Math.max(0, items.findIndex((i) => i.id === active));
+  const left = minutes ? Math.ceil(minutes * (1 - progress)) : 0;
   useEffect(() => {
     const sections = items.map((i) => document.getElementById(i.id)).filter((el): el is HTMLElement => !!el);
     // A section is "current" once its heading passes the upper third of the viewport
@@ -76,7 +107,7 @@ export function TableOfContents({ items, slug }: { items: TocItem[]; slug?: stri
           <li key={item.id}>
             <a
               href={`#${item.id}`}
-              className={item.id === active ? styles.active : undefined}
+              className={i === activeIndex ? styles.active : i < activeIndex ? styles.read : undefined}
               aria-current={item.id === active ? "location" : undefined}
               onClick={() => {
                 if (slug) {
@@ -90,6 +121,12 @@ export function TableOfContents({ items, slug }: { items: TocItem[]; slug?: stri
           </li>
         ))}
       </ol>
+      {minutes ? (
+        <p className={styles.timeLeft}>
+          <Clock size={13} aria-hidden="true" />
+          {progress > 0.96 || left < 1 ? "You've reached the end" : `${left} min left`}
+        </p>
+      ) : null}
     </nav>
   );
 }

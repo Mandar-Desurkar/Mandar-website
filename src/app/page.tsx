@@ -8,6 +8,7 @@ import DesktopIcon from "@/components/DesktopIcon";
 import iconStyles from "@/components/DesktopIcon.module.css";
 import { shippedApps } from "@/data/resume";
 import HiringNotification from "@/components/HiringNotification";
+import MissionControl from "@/components/MissionControl";
 import MobileDock from "@/components/MobileDock";
 import MobileHome from "@/components/MobileHome";
 import PhoneBack from "@/components/PhoneBack";
@@ -85,6 +86,7 @@ function DesktopEnvironment() {
               <DesktopIcon
                 key={app.name}
                 title={app.name}
+                iconKey={app.prototype}
                 icon={<Image src={app.icon} alt="" width={116} height={116} className={iconStyles.appIcon} />}
                 onOpen={() => app.prototype && openPrototype(app.prototype, "desktop")}
               />
@@ -115,6 +117,7 @@ export default function Home() {
         <Navbar />
         <DesktopEnvironment />
         <HiringNotification />
+        <MissionControl />
         <PrototypeHost />
         <PhoneBack />
       </WindowProvider>

@@ -59,7 +59,9 @@
 html,
 body {
   max-width: 100vw;
-  overflow-x: hidden;
+  /* clip, not hidden: hidden on both html and body makes body a scroll container that never
+     scrolls, which silently breaks every position: sticky on long pages (case study contents) */
+  overflow-x: clip;
   /* OS Desktop Wallpaper */
   background: #000 url('/wallpaper-desktop.webp') no-repeat center center fixed;
   background-size: cover;
@@ -299,16 +301,25 @@ a {
     max-width: none; 
     min-height: 300px;
     min-width: 400px;
-    max-height: calc(100vh - 56px); /* Prevent colliding with the menu bar and screen bottom */
+    max-height: calc(100vh - 70px); /* 20px clear of the 30px menu bar and of the screen bottom */
     overflow: hidden; /* Important: hide overflow so the handles don't scroll and content stays inside */
-    /* Centred left of the desktop items, and a little above the middle, where the eye settles. Wider
-       screens below use true centre. */
-    top: 28px;
-    bottom: 9vh;
+    /* Screen centre, with an even 20px under the 30px menu bar and above the bottom. Where
+       centring would bring the window within 48px of the desktop icons, it shifts left just enough:
+       `right` shrinks the box the auto margins centre in. --win-w is the window's width (set inline),
+       --icons-w how far the icons reach in from the right edge (one column here, two below). */
+    --icons-w: 120px;
+    top: 50px;
+    bottom: 20px;
     left: 0;
-    right: 136px;
+    right: max(0px, calc(var(--win-w, 1040px) - 100vw + 2 * (var(--icons-w) + 48px)));
     margin: auto;
   }
+}
+
+/* Mission Control is open: the window's preview stands in for it (MissionControl.tsx) */
+html[data-mc] .os-window.absolute-window {
+  opacity: 0;
+  pointer-events: none;
 }
 
 /* A tone layer over the wallpaper, so its colour stays behind the content. Adjust it with
@@ -349,22 +360,15 @@ a {
   pointer-events: auto;
 }
 
-/* Too short for one column: the five sections stay together and the apps sit beside them, and
-   large windows centre in the space left of both columns */
+/* Too short for one column: the five sections stay together and the apps sit beside them, so the
+   icons reach further in and wide windows shift further left */
 @media (max-height: 829.98px) {
   .desktop-grid {
     height: 530px;
   }
 
   .os-window.absolute-window {
-    right: 248px;
-  }
-}
-
-/* True screen centre wherever a 1040px window clears the icons (one column or two) */
-@media (min-width: 1280px) and (min-height: 830px), (min-width: 1500px) {
-  .os-window.absolute-window {
-    right: 0;
+    --icons-w: 228px;
   }
 }
 

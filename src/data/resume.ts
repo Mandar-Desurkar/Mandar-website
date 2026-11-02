@@ -299,3 +299,20 @@ export const skills = [
       "FinTech & WealthTech, AgriTech & Dairy-tech, CRM & Sales Platforms, ERP & Last-Mile Delivery, AI/Computer Vision Features",
   },
 ];
+
+// Desktop Skills & Toolkit: the Product & UX skills by stage of the work, and the product behind each
+// domain. Keep every item identical to `skills` above, which the phone and Spotlight read.
+export const skillStages = [
+  { label: "Strategy", items: ["0→1 Product Development", "Product Strategy", "Roadmapping", "Feature Prioritization", "GTM Planning"] },
+  { label: "Discovery & design", items: ["User Research", "Usability Testing", "Competitive Research", "UI/UX"] },
+  { label: "Growth", items: ["Monetization (Freemium & Subscription)", "Funnel Optimization", "A/B Testing"] },
+  { label: "Delivery", items: ["PRD Writing", "Agile/Scrum"] },
+];
+
+export const domainProof: Record<string, string> = {
+  "FinTech & WealthTech": "AltQube Wealth Platform",
+  "AgriTech & Dairy-tech": "Kissan & Gau Sampurna",
+  "CRM & Sales Platforms": "Sales CRM & Telecalling",
+  "ERP & Last-Mile Delivery": "Rider App & Outlet ERP",
+  "AI/Computer Vision Features": "Crop & cattle diagnosis",
+};

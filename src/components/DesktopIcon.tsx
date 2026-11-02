@@ -13,9 +13,11 @@ interface DesktopIconProps {
   icon?: ReactNode;
   // A photo instead of a folder icon
   thumb?: string;
+  // Names the icon for Mission Control's fly-in (the section id, or the app's prototype id)
+  iconKey?: string;
 }
 
-export default function DesktopIcon({ id, onOpen, title, icon, thumb }: DesktopIconProps) {
+export default function DesktopIcon({ id, onOpen, title, icon, thumb, iconKey }: DesktopIconProps) {
   const { openSection, activeTab, isClosed, isMinimized } = useWindow();
   // Like a selected item in Finder: the folder stays highlighted while its window is on screen
   const isOpen = !!id && activeTab === id && !isClosed && !isMinimized;
@@ -25,6 +27,7 @@ export default function DesktopIcon({ id, onOpen, title, icon, thumb }: DesktopI
     <div
       className={`${styles.desktopIcon} ${isOpen ? styles.selected : ""}`}
       aria-current={isOpen ? "true" : undefined}
+      data-icon={id ?? iconKey}
       onClick={open}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {

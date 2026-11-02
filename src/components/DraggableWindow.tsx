@@ -11,6 +11,15 @@ import { ChevronLeft, Share } from "lucide-react";
 import { profile } from "@/data/resume";
 import { sectionApp } from "./ios/sections";
 
+// The widest a window can be while centred on screen and 48px clear of the desktop icons. On small
+// laptops that would be too narrow to read, so it never drops below 760px (or the space left of the
+// icons); globals.css then shifts it left just enough to stay clear.
+const CENTRED_MAX =
+  'max(calc(100vw - 2 * (var(--icons-w, 120px) + 48px)), min(760px, calc(100vw - var(--icons-w, 120px) - 96px)))';
+const CENTRED_WIDE = `min(84vw, 1180px, ${CENTRED_MAX})`;
+// Below the 30px menu bar with an even 20px above and below
+const FULL_HEIGHT = 'calc(100vh - 70px)';
+
 export default function DraggableWindow({ 
   title, 
   children
@@ -72,7 +81,7 @@ export default function DraggableWindow({
   useEffect(() => {
     if (isMobile) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key !== "Escape" || isClosed || isMinimized || prototype) return;
+      if (e.key !== "Escape" || e.defaultPrevented || isClosed || isMinimized || prototype) return;
       if (document.querySelector('[role="dialog"]')) return;
       if ((e.target as HTMLElement | null)?.closest("input, textarea, select")) return;
       trackEvent("Closed Window", { section: activeTab, method: "escape" });
@@ -101,18 +110,20 @@ export default function DraggableWindow({
         newHeight = new URLSearchParams(window.location.search).has('about') ? 'max(64vh, 580px)' : 'fit-content';
         break;
       case 'experience':
-        // wide enough for the swimming feature; never so wide it covers the desktop icons
-        // the desktop icons take ~224px on the right, so a centred window can span 100vw − 2 × 240px
-        newWidth = 'min(84vw, 1180px, calc(100vw - 480px))';
-        newHeight = '88vh';
+        // wide enough for the swimming feature, but centred on screen with a 48px gap to the desktop
+        // icons on both sides; --icons-w (globals.css) is how far the icons reach in from the right
+        newWidth = CENTRED_WIDE;
+        newHeight = FULL_HEIGHT;
         break;
       case 'education':
-        newWidth = 'min(65vw, 960px)';
-        newHeight = '80vh';
+        // the same frame as Experience and Case Studies, so the three long windows match
+        newWidth = CENTRED_WIDE;
+        newHeight = FULL_HEIGHT;
         break;
       case 'projects':
-        newWidth = 'min(75vw, 1040px)';
-        newHeight = '80vh';
+        // as large as Experience: three case study cards read better with room for their phone fans
+        newWidth = CENTRED_WIDE;
+        newHeight = FULL_HEIGHT;
         break;
       case 'contact':
         newWidth = '560px';
@@ -295,10 +306,14 @@ export default function DraggableWindow({
       onDragEnd={() => trackEvent("Moved Window", { section: activeTab })}
       style={{ 
         position: 'absolute', 
+        // globals.css uses the width to keep the centred window clear of the desktop icons
+        ["--win-w" as string]: size.width,
         zIndex: isMaximized ? 9999 : 10,
         margin: isMaximized ? 0 : undefined,
         top: isMaximized ? 0 : undefined,
+        bottom: isMaximized ? 0 : undefined,
         left: isMaximized ? 0 : undefined,
+        right: isMaximized ? 0 : undefined,
         maxWidth: isMaximized ? 'none' : undefined,
         // When not maximizing or opening (e.g. initial), width/height are handled by variants
         // but we keep size in state. Framer motion overrides these with variant values

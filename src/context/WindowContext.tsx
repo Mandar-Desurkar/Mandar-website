@@ -8,8 +8,8 @@ export type SectionId = 'about' | 'experience' | 'education' | 'projects' | 'con
 const SECTION_IDS: SectionId[] = ['about', 'experience', 'education', 'projects', 'contact'];
 const isSectionId = (v: string | null): v is SectionId => SECTION_IDS.includes(v as SectionId);
 export type PrototypeId = 'kissan-sampurna' | 'gau-sampurna';
-export type PrototypePlacement = 'hero' | 'desktop' | 'experience' | 'projects' | 'home_screen' | 'deep_link' | 'spotlight';
-export type OpenSource = 'desktop_icon' | 'menu_bar' | 'system_menu' | 'hero_cta' | 'notification' | 'mobile_dock' | 'home_widget' | 'spotlight' | 'deep_link';
+export type PrototypePlacement = 'hero' | 'desktop' | 'experience' | 'projects' | 'home_screen' | 'deep_link' | 'spotlight' | 'mission_control';
+export type OpenSource = 'desktop_icon' | 'menu_bar' | 'system_menu' | 'hero_cta' | 'notification' | 'mobile_dock' | 'home_widget' | 'spotlight' | 'deep_link' | 'mission_control';
 
 type WindowContextType = {
   isMinimized: boolean;

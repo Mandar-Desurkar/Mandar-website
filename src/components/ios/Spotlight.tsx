@@ -7,7 +7,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { IoChevronForward, IoCloseCircle, IoSearch } from "react-icons/io5";
 import { useWindow } from "@/context/WindowContext";
-import { experiences, profile, projects, shippedApps, skills } from "@/data/resume";
+import { experiences, profile, shippedApps, skills } from "@/data/resume";
 import { caseStudies } from "@/data/caseStudies";
 import { trackEvent } from "@/lib/analytics";
 import { AppTile } from "./AppIcon";
@@ -41,13 +41,13 @@ const SECTION_SUBTITLES: Record<string, string> = {
   about: `${profile.role} · ${profile.location}`,
   experience: current ? `${current.role}, ${current.company.replace(/ Private Limited$/, "")}` : "Roles",
   education: "B.E. ISE · Skills & toolkit",
-  projects: [...caseStudies.map((c) => c.title.split(":")[0]), "Products I've shipped"].join(" · "),
+  projects: caseStudies.map((c) => c.title.split(":")[0]).join(" · "),
   contact: "Email, phone, LinkedIn",
 };
 const SECTION_KEYWORDS: Record<string, string> = {
   experience: experiences.map((e) => `${e.role} ${e.company} ${e.groups?.map((g) => g.title).join(" ") ?? ""}`).join(" "),
   education: skills.map((s) => s.items).join(" "),
-  projects: [...projects.map((p) => `${p.title} ${p.context} ${p.tags.join(" ")}`), ...caseStudies.map((c) => `${c.title} ${c.tags.join(" ")}`)].join(" "),
+  projects: caseStudies.map((c) => `${c.title} ${c.tags.join(" ")}`).join(" "),
 };
 
 export default function Spotlight({ onClose }: { onClose: () => void }) {

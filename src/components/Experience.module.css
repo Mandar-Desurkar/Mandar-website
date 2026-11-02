@@ -727,10 +727,6 @@
   display: none;
 }
 
-/* Tall window: centred in the full space under the menu bar, not lifted like the shorter ones */
-:global(.os-window.absolute-window):has(.experienceSection) {
-  bottom: 0;
-}
 
 /* ==================== Desktop window ====================
    On the shared dark glass (globals.css). A timeline: when and where on the left, the role on the

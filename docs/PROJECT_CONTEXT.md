@@ -29,10 +29,13 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
   `src/app/globals.css`, framer-motion, lucide-react, react-icons.
 - Sections (tab ids in `WindowContext.activeTab`): `about`, `experience`, `education`,
   `projects` (shown as **Case Studies** since 2026-10-30), `contact`.
-- **Case studies** (2026-10-30): content in `src/data/caseStudies.ts` (typed; every public statistic
+- **First visit (desktop, 2026-11-02):** a Mission Control overview of every window (`MissionControl.tsx`)
+  that tours them automatically in grid order, then opens About Me; later visits reach it from the menu
+  bar's Show all windows button, with hover peeks only.
+- **Case studies** (2026-10-30; Farm Monitoring added 2026-10-31, AI Crop Doctor 2026-11-01): content in `src/data/caseStudies.ts` (typed; every public statistic
   has a `source` id pointing at a verified URL), one statically generated page per slug at
   `/case-studies/<slug>` (`src/app/case-studies/[slug]/page.tsx` + `CaseStudy.module.css`). The Case
-  Studies window lists them as feature cards above "Products I've shipped" (the old project cards),
+  Studies window lists them as feature cards (the "Products I've shipped" list was removed on 2026-11-01),
   and Spotlight has a "Case studies" group. **To add one:** append an entry to `caseStudies`, add
   screenshots under `public/case-studies/<slug>/` (captured from the desktop prototype viewer at 2×),
   and run `next build` (the page prerenders via `generateStaticParams`). Deep links:
@@ -67,7 +70,7 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
 | Date | Decision | Why |
 |---|---|---|
 | 2026-10-31 | Phone exit uses a history guard added on the first tap; the second Back on home is the browser's own | A site can't close itself, and Chrome skips history entries added without a user gesture |
-| 2026-10-31 | All windows sit centred, a little above the middle; they shift left only where they would cover the icons | Owner's call: one consistent position, without hiding the desktop items on small laptops |
+| 2026-11-02 | Windows sit at true screen centre, 20px under the 30px menu bar and 20px above the bottom; wide windows are sized to stay centred with 48px clear of the desktop icons (never below 760px, where they shift left instead) | Owner's call: centred and evenly framed, never touching the icons. Sizes use `--icons-w` (one or two icon columns); the left shift is computed from `--win-w` |
 | 2026-10-30 | Site font: Apple's **SF Pro** on Apple devices (system font), **Inter** elsewhere (self-hosted via `next/font`) | SF Pro's licence forbids web hosting; most visitors are on Android, where the old stack fell back to Roboto. Platform-aware stack because Chrome maps `BlinkMacSystemFont` to `system-ui` everywhere |
 | 2026-10-30 | "Projects" renamed **Case Studies** in the UI only; the tab id stays `projects` | Keeps analytics (`Opened Section` history) comparable and avoids touching every wiring point |
 | 2026-10-30 | Case studies are real routes (`/case-studies/<slug>`), not views inside the window | Shareable on LinkedIn/email on their own, crawlable, readable long-form on phones |
@@ -124,6 +127,8 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
       September 2018; the resume and site say "World Open Water Championships 2018". Owner to confirm wording.
 - [ ] **Owner to decide:** remove `NoInspect` copy, text-selection and screenshot blocking; add a dock for
       minimized windows.
+- [ ] **Farm Monitoring case study, owner to confirm:** "pipeline I specified with the data science team",
+      composite personas, publishing the real satellite output, "Timeline: 2025–26", sync as a paid feature.
 - [ ] **Phone Back:** test on a real Android phone, including in-app browsers such as LinkedIn's.
 - [ ] **Before pushing:** owner to confirm Silo Fortune is OK with public app screens, the install-to-signup
       "3%" wording, and whether Contact keeps "SYSTEM HALTED".
@@ -348,6 +353,149 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 
 ## Changelog
 
+- 2026-11-02: Fixed two previews looking selected at once in the first-visit tour (owner): focus started on
+  Case Studies and kept its blue ring while the tour moved on. Focus now follows the tour stop (and starts on
+  About Me), and while a preview peeks no other shows the ring or lift. Crop Doctor full report recompressed
+  (371 → 272 KB). Committed everything since c32323c on `dev`, fast-forwarded `prod`, pushed both.
+- 2026-11-02: Owner: no tips after the tour, and the tour starts from About Me. `DesktopTour.tsx` (the two
+  hints) and its events are deleted; the tour now runs About Me → Experience → Case Studies → Education →
+  Contact → Kissan → Gau (3s each, ~21s) and then opens About Me. Verified in order with no hint after.
+  Uncommitted.
+- 2026-11-02: Tour changed (owner): **first visit only and automatic**, no "Watch a tour" button and no tour
+  bar (segments, caption, Pause/End). It starts 1.3s after the overview opens and visits every window in
+  grid order, left to right then the bottom row: Experience → Case Studies → Education → Contact → Kissan →
+  Gau, 3s each (~18s), then opens About Me; the two tips follow. During it the subtitle says "A quick look
+  at each window. Click one to open it, or press Esc."; the peeking preview's note shows its action. The
+  menu-bar overview on later visits has hover peeks only. Uncommitted.
+- 2026-11-02: **Peeks + optional tour in Mission Control** (owner: show what each window does, then open About
+  Me; agreed plan: hover peek by default, tour opt-in, never autoplay). Resting ~0.45s on a preview (or
+  keyboard focus) enlarges it, dims the rest and plays a 3s peek; the note line becomes the action:
+  Experience scrolls to the swimming story, Education to the toolkit (tall stitched captures), Case Studies
+  / Contact / About Me show a cursor gliding to the real control (Read case study, Copy, an app name),
+  pressing it and the result crossfading in, Kissan / Gau flip through real screens. "Watch a 16-second
+  tour" (top left) runs 5 stops × 3.2s (Experience, Case Studies, Kissan, Education, Contact) with a
+  segmented progress bar, caption, Pause (space), ← →, End tour / Esc (stays in the overview); a click on any
+  preview stops it and opens that window; the last stop opens About Me. Peeks are CSS animations on
+  captures in `public/mission-control/peek/` (re-capture with the window stitch method when a window
+  changes; click targets are % of the preview); reduced motion jumps to each end state. Events: `Peeked
+  Window`, `Started / Completed / Stopped Overview Tour`. Fixed: the entrance animation's transform had
+  pushed the heading off centre (it is now centred by insets). Uncommitted.
+- 2026-11-02: **Mission Control animated** (owner: "animate this… so users understand the UX"). Motion
+  teaches the mapping: the open window shrinks from its real position into its tile, every other tile
+  grows out of its desktop icon (`data-icon` on `DesktopIcon`, prototype id for the apps), labels fade up
+  after, the "Start here" badge pops in last and first-visit focus starts on Case Studies. A pick zooms that
+  tile toward the centre and crossfades into the real window (full screen for a prototype); Esc / background
+  / Go to desktop flies every tile back into its icon and the open one back onto its window. The real window
+  hides while its tile stands in (`html[data-mc]` in globals.css). Imperative framer `animate()` measured in
+  a layout effect (no flash); hover lift lives on the tile so it never fights the preview's transform;
+  reduced motion = fades. Fixed: picking a window re-armed the first-visit timer (overview came back 2.3s
+  later), now marked seen on open and timers use a ref. Verified with screencast filmstrips (entry, pick,
+  Esc), fit at 1024 / 1280 / 1920, hints and prototype path unchanged. Uncommitted.
+- 2026-11-02: **First-visit onboarding = Mission Control overview** (owner's reference: samuello.me; owner:
+  "think like an expert and proceed"). Desktop only. After the loader (2.3s) a first-time visitor sees every
+  window at once (`MissionControl.tsx`): About Me, Experience, Case Studies ("Start here" badge), Education,
+  Contact, Kissan and Gau as labelled previews over the blurred desktop, "Everything on my desktop. Each
+  window is a part of my work…". Hover or arrow keys give the blue selection ring; click/Enter opens it,
+  Esc / background / "Go to desktop" closes (About Me is already open behind). No timer, so readers aren't
+  rushed. Previews are screenshots in `public/mission-control/` (720px, ~200 KB total; **re-capture when a
+  window's design changes**); tile height is computed to fit the screen (verified 1024 × 768 to 1920 ×
+  1080). Reopen from the new **Show all windows** button in the menu bar (event `mission-control-open`); no
+  keyboard shortcut, because macOS takes F3 and Ctrl+↑ before the browser. Skipped on `?section=` /
+  `?prototype=` links. Then two hints, once (`DesktopTour.tsx`, replaces the 5-step tour built earlier the
+  same day): "Windows work like a Mac" (title bar) and "See everything again" (the menu button); they wait
+  for a picked prototype to close. The hiring banner waits for both. Events: `Opened / Picked From / Closed
+  Mission Control` (which window first-timers pick first) and `Completed / Skipped Desktop Tour`. Keys:
+  `mission-control-seen`, `desktop-tour-seen`. **Fixed along the way:** Esc on a prototype also closed the
+  window behind it (the viewer now marks the key handled; the window ignores handled keys). Uncommitted.
+- 2026-11-02: **Skills & Toolkit redesigned (desktop Education window)** as a bento: Product & UX as the lead
+  card with its 14 skills grouped by stage (Strategy, Discovery & design, Growth, Delivery), Technical and
+  Tools & Analytics beside it, Domains full width as cells naming the product behind each (AltQube Wealth
+  Platform, Kissan & Gau Sampurna, Sales CRM & Telecalling, Rider App & Outlet ERP, Crop & cattle
+  diagnosis). Each card has an icon, an accent tint and a count; chips tint on hover. The grouping and
+  domain products live in `skillStages` / `domainProof` in `resume.ts` (keep them identical to `skills`,
+  which the phone and Spotlight still read). Phone layout unchanged. Uncommitted.
+- 2026-11-02: Education now uses the same frame as Experience and Case Studies (`CENTRED_WIDE` ×
+  `FULL_HEIGHT`, was up to 960px × 80vh), and its desktop content column widened 920 → 1100px to match
+  Experience. The three long windows are now identical in size and position. Uncommitted.
+- 2026-11-02: Windows centred on screen with a 20px gap under the menu bar (owner). Experience and Case
+  Studies are `min(84vw, 1180px, centred max)` × `100vh − 70px`, Education `min(65vw, 960px, centred max)`;
+  "centred max" = `100vw − 2 × (--icons-w + 48px)`, floored at 760px so small laptops don't get a narrow
+  window (they shift left a little instead). Constants in `DraggableWindow.tsx`; top 50px, bottom 20px in
+  `globals.css`. Measured: true centre at 1440, 1512 × 827 and 1920 (960px wide on 1512 × 827, 1104 on 1440 ×
+  900), 16px shift at 1280, gap to icons ≥ 48px everywhere. Uncommitted.
+- 2026-11-02: **Window placement by real width.** The owner made Experience and Case Studies full height
+  (`100vh − 52px`, up to `min(84vw, 1180px, 100vw − 320px)` wide) at true centre (top 34px, bottom 18px) and
+  removed the About/Experience placement overrides; on 1512 × 827 and smaller that overlapped the icons by
+  ~62px. Owner chose to keep it and add clearance: `right: max(0px, var(--win-w) − 100vw + 2 × (--icons-w +
+  48px))`, with `--win-w` set inline from the window size and `--icons-w` 120px (one column) or 228px (two,
+  below 830px tall). Measured all five windows at 1024 / 1280 / 1440 / 1512 × 827 / 1920: every gap to the
+  icons ≥ 48px, true centre wherever it fits. Uncommitted.
+- 2026-11-01: Case Studies window enlarged to the Experience size, `min(84vw, 1180px, 100vw − 480px)` × 88vh
+  (was `min(75vw, 1040px)` × 80vh), so the three feature cards and their phone fans read better. Checked at
+  1280 × 800, 1440 × 900 and 1920 × 1080: on screen and clear of the desktop icons. Uncommitted.
+- 2026-11-01: **Third case study: AI Crop Doctor** (`/case-studies/crop-doctor`, owner request). Built from the
+  feature itself: the prototype flow, PM notes, and the prod repo's `API_EDGE_CASES_AND_TESTS.md` and
+  `diseaseReportMock.js` (read-only): crop picked first, photo quality check that names its reason, healthy
+  short-circuit, async report polled every 10 s (40–90 s), a five-stage severity model (Healthy → Early Spot
+  → Spot Expansion → Infection Spread → Total Loss) with loss per acre and a stage-specific day-by-day plan
+  ending in a day-7 rescan, diagnosis on the subscription (scan quota). Problem sources checked on the web:
+  FAO 2021 (up to 40% of crop production lost to pests, diseases >$220bn), Sachan et al. 2022 (387 farmers,
+  rural Lucknow: 32.6% got pesticide advice from retailers, 55% didn't read the label), NSO 42% (reused).
+  Plantix was the framing reference (name the disease from a photo); the case study positions the gap as
+  urgency, stage, cost and a plan. Usage: 4.8K+ MAU at peak (resume). Screens in
+  `public/case-studies/crop-doctor/` (2×, no hint rings) plus a 786 × 7810 full report with 12 measured
+  callouts. Personas (Shivanna, Kavya) are labelled composites. Uncommitted. **Owner to confirm:** "a vision
+  pipeline I integrated with the engineering and data science teams", and that a rejected photo doesn't
+  use a scan.
+- 2026-11-01: **Case study component review** (owner: make the components proper and rich). Reviewed
+  every section of both pages at 1440 / 393; most were already purpose-built. The three that were still
+  plain numbered text rows are now cards: **Principles** (grey insight half → arrow → white design rule,
+  two a row, subgrid so the seams align, an odd last card spans the row), **Decisions** (D-badge and title,
+  then Why in blue and Trade-off in a warm tint side by side), **Reflection** (one card per lesson, title
+  split from the `**bold**` lead-in, lime tab). Verified 320 / 393 / 1440, no overflow. Uncommitted.
+- 2026-11-01: Removed "Products I've shipped" from the Case Studies window (owner's call), on desktop and
+  phone; the window now lists only the case studies, and those products stay in Experience. Spotlight no
+  longer mentions it. Its styles were pruned from `Projects.module.css`; the `projects` data in
+  `resume.ts` is kept but nothing renders it now. Uncommitted.
+- 2026-11-01: **Case study content review** (owner: replace the N:P:K line, frame the problem the way
+  satellite farm products do, show product sense). MapMyCrop, Sat2Farm and Farmonaut all pitch the same
+  pain: stress found late, then blanket treatment. Farm Monitoring now leads with it: challenge "Farmers
+  find problems late, then treat the whole field", featured waffle **30%** of applied nitrogen used by the
+  crop (Down To Earth, 21 Jan 2021; source `nue` replaces `npk`), ~86% small/marginal moved to the stat
+  strip, and the intro names the gap (satellites see stress early; turning a map into an action is what's
+  missing). Persona renamed Lakshmi → Savitha so the two studies don't share a name. Crop Guide's impact now
+  leads with 7.7K+ MAU (usage) rather than 655K+ farm profiles (reach). Uncommitted.
+- 2026-11-01: **Case study sidebar is now a reading companion** (owner: the space under "On this page" was
+  blank). Sticky stack: contents with read sections tinted on the rail and "N min left"; a "Next case study"
+  card (its report screen on a brand tile, wraps round); "Open to PM roles" with Get in touch
+  (`/?section=contact`) and Copy link. Short screens drop the thumbnail, then the text, then the cards.
+  `Clicked Case Study CTA` gained `next_case_study`, `contact`, `copy_link`. **Fixed:** the sticky contents
+  never stuck, because `overflow-x: hidden` on both `html` and `body` made body a non-scrolling scroll
+  container; now `overflow-x: clip` (globals.css). Uncommitted.
+- 2026-11-01: **Engine pipeline redesigned** (both case studies): a numbered stepper instead of the funnel
+  shape and cramped cards. "Starts with" input on top, stages as columns on one horizontal rail with an
+  arrowhead (vertical rail on phones), captions and plain dot lists instead of chips, and the output as a
+  solid "Delivers" bar. Subgrid aligns each stage's title, caption and list rows across columns. Uncommitted.
+- 2026-10-31: **Journey redesigned as a vertical timeline** (owner chose it over curve + cards; both case
+  studies): one rail with a numbered node and a mood face per stage (lucide faces by `feel`), what the
+  farmer does on the left (right-aligned toward the rail), what goes wrong on the right as a tinted note
+  with its source. Phones put the rail (58px, so labels like "Confused" fit) on the left with the story
+  stacked beside it. The face icons are imported in `page.tsx` (`MOOD_FACES`). Uncommitted.
+- 2026-10-31: **Persona section redesigned** (both case studies, shared template): profile cards with a
+  tinted band and the avatar on its edge, name and age, a role chip ("· internal" for internal users), facts
+  as icon tiles (`ATTR_ICONS` by label), the quote in a tinted callout, then Wants (✓) and Frustrations (✕).
+  Cards sit side by side with `auto-fit`, so two or three personas both fill the row; a container query turns
+  the facts into single rows in narrow cards. The avatar letter skips a leading "The". Uncommitted.
+- 2026-10-31: **Second case study: Farm Monitoring** (`/case-studies/farm-monitoring`, data in
+  `caseStudies.ts`, screens in `public/case-studies/farm-monitoring/` captured from the prototype at 2×
+  without hint rings). Problem backed by sources checked on the web: N:P:K 10.9:4.1:1 vs 4:2:1 (Economic
+  Survey via Down To Earth), 1 extension worker per 1,156 farmers (Down To Earth), Soil Health Card every
+  2 years (PIB), within-field NDVI variance from fertilisation (Blaes et al. 2016), Sentinel-2 specs (ESA).
+  Includes the owner's real pipeline output (three maps of a 2.45 ha farm, farm name cropped out) via a new
+  optional `solution.evidence`. Outcomes: 9.8K+ MAU and 1.6K+ DAU at peak, 13 languages (resume). The page
+  template no longer hard-codes "Crop Guide"; the pipeline fits any number of stages (`--stages`) and four
+  engine rules sit as two pairs (`--rules`). The Crop Guide full report was re-stitched without hint rings.
+  Uncommitted.
 - 2026-11-01: **Expanded Amplitude & Firebase analytics tracking for user interactions:**
   Added tracking for untracked user actions: `Opened Photo Lightbox` and `Closed Photo Lightbox` in Beyond Work (records photo URL, caption, and method click vs escape), `Clicked Case Study TOC` (section wayfinding navigation in sticky contents), `Scrolled Case Study` (reading depth milestones at 25%, 50%, 75%, 100%), `Clicked Case Study Footnote` (citation links to sources), `Shared Prototype` (copying prototype link in the viewer), `Switched Prototype` (switching between Kissan and Gau prototypes on desktop and mobile), `Dismissed Prototype Hint` (closing the mobile prototype coachmark), and `Downloaded vCard` (saving contact to phone). Sanitized Firebase event parameter processing to filter out undefined values.
 - 2026-10-31: **Sharing and search basics:** `metadataBase` and canonical URLs (`src/data/site.ts`), Open
@@ -600,9 +748,7 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
   numbered flow of device-framed screens, **annotated report** (markers in the margin with leader
   lines; `anatomy.callouts` x/y are % of the screenshot), engine **funnel** (100+ crops → filter →
   score → rank → top 5), decision log (D1–D4), navy outcomes panel, measurement-plan table, CTA with
-  a phone bleeding off the edge. Gotcha: grid items with an explicit row and column are placed
-  before auto-placed ones, so the journey steps need explicit columns or the curve pushes them into
-  implicit columns. Verified desktop 1440 and phone 393 section by section; no overflow, no errors.
+  a phone bleeding off the edge. (The old column layout needed explicit grid columns; the 2026-10-31 card layout doesn't.) Verified desktop 1440 and phone 393 section by section; no overflow, no errors.
   Uncommitted.
 - 2026-10-30: **Apple typography site-wide.** `--font-system` is now platform-aware: Apple devices
   render SF Pro (verified `.SF NS` in Chrome on macOS), Android/Windows render **Inter** (verified,

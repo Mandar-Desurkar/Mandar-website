@@ -7,9 +7,36 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
-import { ArrowLeft, ArrowUpRight, Play } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+  BookOpen,
+  Check,
+  CircleAlert,
+  Droplets,
+  Annoyed,
+  Frown,
+  Info,
+  Lightbulb,
+  LandPlot,
+  Laugh,
+  Meh,
+  Smile,
+  Map as MapIcon,
+  MapPin,
+  Play,
+  Quote,
+  Scale,
+  Sprout,
+  Target,
+  Wrench,
+  X,
+  type LucideIcon,
+} from "lucide-react";
 import RichText from "@/components/RichText";
-import { CaseStudyView, TrackedCite, TrackedLink } from "@/components/case-study/CaseStudyTracking";
+import { CaseStudyView, CopyLinkButton, TrackedCite, TrackedLink } from "@/components/case-study/CaseStudyTracking";
 import { ReadingProgress, TableOfContents, type TocItem } from "@/components/case-study/ReadingNav";
 import { caseStudies, getCaseStudy, type CaseStudy, type CaseStudyFeature } from "@/data/caseStudies";
 import { profile } from "@/data/resume";
@@ -44,6 +71,17 @@ const TOC: { id: keyof CaseStudy["headlines"]; label: string }[] = [
   { id: "outcomes", label: "Outcomes" },
   { id: "reflection", label: "Reflection" },
 ];
+
+// An icon for each persona fact, so the profile scans like a card rather than a table
+const ATTR_ICONS: Record<string, LucideIcon> = {
+  Place: MapPin,
+  Land: LandPlot,
+  Water: Droplets,
+  Grows: Sprout,
+  Owns: BookOpen,
+  Scope: MapIcon,
+  Tools: Wrench,
+};
 
 // Footnote marker: the number of a source in the list at the end of the page
 function Cite({ cs, id }: { cs: CaseStudy; id?: string }) {
@@ -92,68 +130,46 @@ function Waffle({ value }: { value: number }) {
 }
 
 // Journey map: stages as columns, an emotion curve across them, the pain point under each
+// The journey as a story read top to bottom: what the farmer does, how it feels, what goes wrong
+const MOOD_FACES: Record<number, LucideIcon> = { 2: Laugh, 1: Smile, 0: Meh, [-1]: Annoyed, [-2]: Frown };
+
 function JourneyMap({ cs }: { cs: CaseStudy }) {
-  const steps = cs.journey;
-  const W = 600;
-  const H = 120;
-  const x = (i: number) => (W / steps.length) * (i + 0.5);
-  const y = (feel: number) => H / 2 - feel * 24;
-  const pts = steps.map((s, i) => [x(i), y(s.feel)] as const);
-  const d = pts.reduce((acc, [px, py], i) => {
-    if (i === 0) return `M ${px} ${py}`;
-    const [qx, qy] = pts[i - 1];
-    const mx = (qx + px) / 2;
-    return `${acc} C ${mx} ${qy}, ${mx} ${py}, ${px} ${py}`;
-  }, "");
   const tone = (feel: number) => (feel > 0 ? styles.toneGood : feel < 0 ? styles.toneBad : styles.toneMid);
   return (
     <figure className={styles.journey}>
-      <div className={styles.journeyGrid} style={{ ["--cols" as string]: steps.length }}>
-        <span className={styles.rowLabel} style={{ gridRow: 1 }}>
-          Stage
-        </span>
-        <span className={styles.rowLabel} style={{ gridRow: 2 }}>
-          Feeling
-          <small>illustrative</small>
-        </span>
-        <span className={styles.rowLabel} style={{ gridRow: 3 }}>
-          Pain point
-        </span>
-
-        {steps.map((s, i) => (
-          // Explicit column: the curve has a fixed position, so auto-placed steps would skip past it
-          <div key={s.step} className={styles.step} style={{ gridColumn: i + 2 }}>
-            <div className={styles.stage}>
-              <span className={styles.stageNum}>{i + 1}</span>
-              <h3>{s.step}</h3>
-              <p>{s.does}</p>
-              <span className={`${styles.feeling} ${tone(s.feel)}`}>{s.feeling}</span>
-            </div>
-            <span className={styles.curveSlot} aria-hidden="true" />
-            <p className={styles.painCell}>
-              {s.pain}
-              <Cite cs={cs} id={s.source} />
-            </p>
-          </div>
-        ))}
-
-        <div className={styles.curve} aria-hidden="true">
-          <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none">
-            <defs>
-              <linearGradient id="journeyFill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stopColor="#004691" stopOpacity="0.14" />
-                <stop offset="1" stopColor="#004691" stopOpacity="0" />
-              </linearGradient>
-            </defs>
-            <line x1="0" x2={W} y1={H / 2} y2={H / 2} className={styles.curveBase} />
-            <path d={`${d} L ${x(steps.length - 1)} ${H} L ${x(0)} ${H} Z`} fill="url(#journeyFill)" />
-            <path d={d} className={styles.curveLine} />
-          </svg>
-          {steps.map((s, i) => (
-            <span key={s.step} className={`${styles.curveDot} ${tone(s.feel)}`} style={{ left: `${(x(i) / W) * 100}%`, top: `${(y(s.feel) / H) * 100}%` }} />
-          ))}
-        </div>
+      <div className={styles.timelineHead} aria-hidden="true">
+        <span>What the farmer does</span>
+        <span>Feels</span>
+        <span>What goes wrong</span>
       </div>
+      <ol className={styles.timeline}>
+        {cs.journey.map((s, i) => {
+          const Face = MOOD_FACES[Math.max(-2, Math.min(2, s.feel))] ?? Meh;
+          return (
+            <li key={s.step} className={`${styles.timelineRow} ${tone(s.feel)}`}>
+              <div className={styles.tlDoes}>
+                <h3>{s.step}</h3>
+                <p>{s.does}</p>
+              </div>
+              <div className={styles.tlRail}>
+                <span className={styles.tlNode}>{i + 1}</span>
+                <span className={styles.tlMood}>
+                  <Face size={18} aria-hidden="true" />
+                  {s.feeling}
+                </span>
+              </div>
+              <p className={styles.tlPain}>
+                <CircleAlert size={15} aria-hidden="true" />
+                <span>
+                  {s.pain}
+                  <Cite cs={cs} id={s.source} />
+                </span>
+              </p>
+            </li>
+          );
+        })}
+      </ol>
+      <figcaption className={styles.timelineNote}>Feelings are illustrative, drawn from the pain points.</figcaption>
     </figure>
   );
 }
@@ -203,6 +219,10 @@ export default async function CaseStudyPage({ params }: PageProps<"/case-studies
   const toc: TocItem[] = TOC.map((t) => ({ id: t.id, label: t.label }));
   const minutes = Math.max(1, Math.round(JSON.stringify(cs).split(/\s+/).length / 230));
   const { featured } = cs.problem;
+  // "Crop Guide: the right crop…" → "Crop Guide"
+  const featureName = cs.title.split(":")[0];
+  // The sidebar suggests the next case study, wrapping round to the first
+  const next = caseStudies.length > 1 ? caseStudies[(caseStudies.indexOf(cs) + 1) % caseStudies.length] : undefined;
 
   return (
     <div className={styles.page}>
@@ -269,8 +289,38 @@ export default async function CaseStudyPage({ params }: PageProps<"/case-studies
       </section>
 
       <div className={styles.layout}>
+        {/* Wide screens: a sticky reading companion beside the article (where am I, how long is
+            left, where next, and how to reach me) */}
         <aside className={styles.tocCol}>
-          <TableOfContents items={toc} slug={cs.slug} />
+          <div className={styles.companion}>
+            <TableOfContents items={toc} slug={cs.slug} minutes={minutes} />
+
+            {next && (
+              <TrackedLink slug={cs.slug} cta="next_case_study" href={`/case-studies/${next.slug}`} className={styles.nextCase}>
+                <span className={styles.companionLabel}>Next case study</span>
+                <span className={styles.nextThumb} aria-hidden="true">
+                  <Image src={next.cover} alt="" width={393} height={852} sizes="96px" />
+                </span>
+                <b>{next.title.split(":")[0]}</b>
+                <span className={styles.nextMeta}>
+                  {next.product}
+                  <ArrowRight size={14} aria-hidden="true" />
+                </span>
+              </TrackedLink>
+            )}
+
+            <div className={styles.hire}>
+              <p className={styles.hireStatus}>
+                <span aria-hidden="true" />
+                {profile.availability}
+              </p>
+              <p className={styles.hireText}>Want the story behind the decisions? Happy to walk through it.</p>
+              <TrackedLink slug={cs.slug} cta="contact" href="/?section=contact" className={styles.hireCta}>
+                Get in touch
+              </TrackedLink>
+              <CopyLinkButton slug={cs.slug} className={styles.copyLink} />
+            </div>
+          </div>
         </aside>
 
         <article className={styles.main}>
@@ -317,46 +367,74 @@ export default async function CaseStudyPage({ params }: PageProps<"/case-studies
           <Section cs={cs} id="people" n={2}>
             <p className={styles.note}>{cs.personasNote}</p>
             <div className={styles.personas}>
-              {cs.personas.map((p) => (
-                <article key={p.name} className={styles.persona}>
-                  <header className={styles.personaHead}>
-                    <span className={`${styles.monogram} ${p.internal ? styles.monogramInternal : ""}`} aria-hidden="true">
-                      {p.name.charAt(0)}
-                    </span>
-                    <span>
-                      <h3>{p.name}</h3>
-                      <span className={styles.personaRole}>{p.role}</span>
-                    </span>
-                  </header>
-                  <dl className={styles.attrs}>
-                    {p.attrs.map((a) => (
-                      <div key={a.label}>
-                        <dt>{a.label}</dt>
-                        <dd>{a.value}</dd>
+              {cs.personas.map((p, i) => {
+                const [name, age] = p.name.split(", ");
+                return (
+                  <article key={p.name} className={`${styles.persona} ${p.internal ? styles.personaInternal : styles[`tone${i % 3}`]}`}>
+                    {/* Profile header: a tinted band with the avatar sitting on its edge */}
+                    <header className={styles.personaHead}>
+                      <span className={styles.personaBand} aria-hidden="true" />
+                      <span className={styles.monogram} aria-hidden="true">
+                        {name.replace(/^The /, "").charAt(0).toUpperCase()}
+                      </span>
+                      <span className={styles.personaId}>
+                        <h3>
+                          {name}
+                          {age && <span className={styles.personaAge}>, {age}</span>}
+                        </h3>
+                        <span className={styles.personaRole}>{p.internal && !/internal/i.test(p.role) ? `${p.role} · internal` : p.role}</span>
+                      </span>
+                    </header>
+
+                    <dl className={styles.attrs}>
+                      {p.attrs.map((a) => {
+                        const Icon = ATTR_ICONS[a.label] ?? Info;
+                        return (
+                          <div key={a.label}>
+                            <Icon size={15} aria-hidden="true" />
+                            <dt>{a.label}</dt>
+                            <dd>{a.value}</dd>
+                          </div>
+                        );
+                      })}
+                    </dl>
+
+                    <blockquote className={styles.personaQuote}>
+                      <Quote size={18} aria-hidden="true" />
+                      <p>{p.quote}</p>
+                    </blockquote>
+
+                    <div className={styles.needs}>
+                      <div className={styles.wants}>
+                        <h4>
+                          <Target size={14} aria-hidden="true" /> Wants
+                        </h4>
+                        <ul>
+                          {p.goals.map((g) => (
+                            <li key={g}>
+                              <Check size={14} aria-hidden="true" />
+                              {g}
+                            </li>
+                          ))}
+                        </ul>
                       </div>
-                    ))}
-                  </dl>
-                  <blockquote className={styles.personaQuote}>“{p.quote}”</blockquote>
-                  <div className={styles.needs}>
-                    <div>
-                      <h4>Needs</h4>
-                      <ul>
-                        {p.goals.map((g) => (
-                          <li key={g}>{g}</li>
-                        ))}
-                      </ul>
+                      <div className={styles.struggles}>
+                        <h4>
+                          <CircleAlert size={14} aria-hidden="true" /> Frustrations
+                        </h4>
+                        <ul>
+                          {p.frustrations.map((f) => (
+                            <li key={f}>
+                              <X size={14} aria-hidden="true" />
+                              {f}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
-                    <div>
-                      <h4>Struggles</h4>
-                      <ul className={styles.struggles}>
-                        {p.frustrations.map((f) => (
-                          <li key={f}>{f}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </article>
-              ))}
+                  </article>
+                );
+              })}
             </div>
           </Section>
 
@@ -368,20 +446,26 @@ export default async function CaseStudyPage({ params }: PageProps<"/case-studies
 
           {/* 04 Principles */}
           <Section cs={cs} id="principles" n={4}>
+            {/* Each card reads top to bottom: what we learned, then the rule it turned into */}
             <ol className={styles.principles}>
               {cs.principles.map((p, i) => (
-                <li key={p.principle}>
-                  <span className={styles.bigNum}>{String(i + 1).padStart(2, "0")}</span>
-                  <div>
-                    <p className={styles.insight}>
-                      <span>Insight</span>
+                <li key={p.principle} className={styles.principle}>
+                  <div className={styles.insight}>
+                    <span className={styles.principleLabel}>
+                      <Lightbulb size={14} aria-hidden="true" /> Insight
+                    </span>
+                    <span className={styles.principleNum} aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+                    <p>
                       {p.insight}
                       <Cite cs={cs} id={p.source} />
                     </p>
-                    <p className={styles.rule}>
-                      <span>Design rule</span>
-                      {p.principle}
-                    </p>
+                  </div>
+                  <span className={styles.principleArrow} aria-hidden="true">
+                    <ArrowDown size={14} />
+                  </span>
+                  <div className={styles.rule}>
+                    <span className={styles.principleLabel}>Design rule</span>
+                    <p>{p.principle}</p>
                   </div>
                 </li>
               ))}
@@ -400,7 +484,7 @@ export default async function CaseStudyPage({ params }: PageProps<"/case-studies
                 <span className={`${styles.device} ${styles.deviceLong}`}>
                   <Image
                     src={cs.solution.anatomy.image}
-                    alt="The full Crop Guide report, annotated"
+                    alt={`The full ${featureName} report, annotated`}
                     width={cs.solution.anatomy.width}
                     height={cs.solution.anatomy.height}
                     sizes="(max-width: 767px) 72vw, 300px"
@@ -441,23 +525,53 @@ export default async function CaseStudyPage({ params }: PageProps<"/case-studies
           {/* 06 Engine */}
           <Section cs={cs} id="engine" n={6}>
             <p className={styles.lead}>{cs.solution.engineIntro}</p>
-            <figure className={styles.pipeline} aria-label="How the engine ranks crops">
-              <span className={`${styles.endpoint} ${styles.endpointIn}`}>{cs.solution.pipeline.input}</span>
-              {cs.solution.pipeline.stages.map((st, i) => (
-                <div key={st.title} className={styles.pipeStage}>
-                  <span className={styles.pipeNum}>Stage {i + 1}</span>
-                  <h3>{st.title}</h3>
-                  <p>{st.caption}</p>
-                  <ul>
-                    {st.items.map((it) => (
-                      <li key={it}>{it}</li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-              <span className={`${styles.endpoint} ${styles.endpointOut}`}>{cs.solution.pipeline.output}</span>
+            <figure
+              className={styles.pipeline}
+              aria-label={`How ${featureName} works`}
+              style={{ ["--stages" as string]: cs.solution.pipeline.stages.length }}
+            >
+              {/* Reads top to bottom: what goes in, the stages on one rail, what comes out */}
+              <p className={styles.pipeIn}>
+                <span>Starts with</span> {cs.solution.pipeline.input}
+              </p>
+              <ol className={styles.pipeStages}>
+                {cs.solution.pipeline.stages.map((st, i) => (
+                  <li key={st.title} className={styles.pipeStage}>
+                    <span className={styles.pipeNode} aria-hidden="true">{i + 1}</span>
+                    <div className={styles.pipeBody}>
+                      <span className={styles.pipeNum}>Stage {i + 1}</span>
+                      <h3>{st.title}</h3>
+                      <p>{st.caption}</p>
+                      <ul>
+                        {st.items.map((it) => (
+                          <li key={it}>{it}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+              <p className={styles.pipeOut}>
+                <span>Delivers</span> {cs.solution.pipeline.output}
+                <ArrowRight size={18} aria-hidden="true" />
+              </p>
             </figure>
-            <ul className={styles.ruleNotes}>
+            {cs.solution.evidence && (
+              <figure className={styles.evidence}>
+                <Image
+                  src={cs.solution.evidence.image}
+                  alt={cs.solution.evidence.caption}
+                  width={cs.solution.evidence.width}
+                  height={cs.solution.evidence.height}
+                  sizes="(max-width: 767px) 100vw, 860px"
+                />
+                <figcaption>
+                  <b>Real output</b> {cs.solution.evidence.caption}
+                </figcaption>
+              </figure>
+            )}
+            {/* Three rules sit in a row; four read better as two pairs */}
+            <ul className={styles.ruleNotes} style={{ ["--rules" as string]: cs.solution.engineRules.length === 4 ? 2 : 3 }}>
               {cs.solution.engineRules.map((r) => (
                 <li key={r}>
                   <RichText text={r} />
@@ -468,19 +582,26 @@ export default async function CaseStudyPage({ params }: PageProps<"/case-studies
 
           {/* 07 Decisions */}
           <Section cs={cs} id="decisions" n={7}>
+            {/* A decision log: the choice, the reason, and what it cost, side by side */}
             <ol className={styles.decisions}>
               {cs.solution.decisions.map((d, i) => (
-                <li key={d.decision}>
-                  <span className={styles.decisionId}>D{i + 1}</span>
-                  <h3>{d.decision}</h3>
-                  <p>
-                    <span>Why</span>
-                    {d.why}
-                  </p>
-                  <p>
-                    <span>Trade-off</span>
-                    {d.tradeoff}
-                  </p>
+                <li key={d.decision} className={styles.decision}>
+                  <div className={styles.decisionHead}>
+                    <span className={styles.decisionId}>D{i + 1}</span>
+                    <h3>{d.decision}</h3>
+                  </div>
+                  <div className={styles.decisionWhy}>
+                    <span className={styles.decisionLabel}>
+                      <Check size={13} aria-hidden="true" /> Why
+                    </span>
+                    <p>{d.why}</p>
+                  </div>
+                  <div className={styles.decisionCost}>
+                    <span className={styles.decisionLabel}>
+                      <Scale size={13} aria-hidden="true" /> Trade-off
+                    </span>
+                    <p>{d.tradeoff}</p>
+                  </div>
                 </li>
               ))}
             </ol>
@@ -528,14 +649,19 @@ export default async function CaseStudyPage({ params }: PageProps<"/case-studies
           {/* 09 Reflection */}
           <Section cs={cs} id="reflection" n={9}>
             <ol className={styles.reflection}>
-              {cs.learnings.map((l, i) => (
-                <li key={l}>
-                  <span className={styles.bigNum}>{String(i + 1).padStart(2, "0")}</span>
-                  <p>
-                    <RichText text={l} />
-                  </p>
-                </li>
-              ))}
+              {cs.learnings.map((l, i) => {
+                // "**Close the loop at harvest.** Usage shows…" → a title and its explanation
+                const [, title, body] = l.match(/^\*\*(.+?)[.:]?\*\*\s*(.*)$/) ?? [null, null, l];
+                return (
+                  <li key={l} className={styles.lesson}>
+                    <span className={styles.lessonNum} aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+                    {title && <h3>{title}</h3>}
+                    <p>
+                      <RichText text={body} />
+                    </p>
+                  </li>
+                );
+              })}
             </ol>
           </Section>
 
@@ -548,7 +674,7 @@ export default async function CaseStudyPage({ params }: PageProps<"/case-studies
               <div className={styles.ctaRow}>
                 <TrackedLink slug={cs.slug} cta="prototype" href={prototypeHref} className={styles.ctaPrimary}>
                   <Play size={16} aria-hidden="true" />
-                  Try the Crop Guide prototype
+                  Try the {featureName} prototype
                 </TrackedLink>
                 <TrackedLink slug={cs.slug} cta="back" href="/?section=projects" className={styles.ctaSecondary}>
                   More case studies

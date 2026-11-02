@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Wifi } from "lucide-react";
+import { LayoutGrid, Wifi } from "lucide-react";
 import { profile } from "@/data/resume";
 import { useWindow, type SectionId } from "@/context/WindowContext";
 import styles from "./Navbar.module.css";
@@ -76,6 +76,16 @@ export default function Navbar() {
       </div>
 
       <div className={styles.right}>
+        {/* Mission Control: every window at once (MissionControl listens for this event) */}
+        <button
+          type="button"
+          className={styles.help}
+          onClick={() => window.dispatchEvent(new Event("mission-control-open"))}
+          aria-label="Show all windows"
+          title="Show all windows"
+        >
+          <LayoutGrid size={14} strokeWidth={2.2} aria-hidden="true" />
+        </button>
         <BatteryIcon />
         <Wifi size={15} strokeWidth={2.4} aria-hidden="true" />
         {now && (

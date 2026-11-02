@@ -41,16 +41,27 @@ export type AnalyticsEvents = {
   "Dismissed Hiring Notification": { method: "close_button" | "timeout" };
 
   // Interactive app prototypes (e.g. Kissan Sampurna)
-  "Opened Prototype": { prototype: string; placement: "hero" | "desktop" | "experience" | "projects" | "home_screen" | "deep_link" | "spotlight" };
+  "Opened Prototype": { prototype: string; placement: "hero" | "desktop" | "experience" | "projects" | "home_screen" | "deep_link" | "spotlight" | "mission_control" };
   "Switched Prototype": { from_prototype: string; to_prototype: string };
   "Shared Prototype": { prototype: string; method: "copy" | "native" };
   "Dismissed Prototype Hint": Record<string, never>;
+  // Mission Control overview (MissionControl): the first-visit introduction, and the menu bar button.
+  // `item` is which window a visitor picks first: the clearest signal of what recruiters want to see.
+  "Opened Mission Control": { trigger: "first_visit" | "menu_bar" };
+  "Picked From Mission Control": { item: string; kind: "section" | "prototype"; trigger: "first_visit" | "menu_bar" };
+  "Closed Mission Control": { method: "escape" | "background" | "button"; trigger: "first_visit" | "menu_bar" };
+  // A preview played its peek (hover or keyboard), once per window per opening
+  "Peeked Window": { item: string };
+  // The optional tour of the overview: five stops, then About Me
+  "Started Overview Tour": Record<string, never>;
+  "Completed Overview Tour": Record<string, never>;
+  "Stopped Overview Tour": { stop: number; method: "escape" | "end_button" | "picked" };
   // Phone home screen: the iOS Search pill opens Spotlight over the sections, apps and contact actions
   "Opened Spotlight": Record<string, never>;
   // Case studies (the Case Studies window lists them; each is a page at /case-studies/<slug>)
   "Opened Case Study": { slug: string; placement: "case_studies" | "spotlight" | "desktop" };
   "Viewed Case Study": { slug: string };
-  "Clicked Case Study CTA": { slug: string; cta: "prototype" | "back" | "source" };
+  "Clicked Case Study CTA": { slug: string; cta: "prototype" | "back" | "source" | "next_case_study" | "contact" | "copy_link" };
   "Clicked Case Study TOC": { slug: string; section: string };
   "Scrolled Case Study": { slug: string; milestone: 25 | 50 | 75 | 100 };
   "Clicked Case Study Footnote": { slug: string; source_id: string };

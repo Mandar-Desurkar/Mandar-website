@@ -234,7 +234,10 @@ export default function PrototypeViewer({ prototype, screens, onClose, onSwitchP
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") close();
+      if (e.key === "Escape") {
+        e.preventDefault(); // handled: the window behind must not close on the same key press
+        close();
+      }
       if (e.key === "ArrowRight") goTo(flowIndex, screenIndex + 1, "keyboard");
       if (e.key === "ArrowLeft") goTo(flowIndex, screenIndex - 1, "keyboard");
       if (e.key === "r" || e.key === "R") restart();

@@ -1,9 +1,3 @@
-/* True screen centre wherever that clears the desktop items */
-@media (min-width: 1000px) {
-  :global(.os-window.absolute-window):has(.card) {
-    right: 0;
-  }
-}
 
 .card {
   --mx: 50%;

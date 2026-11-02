@@ -278,8 +278,9 @@
 }
 
 :global(.os-window:not(.ios-app)) .container {
-  max-width: 920px;
-  padding: 0 40px;
+  /* same reading width as Experience, now that the windows share one frame */
+  max-width: 1100px;
+  padding: 0 44px;
 }
 
 :global(.os-window:not(.ios-app)) .headerBox {
@@ -489,17 +490,14 @@
   color: rgba(245, 245, 247, 0.88);
 }
 
-/* Skills & Toolkit: one card, the four groups in a 2 × 2 grid */
+/* Skills & Toolkit: a heading over a bento of four group cards */
 :global(.os-window:not(.ios-app)) .toolkitCard {
   max-width: none;
-  margin-top: 4px;
-  padding: 22px 24px 24px;
+  margin-top: 12px;
+  padding: 0;
   border: 0;
-  border-radius: 16px;
-  background:
-    radial-gradient(420px 160px at 0% 0%, rgba(125, 178, 255, 0.12), transparent 70%),
-    rgba(255, 255, 255, 0.05);
-  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.12);
+  background: none;
+  box-shadow: none;
 }
 
 :global(.os-window:not(.ios-app)) .toolkitTitle {
@@ -515,19 +513,154 @@
 
 :global(.os-window:not(.ios-app)) .toolkitGrid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 22px 28px;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 14px;
+}
+
+/* Each group is its own card, tinted by its accent (--tone) */
+:global(.os-window:not(.ios-app)) .toolkitGroup {
+  --tone: 125, 178, 255;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px 18px 20px;
+  border-radius: 14px;
+  background:
+    radial-gradient(260px 120px at 0% 0%, rgba(var(--tone), 0.12), transparent 70%),
+    rgba(255, 255, 255, 0.04);
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.12);
+}
+
+:global(.os-window:not(.ios-app)) .toolkitGroup[data-tone="teal"] {
+  --tone: 100, 210, 190;
+}
+
+:global(.os-window:not(.ios-app)) .toolkitGroup[data-tone="violet"] {
+  --tone: 190, 160, 255;
+}
+
+:global(.os-window:not(.ios-app)) .toolkitGroup[data-tone="amber"] {
+  --tone: 255, 196, 110;
+}
+
+/* Product & UX, the largest group, sits beside Technical and Tools; Domains runs full width below */
+:global(.os-window:not(.ios-app)) .toolkitLead {
+  grid-row: span 2;
+}
+
+:global(.os-window:not(.ios-app)) .toolkitGroup[data-tone="amber"] {
+  grid-column: 1 / -1;
+}
+
+:global(.os-window:not(.ios-app)) .toolkitHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+:global(.os-window:not(.ios-app)) .toolkitIcon {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 9px;
+  background: rgba(var(--tone), 0.16);
+  color: rgb(var(--tone));
 }
 
 :global(.os-window:not(.ios-app)) .toolkitLabel {
-  margin-bottom: 10px;
-  font-size: 0.875rem;
+  margin: 0;
+  font-size: 0.9375rem;
   font-weight: 600;
   color: #fff;
+}
+
+:global(.os-window:not(.ios-app)) .toolkitCount {
+  margin-left: auto;
+  min-width: 24px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  color: rgba(235, 235, 245, 0.6);
+}
+
+:global(.os-window:not(.ios-app)) .toolkitGroup .chipRow li {
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+:global(.os-window:not(.ios-app)) .toolkitGroup .chipRow li:hover {
+  background: rgba(var(--tone), 0.16);
+  box-shadow: inset 0 0 0 0.5px rgba(var(--tone), 0.5);
+}
+
+/* Product & UX by stage of the work, each stage a labelled row on a thin rail */
+:global(.os-window:not(.ios-app)) .stages {
+  display: grid;
+  gap: 14px;
+}
+
+:global(.os-window:not(.ios-app)) .stage {
+  padding-left: 12px;
+  border-left: 2px solid rgba(var(--tone), 0.35);
+}
+
+:global(.os-window:not(.ios-app)) .stageLabel {
+  margin: 0 0 8px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(var(--tone), 0.95);
+}
+
+/* Domains as cells: the domain, and under it the product it comes from */
+:global(.os-window:not(.ios-app)) .domains {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+:global(.os-window:not(.ios-app)) .domains li {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px 11px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.1);
+}
+
+:global(.os-window:not(.ios-app)) .domainName {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(245, 245, 247, 0.92);
+}
+
+:global(.os-window:not(.ios-app)) .domainProof {
+  font-size: 0.75rem;
+  color: rgba(var(--tone), 0.85);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global(.os-window:not(.ios-app)) .toolkitGroup .chipRow li {
+    transition: none;
+  }
 }
 
 @container window (max-width: 719.98px) {
   :global(.os-window:not(.ios-app)) .toolkitGrid {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  :global(.os-window:not(.ios-app)) .toolkitLead {
+    grid-row: auto;
   }
 }
