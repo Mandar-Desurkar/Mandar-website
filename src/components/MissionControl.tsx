@@ -55,9 +55,13 @@ const ITEMS: Item[] = [
 // The first-visit tour: every window in the order the grid shows them (left to right, top row then
 // bottom), starting at About Me, one action each, then it opens About Me
 const TOUR = ["about", "experience", "projects", "education", "contact", "kissan", "gau"];
-const STOP_MS = 3000;
+const STOP_MS = 950;
+// The tour clock; fine enough that a stop ends on time (a 100ms tick rounded 950 up to 1000)
+const TICK_MS = 50;
+// The tour plays each peek at this share of its hover length, so it fits a stop (CSS var --k)
+const TOUR_PEEK_SPEED = 0.33;
 // Let the previews land and the badge pop before the first stop
-const TOUR_START_MS = 1300;
+const TOUR_START_MS = 800;
 // Resting on a preview this long starts its peek, so sweeping across the grid doesn't trigger them all
 const PEEK_DELAY_MS = 450;
 
@@ -94,7 +98,15 @@ function PeekLayer({ peek }: { peek: Peek }) {
   return (
     <span className={styles.peek} aria-hidden="true">
       {peek.srcs.map((src, i) => (
-        <Image key={src} src={src} alt="" fill sizes="440px" className={styles.peekSlide} style={{ animationDelay: `${0.9 + i * 1}s` }} />
+        <Image
+          key={src}
+          src={src}
+          alt=""
+          fill
+          sizes="440px"
+          className={styles.peekSlide}
+          style={{ animationDelay: `calc(${0.9 + i * 1}s * var(--k, 1))` }}
+        />
       ))}
     </span>
   );
@@ -311,7 +323,7 @@ export default function MissionControl() {
     const tick = setInterval(() => {
       const t = tourRef.current;
       if (!t || t.paused) return;
-      const elapsed = t.t + 100;
+      const elapsed = t.t + TICK_MS;
       if (elapsed < STOP_MS) setTour({ ...t, t: elapsed });
       else if (t.i < TOUR.length - 1) setTour({ i: t.i + 1, t: 0, paused: false });
       else {
@@ -320,7 +332,7 @@ export default function MissionControl() {
         setTour(null);
         close({ picked: ITEMS[0] });
       }
-    }, 100);
+    }, TICK_MS);
     return () => clearInterval(tick);
   }, [running, close]);
 
@@ -508,6 +520,7 @@ export default function MissionControl() {
       ref={overlayRef}
       className={styles.overlay}
       data-paused={tour?.paused ? "" : undefined}
+      style={tour ? { ["--k" as string]: TOUR_PEEK_SPEED } : undefined}
       role="dialog"
       aria-modal="true"
       aria-labelledby="mc-title"

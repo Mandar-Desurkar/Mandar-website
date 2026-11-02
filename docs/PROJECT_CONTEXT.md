@@ -353,6 +353,11 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 
 ## Changelog
 
+- 2026-11-02: Tour shortened to **6.67s** (owner asked for 6.4–7s; it was 21s, then 12.6s): 7 stops × 0.95s
+  (`STOP_MS`), a 50ms tour clock (`TICK_MS`; the old 100ms tick rounded each stop up to 1s), first stop 0.8s
+  after the overview opens; page load to About Me ~10.7s. In the tour each peek runs at 0.33× its hover
+  length (CSS var `--k`, `TOUR_PEEK_SPEED`) and reaches its end state by ~0.8s (checked); hover peeks keep
+  their full length. Pushed to `dev` and `prod`.
 - 2026-11-02: Fixed two previews looking selected at once in the first-visit tour (owner): focus started on
   Case Studies and kept its blue ring while the tour moved on. Focus now follows the tour stop (and starts on
   About Me), and while a preview peeks no other shows the ring or lift. Crop Doctor full report recompressed
