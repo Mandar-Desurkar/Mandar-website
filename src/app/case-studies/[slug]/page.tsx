@@ -24,13 +24,19 @@ import {
   Laugh,
   Meh,
   Smile,
+  Languages,
   Map as MapIcon,
   MapPin,
+  Milk,
+  PawPrint,
   Play,
   Quote,
   Scale,
   Sprout,
+  Store,
   Target,
+  Wallet,
+  Wheat,
   Wrench,
   X,
   type LucideIcon,
@@ -81,6 +87,13 @@ const ATTR_ICONS: Record<string, LucideIcon> = {
   Owns: BookOpen,
   Scope: MapIcon,
   Tools: Wrench,
+  // Dairy farmers (Gau Sampurna)
+  Herd: PawPrint,
+  Milk: Milk,
+  Feed: Wheat,
+  Market: Store,
+  Money: Wallet,
+  Language: Languages,
 };
 
 // Footnote marker: the number of a source in the list at the end of the page
@@ -117,7 +130,7 @@ function Device({ src, alt = "", sizes, eager }: { src: string; alt?: string; si
   );
 }
 
-// 10 × 10 waffle: one square per farm household
+// 10 × 10 waffle: one square per percentage point
 function Waffle({ value }: { value: number }) {
   const filled = Math.round(value);
   return (
@@ -477,7 +490,7 @@ export default async function CaseStudyPage({ params }: PageProps<"/case-studies
             <p className={styles.lead}>{cs.solution.intro}</p>
             <FeatureList features={cs.solution.beforeReport} />
 
-            <h3 className={styles.subhead}>Anatomy of a recommendation</h3>
+            <h3 className={styles.subhead}>{cs.solution.anatomy.title ?? "Anatomy of a recommendation"}</h3>
             <p>{cs.solution.anatomy.intro}</p>
             <figure className={styles.anatomy}>
               <div className={styles.anatomyShot}>

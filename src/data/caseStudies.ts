@@ -1,6 +1,6 @@
 // Case studies: the long-form write-ups behind the work, each rendered at /case-studies/<slug>.
-// Facts about the product come from the app's code and the recommendation engine's scoring
-// reference; every public statistic carries a `source` id that links to `sources` (each one was
+// Facts about the product come from the app's code (Kissan and Gau Sampurna) and the recommendation
+// engine's scoring reference; every public statistic carries a `source` id that links to `sources` (each one was
 // checked against the original page). `**text**` renders bold through RichText.
 
 export type CaseStudySource = { id: string; label: string; publisher: string; date: string; url: string };
@@ -63,7 +63,8 @@ export type CaseStudy = {
     afterReport: CaseStudyFeature[];
     // Annotated screenshot: callout positions are % of the image
     // The whole report as one long screenshot; width and height are its pixels
-    anatomy: { image: string; width: number; height: number; intro: string; callouts: CaseStudyCallout[] };
+    // `title` names the annotated screen (default "Anatomy of a recommendation")
+    anatomy: { image: string; width: number; height: number; title?: string; intro: string; callouts: CaseStudyCallout[] };
     engineIntro: string;
     pipeline: { input: string; stages: CaseStudyStage[]; output: string };
     engineRules: string[];
@@ -73,13 +74,16 @@ export type CaseStudy = {
   };
   outcomes: { intro: string; metrics: CaseStudyMetric[]; impact: string[]; measureNext: { metric: string; how: string; tells: string }[] };
   learnings: string[];
-  prototype: { id: "kissan-sampurna"; flow: string };
+  prototype: { id: "kissan-sampurna" | "gau-sampurna"; flow: string };
   sources: CaseStudySource[];
 };
 
 const IMG = "/case-studies/crop-guide";
 const FM = "/case-studies/farm-monitoring";
 const CD = "/case-studies/crop-doctor";
+const CH = "/case-studies/cattle-health";
+const MV = "/case-studies/market-value";
+const DC = "/case-studies/dung-check";
 
 export const caseStudies: CaseStudy[] = [
   {
@@ -1052,6 +1056,983 @@ export const caseStudies: CaseStudy[] = [
       { id: "fao", label: "Climate change fans spread of pests and threatens plants and crops: up to 40 percent of global crop production lost to pests each year; plant diseases cost over $220 billion", publisher: "Food and Agriculture Organization of the UN", date: "2 Jun 2021", url: "https://www.fao.org/newsroom/detail/Climate-change-fans-spread-of-pests-and-threatens-plants-and-crops-new-FAO-study/en" },
       { id: "sachan", label: "Sachan et al., Agricultural pesticide use and misuse among North Indian farmers (387 farmers, rural Lucknow): 32.6% got pesticide information from retailers; 55% did not read and follow the label", publisher: "Journal of Family Medicine and Primary Care 11(10)", date: "Oct 2022", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC9810978/" },
       { id: "nso", label: "Situation Assessment of Agricultural Households, NSS 77th round (2019): access to technical advice", publisher: "National Statistical Office, via PARI", date: "Sep 2021", url: "https://ruralindiaonline.org/en/library/resource/situation-assessment-of-agricultural-households-and-land-and-livestock-holdings-of-households-in-rural-india/" },
+    ],
+  },
+  {
+    slug: "cattle-health",
+    title: "Cattle Health Check: one side photo, 31 conditions screened",
+    subtitle:
+      "How I shipped Gau Sampurna's AI health checks for dairy farmers: one side photo screens a cow for 31 conditions across eight body systems, says what to do next, and keeps the free vet line outside the paywall.",
+    product: "Gau Sampurna",
+    cover: `${CH}/11-report.webp`,
+    tags: ["DairyTech", "Computer vision", "Freemium", "Low-literacy UX"],
+    card: {
+      problem: "A cow eats less or gives less milk, the farmer can't tell why, and the vet is hours away.",
+      metric: "One side photo screens 31 conditions, with a vet one tap away",
+      stats: [
+        { value: "31", label: "Conditions screened" },
+        { value: "8", label: "Body systems" },
+        { value: "1", label: "Side photo" },
+      ],
+    },
+    meta: [
+      { label: "Role", value: "Associate Product Manager" },
+      { label: "Company", value: "Silo Fortune" },
+      { label: "Team", value: "Engineering, design, data science" },
+      { label: "Platform", value: "Mobile app, in the farmer's language" },
+      { label: "Timeline", value: "2025–26" },
+    ],
+    glance: [
+      {
+        label: "The challenge",
+        takeaway: "Problems show up once the milk drops.",
+        text: "Studies across India find **subclinical mastitis**, which shows no visible sign, in about **46%** of dairy cows, and there are far fewer vets than villages.",
+        source: "mastitis",
+      },
+      {
+        label: "Our approach",
+        takeaway: "One side photo, screened for **31** conditions.",
+        text: "A vision model reads one side photo of the cow, checks **31 conditions** across **8 body systems**, and says what to do next and when to call a vet.",
+      },
+      {
+        label: "The impact",
+        takeaway: "The paid core of the plan, with safety kept free.",
+        text: "Health checks carry the subscription and the **vet helpline stays free**. Across Kissan and Gau Sampurna, redesigned paywalls **tripled** onboarding-to-trial conversion.",
+      },
+    ],
+    heroScreens: [`${CH}/02-photo-guide.webp`, `${CH}/11-report.webp`, `${CH}/05-ready.webp`],
+    headlines: {
+      problem: "A sick cow shows it late, and the vet is far away",
+      people: "Two farmers who find out too late",
+      today: "Today the first opinion comes from a neighbour",
+      principles: "Six insights, six design rules",
+      solution: "One photo, then a report that says what to do",
+      engine: "From one side photo to 31 conditions screened",
+      decisions: "What I chose, and what each choice cost",
+      outcomes: "Health checks that carry the plan, and a vet line that stays free",
+      reflection: "What I'd do differently",
+    },
+    problem: {
+      featured: {
+        value: 60,
+        label: "of the veterinarians India needs are in place",
+        caption: "India needs about 72,000 veterinarians and has about 43,000, so for every 100 vets the country needs, about 60 are working.",
+        source: "vets",
+      },
+      intro:
+        "Most of India's milk comes from small herds of a few cows. When a cow eats less or gives less milk, her owner has to work out why, usually with no vet nearby. Many conditions show nothing at first: a swelling udder, ticks carrying blood parasites, the first lumps of lumpy skin disease. By the time the signs are obvious, milk is already lost, and some animals don't recover. An app can name a disease; a dairy farmer also needs to know how serious it is, what to do today and when a vet has to see the cow.",
+      stats: [
+        { value: "~46%", label: "of dairy cows in Indian studies have subclinical mastitis, with no visible sign", source: "mastitis" },
+        { value: "1,55,366", label: "cattle died of lumpy skin disease in India in 2022", source: "lsd" },
+        { value: "8 crore+", label: "farmers work directly in Indian dairy, many of them small and marginal", source: "pib" },
+      ],
+      statement:
+        "Dairy farmers can't see most problems until the milk drops, and can't get a vet to every cow that looks off, so they wait, ask a neighbour or treat by guesswork.",
+      hmw: "How might we turn one photo of a cow into an early warning a farmer trusts, with what to do today and a clear line to a vet when it's serious?",
+    },
+    personasNote:
+      "Composite personas, built from the field context above and Gau Sampurna's dairy farmers in Karnataka, not individual interviewees.",
+    personas: [
+      {
+        name: "Manjunath, 44",
+        role: "Dairy farmer",
+        attrs: [
+          { label: "Place", value: "Near Hassan, Karnataka" },
+          { label: "Herd", value: "6 cows, HF crossbreds" },
+          { label: "Milk", value: "Pours at the village dairy twice a day" },
+          { label: "Language", value: "Kannada" },
+        ],
+        quote: "She ate less for two days. By the time the vet came, her milk had halved.",
+        goals: ["Know if it's serious before paying for a vet visit", "Catch the next problem before the milk drops", "Advice in Kannada he can follow"],
+        frustrations: ["The vet covers many villages", "Early signs look like nothing", "Every neighbour says something different"],
+      },
+      {
+        name: "Roopa, 36",
+        role: "Dairy farmer",
+        attrs: [
+          { label: "Place", value: "Near Mandya, Karnataka" },
+          { label: "Herd", value: "3 cows and a calf" },
+          { label: "Milk", value: "The family's main income" },
+          { label: "Language", value: "Kannada, reads a little" },
+        ],
+        quote: "I milk them every day, so I know when the udder feels wrong. I just don't know if it's serious.",
+        goals: ["An answer without leaving the farm", "Pictures and simple words, not long text", "A number to call when it's urgent"],
+        frustrations: ["Small print and long paragraphs", "A trip to the vet costs a day's work", "Not knowing which supplement to trust"],
+      },
+    ],
+    journeyIntro: "How a farmer like Manjunath deals with a cow that looks unwell today, and where it goes wrong.",
+    journey: [
+      {
+        step: "Notice a change",
+        feel: 0,
+        feeling: "Uneasy",
+        does: "She eats less, or pours a little less milk at the dairy.",
+        pain: "Many problems show nothing early: subclinical mastitis, with no visible sign, turns up in about 46% of cows in Indian studies.",
+        source: "mastitis",
+      },
+      {
+        step: "Ask around",
+        feel: 0,
+        feeling: "Hopeful",
+        does: "Asks a neighbour or the people at the milk collection centre.",
+        pain: "The first opinion comes from whoever is nearby, not from someone who has examined the cow.",
+      },
+      {
+        step: "Wait for a vet",
+        feel: -1,
+        feeling: "Anxious",
+        does: "Calls the vet, who covers many villages.",
+        pain: "India has about 43,000 veterinarians for the 72,000 it needs.",
+        source: "vets",
+      },
+      {
+        step: "Treat by guess",
+        feel: -1,
+        feeling: "Unsure",
+        does: "Tries a home remedy or a medicine from the shop.",
+        pain: "Nothing tells the farmer whether the guess was right, while the condition moves on.",
+      },
+      {
+        step: "Milk drops",
+        feel: -2,
+        feeling: "Worried",
+        does: "Pours less at the dairy every day.",
+        pain: "The loss shows up in the milk money before anyone knows the cause.",
+      },
+      {
+        step: "Lose the animal",
+        feel: -2,
+        feeling: "Defeated",
+        does: "In the worst case, the cow doesn't recover.",
+        pain: "Lumpy skin disease alone killed 1,55,366 cattle in India in 2022.",
+        source: "lsd",
+      },
+    ],
+    principles: [
+      {
+        insight: "Most problems show nothing until the milk drops.",
+        principle: "Screen every body system from one routine photo, not only the problem the farmer suspects.",
+        source: "mastitis",
+      },
+      {
+        insight: "A blurry or partial photo gets a confident wrong answer.",
+        principle: "Coach a full side profile, level and in daylight, and preview the photo before it uses a scan.",
+      },
+      {
+        insight: "Farmers act on how serious it is, not on disease names.",
+        principle: "Lead with counts (clear, watch, vet) and one plain summary; condition names and detail come after.",
+      },
+      {
+        insight: "A model sees signs, not certainty.",
+        principle: "Mark each finding as detected, suspected or not assessable, and say the report is an AI estimate.",
+      },
+      {
+        insight: "A sick cow is the worst moment to hit a paywall.",
+        principle: "Never paywall safety: the finding and the vet helpline are free; the expert guidance is on the plan.",
+      },
+      {
+        insight: "Farmers trust the local vet more than any app.",
+        principle: "Send serious findings to a vet, with the exact signs that mean 'call now'.",
+      },
+    ],
+    solution: {
+      intro:
+        "The health checks live on the Scan page. A farmer picks the cow, takes one side photo and gets a report: Disease Diagnosis when something looks wrong, or the 360° Full Health report, which adds breed, milk, value and feed from the same photo.",
+      beforeReport: [
+        {
+          title: "Triage before routine",
+          what: "The Scan page puts 'Cow unwell or Off-feed?' on top in an urgent card, routine scans below and the 360° report last. The cow is picked first, and a counter shows the scans left.",
+          why: "A worried farmer shouldn't have to read a menu. Picking the cow first ties every report to an animal, so the next scan has something to compare with.",
+          screens: [
+            { image: `${CH}/01-scan-hub.webp`, label: "Scan page" },
+            { image: `${CH}/13-scan-hub-full.webp`, label: "360° report" },
+          ],
+        },
+        {
+          title: "Coach one photo",
+          what: "Four tips before the camera opens (full side profile, level angle, good daylight, nothing in the way), then a preview with Continue or Retry.",
+          why: "One side photo feeds every body check, so a bad photo would spoil all of them. Catching it at the preview costs a retake, not a scan.",
+          screens: [
+            { image: `${CH}/02-photo-guide.webp`, label: "Photo guide" },
+            { image: `${CH}/03-confirm.webp`, label: "Preview" },
+          ],
+        },
+        {
+          title: "Check the plan before the photo",
+          what: "The app checks the plan and the scan allowance before the camera opens. The 360° report, which isn't in the free plan, says so and offers Upgrade.",
+          why: "A farmer should never take a photo only to meet a paywall afterwards.",
+          screens: [{ image: `${CH}/08-plan-gate.webp`, label: "Plan check" }],
+        },
+        {
+          title: "Show the work",
+          what: "Named steps tick off while the model runs (image received, detecting visual symptoms, matching against conditions), with a note not to close the app.",
+          why: "15 to 30 seconds of analysis, or 1 to 2 minutes for the 360° report, feels like progress instead of a frozen screen.",
+          screens: [
+            { image: `${CH}/04-analyzing.webp`, label: "Disease Diagnosis" },
+            { image: `${CH}/09-full-analyzing.webp`, label: "360° report" },
+          ],
+        },
+        {
+          title: "The verdict at a glance",
+          what: "'1 of 31 conditions detected', what was found and what is clear, then View Full Report. The 360° version adds breed, purity grade and milk.",
+          why: "The farmer gets the answer before any detail, in a few words and a colour.",
+          screens: [
+            { image: `${CH}/05-ready.webp`, label: "Disease Diagnosis" },
+            { image: `${CH}/10-full-ready.webp`, label: "360° report" },
+          ],
+        },
+      ],
+      afterReport: [
+        {
+          title: "Safety is never paywalled",
+          what: "On the Disease Diagnosis report, free users see the finding, how many signs were flagged and the vet helpline. The reason, prevention and early warning signs unlock with the plan.",
+          why: "Charging for the expert guidance pays for the model; holding back 'call a vet' would put a cow at risk. The plan banner collapses so it never covers the report.",
+          screens: [{ image: `${CH}/06-diagnosis.webp`, label: "Disease Diagnosis" }],
+        },
+        {
+          title: "Honest errors",
+          what: "If a scan can't start, the screen says so, and Try Again goes back to the camera.",
+          why: "Start-up failures used to send farmers to the paywall, which told people on a valid plan to pay again. Now an error is just an error.",
+          screens: [{ image: `${CH}/07-error.webp`, label: "Scan error" }],
+        },
+        {
+          title: "Every scan, kept",
+          what: "Scan history lists every report by type and cow, with filters for both; a scan with no cow is labelled as unlinked.",
+          why: "'How has Gowri been?' needs her last scan next to this one.",
+          screens: [{ image: `${CH}/12-history.webp`, label: "Scan history" }],
+        },
+      ],
+      anatomy: {
+        image: `${CH}/11-report-full.webp`,
+        width: 750,
+        height: 7702,
+        title: "Anatomy of the report",
+        intro: "The 360° Full Health report answers, in order, what a farmer asks about a cow: is she all right, what's wrong, what is she worth and what do I do now. This is the whole report, top to bottom (the prototype's sample values).",
+        callouts: [
+          { x: 88, y: 3.4, title: "Jump to what you came for", body: "Status, Diseases and Nutrition at the top, so a farmer goes straight to the part they care about." },
+          { x: 90, y: 8.6, title: "How serious, before what", body: "28 clear, 2 to watch, 1 for the vet: the counts come before any condition is named." },
+          { x: 6, y: 15.7, title: "One plain summary", body: "'Needs attention', then two sentences: good body condition, early udder swelling, treat early to protect her milk." },
+          { x: 90, y: 19.45, title: "Signs, put together", body: "A milk drop plus udder swelling points to early mastitis rather than a feed problem." },
+          { x: 6, y: 23.1, title: "Breed purity, explained", body: "Her grade on a scale from C to A1, with the purity range of each grade, so 'A2' means something." },
+          { x: 90, y: 31.3, title: "Milk and money", body: "Milk capacity a day, lactation yield, an estimated value range and a buying recommendation." },
+          { x: 6, y: 49.65, title: "Grouped by body system", body: "Each condition sits under its body system (here udder, skin and digestive) with its own severity." },
+          { x: 90, y: 52.25, title: "What the photo shows, and what to do", body: "A condition opens to its interpretation and a recommendation: strip-test the milk, milk her last, call a vet." },
+          { x: 6, y: 64.8, title: "A plan that ends in a rescan", body: "Day 1, days 2 to 4, then a rescan on day 7 to confirm she has recovered." },
+          { x: 90, y: 66.7, title: "A ration for her", body: "Balanced ration options by diet, then her daily feed split into morning, afternoon and evening." },
+          { x: 6, y: 80.5, title: "Products that fit the finding", body: "Our own supplements, matched to the report: a complete feed supplement, and a teat dip for an udder problem." },
+          { x: 90, y: 94.2, title: "When to call a vet", body: "The signs that mean call now, and a free vet helpline button." },
+          { x: 6, y: 96.3, title: "Honest about AI", body: "The report says it is an AI estimate from the photo, and that a vet makes final decisions." },
+        ],
+      },
+      engineIntro:
+        "Behind the report is a vision pipeline I integrated with the engineering and data science teams, built on a knowledge base of 31 cattle conditions. Every side photo goes through four stages:",
+      pipeline: {
+        input: "One side photo of the cow",
+        stages: [
+          { title: "Check", caption: "Confirm the plan, then the photo.", items: ["Plan and scan allowance first", "Full side profile, previewed", "An honest error if it can't start"] },
+          { title: "Screen", caption: "Look for 31 conditions.", items: ["Eight body systems", "Detected, suspected or not assessable", "Severity, from mild to critical"] },
+          { title: "Assess", caption: "Read the whole animal (360° report).", items: ["Breed and purity grade", "Milk capacity and lactation", "Estimated value range"] },
+          { title: "Advise", caption: "What to do, and when to call.", items: ["Interpretation and recommendation", "Recovery plan and ration", "Call-a-vet signs and helpline"] },
+        ],
+        output: "A report with a next step",
+      },
+      engineRules: [
+        "**Not everything is a yes.** Each condition comes back detected, suspected or not assessable, with a severity, so a suspicion never reads like a diagnosis.",
+        "**Grouped the way a vet thinks.** The 31 conditions sit under eight body systems: digestive, metabolic, udder, skin, eyes, muscles and bones, reproductive, and viral diseases.",
+        "**One photo, three reports.** The 360° Full Health scan returns the disease screening, Animal Status and Market Value from the same photo.",
+        "**Checks before the camera.** The plan and scan allowance are verified first, so no farmer takes a photo only to be told it isn't included.",
+      ],
+      decisions: [
+        {
+          decision: "Screen everything, not only what the farmer suspects",
+          why: "Many conditions show nothing early, so a farmer who checks only the obvious worry misses the rest.",
+          tradeoff: "A longer report, so it opens on counts (clear, watch, vet) and one summary before any detail.",
+        },
+        {
+          decision: "Suspected is not detected",
+          why: "A model sees signs, not certainty. Calling a suspicion a disease would cost the farmer a needless treatment and cost us their trust.",
+          tradeoff: "Less definite answers, so a suspected finding comes with what to watch for and when to call a vet.",
+        },
+        {
+          decision: "Finding and vet line free, guidance on the plan",
+          why: "Every scan runs a model; charging for the expert layer pays for it, while 'call a vet' stays free for the cow's sake.",
+          tradeoff: "Free users see less at a worrying moment, so the plan banner collapses and never blocks the report.",
+        },
+        {
+          decision: "Check the plan before the photo",
+          why: "Taking a photo and then meeting a paywall feels like a trick, and farmers who feel tricked don't come back.",
+          tradeoff: "A moment of loading before the camera opens, shown as 'Setting up'.",
+        },
+      ],
+    },
+    outcomes: {
+      intro:
+        "The health checks shipped in Gau Sampurna: Disease Diagnosis for a cow that looks unwell, and the 360° Full Health report on the paid plan. They are the paid core of the freemium model, and the vet helpline stays free.",
+      metrics: [
+        { value: "31", label: "conditions screened from one side photo" },
+        { value: "8", label: "body systems in the report" },
+        { value: "3", label: "reports from one 360° scan" },
+        { value: "3×", label: "onboarding-to-trial conversion (2.4% to 7.2%) across Kissan and Gau Sampurna" },
+      ],
+      impact: [
+        "A farmer can check a cow that looks off without waiting for a vet, and knows when a vet is needed.",
+        "Screening every body system turns a check for one worry into a check of the whole animal.",
+        "The checks carry the subscription that pays for the models, while the vet helpline stays free.",
+      ],
+      measureNext: [
+        { metric: "Agreement", how: "Findings against a vet's examination, on a sample of cows each week", tells: "Whether the screening is right often enough to act on" },
+        { metric: "Not assessable", how: "Share of conditions returned as not assessable, by condition and phone model", tells: "Where the photo or the model needs work" },
+        { metric: "Escalation", how: "Helpline calls from reports flagged for a vet, and from those that weren't", tells: "Whether serious cases reach a vet" },
+        { metric: "Rescan", how: "Share of flagged cows scanned again within 10 days", tells: "Whether farmers follow the recovery plan" },
+        { metric: "Plan start", how: "Share of free users who start the plan from a Disease Diagnosis report", tells: "Whether health checks earn the subscription" },
+      ],
+    },
+    learnings: [
+      "**Prove it against a vet, in public.** Screening 31 conditions only helps if farmers and vets trust it. I'd publish how often findings matched a vet's examination, condition by condition, before adding more.",
+      "**Lead with milk, not body condition.** The summary shows weight and a body condition score beside milk. Farmers don't use the score and weight is an estimate, so I'd put milk and value first and move the rest into the detail.",
+      "**Send the report to the vet.** The helpline gets a phone call; it should also get the report, so the vet starts from the photo and the findings rather than a description.",
+    ],
+    prototype: { id: "gau-sampurna", flow: "disease-check" },
+    sources: [
+      { id: "mastitis", label: "Bangar et al., A systematic review and meta-analysis of prevalence of subclinical mastitis in dairy cows in India: 46.35% of cows (25 studies, 6,344 cows)", publisher: "Tropical Animal Health and Production 47(2)", date: "2015", url: "https://agris.fao.org/search/en/records/65debdab63b8185d9ca95fa4" },
+      { id: "vets", label: "Sasidhar et al., Assessment of core competencies of veterinarians: India needs about 72,000 veterinarians against an availability of 43,000", publisher: "Revue Scientifique et Technique (WOAH) 37(3)", date: "2018", url: "https://www.woah.org/app/uploads/2021/03/22022018-00121-en-sasidhar.pdf" },
+      { id: "lsd", label: "Lumpy skin disease caused 1,55,366 cattle deaths in 2022 (the Union Minister's written reply in the Rajya Sabha)", publisher: "Outlook India", date: "9 Dec 2022", url: "https://www.outlookindia.com/amp/story/national/lumpy-skin-disease-caused-over-1-5-lakh-cattle-deaths-in-2022-rajasthan-accounted-for-nearly-half-news-243704" },
+      { id: "pib", label: "India's Dairy Sector: Anchoring Nutrition and Income Security: more than 8 crore farmers directly employed, many of them small and marginal", publisher: "Press Information Bureau, Government of India", date: "Sep 2025", url: "https://static.pib.gov.in/WriteReadData/specificdocs/documents/2025/sep/doc2025929650301.pdf" },
+    ],
+  },
+  {
+    slug: "market-value",
+    title: "Market Value: a cow's worth before a trader names a price",
+    subtitle:
+      "How I designed Gau Sampurna's valuation scan: one side photo gives a dairy farmer an estimated price range, breed purity, milk capacity and a buying recommendation, so the number starts from the cow, not the broker.",
+    product: "Gau Sampurna",
+    cover: `${MV}/08-report.webp`,
+    tags: ["DairyTech", "Computer vision", "Pricing", "Trust"],
+    card: {
+      problem: "Cattle are priced in code words and hand signals, through brokers who keep a share.",
+      metric: "One side photo to a price range, a breed grade and a milk estimate",
+      stats: [
+        { value: "1", label: "Side photo" },
+        { value: "5", label: "Breed purity grades" },
+        { value: "3", label: "Facts behind the price" },
+      ],
+    },
+    meta: [
+      { label: "Role", value: "Associate Product Manager" },
+      { label: "Company", value: "Silo Fortune" },
+      { label: "Team", value: "Engineering, design, data science" },
+      { label: "Platform", value: "Mobile app, in the farmer's language" },
+      { label: "Timeline", value: "2025–26" },
+    ],
+    glance: [
+      {
+        label: "The challenge",
+        takeaway: "The price is set in code, and the broker keeps a share.",
+        text: "A study of **525** cattle owners in Tamil Nadu describes prices agreed in secret code words and finger signals, with brokers taking a considerable share.",
+        source: "kumar",
+      },
+      {
+        label: "Our approach",
+        takeaway: "One side photo to a **price range**.",
+        text: "The scan estimates **breed purity**, **milk capacity** and **lactation**, then gives a value range and a yes-or-no buying recommendation.",
+      },
+      {
+        label: "The impact",
+        takeaway: "A number to bargain from, on the farmer's side.",
+        text: "The same analysis powers Animal Status and the **360°** report, so one model and one scan serve three reports.",
+      },
+    ],
+    heroScreens: [`${MV}/02-photo-guide.webp`, `${MV}/08-report.webp`, `${MV}/07-ready.webp`],
+    headlines: {
+      problem: "A cow's price is set in code",
+      people: "A seller and a first-time buyer, both guessing",
+      today: "Today the price comes from the broker",
+      principles: "Six insights, six design rules",
+      solution: "One photo, then the facts a price rests on",
+      engine: "From one side photo to a value range",
+      decisions: "What I chose, and what each choice cost",
+      outcomes: "A valuation that starts from the cow, not the broker",
+      reflection: "What I'd do differently",
+    },
+    problem: {
+      featured: {
+        value: 57.7,
+        label: "of a cow's price was explained by traits a buyer can see or ask about",
+        caption: "In a model built from 525 Tamil Nadu cattle owners, a cow's activeness, body shape, pregnancy and milk yield explained 57.7% of the variation in her price. Most of what sets the price is visible.",
+        source: "kumar",
+      },
+      intro:
+        "A dairy farmer sells a cow every few years and buys one when the herd grows, usually at a weekly cattle market or through a broker. A cow's price depends on her breed, how much milk she gives and where she is in her lactation, and the seller knows far more about all three than the buyer. Bargaining happens in code, brokers keep a share, and tricks such as rasped teeth or painted horns hide an animal's age and condition. A farmer needs a fair estimate in their pocket before anyone names a price.",
+      stats: [
+        { value: "₹4,189", label: "more for a pregnant buffalo in the same study, and ₹1,114 more for a pregnant cow", source: "kumar" },
+        { value: "303.76 M", label: "cattle, buffalo, mithun and yak in India", source: "pib" },
+        { value: "8 crore+", label: "farmers work directly in Indian dairy", source: "pib" },
+      ],
+      statement:
+        "Dairy farmers buy and sell cattle without a fair reference price, so the side that knows less about the animal, and the broker between them, ends up setting the number.",
+      hmw: "How might we give a farmer a fair, explainable estimate of a cow's value from one photo, before a trader names a price?",
+    },
+    personasNote:
+      "Composite personas, built from the field context above and Gau Sampurna's dairy farmers in Karnataka, not individual interviewees.",
+    personas: [
+      {
+        name: "Basavaraj, 52",
+        role: "Selling a cow",
+        attrs: [
+          { label: "Place", value: "Near Haveri, Karnataka" },
+          { label: "Herd", value: "5 cows, sells one most years" },
+          { label: "Market", value: "Weekly cattle market, through a broker" },
+          { label: "Language", value: "Kannada" },
+        ],
+        quote: "The broker says she's worth fifty thousand. I know she gives twelve litres. Who is right?",
+        goals: ["A fair price to start bargaining from", "Proof of her breed and milk to show a buyer", "Not losing a share to the broker"],
+        frustrations: ["Bargaining in code he can't check", "Buyers who don't believe his milk figures", "Selling in a hurry when cash is short"],
+      },
+      {
+        name: "Nagaraj, 29",
+        role: "First-time buyer",
+        attrs: [
+          { label: "Place", value: "Near Tumakuru, Karnataka" },
+          { label: "Herd", value: "2 cows, buying a third" },
+          { label: "Money", value: "A dairy loan" },
+          { label: "Language", value: "Kannada, some English" },
+        ],
+        quote: "Everyone says their cow gives fifteen litres. I can't milk her before I pay.",
+        goals: ["Know if the asking price is fair", "Know her breed and how much milk to expect", "A clear yes or no before he pays"],
+        frustrations: ["Sellers hide age and condition", "A loan he can't afford to waste", "No one neutral to ask at the market"],
+      },
+    ],
+    journeyIntro: "How a farmer like Nagaraj buys a cow today, and where it goes wrong.",
+    journey: [
+      {
+        step: "Hear of a cow",
+        feel: 1,
+        feeling: "Hopeful",
+        does: "A broker or a neighbour mentions a cow for sale.",
+        pain: "The seller and the broker know the animal; the buyer knows only what they are told.",
+      },
+      {
+        step: "See her at the market",
+        feel: 0,
+        feeling: "Unsure",
+        does: "Looks her over among dozens of animals at the weekly market.",
+        pain: "Rasped teeth, sharpened or painted horns and drenching often get in the way of a fair valuation.",
+        source: "kumar",
+      },
+      {
+        step: "Bargain in code",
+        feel: -1,
+        feeling: "Confused",
+        does: "The price is agreed through the broker.",
+        pain: "Prices are set in secret code words, with fingers pressed under a towel so no one else sees.",
+        source: "kumar",
+      },
+      {
+        step: "Pay the broker",
+        feel: -1,
+        feeling: "Uneasy",
+        does: "Pays the price and the broker's cut.",
+        pain: "Brokers sit between buyer and seller and keep a considerable share of the price.",
+        source: "kumar",
+      },
+      {
+        step: "Milk her at home",
+        feel: -2,
+        feeling: "Disappointed",
+        does: "Finds out over the next weeks how much milk she really gives.",
+        pain: "Milk yield moves the price most, and it's the one thing a buyer can't check at the market.",
+        source: "kumar",
+      },
+      {
+        step: "Sell at a loss",
+        feel: -2,
+        feeling: "Defeated",
+        does: "If she disappoints, sells her on for less.",
+        pain: "With no reference price, the loss is never clear, and the next deal starts from guesswork again.",
+      },
+    ],
+    principles: [
+      {
+        insight: "Most of a cow's price sits in traits a buyer can see.",
+        principle: "Estimate value from the same side photo as every other scan: breed, body, udder and lactation.",
+        source: "kumar",
+      },
+      {
+        insight: "No estimate from a photo is exact.",
+        principle: "Show a price range, never a single number, and call it an estimate.",
+      },
+      {
+        insight: "A number on its own starts an argument.",
+        principle: "Show the facts behind the price (breed purity, milk capacity, lactation) so the farmer can defend it.",
+      },
+      {
+        insight: "The udder drives the milk estimate, and so the price.",
+        principle: "Coach 'udder clearly visible'; if the model can't see it, say so and offer a re-upload instead of guessing.",
+      },
+      {
+        insight: "Farmers check a price standing next to the seller.",
+        principle: "Make it the Instant scan: one photo, about a minute, the price first.",
+      },
+      {
+        insight: "Breed is the biggest unknown, and rarer breeds are where a model slips.",
+        principle: "When the model can't name the breed, ask the farmer to pick the closest match and run the scan again.",
+      },
+    ],
+    solution: {
+      intro:
+        "Market Value is the Instant scan on the Scan page. It runs the same side photo through the same analysis as Animal Status and returns a focused valuation: the price range first, then the facts a buyer and seller argue about.",
+      beforeReport: [
+        {
+          title: "Named for the answer",
+          what: "Routine scans are named by what the farmer gets: Animal Status ('Weight & Health Score') and Market Valuation ('Final Price Estimate'), marked Recommended and Instant.",
+          why: "Farmers come for a price, not for computer vision. 'Instant' suits a check made at the market.",
+          screens: [{ image: `${MV}/01-scan-hub.webp`, label: "Scan page" }],
+        },
+        {
+          title: "Coach the udder",
+          what: "The photo guide adds 'Udder clearly visible' to the side-profile tips, then shows a preview with Continue or Retry.",
+          why: "Udder size drives the milk estimate, and milk drives the price.",
+          screens: [
+            { image: `${MV}/02-photo-guide.webp`, label: "Photo guide" },
+            { image: `${MV}/03-confirm.webp`, label: "Preview" },
+          ],
+        },
+        {
+          title: "Ask only when unsure",
+          what: "If the model can't identify the breed, the farmer picks the closest match (HF crossbred, Jersey crossbred, Gir, Sahiwal or none of these) and the same scan runs again.",
+          why: "One question at the right moment beats a questionnaire for everyone: earlier up-front questions were cut because farmers dropped off.",
+          screens: [
+            { image: `${MV}/04-analyzing.webp`, label: "Analysis" },
+            { image: `${MV}/05-breed.webp`, label: "Pick the breed" },
+          ],
+        },
+        {
+          title: "No made-up numbers",
+          what: "If the udder isn't visible, the farmer chooses: re-upload for an accurate price, or continue with a report that says why the price is missing.",
+          why: "A confident wrong price costs a farmer money at the market, and costs us their trust.",
+          screens: [{ image: `${MV}/06-udder.webp`, label: "Udder not detected" }],
+        },
+        {
+          title: "Price in the summary",
+          what: "Report Ready shows the breed and purity grade, then the estimated value beside weight and body condition.",
+          why: "Value takes the place milk has in the other scans' summary, because price is the question this scan answers.",
+          screens: [{ image: `${MV}/07-ready.webp`, label: "Report ready" }],
+        },
+      ],
+      afterReport: [
+        {
+          title: "The full picture, on the plan",
+          what: "Animal Status runs the same scan with the long report. Health check counts, breed purity, milk and economic figures stay open; detailed checks, the AI summary and the diet plan unlock with the plan.",
+          why: "The facts a farmer needs to trust the estimate are free. The expert layer is what the subscription pays for.",
+          screens: [
+            { image: `${MV}/09-status-ready.webp`, label: "Animal Status" },
+            { image: `${MV}/10-status-report.webp`, label: "Status report" },
+          ],
+        },
+      ],
+      anatomy: {
+        image: `${MV}/08-report-full.webp`,
+        width: 750,
+        height: 2530,
+        title: "Anatomy of the valuation",
+        intro: "The valuation report is short on purpose. It answers what a buyer and a seller argue about: what is she worth, and why. This is the whole report (the prototype's sample values).",
+        callouts: [
+          { x: 86, y: 13.3, title: "Tied to her photo", body: "The cow's own photo, with a verified badge, so the estimate belongs to this animal." },
+          { x: 21, y: 30.9, title: "A range, not a price", body: "₹78,000 to ₹86,000: an estimate to bargain from, never one exact number." },
+          { x: 6, y: 43.8, title: "Breed purity first", body: "Breed and purity grade (here Gir, A2), the first thing a buyer asks about." },
+          { x: 6, y: 54.6, title: "Where she is in lactation", body: "Early, mid or late lactation changes how much milk is still to come, and so the price." },
+          { x: 90, y: 54.6, title: "Estimates, labelled", body: "Body condition and weight are estimates from the photo, so they support the price rather than lead it." },
+          { x: 6, y: 61.2, title: "Milk, the biggest driver", body: "Milk capacity a day and the expected lactation yield: 12 to 14 litres a day and 3,600 litres in the sample." },
+          { x: 90, y: 68.4, title: "A yes or a no", body: "A buying recommendation for a farmer standing next to the seller." },
+          { x: 6, y: 72.3, title: "Care that follows", body: "Supplements for her from our own range, shown only where we can deliver." },
+        ],
+      },
+      engineIntro:
+        "Market Value sends the same request as Animal Status; only the report screen differs. Behind both is a vision pipeline I integrated with the engineering and data science teams. Every side photo goes through four stages:",
+      pipeline: {
+        input: "One side photo of the cow",
+        stages: [
+          { title: "Check", caption: "Make sure the photo can be valued.", items: ["Full side profile in frame", "Udder visible, or the farmer is asked", "Re-upload, or a partial report"] },
+          { title: "Identify", caption: "The breed, and how pure.", items: ["Breed from the photo", "The farmer picks it if unsure", "Purity grade, C to A1"] },
+          { title: "Assess", caption: "The facts a price rests on.", items: ["Milk capacity a day", "Lactation stage and yield", "Body condition and weight"] },
+          { title: "Value", caption: "A range and a recommendation.", items: ["Estimated value range", "Buying recommendation", "Shared with the 360° report"] },
+        ],
+        output: "A price range to bargain from",
+      },
+      engineRules: [
+        "**One request, three reports.** Market Value, Animal Status and the 360° report use the same analysis, and the first two share one scan allowance, so the model is built and improved once.",
+        "**Purity has a scale.** Grades map to purity ranges: A1 above 95%, A2 85 to 95%, A3 75 to 85%, B 65 to 75% and C below 65%.",
+        "**Missing means missing.** If the udder isn't detected, the price is left out and the report says why, rather than estimating it from the rest.",
+        "**Indicative, and said so.** Value is a range, and the report says estimates are indicative and a vet or livestock expert makes final decisions.",
+      ],
+      decisions: [
+        {
+          decision: "A range, never a single price",
+          why: "No photo can price a cow to the rupee, and a single number reads like a promise.",
+          tradeoff: "A range is harder to quote at the market, so the report leads with it and puts the facts behind it right below.",
+        },
+        {
+          decision: "The same scan as Animal Status",
+          why: "One model, one request and one allowance keep valuation cheap to run and consistent with the health figures.",
+          tradeoff: "Valuation rests on one side photo; adding front or rear photos would mean changing the scan every report shares.",
+        },
+        {
+          decision: "Ask the breed only when the model can't tell",
+          why: "Breed sets the grade and moves the price, and a wrong breed spoils both.",
+          tradeoff: "An extra screen for some cows, instead of a question for every farmer.",
+        },
+        {
+          decision: "Leave the price out when the udder isn't visible",
+          why: "Milk drives the price and the udder drives the milk estimate, so a price without it would be a made-up number.",
+          tradeoff: "Some farmers have to retake the photo, so the dialog explains why and offers a partial report instead.",
+        },
+      ],
+    },
+    outcomes: {
+      intro:
+        "Market Value shipped in Gau Sampurna as the Instant scan, alongside Animal Status and inside the 360° report. Across the two apps, Kissan and Gau Sampurna reached 250K+ combined installs and 25K+ monthly active users.",
+      metrics: [
+        { value: "1", label: "side photo to a value range" },
+        { value: "5", label: "breed purity grades, C to A1" },
+        { value: "3", label: "reports that share the analysis" },
+        { value: "250K+", label: "combined installs of Kissan and Gau Sampurna" },
+      ],
+      impact: [
+        "A farmer can bring a price range, and the facts behind it, to the market instead of starting from the broker's number.",
+        "One analysis serves three reports, so improving the model improves all of them at once.",
+        "The breed and udder checks turn the model's blind spots into a question or a retake, not a wrong price.",
+      ],
+      measureNext: [
+        { metric: "Price accuracy", how: "Estimated range against the sale price, where farmers report a sale", tells: "Whether the range is close enough to bargain from" },
+        { metric: "Breed fallback", how: "Share of scans where the farmer picks the breed, by breed", tells: "Which breeds the model needs more photos of" },
+        { metric: "Udder retakes", how: "Share of scans with the udder not detected, and how many re-upload", tells: "Whether the photo guide works" },
+        { metric: "Use at the market", how: "Market Value scans by day and hour, against local market days", tells: "Whether farmers check value before a deal" },
+        { metric: "Plan start", how: "Share of free users who start the plan after a valuation", tells: "Whether valuation earns the subscription" },
+      ],
+    },
+    learnings: [
+      "**Close the loop with real sale prices.** An estimate is only as good as its last comparison with a real deal. I'd ask farmers for the final price after a valuation and use it to tune the range by region and breed.",
+      "**Price for the place, not the country.** Cattle prices change with district and season. I'd show the range for the farmer's own area and say what it's based on.",
+      "**Design the report for the person it's shown to.** A seller showing a buyer the report is stronger than any claim, so I'd design the shared version for the person receiving it, in their language.",
+    ],
+    prototype: { id: "gau-sampurna", flow: "market-value" },
+    sources: [
+      { id: "kumar", label: "Sudeep Kumar et al., Development of valuation index for dairy cattle and buffalo in Tamil Nadu (525 owners): prices set with secret code words and brokers' share; activeness, body shape, pregnancy and milk yield explained 57.7% of cow value", publisher: "Indian Journal of Animal Sciences 84(11)", date: "Nov 2014", url: "https://epubs.icar.org.in/index.php/IJAnS/article/view/44789" },
+      { id: "pib", label: "India's Dairy Sector: Anchoring Nutrition and Income Security: more than 8 crore farmers directly employed; 303.76 million bovines", publisher: "Press Information Bureau, Government of India", date: "Sep 2025", url: "https://static.pib.gov.in/WriteReadData/specificdocs/documents/2025/sep/doc2025929650301.pdf" },
+    ],
+  },
+  {
+    slug: "dung-check",
+    title: "Cow Dung Check: digestion read from a photo, before the milk drops",
+    subtitle:
+      "How I designed Gau Sampurna's dung scan: one photo of fresh dung gives a dairy farmer a digestion score from 1 to 5, what it means, what to change in the feed and when to call a vet.",
+    product: "Gau Sampurna",
+    cover: `${DC}/06-report.webp`,
+    tags: ["DairyTech", "Computer vision", "Nutrition", "Habit"],
+    card: {
+      problem: "Feed is most of the cost of milk, and a feeding problem shows only when the milk drops.",
+      metric: "A photo of fresh dung to a 1–5 digestion score and a feed fix",
+      stats: [
+        { value: "1–5", label: "Digestion score" },
+        { value: "3", label: "Means healthy" },
+        { value: "10–15 s", label: "Fastest scan" },
+      ],
+    },
+    meta: [
+      { label: "Role", value: "Associate Product Manager" },
+      { label: "Company", value: "Silo Fortune" },
+      { label: "Team", value: "Engineering, design, data science" },
+      { label: "Platform", value: "Mobile app, in the farmer's language" },
+      { label: "Timeline", value: "2025–26" },
+    ],
+    glance: [
+      {
+        label: "The challenge",
+        takeaway: "Feed is most of the cost of milk, and set by habit.",
+        text: "Feed and fodder make up about **70–75%** of the cost of producing milk in India, yet most farmers have no way to check whether a ration suits the cow.",
+        source: "nddbcost",
+      },
+      {
+        label: "Our approach",
+        takeaway: "Read the dung the way a nutritionist does.",
+        text: "Nutritionists score manure from **1 to 5**, with **3** as healthy. The scan does it from one photo and says what to change in the feed.",
+        source: "msu",
+      },
+      {
+        label: "The impact",
+        takeaway: "The quickest check in the app, built to be repeated.",
+        text: "At **10–15 seconds** it is the fastest scan, and every report ends by asking for a rescan in a few days.",
+      },
+    ],
+    heroScreens: [`${DC}/02-photo-guide.webp`, `${DC}/06-report.webp`, `${DC}/05-ready.webp`],
+    headlines: {
+      problem: "Most of the cost of milk is feed, and it's fed by guesswork",
+      people: "Two farmers feeding by habit",
+      today: "Today a feeding problem shows up in the milk",
+      principles: "Six insights, six design rules",
+      solution: "One photo, then a score and a feed fix",
+      engine: "From a dung photo to a feed plan",
+      decisions: "What I chose, and what each choice cost",
+      outcomes: "A digestion check built to be repeated",
+      reflection: "What I'd do differently",
+    },
+    problem: {
+      featured: {
+        value: 70,
+        label: "or more of the cost of producing milk in India is feed and fodder",
+        caption: "NDDB puts feed and fodder at about 70 to 75% of the cost of milk production, so a ration that doesn't suit the cow is the most expensive mistake on the farm.",
+        source: "nddbcost",
+      },
+      intro:
+        "A dairy cow's milk depends on what she eats, and feed is the biggest cost a dairy farmer has. Most farmers feed what they have and what their neighbours feed, with no way to check whether the ration suits each cow. Digestion problems, from too much green fodder to early acidosis, show in the dung before they show in the milk. Dairy nutritionists read dung for exactly this, but a smallholder has no nutritionist to ask.",
+      stats: [
+        { value: "11.8%", label: "lower feed cost per kg of milk when NDDB balanced farmers' rations", source: "rbp" },
+        { value: "+0.27 kg", label: "more milk per animal a day in the same programme (7.08 to 7.35 kg)", source: "rbp" },
+        { value: "Score 3", label: "is the ideal consistency on the 1–5 manure scale nutritionists use", source: "msu" },
+      ],
+      statement:
+        "Dairy farmers can't see whether a cow's ration suits her until her milk drops, so the costliest input on the farm is set by habit and corrected too late.",
+      hmw: "How might we turn a photo of fresh dung into an early, plain-language read of a cow's digestion, with what to change in her feed and when to call a vet?",
+    },
+    personasNote:
+      "Composite personas, built from the field context above and Gau Sampurna's dairy farmers in Karnataka, not individual interviewees.",
+    personas: [
+      {
+        name: "Sunanda, 41",
+        role: "Dairy farmer",
+        attrs: [
+          { label: "Place", value: "Near Tumakuru, Karnataka" },
+          { label: "Herd", value: "4 cows, HF and Jersey crossbreds" },
+          { label: "Feed", value: "Green fodder, straw and bought concentrate" },
+          { label: "Language", value: "Kannada" },
+        ],
+        quote: "I switched to a cheaper feed. Two weeks later the milk was down, and I didn't know why.",
+        goals: ["Know whether a feed change is working", "Spend less on feed without losing milk", "A check she can do herself every week"],
+        frustrations: ["Feed advice comes from the shop selling it", "No way to tell which cow isn't digesting well", "Finding out from a smaller milk payment"],
+      },
+      {
+        name: "Prakash, 33",
+        role: "Growing his herd",
+        attrs: [
+          { label: "Place", value: "Near Chikkaballapur, Karnataka" },
+          { label: "Herd", value: "9 cows" },
+          { label: "Feed", value: "Maize silage and concentrate" },
+          { label: "Language", value: "Kannada and English" },
+        ],
+        quote: "With nine cows I can't watch each one. I need something that tells me which one to look at.",
+        goals: ["Spot the one cow that's off", "Keep the feed cost per litre down", "A record for each cow"],
+        frustrations: ["One ration for the whole herd", "Loose dung he notices too late", "Vet visits for problems feed could fix"],
+      },
+    ],
+    journeyIntro: "How a farmer like Sunanda handles feeding today, and where it goes wrong.",
+    journey: [
+      {
+        step: "Feed by habit",
+        feel: 1,
+        feeling: "Settled",
+        does: "Feeds the same mix as last month, or what the neighbour feeds.",
+        pain: "In most cases the feed offered is more or less than the animal needs, and the ration is out of balance in protein, energy and minerals.",
+        source: "rbp",
+      },
+      {
+        step: "Change the feed",
+        feel: 0,
+        feeling: "Hopeful",
+        does: "Switches to a cheaper concentrate, or adds more green fodder in season.",
+        pain: "A sudden change in feed is one of the common causes of loose dung, and nothing on the farm flags it.",
+      },
+      {
+        step: "Miss the signs",
+        feel: 0,
+        feeling: "Unaware",
+        does: "Doesn't look at the dung, or doesn't know what it means.",
+        pain: "Dung scoring can pick out sick cows, feed imbalances and metabolic problems such as ketosis, but it takes training to read.",
+        source: "msu",
+      },
+      {
+        step: "Milk drops",
+        feel: -1,
+        feeling: "Worried",
+        does: "Pours less milk at the dairy.",
+        pain: "Animals on an imbalanced ration produce below their potential, at a higher cost per litre.",
+        source: "rbp",
+      },
+      {
+        step: "Guess the fix",
+        feel: -2,
+        feeling: "Unsure",
+        does: "Buys whatever supplement the shop recommends.",
+        pain: "Feed is about 70 to 75% of the cost of milk, so a wrong guess here is the most expensive kind.",
+        source: "nddbcost",
+      },
+      {
+        step: "Call the vet",
+        feel: -2,
+        feeling: "Frustrated",
+        does: "Calls a vet once the cow looks unwell.",
+        pain: "A feeding problem caught at the dung stage might never have needed the visit.",
+      },
+    ],
+    principles: [
+      {
+        insight: "Dung shows digestion before the milk does.",
+        principle: "Make the dung scan the quickest check in the app, so it gets done often.",
+        source: "msu",
+      },
+      {
+        insight: "A dung score only means something on fresh dung.",
+        principle: "Coach the photo: fresh (within an hour), from above, the whole pile, in daylight.",
+      },
+      {
+        insight: "Both ends of the scale are bad: too loose and too firm.",
+        principle: "Show a 1–5 scale with 3 marked Healthy and the cow's score on it, never a pass or a fail.",
+        source: "msu",
+      },
+      {
+        insight: "Farmers act on what to do, not on a score.",
+        principle: "Three plain cards: what we see, what it means, what to do.",
+      },
+      {
+        insight: "Some dung means illness, not feed.",
+        principle: "Name the signs that mean call a vet now, with the helpline on the report.",
+      },
+      {
+        insight: "One check says little; the trend says a lot.",
+        principle: "End every report with a rescan date, and offer to add an unlinked scan to a cow.",
+      },
+    ],
+    solution: {
+      intro:
+        "Cow Dung Check sits under Feed & Digestion on the Scan page. A farmer photographs fresh dung, gets a score in about 15 seconds, and reads a report that says what to change.",
+      beforeReport: [
+        {
+          title: "Its own place on the Scan page",
+          what: "Feed & Digestion is a separate section with Dung Scan marked Popular, below the disease checks and above the 360° report.",
+          why: "Dung is a routine check, not an emergency, so keeping it apart leaves the urgent path clear.",
+          screens: [{ image: `${DC}/01-scan-hub.webp`, label: "Scan page" }],
+        },
+        {
+          title: "Coach a fresh sample",
+          what: "Four tips before the camera (fresh manure only, the full pile from above, good daylight, close enough to fill most of the frame), then a preview with Continue or Retry.",
+          why: "Older samples change colour and texture as they dry, and would mislead the model.",
+          screens: [
+            { image: `${DC}/02-photo-guide.webp`, label: "Photo guide" },
+            { image: `${DC}/03-confirm.webp`, label: "Preview" },
+          ],
+        },
+        {
+          title: "The fastest scan",
+          what: "Three steps tick off (checking consistency, analysing colour and texture, generating recommendations), usually in 10 to 15 seconds.",
+          why: "A check that takes seconds is one a farmer will repeat.",
+          screens: [{ image: `${DC}/04-analyzing.webp`, label: "Analysis" }],
+        },
+        {
+          title: "Score first",
+          what: "Report Ready leads with the manure score (2 of 5, Digestive Imbalance), then the consistency and the possible causes.",
+          why: "The farmer sees how far from healthy she is before any explanation.",
+          screens: [{ image: `${DC}/05-ready.webp`, label: "Report ready" }],
+        },
+      ],
+      afterReport: [
+        {
+          title: "History by cow and by scan",
+          what: "Scan history filters by scan type and by cow, and labels dung scans that weren't linked to a cow.",
+          why: "'What did her last dung scan say?' needs the two scans side by side.",
+          screens: [{ image: `${DC}/07-history.webp`, label: "Scan history" }],
+        },
+      ],
+      anatomy: {
+        image: `${DC}/06-report-full.webp`,
+        width: 750,
+        height: 4160,
+        title: "Anatomy of the report",
+        intro: "The dung report reads like a nutritionist's visit: how far from healthy, what we see, what it means, what to do, and when it isn't about feed at all. This is the whole report, top to bottom (the prototype's sample values).",
+        callouts: [
+          { x: 90, y: 9.3, title: "Turn a scan into a record", body: "A scan with no cow attached offers 'Add this cow', so the next score has something to compare with." },
+          { x: 6, y: 27.6, title: "Where she is on the scale", body: "1 to 5, with 3 marked Healthy and her score (2) marked Current, so too loose and too firm both read as off." },
+          { x: 6, y: 34.5, title: "What we see", body: "The visible signs in plain words: loose, uneven dung with some undigested fibre." },
+          { x: 90, y: 40.7, title: "What it means", body: "Feed is passing through too fast to be absorbed; left alone, milk can drop within a week." },
+          { x: 6, y: 45.8, title: "Likely causes", body: "Too much green fodder or concentrate, a sudden feed change, early acidosis or worms." },
+          { x: 90, y: 54.6, title: "A feed fix", body: "Concrete steps: add dry straw to every feed, cut concentrate for three days, clean water all day." },
+          { x: 6, y: 60.3, title: "Rescan in 3 days", body: "The last step is another photo, to see whether the change worked." },
+          { x: 90, y: 63.7, title: "One product, for her", body: "One supplement matched to the result (a complete feed supplement for digestive imbalance), not a catalogue." },
+          { x: 6, y: 73.4, title: "When it isn't feed", body: "Watery or bloody dung, or not eating for more than a day, means call a vet, with the helpline's live availability." },
+          { x: 90, y: 82.5, title: "The scale, in words", body: "Every score explained, from 1 (severe illness) to 5 (bleeding while passing dung)." },
+        ],
+      },
+      engineIntro:
+        "Behind the report is a vision pipeline I integrated with the engineering and data science teams. Every dung photo goes through four stages:",
+      pipeline: {
+        input: "One photo of fresh dung",
+        stages: [
+          { title: "Check", caption: "Make sure the sample can be read.", items: ["Fresh, from above, the whole pile", "Previewed before it uses a scan", "Linked to a cow, or offered"] },
+          { title: "Score", caption: "Rate it on the 1–5 manure scale.", items: ["Consistency and texture", "Colour and undigested fibre", "3 is healthy"] },
+          { title: "Explain", caption: "Turn the score into plain words.", items: ["What we see", "What it means", "Likely causes"] },
+          { title: "Act", caption: "What to change, and when to escalate.", items: ["Feed steps and a rescan date", "One product for her", "Call-a-vet signs and helpline"] },
+        ],
+        output: "A feed fix and a date to check again",
+      },
+      engineRules: [
+        "**Built from sections, shown defensively.** The model returns a score, a diagnosis and sections (what we see, what needs attention, what's working, the action plan, when to call a vet); the app shows each one only if it arrived.",
+        "**Escalation is part of every answer.** Each report carries the signs that mean call a vet, and the helpline button shows unless the result says it isn't needed.",
+        "**Its own allowance.** Dung scans draw on their own scan count, separate from the disease and body scans, so a routine check never uses up a health check.",
+        "**Fast on purpose.** At 10 to 15 seconds it is the fastest scan in the app, because a routine check has to be quick to be repeated.",
+      ],
+      decisions: [
+        {
+          decision: "A 1–5 scale with 3 as healthy, not a pass or fail",
+          why: "Loose dung and firm dung mean different things; a two-sided scale shows which way she is off.",
+          tradeoff: "A healthy middle is less intuitive than 'higher is better', so the scale labels 3 Healthy and marks her score as Current.",
+        },
+        {
+          decision: "Feed fix first, product second",
+          why: "Most dung problems are fixed by changing the ration, and farmers distrust being sold to.",
+          tradeoff: "Fewer product sales from each report; the one product shown is matched to the result, and only where we can deliver.",
+        },
+        {
+          decision: "Allow a dung scan without a cow",
+          why: "Asking a farmer to register a cow before the first scan would lose them at the start.",
+          tradeoff: "An unlinked scan can't build a trend, so the report opens by offering 'Add this cow'.",
+        },
+        {
+          decision: "A vet line on every report",
+          why: "Some dung signs mean illness, not feed, and a farmer shouldn't have to judge that alone.",
+          tradeoff: "A prominent vet button invites calls that a feed change could fix, so it lists the exact signs that mean call now.",
+        },
+      ],
+    },
+    outcomes: {
+      intro:
+        "Cow Dung Check shipped in Gau Sampurna as the quick digestion scan, separate from the disease checks and with its own scan allowance. Across the two apps, Kissan and Gau Sampurna reached 250K+ combined installs and 25K+ monthly active users.",
+      metrics: [
+        { value: "1–5", label: "manure score, with 3 as healthy" },
+        { value: "10–15 s", label: "the fastest scan in the app" },
+        { value: "3", label: "plain cards: what we see, what it means, what to do" },
+        { value: "250K+", label: "combined installs of Kissan and Gau Sampurna" },
+      ],
+      impact: [
+        "A feeding problem can be caught from a photo in seconds, before it shows in the milk.",
+        "The rescan step and 'Add this cow' turn a one-off scan into a record for each cow.",
+        "The report sends farmers to a vet for the signs that aren't about feed.",
+      ],
+      measureNext: [
+        { metric: "Score agreement", how: "Model score against a nutritionist's score, on a weekly sample", tells: "Whether the score is right often enough to act on" },
+        { metric: "Rescan rate", how: "Share of dung reports followed by another dung scan of the same cow within 7 days", tells: "Whether farmers follow the feed fix through" },
+        { metric: "Score change", how: "Change in score between a report and its rescan", tells: "Whether the feed steps move cows towards 3" },
+        { metric: "Cow linking", how: "Share of unlinked dung scans where the farmer adds the cow", tells: "Whether the scan builds herd records" },
+        { metric: "Vet calls", how: "Helpline calls from dung reports, by score", tells: "Whether escalation reaches the right cases" },
+      ],
+    },
+    learnings: [
+      "**Show the trend, not one score.** A single score is a snapshot. I'd chart each cow's dung scores over time next to her milk, so a farmer can see a feed change working.",
+      "**Put a number on the problem.** The report format can carry the milk lost each day and the monthly cost; showing it would make the feed fix feel as urgent as it is.",
+      "**Check the score against a nutritionist.** Dung is easy to misread in poor light or on uneven ground, so I'd publish a sample scored by both the model and a nutritionist before claiming accuracy.",
+    ],
+    prototype: { id: "gau-sampurna", flow: "dung-scan" },
+    sources: [
+      { id: "nddbcost", label: "NDDB Chairman's address at the National Seminar on animal nutrition for small-holder dairy: feed and fodder constitute about 70–75% of the cost of milk production", publisher: "National Dairy Development Board", date: "21 Nov 2019", url: "https://nddb.coop/hi/about/speech/national-seminar-on-animal-nutritional-strategies-for-optimising-production-cost-milk-quality-and-quantity-in-small-holder-dairy-farming-systems" },
+      { id: "msu", label: "Halfen & Bristle, Effective Scoring Metrics for Livestock Employee Training (P4199): manure scores 1–5, where 3 is the ideal consistency; scoring can identify sick cows, nutritional imbalances and ketosis", publisher: "Mississippi State University Extension", date: "Jul 2026", url: "https://extension.msstate.edu/publications/effective-scoring-metrics-for-livestock-employee-training" },
+      { id: "rbp", label: "Ration Balancing Programme: imbalanced rations are common; feed cost per kg of milk down 11.8%, milk up from 7.08 to 7.35 kg per animal a day", publisher: "National Dairy Development Board", date: "Accessed Nov 2026", url: "https://www.nddb.coop/services/animalnutrition/programmes/ration-balancing-programme" },
     ],
   },
 ];

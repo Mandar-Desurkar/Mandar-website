@@ -45,7 +45,8 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
   the PDF:** open `/resume` in Chrome → Print → Save as PDF (paper Letter, margins none, background graphics
   on), save over that file. Linked from About Me ("View resume", new tab), the phone hero ("View Resume"), phone
   Search (a "Resume" result) and the phone Contact card (a "resume" row).
-- **Case studies** (2026-10-30; Farm Monitoring added 2026-10-31, AI Crop Doctor 2026-11-01): content in `src/data/caseStudies.ts` (typed; every public statistic
+- **Case studies** (2026-10-30; Farm Monitoring added 2026-10-31, AI Crop Doctor 2026-11-01; Gau Sampurna's Cattle Health Check,
+  Market Value and Cow Dung Check 2026-11-03): six in all, content in `src/data/caseStudies.ts` (typed; every public statistic
   has a `source` id pointing at a verified URL), one statically generated page per slug at
   `/case-studies/<slug>` (`src/app/case-studies/[slug]/page.tsx` + `CaseStudy.module.css`). The Case
   Studies window lists them as feature cards (the "Products I've shipped" list was removed on 2026-11-01),
@@ -310,8 +311,11 @@ Measured from the apps' own source on 2026-10-22; follow this for any new protot
   0 and the last card got squeezed. Set `flex-shrink: 0` (also applied to the Kissan flows).
 - [ ] Experience's "Kissan & Gau Sampurna" group still opens only the Kissan prototype; consider a
   second pill for Gau.
-- [ ] Gau sample catalogue: Bio Bloom, Nitro Power and Micro Nutri names/prices were inferred from
-  image file names; confirm or replace with real catalogue data.
+- [x] Gau sample catalogue (2026-11-03): the inferred Bio Bloom, Nitro Power and Micro Nutri were replaced by the
+  app's real products from `assets/data/product.js` (Dairy Fortune, Gau Dip & Dip Cup, Trans Fortune, Immune
+  Fortune; images from the app's public product bucket); ratings and review counts are sample values.
+- [ ] Gau prototype's My Herd shows herd statuses and a weekly dung-scan prompt, which the 3 Nov 2026 marketing
+  brief lists as planned (not to be advertised yet). Owner to decide whether the public prototype keeps them.
 
 ## Analytics
 
@@ -366,6 +370,24 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 
 ## Changelog
 
+- 2026-11-03: **Three Gau Sampurna case studies** (owner sent the Gau Sampurna marketing brief: "add case studies about
+  reports and features"): `/case-studies/cattle-health` (Disease Diagnosis + 360° Full Health: 31 conditions in 8 body
+  systems, detected / suspected / not assessable, vet line never paywalled), `/case-studies/market-value` (price range,
+  breed purity C–A1, udder-not-detected and breed fallback, shared analysis with Animal Status) and
+  `/case-studies/dung-check` (1–5 manure score with 3 healthy, feed fix, call-a-vet signs). Facts from the prod repo
+  (`_external/gausampurna-app-prod`, read-only: parsers, scan types, purity ranges) and the brief's can/can't-say
+  rules: no prices or trial terms, value and milk as estimates, no "replaces a vet", BCS and weight kept out of the
+  lead, no planned features. Sources checked on the web: WOAH 2018 (72,000 vets needed, 43,000 available), Bangar
+  2015 (46% subclinical mastitis), Rajya Sabha reply via Outlook (1,55,366 LSD deaths, 2022), PIB Sep 2025 (8 crore
+  farmers, 303.76 M bovines), Sudeep Kumar 2014 (secret code words, brokers, 57.7% of cow value from visible traits),
+  NDDB (feed 70–75% of milk cost; ration balancing −11.8% feed cost/kg, +0.27 kg milk), MSU Extension (manure 1–5, 3
+  ideal). Outcomes use only resume facts (250K+ installs and 25K+ MAU combined; 2.4% → 7.2% onboarding-to-trial,
+  both apps). Screens captured from the desktop prototype at 2× into `public/case-studies/<slug>/` (~2.1 MB), full
+  reports stitched, callouts measured from the DOM. Template: `anatomy.title`, Gau prototype id, dairy persona icons
+  (Herd, Milk, Feed, Market, Money, Language). Gau product catalogue fixed (see backlog). Verified 1440 and 393, no
+  overflow or errors; `next build` prerenders all six. **Owner to confirm:** 31 conditions (resume says
+  20+), "a vision pipeline I integrated with the engineering and data science teams", composite personas, and that
+  the brief's facts may be public. Committed and pushed to `dev` and `prod`.
 - 2026-11-03: **Resume updated to the owner's new LaTeX source** (XCharter version): new wording throughout ("consumer
   mobile apps", shorter bullets, product lines in parentheses, Domains "Consumer Mobile Apps (B2C)"), Summary as its own
   section, Education moved after Beyond Work, a second gold rule under the contact line, black product lines and blue

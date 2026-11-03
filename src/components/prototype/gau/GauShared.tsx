@@ -122,15 +122,15 @@ export function useToast(ms = 1800) {
   return { show: setText, node };
 }
 
-// Catalogue from the app's own product data (assets/data/product.js) plus the vet-pick packs
+// Catalogue from the app's own product data (assets/data/product.js): its four Gau Sampurna products,
+// with names, descriptions and images from that file; prices are its variant prices, ratings sample values
 export type Product = { id: string; title: string; desc: string; variant: string; price: number; mrp: number; rating: number; reviews: number; image: string };
 
 export const PRODUCTS: Product[] = [
   { id: "dairy-fortune", title: "Dairy Fortune", desc: "Cow Supplementary feed", variant: "10 kg", price: 2340, mrp: 3000, rating: 3.7, reviews: 9, image: "prod-dairy-fortune.webp" },
-  { id: "bio-bloom", title: "Bio Bloom", desc: "Udder & teat care", variant: "500 ml", price: 449, mrp: 560, rating: 4.4, reviews: 128, image: "prod-bio-bloom.webp" },
-  { id: "nitro-power", title: "Nitro Power", desc: "Energy for milking cows", variant: "1 kg", price: 690, mrp: 850, rating: 4.2, reviews: 86, image: "prod-nitro-power.webp" },
-  { id: "micro-nutri", title: "Micro Nutri", desc: "Mineral mixture", variant: "1 kg", price: 299, mrp: 380, rating: 4.5, reviews: 212, image: "prod-micro-nutri.webp" },
-  { id: "immune-fortune", title: "Immune Fortune", desc: "Animal immunity booster", variant: "500 ml", price: 2340, mrp: 3000, rating: 3.7, reviews: 9, image: "prod-generic.webp" },
+  { id: "gau-dip", title: "Gau Dip & Dip Cup", desc: "Teat disinfectant dip", variant: "500 ml", price: 1200, mrp: 1500, rating: 4.4, reviews: 128, image: "prod-gau-dip.webp" },
+  { id: "trans-fortune", title: "Trans Fortune", desc: "Transition cow supplement", variant: "1 kg", price: 1200, mrp: 1500, rating: 4.2, reviews: 86, image: "prod-trans-fortune.webp" },
+  { id: "immune-fortune", title: "Immune Fortune", desc: "Animal immunity booster", variant: "500 ml", price: 3000, mrp: 4000, rating: 4.5, reviews: 212, image: "prod-immune-fortune.webp" },
 ];
 
 export const rupee = (n: number) => `₹${n.toLocaleString("en-IN")}`;

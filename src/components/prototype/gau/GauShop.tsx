@@ -149,7 +149,7 @@ function SearchScreen({ back, go }: ScreenProps) {
   const results = useMemo(() => {
     const s = q.trim().toLowerCase();
     if (!s) return [];
-    return PRODUCTS.filter((p) => `${p.title} ${p.desc}`.toLowerCase().includes(s) || (s === "milk" && p.id !== "bio-bloom"));
+    return PRODUCTS.filter((p) => `${p.title} ${p.desc}`.toLowerCase().includes(s) || (s === "milk" && p.id !== "gau-dip"));
   }, [q]);
   return (
     <div className={u.screen}>
@@ -814,8 +814,8 @@ function Confirmation({ go, goToFlow }: ScreenProps) {
 
 const ORDERS = [
   { id: "GS10482", date: "21 Oct", status: "Confirmed", tone: "#004691", items: [PRODUCTS[0]], total: 2106 },
-  { id: "GS10311", date: "02 Oct", status: "Shipped", tone: "#D97706", items: [PRODUCTS[3], PRODUCTS[1]], total: 670 },
-  { id: "GS10027", date: "14 Sep", status: "Delivered", tone: "#16A34A", items: [PRODUCTS[2]], total: 621 },
+  { id: "GS10311", date: "02 Oct", status: "Shipped", tone: "#D97706", items: [PRODUCTS[3], PRODUCTS[1]], total: 3780 },
+  { id: "GS10027", date: "14 Sep", status: "Delivered", tone: "#16A34A", items: [PRODUCTS[2]], total: 1080 },
 ];
 
 function MyOrders({ back, go }: ScreenProps) {

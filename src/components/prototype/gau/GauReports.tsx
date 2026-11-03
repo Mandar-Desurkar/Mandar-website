@@ -707,7 +707,8 @@ const SCORE_GUIDE = [
 function DungResults({ back, goToFlow }: ScreenProps) {
   const [guide, setGuide] = useState(true);
   const score = 2;
-  const dung = PRODUCTS[3];
+  // Digestion: the complete feed supplement (rumen tonics, toxin binders)
+  const dung = PRODUCTS[0];
   return (
     <div className={u.screen}>
       <div className={r.header}>
