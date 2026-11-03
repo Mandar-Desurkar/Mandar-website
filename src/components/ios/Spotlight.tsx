@@ -5,7 +5,7 @@
 // and on keywords pulled from the resume (companies, products, skills), so "CRM" finds Projects and
 // "Figma" finds Education. Return opens the first result; Esc or Cancel closes.
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { IoChevronForward, IoCloseCircle, IoSearch } from "react-icons/io5";
+import { IoChevronForward, IoCloseCircle, IoDocumentText, IoSearch } from "react-icons/io5";
 import { useWindow } from "@/context/WindowContext";
 import { experiences, profile, shippedApps, skills } from "@/data/resume";
 import { caseStudies } from "@/data/caseStudies";
@@ -83,6 +83,16 @@ export default function Spotlight({ onClose }: { onClose: () => void }) {
         href: `/case-studies/${c.slug}`,
         run: () => trackEvent("Opened Case Study", { slug: c.slug, placement: "spotlight" }),
       })),
+      {
+        id: "resume",
+        kind: "section" as const,
+        title: "Resume",
+        subtitle: "View or download the PDF",
+        keywords: "resume cv pdf download print hire",
+        tile: <AppTile size={38} colors={["#FF6B5E", "#E5312B"]} glyph={<IoDocumentText size="54%" />} />,
+        href: profile.resumeUrl,
+        run: () => trackEvent("Opened Resume", { placement: "spotlight" }),
+      },
       ...SECTION_APPS.map((app) => ({
         id: app.id,
         kind: "section" as const,

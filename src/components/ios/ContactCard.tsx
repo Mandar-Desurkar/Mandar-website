@@ -70,6 +70,10 @@ export default function ContactCard() {
           <span className={styles.rowLabel}>LinkedIn</span>
           <span className={styles.rowValue}>{linkedinHandle}</span>
         </a>
+        <a href={profile.resumeUrl} className={styles.row} onClick={() => trackEvent("Opened Resume", { placement: "contact_card" })}>
+          <span className={styles.rowLabel}>resume</span>
+          <span className={styles.rowValue}>View or download PDF</span>
+        </a>
         <div className={styles.row}>
           <span className={styles.rowLabel}>location</span>
           <span className={`${styles.rowValue} ${styles.plain}`}>{profile.location}</span>

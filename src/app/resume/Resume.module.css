@@ -18,8 +18,8 @@
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  height: 48px;
-  padding: 0 8px;
+  height: calc(48px + env(safe-area-inset-top));
+  padding: env(safe-area-inset-top) max(8px, env(safe-area-inset-right)) 0 max(8px, env(safe-area-inset-left));
   background: #323639;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
   font-size: 13px;
@@ -136,7 +136,7 @@
 /* Phones: the pages fit the width (pinch to zoom), and the toolbar keeps what fits */
 @media (max-width: 599.98px) {
   .canvas {
-    padding: 8px 8px 24px;
+    padding: 8px 8px calc(24px + env(safe-area-inset-bottom));
   }
 
   .pages {
@@ -160,26 +160,30 @@
 }
 
 /* ---------- The paper ----------
-   Matched to the owner's LaTeX template (US Letter, Linux Libertine): 11pt text on 13.75pt lines, 14.4pt
-   headings, a 32pt name, navy for the name, headings and product lines, a gold rule under the name and each
-   heading, entries indented 11pt and dashes 21pt. Measured from the template's PDF. */
+   Translated from the owner's LaTeX source (article 11pt, XCharter, US Letter). Margins 0.45in top/left and
+   0.5in right/bottom; 11pt text on 13.6pt lines; a 30pt name; \Large (14.4pt) bold headings; accent blue for
+   the name, headings and entry titles; a gold 0.6pt rule under the name, the contact line and each heading;
+   entries 0.15in in, list text at 0.42in with the dash 0.6em before it; ragged right, never hyphenated.
+   Vertical gaps are LaTeX's baseline-to-baseline distances minus one 13.6pt line, worked out from its
+   spacing rules (\vspace, topsep, itemsep, titlespacing, and the 1pt \lineskip between kept minipages). */
 
 .page {
-  --ink: #1b1b1b;
-  --navy: #2c5a8c;
-  --gold: #cdb27e;
+  --ink: #000;
+  --accent: #1f4e79;
+  --gold: #b49a5e;
   position: relative;
   flex-shrink: 0;
   width: 8.5in;
   height: 11in;
-  padding: 0.41in 0.36in 0.4in 0.45in;
+  padding: 0.45in 0.5in 0.5in 0.45in;
   overflow: hidden;
   background: #fff;
   color: var(--ink);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35), 0 0 1px rgba(0, 0, 0, 0.4);
   font-size: 11pt;
-  line-height: 1.25;
+  line-height: 13.6pt;
   text-align: left;
+  hyphens: manual;
   font-kerning: normal;
   font-variant-ligatures: common-ligatures;
 }
@@ -187,12 +191,19 @@
 /* globals.css forces the system font on every element; the page keeps its book face */
 .page,
 .page * {
-  font-family: var(--font-resume), var(--font-resume-arrow), "Times New Roman", Times, serif !important;
+  font-family: var(--font-resume-symbols), var(--font-resume), "Times New Roman", Times, serif !important;
 }
 
 .page strong {
   font-weight: 700;
-  color: #000;
+}
+
+.nobreak {
+  white-space: nowrap;
+}
+
+.plus {
+  margin: 0 -0.0835em; /* 1em → Charter's 0.833em */
 }
 
 .page a {
@@ -215,56 +226,67 @@
   text-align: center;
 }
 
+/* The name's baseline sits 22pt below the top margin, its ascender height, as on LaTeX's first line */
 .name {
-  font-size: 32pt;
+  margin-top: -6.25pt !important;
+  font-size: 30pt;
   font-weight: 400;
-  line-height: 1;
-  color: var(--navy);
+  line-height: 34pt;
+  color: var(--accent);
 }
 
 .rule {
   height: 0;
-  margin: 2pt 0 0;
+  margin: 2.35pt 0 0;
   border: 0;
   border-top: 0.6pt solid var(--gold);
 }
 
 .contact {
-  margin-top: 13pt !important;
+  margin-top: 9.15pt !important;
+}
+
+.ruleBelow {
+  margin-top: 9.75pt;
 }
 
 .sep {
-  margin: 0 1.05em;
+  margin: 0 1em; /* \quad-\quad */
 }
 
-.summary {
-  margin-top: 18pt !important;
-  text-align: justify;
-  hyphens: auto;
-}
-
-.page .lead {
-  color: var(--navy);
-}
-
+/* Headings: 12pt above (\titlespacing), the gold rule 2.4pt under the baseline, 6pt below it */
 .section h2 {
-  margin: 13.5pt 0 0 !important;
-  padding-bottom: 1pt;
+  margin: 11.9pt 0 0 !important;
   border-bottom: 0.6pt solid var(--gold);
   font-size: 14.4pt;
   font-weight: 700;
-  line-height: 1.2;
-  color: var(--navy);
+  line-height: 16pt;
+  color: var(--accent);
 }
 
-/* Entries sit 11pt in from the headings, as the template sets them */
+.afterText h2 {
+  margin-top: 13.9pt !important;
+}
+
+.head + .section h2 {
+  margin-top: 11.15pt !important;
+}
+
+.summary {
+  margin-top: 3.1pt !important;
+}
+
+/* Entries sit 0.15in in from the headings */
 .entry {
-  margin-top: 9pt;
-  padding-left: 11pt;
+  padding-left: 0.15in;
+}
+
+.section h2 + .entry {
+  margin-top: 10.5pt;
 }
 
 .entry + .entry {
-  margin-top: 6pt;
+  margin-top: 5pt;
 }
 
 .entryHead {
@@ -272,7 +294,10 @@
   justify-content: space-between;
   gap: 12pt;
   font-weight: 700;
-  color: #000;
+}
+
+.entryHead span:first-child {
+  color: var(--accent);
 }
 
 .entryHead span:last-child {
@@ -285,30 +310,33 @@
 }
 
 .bar {
-  margin: 0 0.9em;
-  font-style: normal;
+  margin: 0 1em; /* \quad|\quad */
 }
 
+/* Product groups: 6pt under the entry title; each later group is its own kept block, a little closer */
 .group {
   margin-top: 6pt;
 }
 
-.groupTitle {
-  margin-bottom: 2.5pt !important;
-  font-weight: 700;
-  color: var(--navy);
+.group + .group {
+  margin-top: 3.6pt;
 }
 
-/* A continued entry opens straight on its product line, with no extra space */
+.groupTitle {
+  margin-bottom: 3pt !important; /* the list's topsep */
+  font-weight: 700;
+}
+
+/* A continued entry opens page 2 straight on its product line */
 .page > .entry:first-child {
   margin-top: 0;
 }
 
 .page > .entry:first-child > .group:first-child {
-  margin-top: 0;
+  margin-top: 3.1pt;
 }
 
-/* Dashes, not discs, 21pt in, with the text hung 10pt after them */
+/* Dashes, not discs: text at 0.42in from the margin, the dash ending 0.6em before it */
 .page ul {
   padding-left: 0;
   list-style: none;
@@ -316,24 +344,22 @@
 
 .page li {
   position: relative;
-  padding-left: 20pt;
-  text-align: justify;
-  hyphens: auto;
+  padding-left: 0.27in;
 }
 
 .page li + li {
-  margin-top: 0.6pt;
+  margin-top: 1.5pt; /* itemsep */
 }
 
 .page li::before {
   content: "-";
   position: absolute;
-  left: 10pt;
+  left: 0.1294in;
 }
 
-/* Skills run flush with the headings, a little closer under the rule */
+/* Skills run flush with the headings, 3pt apart */
 .skills {
-  margin-top: 9pt;
+  margin-top: 3.1pt;
 }
 
 .skills p + p {

@@ -1,32 +1,37 @@
-// The resume as a PDF-style document: A4 pages on a viewer canvas, typeset like the owner's LaTeX
+// The resume as a PDF-style document: US Letter pages on a viewer canvas, typeset like the owner's LaTeX
 // resume. Server-rendered, so the text is real (searchable, selectable, crawlable); the viewer chrome
 // (zoom, page counter, download, print) is a small client component.
 import type { Metadata } from "next";
-import { Libertinus_Serif } from "next/font/google";
+import { Charis_SIL } from "next/font/google";
 import localFont from "next/font/local";
-import RichText from "@/components/RichText";
+import { Fragment } from "react";
 import ResumeViewer from "@/components/resume/ResumeViewer";
 import { resumeDocument as doc, type ResumeEntry } from "@/data/resumeDocument";
 import styles from "./Resume.module.css";
 
-// Libertinus Serif: the open continuation of Linux Libertine, the face of the owner's LaTeX template.
+// Charis SIL: SIL's extension of Bitstream Charter, the face of the owner's LaTeX resume (XCharter).
 // Only this route loads it; static weights, so the printed PDF embeds small subsets.
-const serif = Libertinus_Serif({
+const serif = Charis_SIL({
   subsets: ["latin", "latin-ext"],
-  weight: ["400", "600", "700"],
+  weight: ["400", "700"],
   style: ["normal", "italic"],
   display: "swap",
   variable: "--font-resume",
-  // No metric-matched Times fallback in the stack, so the arrow font below is what fills in for →
   adjustFontFallback: false,
 });
 
-// Google's Latin subset of Libertinus has no →, so it comes from Libertinus Math, as LaTeX's \rightarrow
-// does in the template: a 5 KB subset holding only that glyph (OFL)
-const arrow = localFont({
-  src: "../../components/resume/fonts/libertinus-math-arrow.ttf",
+// Google's Latin subset of Charis has no → or ∼ (LaTeX's \rightarrow and \sim, from its math font), so a
+// 6 KB subset of Charis supplies them, ∼ respaced to \sim's width, renamed as its licence (OFL) asks.
+// unicode-range keeps it to those two characters, so it can sit first in the stack.
+const symbols = localFont({
+  src: [
+    { path: "../../components/resume/fonts/resume-symbols-regular.ttf", weight: "400" },
+    { path: "../../components/resume/fonts/resume-symbols-bold.ttf", weight: "700" },
+  ],
   display: "swap",
-  variable: "--font-resume-arrow",
+  variable: "--font-resume-symbols",
+  declarations: [{ prop: "unicode-range", value: "U+2192, U+223C" }],
+  adjustFontFallback: false,
 });
 
 export const metadata: Metadata = {
@@ -36,9 +41,41 @@ export const metadata: Metadata = {
   alternates: { canonical: "/resume" },
 };
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+// Charis draws + a full em wide, Charter 0.83em; a negative margin narrows it while the PDF keeps the real
+// character in the same font run, so text extraction (ATS) still reads "250K+"
+function plusSigns(text: string) {
+  return text.split(/(\+)/g).map((t, k) =>
+    t === "+" ? (
+      <span key={k} className={styles.plus}>
+        +
+      </span>
+    ) : (
+      t
+    ),
+  );
+}
+
+// Bold runs as in RichText, and words joined by a hyphen never split across lines: the LaTeX sets
+// \exhyphenpenalty=10000 so ATS parsers don't read "cross-functional" as two words
+function ResumeText({ text }: { text: string }) {
+  return text.split(/\*\*(.+?)\*\*/g).map((part, i) => {
+    const words = part.split(/(\S+-\S+)/g).map((w, j) =>
+      j % 2 === 1 ? (
+        <span key={j} className={styles.nobreak}>
+          {plusSigns(w)}
+        </span>
+      ) : (
+        plusSigns(w)
+      ),
+    );
+    return i % 2 === 1 ? <strong key={i}>{words}</strong> : <Fragment key={i}>{words}</Fragment>;
+  });
+}
+
+function Section({ title, afterText, children }: { title: string; afterText?: boolean; children: React.ReactNode }) {
+  // afterText: the heading follows running text rather than a kept block, which LaTeX spaces 2pt wider
   return (
-    <section className={styles.section}>
+    <section className={`${styles.section} ${afterText ? styles.afterText : ""}`}>
       <h2>{title}</h2>
       {children}
     </section>
@@ -62,7 +99,7 @@ function Entry({ entry, from = 0, to, continued }: { entry: ResumeEntry; from?: 
           <ul>
             {g.bullets.map((b) => (
               <li key={b}>
-                <RichText text={b} />
+                <ResumeText text={b} />
               </li>
             ))}
           </ul>
@@ -75,8 +112,9 @@ function Entry({ entry, from = 0, to, continued }: { entry: ResumeEntry; from?: 
 export default function ResumePage() {
   const [silo, altqube] = doc.experience;
   return (
-    <ResumeViewer className={`${serif.variable} ${arrow.variable}`} pages={2}>
-      {/* Page 1: who, education and the first three Silo Fortune groups; the page breaks where the LaTeX one does */}
+    <ResumeViewer className={`${serif.variable} ${symbols.variable}`} pages={2}>
+      {/* Page 1: header, summary and the first three Silo Fortune groups; LaTeX keeps each group whole, so the
+          Rider App group doesn't fit and opens page 2 */}
       <article className={styles.page} data-page="1" aria-label="Page 1">
         <header className={styles.head}>
           <h1 className={styles.name}>{doc.name}</h1>
@@ -87,7 +125,7 @@ export default function ResumePage() {
                 {i > 0 && <span className={styles.sep} aria-hidden="true">-</span>}
                 {c.href ? (
                   <a href={c.href} target={c.href.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer">
-                    {c.label}
+                    {plusSigns(c.label)}
                   </a>
                 ) : (
                   c.label
@@ -95,11 +133,30 @@ export default function ResumePage() {
               </span>
             ))}
           </p>
+          <hr className={`${styles.rule} ${styles.ruleBelow}`} />
         </header>
 
-        <p className={styles.summary}>
-          <strong className={styles.lead}>Summary —</strong> <RichText text={doc.summary} />
-        </p>
+        <Section title="Summary">
+          <p className={styles.summary}>
+            <ResumeText text={doc.summary} />
+          </p>
+        </Section>
+
+        <Section title="Experience" afterText>
+          <Entry entry={silo} to={3} />
+        </Section>
+      </article>
+
+      {/* Page 2: the rest of Silo Fortune, AltQube (still under Experience), Beyond Work, Education, Skills */}
+      <article className={styles.page} data-page="2" aria-label="Page 2">
+        <Entry entry={silo} from={3} continued />
+        <Entry entry={altqube} />
+
+        <Section title="Beyond Work">
+          {doc.beyondWork.map((b) => (
+            <Entry key={b.title} entry={b} />
+          ))}
+        </Section>
 
         <Section title="Education">
           {doc.education.map((e) => (
@@ -120,27 +177,11 @@ export default function ResumePage() {
           ))}
         </Section>
 
-        <Section title="Experience">
-          <Entry entry={silo} to={3} />
-        </Section>
-      </article>
-
-      {/* Page 2: the last Silo Fortune group, AltQube (still under Experience), Beyond Work and Skills */}
-      <article className={styles.page} data-page="2" aria-label="Page 2">
-        <Entry entry={silo} from={3} continued />
-        <Entry entry={altqube} />
-
-        <Section title="Beyond Work">
-          {doc.beyondWork.map((b) => (
-            <Entry key={b.title} entry={b} />
-          ))}
-        </Section>
-
-        <Section title="Skills">
+        <Section title="Skills" afterText>
           <div className={styles.skills}>
             {doc.skills.map((s) => (
               <p key={s.label}>
-                <strong>{s.label}:</strong> {s.items}
+                <strong>{s.label}:</strong> <ResumeText text={s.items} />
               </p>
             ))}
           </div>

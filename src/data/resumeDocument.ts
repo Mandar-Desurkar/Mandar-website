@@ -1,7 +1,7 @@
-// The resume as it reads in the owner's LaTeX source (exported to HTML on 2026-11-02), rendered as a
+// The resume as it reads in the owner's LaTeX source (XCharter version, received 2026-11-03), rendered as a
 // PDF-style document at /resume and printed to public/Mandar_Desurkar_Resume.pdf.
-// Keep the wording identical to the LaTeX file; `**text**` renders bold. The four product-group headings
-// under Silo Fortune were lost in the HTML export, so they come from `experiences` in resume.ts.
+// Keep the wording identical to the LaTeX file; `**text**` renders bold. LaTeX's `\,` (Rs.\,1, 5\,km) is a
+// thin space (U+2009) here, and `$\sim$` is ∼.
 // After editing, regenerate the PDF (see "Resume" in docs/PROJECT_CONTEXT.md).
 
 export type ResumeGroup = { title?: string; bullets: string[] };
@@ -19,54 +19,47 @@ export const resumeDocument = {
     { label: "Bangalore" },
   ],
   summary:
-    "Associate Product Manager with 2.5+ years of experience owning **AI-powered 0→1 products** with cross-functional teams, from product strategy, PRDs and roadmaps to launch, growth and monetization. Grew two agritech apps to a combined **250K+ installs**, **tripled trial conversion** through funnel optimization, and shipped **computer vision** disease diagnosis and livestock valuation, satellite farm monitoring, and a crop recommendation engine. Built the CRM and last-mile stack behind **Rs. 1 Cr+ of sales a month**.",
-  education: [
-    {
-      school: "M. S. Ramaiah Institute of Technology, Bangalore",
-      period: "01/2021 - 07/2025",
-      detail: "B.E. in Information Science and Engineering | CGPA: 8.30",
-    },
-  ],
+    "Associate Product Manager with 2.5+ years of experience owning **AI-powered 0→1 products** with cross-functional teams, from product strategy, PRDs and roadmaps to launch, growth and monetization. Grew two consumer mobile apps to a combined **250K+ installs**, **tripled trial conversion** through funnel optimization, and shipped **computer vision** disease diagnosis and livestock valuation, satellite farm monitoring, and a crop recommendation engine. Built the CRM and last-mile stack behind **Rs. 1 Cr+ of sales a month**.",
   experience: [
     {
       title: "Associate Product Manager - Silo Fortune Private Limited",
       period: "09/2025 - Present",
       groups: [
         {
-          title: "Kissan Sampurna & Gau Sampurna Apps: 0→1 Launch & AI Features",
+          title: "Kissan Sampurna & Gau Sampurna Apps (0→1 Launch & AI Features)",
           bullets: [
-            "Led the launch of two farmer apps with a **15-person team** (Engineering, Design, Data Science) to **250K+ combined installs** and 25K+ MAU, and designed the V1 UI/UX hands-on in Figma, from user flows to developer-ready screens.",
-            "**Shipped AI-powered satellite monitoring**, enabling farmers to geotag field boundaries on smartphones to track crop health (via vegetation indices), disease risks, and irrigation needs across their entire farm in **13 languages**, peaking at **9.8K+ MAU** and **1.6K+ DAU**.",
-            "Architected a no-code **crop recommendation engine** that ranks each farmer's **top 5 of 100+ crops** across **655K+ farm profiles** by climate zone, soil, budget, and rotation, reaching **7.7K+ MAU** at peak.",
-            "Integrated **computer vision models** that diagnose crop diseases with their **severity stage** and **20+ cattle diseases** from one photo, and estimate cattle price, BCS, and dung score; crop diagnosis peaked at **4.8K+ MAU**.",
+            "Led a **15-person team** (Engineering, Design, Data Science) to launch two farmer apps to **250K+ combined installs** and 25K+ MAU, and designed the V1 UI/UX hands-on in Figma, from user flows to developer-ready screens.",
+            "**Shipped AI-powered satellite farm monitoring** in **13 languages**: farmers geotag field boundaries on their phone to track crop health (vegetation indices), disease risk, and irrigation needs; peaked at **9.8K+ MAU** and **1.6K+ DAU**.",
+            "Architected a no-code **crop recommendation engine** ranking each farmer's **top 5 of 100+ crops** across **655K+ farm profiles** by climate zone, soil, budget, and rotation; peaked at **7.7K+ MAU**.",
+            "Integrated **computer vision** for one-photo diagnosis of crop diseases (with **severity stage**) and **20+ cattle diseases**, plus cattle price, BCS, and dung score estimates; crop diagnosis peaked at **4.8K+ MAU**.",
             "Grew both apps into a one-stop farmer platform with a **32+ SKU** marketplace, weather alerts, and market price forecasts.",
           ],
         },
         {
-          title: "Kissan Sampurna & Gau Sampurna Apps: Growth & Monetization",
+          title: "Kissan Sampurna & Gau Sampurna Apps (Growth & Monetization)",
           bullets: [
-            "Defined the **freemium monetization model**, keeping core advisory free to drive adoption while gating AI diagnostics behind a paid subscription.",
-            "Restructured onboarding using Amplitude drop-off funnel analytics, lifting install-to-signup conversion by **3%**.",
-            "**Tripled onboarding-to-trial conversion (2.4% → 7.2%)** with redesigned paywalls and behaviour-triggered engagement nudges, and raised trial-to-paid **from 27% to 30%**.",
+            "Defined the **freemium monetization model**: free core advisory to drive adoption, with AI diagnostics behind a paid subscription.",
+            "Restructured onboarding from Amplitude funnel drop-offs, lifting install-to-signup conversion by **3%**.",
+            "**Tripled onboarding-to-trial conversion (2.4% → 7.2%)** with redesigned paywalls and behaviour-triggered nudges, and raised trial-to-paid **from 27% to 30%**.",
           ],
         },
         {
           title: "Internal Sales CRM & Telecalling Platform",
           bullets: [
-            "Delivered a 0→1 in-house CRM replacing legacy Excel tracking for **150+ telecallers**, now powering **Rs. 1 Cr+ in monthly sales** across **130K+ leads/month**.",
-            "Automated lead capture from D2C web and app channels for the **32+ SKU** catalog, following each customer from first touchpoint to repeat purchase.",
-            "Engineered **rule-based lead routing** by agent language, region, and lead source, matching every farmer with a local, same-language agent to sustain **9% lead-to-sale conversion**.",
-            "Integrated Exotel click-to-call, auto-call recording, and automated WhatsApp follow-up flows, eliminating manual dialing and **saving 6,000+ agent-hours/month** (~40 hours/agent).",
+            "Delivered a 0→1 in-house CRM replacing Excel for **150+ telecallers**, now handling **130K+ leads** and **Rs. 1 Cr+ in sales a month**.",
+            "Automated lead capture from D2C web and app for the **32+ SKU** catalog, following each customer from first touchpoint to repeat purchase.",
+            "Engineered **rule-based lead routing** by language, region, and source, pairing each farmer with a local, same-language agent to sustain **9% lead-to-sale conversion**.",
+            "Integrated Exotel click-to-call, call recording, and automated WhatsApp follow-ups, ending manual dialing and **saving 6,000+ agent-hours/month** (∼40/agent).",
           ],
         },
         {
-          title: "Sampurna Rider App & Outlet ERP: Last-Mile Logistics & Operations",
+          title: "Sampurna Rider App & Outlet ERP (Last-Mile Logistics & Operations)",
           bullets: [
-            "Drove the 0→1 build of a custom rider app and outlet ERP, from PRD to UI/UX prototypes, replacing manual order fulfillment with end-to-end tracking from CRM sale to doorstep delivery.",
-            "Architected serviceability-based order routing across **98 outlets in 4 states**, while piloting algorithmic rider assignment to eliminate manual order allocation by outlet managers.",
-            "Deployed the rider mobile app to **100+ in-house riders** handling **9K+ deliveries/month**, with in-app map navigation, photo + 4-digit OTP proof of delivery, and instant SMS/WhatsApp updates.",
-            "Digitized doorstep payment collection via cash and dynamic in-app UPI QR codes, reconciling **Rs. 3L+ in daily collections** against delivered orders.",
-            "Designed a closed-loop delivery disposition flow escalating cancellations and postponements back to the CRM for verification, **cutting order cancellations by ~8%** and lifting deliveries per rider.",
+            "Drove the 0→1 build of a rider app and outlet ERP from PRD to UI/UX prototypes, replacing manual fulfillment with end-to-end tracking from CRM sale to doorstep.",
+            "Architected serviceability-based order routing across **98 outlets in 4 states**, and piloted algorithmic rider assignment to remove manual allocation by outlet managers.",
+            "Deployed the rider app to **100+ in-house riders** handling **9K+ deliveries/month**, with map navigation, photo + OTP proof of delivery, and instant SMS/WhatsApp updates.",
+            "Digitized doorstep payments (cash and dynamic UPI QR), reconciling **Rs. 3L+ in daily collections** against delivered orders.",
+            "Designed a closed-loop disposition flow escalating cancellations and postponements to the CRM for verification, **cutting cancellations by ∼8%** and lifting deliveries per rider.",
           ],
         },
       ],
@@ -77,10 +70,10 @@ export const resumeDocument = {
       groups: [
         {
           bullets: [
-            "Launched a 0→1 hyper-personalized wealth management platform (web & mobile) with a **15-member cross-functional team** of engineers, designers, data scientists, and economists, scaling AUM past **Rs. 1 Cr**.",
-            "Owned V1 product design end-to-end in Figma, taking **80+ screens** from research-backed user flows and wireframes to high-fidelity interactive prototypes.",
-            "Co-developed a SEBI-compliant **AI recommendation engine** analyzing **12+ investor parameters** (risk tolerance, financial goals, behavioral patterns) to deliver real-time portfolio suggestions in the “Build Your Own Portfolio” feature.",
-            "Unlocked direct in-app investing by connecting **9 fintech partners** (Razorpay, Signzy, CAMS, KFintech, CVL, MF Central and 3 others) and **42 AMCs**, documenting **40+ APIs** across equity execution, mutual fund processing, and e-KYC.",
+            "Launched a 0→1 hyper-personalized wealth management platform (web & mobile) with a **15-member team** of engineers, designers, data scientists, and economists, scaling AUM past **Rs. 1 Cr**.",
+            "Owned V1 product design end-to-end in Figma: **80+ screens** from research-backed user flows and wireframes to high-fidelity interactive prototypes.",
+            "Co-developed a SEBI-compliant **AI recommendation engine** using **12+ investor parameters** (risk tolerance, goals, behaviour) for real-time portfolio suggestions in “Build Your Own Portfolio”.",
+            "Unlocked in-app investing by connecting **9 fintech partners** (Razorpay, Signzy, CAMS, KFintech, CVL, MF Central +3) and **42 AMCs**, documenting **40+ APIs** for equities, mutual funds, and e-KYC.",
           ],
         },
       ],
@@ -93,7 +86,7 @@ export const resumeDocument = {
       groups: [
         {
           bullets: [
-            "Competed professionally for **7+ years**, representing India at the **World Open Water Championships 2018** (Israel) in the 5 km event against 200+ elite athletes from 50+ countries.",
+            "Competed professionally for **7+ years**, representing India at the **World Open Water Championships 2018** (Israel) in the 5 km event against 200+ elite athletes from 50+ countries.",
             "Led the **Indian National Relay Team** at international competition.",
             "Won **3 National Gold**, 2 Silver, and 1 Bronze medals in open water swimming.",
           ],
@@ -101,6 +94,13 @@ export const resumeDocument = {
       ],
     },
   ] as ResumeEntry[],
+  education: [
+    {
+      school: "M. S. Ramaiah Institute of Technology, Bangalore",
+      period: "01/2021 - 07/2025",
+      detail: "B.E. in Information Science and Engineering | CGPA: 8.30",
+    },
+  ],
   skills: [
     {
       label: "Product & UX",
@@ -112,7 +112,7 @@ export const resumeDocument = {
     {
       label: "Domains",
       items:
-        "FinTech & WealthTech, AgriTech & Dairy-tech, CRM & Sales Platforms, ERP & Last-Mile Delivery, AI/Computer Vision Features",
+        "FinTech & WealthTech, Consumer Mobile Apps (B2C), CRM & Sales Platforms, ERP & Last-Mile Delivery, AI/Computer Vision Features",
     },
   ],
 };

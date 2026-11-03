@@ -32,14 +32,19 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
 - **First visit (desktop, 2026-11-02):** a Mission Control overview of every window (`MissionControl.tsx`)
   that tours them automatically in grid order, then opens About Me; later visits reach it from the menu
   bar's Show all windows button, with hover peeks only.
-- **Resume (2026-11-02):** `/resume` shows the owner's LaTeX resume as a PDF-style document: two US Letter
-  pages styled after the owner's LaTeX template (Libertinus Serif, navy + gold, pt/in sizing) on a grey viewer with a dark toolbar (back, file name, page n / 2, zoom −/+/
-  fit, download, print); phones fit the page width and pinch-zoom. Text is real and copyable (NoInspect lets
+- **Resume (2026-11-02, re-typeset 2026-11-03):** `/resume` shows the owner's LaTeX resume as a PDF-style document: two US
+  Letter pages following the owner's XCharter LaTeX source (Charis SIL, SIL's Charter, via next/font; accent `#1F4E79`, gold
+  `#B49A5E`; 0.45/0.5in margins; order Summary → Experience → Beyond Work → Education → Skills) on a grey viewer with a
+  dark toolbar (back, file name, page n / 2, zoom −/+/fit, download, print); phones fit the page width and pinch-zoom.
+  → and ∼ come from a 6 KB renamed Charis subset (`components/resume/fonts/resume-symbols-*.ttf`, unicode-range); `+` is
+  narrowed to Charter's width with CSS (`.plus`), kept in the main font so PDF text extraction reads "250K+"; hyphenated
+  words never wrap (the LaTeX forbids breaks at hyphens). Page break: after the CRM group (each group is a LaTeX `keep`;
+  if content changes, re-check which groups fit on page 1). Text is real and copyable (NoInspect lets
   copy and right-click through inside `[data-allow-copy]`). Content: `src/data/resumeDocument.ts`, word for
-  word from the LaTeX export (the four Silo group headings, lost in that export, come from `resume.ts`).
-  Download serves `public/Mandar_Desurkar_Resume.pdf` (79 KB). **After changing the resume, regenerate
+  word from the LaTeX source. Download serves `public/Mandar_Desurkar_Resume.pdf` (95 KB). **After changing the resume, regenerate
   the PDF:** open `/resume` in Chrome → Print → Save as PDF (paper Letter, margins none, background graphics
-  on), save over that file. Linked from About Me ("View resume", new tab) and the phone hero ("View Resume").
+  on), save over that file. Linked from About Me ("View resume", new tab), the phone hero ("View Resume"), phone
+  Search (a "Resume" result) and the phone Contact card (a "resume" row).
 - **Case studies** (2026-10-30; Farm Monitoring added 2026-10-31, AI Crop Doctor 2026-11-01): content in `src/data/caseStudies.ts` (typed; every public statistic
   has a `source` id pointing at a verified URL), one statically generated page per slug at
   `/case-studies/<slug>` (`src/app/case-studies/[slug]/page.tsx` + `CaseStudy.module.css`). The Case
@@ -361,6 +366,18 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 
 ## Changelog
 
+- 2026-11-03: **Resume updated to the owner's new LaTeX source** (XCharter version): new wording throughout ("consumer
+  mobile apps", shorter bullets, product lines in parentheses, Domains "Consumer Mobile Apps (B2C)"), Summary as its own
+  section, Education moved after Beyond Work, a second gold rule under the contact line, black product lines and blue
+  entry titles, ragged right with no hyphenation. Spacing translated from the LaTeX rules (no TeX on this machine to
+  compile it, so not pixel-checked against a real PDF). Page 1 now holds three Silo groups, page 2 starts at Rider App.
+  PDF regenerated (2 Letter pages, 95 KB, Charis + symbol subsets, 4 live links; text extracts "250K+", "Rs. 1 Cr+").
+  Libertinus fonts removed. Site content (`resume.ts`) not changed. Uncommitted.
+- 2026-11-02: Resume on phones (owner asked): the phone About already linked it; added a "Resume" result to
+  phone Search (`ios/Spotlight.tsx`, red document tile) and a "resume · View or download PDF" row on the
+  Contact card (`ios/ContactCard.tsx`, `Opened Resume` placement `contact_card`). The viewer's toolbar and
+  canvas now pad for the iPhone notch and home indicator (`env(safe-area-inset-*)`). Checked at 393 × 852:
+  both entry points link to `/resume`, pages fit the width, no sideways scroll. Uncommitted.
 - 2026-11-02: **Resume restyled to the owner's LaTeX template** (owner sent its PDF: take the font, sizes,
   colours and spacing, not the content). Libertinus Serif (open continuation of Linux Libertine) via
   next/font; the → comes from a 5 KB Libertinus Math subset (`components/resume/fonts/`), since Google's
