@@ -332,25 +332,21 @@ function Home({ goToFlow }: ScreenProps) {
               </span>
             ))}
           </div>
+          {/* One cow, one line (my-herd-section.jsx priority ladder): the most urgent cow wins, here P0, a
+              critical scan result. Showing every cow with a badge left the farmer to work out who needed them. */}
           <div className={h.cows}>
-            {HERD.map((c, i) => (
-              <button key={c.name} type="button" className={`${u.btnReset} ${h.cowCard} ${i === 0 ? u.hotspot : ""}`} onClick={() => goToFlow("gs-herd", "gs-cow-details")}>
-                <span className={h.cowThumb}>
-                  <img src={gimg(c.image)} alt="" />
-                </span>
-                <span className={h.cowInfo}>
-                  <b>{c.name}</b>
-                  <span>{c.age}</span>
-                  <span>{c.breed}</span>
-                </span>
-                <span className={h.status} style={STATUS_STYLE[c.status]}>
-                  {c.status}
-                </span>
-                <span className={h.chev}>
-                  <ChevronRight size={20} />
-                </span>
-              </button>
-            ))}
+            <button type="button" className={`${u.btnReset} ${h.cowCard} ${u.hotspot}`} onClick={() => goToFlow("gs-herd", "gs-cow-details")}>
+              <span className={h.cowThumb}>
+                <img src={gimg(HERD[0].image)} alt="" />
+              </span>
+              <span className={h.cowInfo}>
+                <b>{HERD[0].name}</b>
+                <span className={h.cowLine}>Critical result — open her report today</span>
+              </span>
+              <span className={h.chev}>
+                <ChevronRight size={20} />
+              </span>
+            </button>
           </div>
         </div>
 

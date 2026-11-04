@@ -2,7 +2,8 @@
 "use client";
 
 // Kissan Sampurna Home + Weather report, recreated from the `dev` branch of kissansampurna-app:
-// code/screens/home/home-new.jsx (+ WeatherCard, QuickActions, MandiPriceCard, FarmMonitorCTA) and
+// code/screens/home/home-new.jsx (+ WeatherCard, QuickActions, MandiPriceCard, FarmMonitorCTA; header and
+// quick actions synced to `prod` e5e83f3 on 2026-11-04: avatar in the header, no Season Guide card) and
 // code/screens/weather/weather-forecast-v2-screen.jsx. Weather values are illustrative; the real
 // screen is themed per condition by the backend, shown here in its Heavy Rain (dark slate) theme.
 import { useState, type ComponentType, type ReactNode } from "react";
@@ -21,6 +22,7 @@ import {
   Clock,
   ImageIcon,
   MapPin,
+  User,
   Pill,
   Plus,
   Square,
@@ -84,18 +86,25 @@ function Home({ next, goToFlow }: ScreenProps) {
         {/* WeatherCard.jsx */}
         <div className={s.wxHero} style={{ backgroundImage: `url(${img("weather-bg.webp")})` }}>
           <div className={s.wxHeroContent}>
-            <div className={s.wxHeaderRow}>
-              <span className={s.wxLocation}>
-                <MapPin size={16} color="#196EED" />
-                <span>Hebbal, Bengaluru</span>
-                <ChevronDown size={16} />
-              </span>
-              <span className={s.wxHeaderRight}>
+            {/* Home header (WeatherCard showAccountButton): location left, the account avatar right (Account
+                left the tab bar for Shop), then the temperature row */}
+            <div className={s.homeHeader}>
+              <div className={s.wxHeaderRow}>
+                <span className={`${s.wxLocation} ${s.homeLocation}`}>
+                  <MapPin size={20} color="#fff" fill="#fff" stroke="#0B1220" strokeWidth={1.2} />
+                  <span>Hebbal, Bengaluru</span>
+                  <ChevronDown size={16} />
+                </span>
+                <span className={s.avatarBtn} aria-label="Account">
+                  <User size={18} color="#004691" strokeWidth={2.2} />
+                </span>
+              </div>
+              <span className={s.homeWeatherRow}>
                 <span className={s.wxTempRow}>
                   <RainCloud />
-                  24°C
+                  <b className={s.homeTemp}>24°C</b>
                 </span>
-                <span className={s.wxCondition}>currently light rain</span>
+                <span className={s.homeCondition}>currently light rain</span>
               </span>
             </div>
             <p className={s.wxHeadline}>Heavy rain likely on Thursday</p>
@@ -142,15 +151,6 @@ function Home({ next, goToFlow }: ScreenProps) {
                 <img src={img(a.icon)} alt="" />
               </button>
             ))}
-          </div>
-          <div className={s.seasonBanner}>
-            <span className={s.newBadge}>NEW</span>
-            <p className={s.seasonTitle}>Season Guide</p>
-            <p className={s.seasonDesc}>
-              Know your nearby water reservoir level, rainfall forecast and crop planning for the season.
-            </p>
-            <span className={s.seasonBtn}>View Now &gt;</span>
-            <img className={s.seasonImg} src={img("season-guide.webp")} alt="" />
           </div>
         </div>
 

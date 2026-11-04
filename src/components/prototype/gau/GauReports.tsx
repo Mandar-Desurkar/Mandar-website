@@ -1,30 +1,36 @@
 /* eslint-disable @next/next/no-img-element -- fixed-size mock screens inside a phone frame */
 "use client";
 
-// Gau Sampurna full reports, recreated from the `prod` branch: diagnosis-results-screen.jsx (the
-// structured 5-section /diagnose report), animal-status-report-screen.jsx (Animal Status, the
-// focused Market Value layout and the Full Health Checkup with its Status / Diseases / Nutrition
-// anchors), cow-dung-results-screen.jsx, BlurOverlay + ViewFullReportBanner (what a free user sees).
-// All values are illustrative samples.
+// Gau Sampurna full reports, recreated from the `prod` branch (synced 2026-11-04 at 5b36102):
+// diagnosis-results-screen.jsx + components/DiseaseReport.jsx (the 31-disease Gau Gopalan Seva report),
+// animal-status-report-screen.jsx (Animal Status, the focused Market Value layout and the Full Health
+// Checkup with its Status / Diseases / Nutrition anchors) and cow-dung-results-screen.jsx. Reports are
+// not a paid surface any more (scan/hooks/useReportUnlocked.js): the allowance is spent when a scan
+// starts, so nothing is blurred and there is no "Unlock Full Report" banner. Values are samples.
 import { useRef, useState, type ReactNode } from "react";
 import {
   ArrowLeft,
-  ArrowRight,
   BadgeCheck,
+  Brain,
   Bug,
   CalendarDays,
+  Camera,
+  Check,
+  CheckCircle2,
   ChevronDown,
   ChevronUp,
-  Crown,
+  Circle,
+  CircleHelp,
+  CircleMinus,
   Eye,
   Info,
   ListChecks,
-  Lock,
   Phone,
   Plus,
   Share2,
   ShieldCheck,
   Sparkles,
+  Stethoscope,
   TriangleAlert,
   Weight,
 } from "lucide-react";
@@ -47,84 +53,6 @@ function ReportHeader({ title, onBack }: { title: string; onBack: () => void }) 
       <span className={r.circle} aria-hidden="true">
         <Share2 size={17} />
       </span>
-    </div>
-  );
-}
-
-// BlurOverlay: premium content stays on the page but frosted, with the lock on top
-function Locked({ children, onUnlock, bg = "#F8FBF8" }: { children: ReactNode; onUnlock: () => void; bg?: string }) {
-  return (
-    <div className={r.locked} style={{ background: bg }}>
-      <div className={r.blurred} aria-hidden="true">
-        {children}
-      </div>
-      <button type="button" className={`${u.btnReset} ${r.unlock}`} onClick={onUnlock}>
-        <Lock size={22} color="#004691" />
-        Unlock Full Report
-      </button>
-    </div>
-  );
-}
-
-// Pro members (isGoldActive) get the same sections without the frost
-function Open({ children }: { children: ReactNode; onUnlock?: () => void; bg?: string }) {
-  return <div className={r.open}>{children}</div>;
-}
-
-// ViewFullReportBanner: collapsed bar pinned under the report, expands into the upsell
-function PremiumBanner({ onPlans }: { onPlans: () => void }) {
-  const [open, setOpen] = useState(false);
-  return (
-    <div className={r.bannerRoot}>
-      <span className={r.bannerFade} />
-      <div className={r.bannerCard}>
-        <button type="button" className={`${u.btnReset} ${r.handleRow}`} onClick={() => setOpen((o) => !o)} aria-expanded={open}>
-          <span className={r.handleLeft}>
-            <i className={r.handlePill} />
-            {!open && <small>Tap to expand</small>}
-          </span>
-          <span className={r.handleChevron} style={{ transform: open ? "rotate(180deg)" : undefined }}>
-            <ChevronUp size={18} color="#004691" />
-          </span>
-        </button>
-        {open ? (
-          <div className={r.bannerOpen}>
-            <span className={r.bannerTop}>
-              <span className={r.premiumBadge}>🔥 PREMIUM</span>
-              <span className={r.lockChip}>
-                <Lock size={11} /> Members only
-              </span>
-            </span>
-            <b>Unlock the Full Report</b>
-            <p>Free users see verdicts only. Premium members get complete recommendations, treatment plans &amp; vet guidance.</p>
-            <span className={r.perks}>
-              {["Recommendations", "Treatment plans", "Vet guidance"].map((p) => (
-                <span key={p}>
-                  <BadgeCheck size={12} /> {p}
-                </span>
-              ))}
-            </span>
-            <button type="button" className={`${u.btnReset} ${r.plansCta} ${u.hotspot}`} onClick={onPlans}>
-              <Crown size={16} /> View Plans <ArrowRight size={16} />
-            </button>
-          </div>
-        ) : (
-          <div className={r.compactBar}>
-            <span className={r.compactLeft}>
-              <i>
-                <Lock size={14} color="#004691" />
-              </i>
-              <span>
-                <small>PREMIUM ONLY</small>
-                <b>Unlock Full Report</b>
-              </span>
-            </span>
-            <button type="button" className={`${u.btnReset} ${r.compactCta}`} onClick={onPlans}>
-              View Plans <ArrowRight size={14} />
-            </button>
-          </div>
-        )}
-      </div>
     </div>
   );
 }
@@ -165,99 +93,270 @@ function Recommended({ goToFlow }: { goToFlow: ScreenProps["goToFlow"] }) {
   );
 }
 
-// ---------- 1. Disease diagnosis (diagnosis-results-screen.jsx) ----------
+// ---------- 1. Disease diagnosis (components/DiseaseReport.jsx, ui_version 1.1) ----------
+// One pass over all 31 conditions. Every condition is detected, suspected, ruled out or not assessable
+// (the photo could not show it); severity only appears on a positive finding.
 
-const INDICATORS = [
-  { name: "Udder swelling", desc: "Rear quarters look swollen and uneven in the side photo", clear: false },
-  { name: "Teat lesions", desc: "No visible cuts or scabs on the teats", clear: true },
-  { name: "Udder skin colour", desc: "Slight reddening on the rear left quarter", clear: false },
-  { name: "Body posture", desc: "Standing normally, no sign of pain while standing", clear: true },
-  { name: "Milk vein", desc: "Milk vein looks normal", clear: true },
+const TONE = { Moderate: { bg: "#FFF3E0", fg: ORANGE }, Mild: { bg: "#FFFDE7", fg: YELLOW }, Severe: { bg: "#FFEBEE", fg: RED } } as const;
+const SLATE = "#64748B";
+
+type Finding = {
+  name: string;
+  grade: keyof typeof TONE;
+  confidence?: string;
+  suspected?: boolean;
+  shows: string[];
+  why: string;
+  against?: string[];
+  urgency: string;
+  confirm: string;
+  ask: string[];
+};
+
+const FINDINGS: Finding[] = [
+  {
+    name: "Mastitis",
+    grade: "Moderate",
+    confidence: "HIGH",
+    shows: ["Rear quarters look swollen and uneven", "Reddening on the rear left quarter"],
+    why: "Swelling and asymmetry on the rear quarters, with reddened skin, match early clinical mastitis.",
+    against: ["No visible cuts or scabs on the teats"],
+    urgency: "Moderate. Treat within 24 hours to protect this lactation's milk.",
+    confirm: "Strip the first milk from each quarter into a dark cup and look for clots. A vet confirms with a CMT test and prescribes treatment; keep her milk out of the can until the withdrawal period ends.",
+    ask: ["Are there clots or flakes in her milk?", "Is the udder hot or painful to touch?", "Has her milk dropped in the last two days?"],
+  },
+  {
+    name: "Tick Infestation",
+    grade: "Mild",
+    suspected: true,
+    shows: ["Small dark spots on the udder and inner thigh that may be ticks"],
+    why: "The spots sit where ticks gather, but the photo is too far away to be sure.",
+    urgency: "Mild. Check her this week.",
+    confirm: "Part the hair at the udder, ears and tail base and look for ticks. Ask the vet about a tick treatment for the whole herd.",
+    ask: ["Have you seen ticks on her or the other cows?", "When was she last treated for ticks?"],
+  },
 ];
 
-function Diagnosis({ back, goToFlow }: ScreenProps) {
-  const unlock = () => goToFlow("gs-pratham");
+// Retake hints cluster by body part, so eleven instructions become six photos worth taking
+const UNCHECKED = [
+  { region: "Mouth and feet", hint: "Close-up of the mouth, tongue and all four feet", names: ["Foot and Mouth Disease", "Wooden Tongue", "Listeriosis"] },
+  { region: "Udder and teats", hint: "Side and rear view of the udder showing all four quarters; image of milk in strip cup if possible", names: ["Mammillitis", "Thelitis"] },
+  { region: "Eyes", hint: "Close-up of both eyes in daylight", names: ["Pink Eye", "Squamous Cell Carcinoma (eye)"] },
+  { region: "Skin", hint: "Close-up of the skin on the neck and back", names: ["Dermatophilosis", "Warts"] },
+  { region: "Face", hint: "Front view of face showing both ears and eyes", names: ["Lumpy Jaw"] },
+  { region: "Full side view", hint: "Side view with the cow walking", names: ["Knuckling of Fetlock"] },
+];
+
+const RULED_OUT: { name: string; reason: string; noted?: string }[] = [
+  { name: "Bloat", reason: "Left flank is not distended." },
+  { name: "Traumatic Reticuloperitonitis", reason: "Normal, relaxed stance." },
+  { name: "Ketosis", reason: "Alert, with a full rumen.", noted: "slightly low body fat" },
+  { name: "Diarrhoea", reason: "Hindquarters are clean." },
+  { name: "Radial Nerve Paralysis", reason: "Bears weight on both forelegs." },
+  { name: "Medial Patellar Luxation", reason: "Hind legs are straight." },
+  { name: "Achilles Tendon Rupture", reason: "Hocks look normal." },
+  { name: "Flying Scapula", reason: "Shoulders sit level." },
+  { name: "Tetanus", reason: "No stiffness in the stance." },
+  { name: "Hygroma", reason: "No swelling on the knees." },
+  { name: "Milk Fever", reason: "Standing and alert." },
+  { name: "Abscess", reason: "No lumps on the body." },
+  { name: "Lantana Toxicity", reason: "Skin is not cracked or yellowed." },
+  { name: "Lumpy Skin Disease", reason: "No nodules on the skin." },
+  { name: "Fly Menace", reason: "No fly clusters on the body." },
+  { name: "Prolapse", reason: "Nothing visible at the vulva." },
+  { name: "Prescapular Lymph Node Enlargement", reason: "Not clearly enlarged.", noted: "the node in front of the shoulder looks slightly full, explained by the tick load" },
+  { name: "Blood Parasites", reason: "Gums and eyes are not pale." },
+];
+
+function Chip({ label, bg, fg, icon }: { label: string; bg: string; fg: string; icon?: ReactNode }) {
+  return (
+    <span className={r.dxChip} style={{ background: bg, color: fg }}>
+      {icon}
+      {label}
+    </span>
+  );
+}
+
+function Field({ icon, label, children }: { icon: ReactNode; label: string; children: ReactNode }) {
+  return (
+    <div className={r.dxField}>
+      <span className={r.dxFieldHead}>
+        {icon}
+        {label}
+      </span>
+      {children}
+    </div>
+  );
+}
+
+function Bullets({ items, color, round }: { items: string[]; color: string; round?: boolean }) {
+  return (
+    <span className={r.dxBullets}>
+      {items.map((line) => (
+        <span key={line} className={r.dxBulletRow}>
+          {round ? <Circle size={14} color={color} /> : <i style={{ background: color }} />}
+          {line}
+        </span>
+      ))}
+    </span>
+  );
+}
+
+function FindingCard({ f, defaultOpen }: { f: Finding; defaultOpen?: boolean }) {
+  const [open, setOpen] = useState(!!defaultOpen);
+  const tone = TONE[f.grade];
+  return (
+    <div className={r.dxFinding} style={{ borderLeftColor: tone.fg }}>
+      <button type="button" className={`${u.btnReset} ${r.dxFindingHead}`} onClick={() => setOpen((v) => !v)} aria-expanded={open}>
+        <span className={r.dxFindingTitle}>
+          <b>{f.name}</b>
+          <span className={r.dxChipRow}>
+            <Chip label={f.grade} bg={tone.bg} fg={tone.fg} />
+            {f.confidence && <Chip label={`${f.confidence} confidence`} bg="#EEF2FF" fg="#004691" />}
+            {f.suspected && <Chip label="Suspected" bg="#FFF7ED" fg={ORANGE} icon={<CircleHelp size={12} />} />}
+          </span>
+        </span>
+        {open ? <ChevronUp size={24} color={SLATE} /> : <ChevronDown size={24} color={SLATE} />}
+      </button>
+      {open && (
+        <div className={r.dxFindingBody}>
+          <Field icon={<Eye size={15} />} label="What the photo shows">
+            <Bullets items={f.shows} color={tone.fg} />
+          </Field>
+          <Field icon={<Brain size={15} />} label="Why this diagnosis">
+            <p className={r.dxText}>{f.why}</p>
+          </Field>
+          {f.against && (
+            <Field icon={<CircleMinus size={15} />} label="Points against">
+              <Bullets items={f.against} color={SLATE} />
+            </Field>
+          )}
+          <Field icon={<TriangleAlert size={15} />} label="Severity and urgency">
+            <p className={r.dxCallout} style={{ background: tone.bg, color: tone.fg }}>
+              {f.urgency}
+            </p>
+          </Field>
+          <Field icon={<Stethoscope size={15} />} label="How to confirm and treat">
+            <p className={r.dxText}>{f.confirm}</p>
+          </Field>
+          <Field icon={<CircleHelp size={15} />} label="Check these yourself">
+            <Bullets items={f.ask} color="#004691" round />
+          </Field>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function Collapsible({ icon, iconBg, title, subtitle, children }: { icon: ReactNode; iconBg: string; title: string; subtitle: string; children: ReactNode }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className={r.dxCard}>
+      <button type="button" className={`${u.btnReset} ${r.dxCardHead}`} onClick={() => setOpen((v) => !v)} aria-expanded={open}>
+        <span className={r.dxCardIcon} style={{ background: iconBg }}>
+          {icon}
+        </span>
+        <span className={r.dxCardText}>
+          <b>{title}</b>
+          <small>{subtitle}</small>
+        </span>
+        {open ? <ChevronUp size={24} color={SLATE} /> : <ChevronDown size={24} color={SLATE} />}
+      </button>
+      {open && <div className={r.dxCardBody}>{children}</div>}
+    </div>
+  );
+}
+
+function Diagnosis({ back, go, goToFlow }: ScreenProps) {
+  const unchecked = UNCHECKED.reduce((n, g) => n + g.names.length, 0);
   return (
     <div className={u.screen}>
       <ReportHeader title="Disease Diagnosis" onBack={back} />
-      <div className={`${u.scroll} ${r.body}`}>
-        <div className={r.heroImg}>
+      <div className={`${u.scroll} ${r.body} ${r.dxBody}`}>
+        <div className={r.dxHero}>
           <img src={gimg("gowri-side.jpg")} alt="" />
-        </div>
-        <div className={r.cattleCard}>
-          <img src={gimg("gowri-avatar.jpg")} alt="" />
-          <span>
-            <b>Gowri</b>
-            <small>Breed: Gir · Weight: 412 kg</small>
-            <small>
-              <CalendarDays size={12} /> 21 Oct 2026
-            </small>
+          <span className={r.dxHeroChips}>
+            <Chip label="Gowri" bg="#FFFFFFEE" fg="#0F172A" />
+            <Chip label="Right side view" bg="#FFFFFFEE" fg={SLATE} icon={<Camera size={12} />} />
           </span>
         </div>
 
-        <div className={r.dxStatus}>
-          <b>Mastitis</b>
-          <span className={r.sevBadge} style={{ background: "#FFF3F0", color: "#dc2626" }}>
-            <i style={{ background: "#dc2626" }} /> NEEDS VET
-          </span>
+        <div className={r.dxVerdict} style={{ background: TONE.Moderate.bg }}>
+          <span className={r.dxVerdictLabel}>MOST LIKELY</span>
+          <b style={{ color: TONE.Moderate.fg }}>Mastitis</b>
+          <span className={r.dxVerdictCode}>D28 · Clinical mastitis</span>
+          <p>Gowri&apos;s rear quarters are swollen and uneven with reddened skin, which points to mastitis in its early clinical stage.</p>
         </div>
 
-        <div className={r.card}>
-          <span className={r.dxTitle}>
-            <ListChecks size={18} /> Indicators Checked
-          </span>
-          <small className={r.countLabel}>2 of 5 indicators flagged</small>
-          {INDICATORS.map((it) => (
-            <span key={it.name} className={r.indicator}>
-              <i className={it.clear ? r.dotClear : r.dotFlag}>{it.clear ? "✓" : "!"}</i>
-              <span>
-                <b>{it.name}</b>
-                <small>{it.desc}</small>
-              </span>
+        <div className={r.dxTally}>
+          {[
+            [FINDINGS.filter((f) => !f.suspected).length, "Detected", RED],
+            [FINDINGS.filter((f) => f.suspected).length, "Suspected", ORANGE],
+            [RULED_OUT.length, "Ruled out", GREEN],
+            [unchecked, "Unchecked", ORANGE],
+          ].map(([n, label, color]) => (
+            <span key={label as string}>
+              <b style={{ color: color as string }}>{n}</b>
+              <small>{label}</small>
             </span>
           ))}
         </div>
+        <small className={r.dxScreened}>31 diseases screened from one photo</small>
 
-        <div className={r.card}>
-          <span className={r.dxTitle}>
-            <Sparkles size={18} /> Diagnosis Reason
+        <div className={r.dxVet}>
+          <span>
+            <b>A vet should see this cow</b>
+            <small>Show them this report. Our helpline is free.</small>
           </span>
-          <Locked onUnlock={unlock}>
-            <span className={r.reasonBadge}>Early stage</span>
-            <p className={r.barText}>Swelling and asymmetry on the rear quarters, with reddening of the skin, match early clinical mastitis.</p>
-          </Locked>
+          <a className={r.dxVetBtn} href="tel:18004197848" onClick={(e) => e.preventDefault()}>
+            <Phone size={16} /> Call
+          </a>
         </div>
 
-        <div className={r.card}>
-          <span className={r.dxTitle}>
-            <ShieldCheck size={18} /> Prevention Rules
-          </span>
-          <Locked onUnlock={unlock}>
-            <p className={r.barText}>• Teat dip after every milking</p>
-            <p className={r.barText}>• Clean, dry bedding every day</p>
-            <p className={r.barText}>• Milk healthy cows first, Gowri last</p>
-          </Locked>
-        </div>
+        <b className={r.dxHeading}>Findings</b>
+        {FINDINGS.map((f, i) => (
+          <FindingCard key={f.name} f={f} defaultOpen={i === 0} />
+        ))}
 
-        <div className={r.warnCard}>
-          <span className={r.warnHead}>
-            <TriangleAlert size={18} /> EARLY WARNING SIGNS
-          </span>
-          <Locked onUnlock={unlock} bg="#FFF8E1">
-            <p className={r.warnText}>Watch for these over the next 48 hours:</p>
-            {["Clots or flakes in the milk", "Hot, hard or painful udder", "Sudden drop in milk yield"].map((w) => (
-              <span key={w} className={r.warnRow}>
-                <i />
-                {w}
+        <b className={r.dxHeading}>The rest of the screening</b>
+        <Collapsible icon={<Camera size={18} color={ORANGE} />} iconBg="#FFF7ED" title={`${unchecked} could not be checked`} subtitle="This photo did not show what they need">
+          {UNCHECKED.map((g) => (
+            <div key={g.region} className={r.dxRetake}>
+              <span className={r.dxRetakeHead}>
+                <b>{g.region}</b>
+                <small>{g.names.length} check(s)</small>
               </span>
-            ))}
-          </Locked>
-        </div>
+              <span className={r.dxRetakeHint}>
+                <Camera size={13} color={SLATE} />
+                {g.hint}
+              </span>
+              <small className={r.dxRetakeNames}>{g.names.join(", ")}</small>
+            </div>
+          ))}
+          <button type="button" className={`${u.btnReset} ${r.dxRescan}`} onClick={() => go("gs-capture")}>
+            <Camera size={18} /> Scan again with a new photo
+          </button>
+        </Collapsible>
+        <Collapsible icon={<Check size={18} color={GREEN} />} iconBg="#E8F5E9" title={`${RULED_OUT.length} ruled out`} subtitle="Checked in this photo, nothing found">
+          {RULED_OUT.map((it) => (
+            <div key={it.name} className={r.dxCleared}>
+              <span className={r.dxClearedName}>
+                <CheckCircle2 size={15} color={GREEN} />
+                <b>{it.name}</b>
+              </span>
+              <small className={r.dxClearedReason}>{it.reason}</small>
+              {it.noted && (
+                <span className={r.dxNoted}>
+                  <Info size={13} color={ORANGE} />
+                  Noted anyway: {it.noted}
+                </span>
+              )}
+            </div>
+          ))}
+        </Collapsible>
 
-        <VetAlert signs={["Fever, or the cow stops eating", "Milk turns watery or bloody", "The udder turns cold or blue"]} />
         <Recommended goToFlow={goToFlow} />
       </div>
-      <PremiumBanner onPlans={unlock} />
     </div>
   );
 }
@@ -278,13 +377,6 @@ const PURITY_LEGEND = [
   ["A3", "High Purity", "75-85%"],
   ["B", "Moderate Purity", "65-75%"],
   ["C", "Low Purity", "<65%"],
-];
-
-const HEALTH_PARAMS = [
-  { name: "Body condition", value: "Good · BCS 3.5", status: "NORMAL" },
-  { name: "Udder", value: "Slight swelling on rear quarters", status: "MODERATE" },
-  { name: "Coat & skin", value: "Glossy, no lesions", status: "NORMAL" },
-  { name: "Hooves & legs", value: "Straight stance", status: "NORMAL" },
 ];
 
 const SEV: Record<string, { bg: string; color: string }> = {
@@ -341,10 +433,12 @@ const RATION = {
   Evening: [["Cattle Feed 22% CP", "2 kg"], ["Green fodder", "15 kg"], ["Dairy Fortune", "100 g"]],
 } as const;
 
+// Reports are not a paid surface (useReportUnlocked): what used to be frosted is simply shown
+function Gated({ children }: { children: ReactNode; bg?: string }) {
+  return <div className={r.open}>{children}</div>;
+}
+
 function StatusReport({ back, goToFlow, full }: ScreenProps & { full?: boolean }) {
-  const unlock = () => goToFlow("gs-pratham");
-  // The full report is Pro-only, so it renders unlocked; Animal Status shows the free view
-  const Gated = full ? Open : Locked;
   const scrollRef = useRef<HTMLDivElement>(null);
   const anchors = useRef<Record<string, HTMLElement | null>>({});
   const [dietTab, setDietTab] = useState(0);
@@ -409,7 +503,7 @@ function StatusReport({ back, goToFlow, full }: ScreenProps & { full?: boolean }
 
         <section className={r.section}>
           <span className={r.sectionTitle}>DETAILED CHECKS</span>
-          <Gated onUnlock={unlock}>
+          <Gated>
             <p className={r.triage} style={{ color: RED }}>VET · Udder swelling</p>
             <p className={r.triage} style={{ color: "#B26A00" }}>WATCH · Slightly low body fat · Mild limp</p>
             <p className={r.triage} style={{ color: GREEN }}>CLEAR · Coat, eyes, posture, rumen fill and 24 more</p>
@@ -420,7 +514,7 @@ function StatusReport({ back, goToFlow, full }: ScreenProps & { full?: boolean }
           <span className={r.sectionTitle}>
             <Sparkles size={15} /> AI SUMMARY
           </span>
-          <Gated onUnlock={unlock}>
+          <Gated>
             <span className={r.summaryStatus}>Needs attention</span>
             <p className={r.barText}>Gowri is in good body condition but shows early udder swelling. Treat early to protect her milk yield.</p>
           </Gated>
@@ -430,7 +524,7 @@ function StatusReport({ back, goToFlow, full }: ScreenProps & { full?: boolean }
           <span className={r.sectionTitle} style={{ color: ORANGE }}>
             <TriangleAlert size={15} /> PATTERN DETECTED
           </span>
-          <Gated onUnlock={unlock} bg="#FFF3E0">
+          <Gated bg="#FFF3E0">
             <b>Milk drop + udder swelling</b>
             <p className={r.barText}>Together these point to early mastitis rather than a feed problem.</p>
           </Gated>
@@ -505,26 +599,10 @@ function StatusReport({ back, goToFlow, full }: ScreenProps & { full?: boolean }
 
         <section className={r.section}>
           <span className={r.sectionTitle}>KEY FINDINGS</span>
-          <Gated onUnlock={unlock}>
+          <Gated>
             <p className={r.flag} style={{ color: RED }}>RED FLAGS · Rear udder swelling</p>
             <p className={r.flag} style={{ color: GREEN }}>POSITIVE · Strong frame, healthy coat, good rumen fill</p>
           </Gated>
-        </section>
-
-        <section className={r.section}>
-          <span className={r.sectionTitle}>HEALTH PARAMETERS</span>
-          {HEALTH_PARAMS.map((p) => (
-            <span key={p.name} className={r.param}>
-              <span>
-                <b>{p.name}</b>
-                <small>{p.value}</small>
-              </span>
-              <span className={r.sevBadge} style={{ background: SEV[p.status].bg, color: SEV[p.status].color }}>
-                <i style={{ background: SEV[p.status].color }} />
-                {p.status}
-              </span>
-            </span>
-          ))}
         </section>
 
         {full && (
@@ -559,7 +637,7 @@ function StatusReport({ back, goToFlow, full }: ScreenProps & { full?: boolean }
                           <span className={r.diagTitle}>
                             <ShieldCheck size={15} /> Recommendation
                           </span>
-                          <Gated onUnlock={unlock}>
+                          <Gated>
                             <span className={r.barText}>{d.rec}</span>
                           </Gated>
                         </span>
@@ -574,7 +652,7 @@ function StatusReport({ back, goToFlow, full }: ScreenProps & { full?: boolean }
 
         <section className={r.section}>
           <span className={r.sectionTitle}>RECOVERY PLAN</span>
-          <Gated onUnlock={unlock}>
+          <Gated>
             {["Day 1 · Strip-test milk and call the vet", "Day 2–4 · Follow the treatment, milk her last", "Day 7 · Re-scan Gowri to confirm recovery"].map((st) => (
               <p key={st} className={r.timelineStep}>
                 <i />
@@ -593,7 +671,7 @@ function StatusReport({ back, goToFlow, full }: ScreenProps & { full?: boolean }
               </button>
             ))}
           </div>
-          <Gated onUnlock={unlock}>
+          <Gated>
             {DIET_TABS[dietTab].rows.map(([item, qty]) => (
               <span key={item} className={r.dietRow}>
                 <span>{item}</span>
@@ -618,7 +696,7 @@ function StatusReport({ back, goToFlow, full }: ScreenProps & { full?: boolean }
               </button>
             ))}
           </div>
-          <Gated onUnlock={unlock}>
+          <Gated>
             {RATION[meal].map(([item, qty]) => (
               <span key={item} className={r.dietRow}>
                 <span>{item}</span>
@@ -634,7 +712,6 @@ function StatusReport({ back, goToFlow, full }: ScreenProps & { full?: boolean }
           Disclaimer: This report is generated by AI based on visual inputs. Estimates for market value and health status are indicative. Please consult a qualified veterinarian or livestock expert for final decisions.
         </p>
       </div>
-      {!full && <PremiumBanner onPlans={unlock} />}
     </div>
   );
 }

@@ -1,29 +1,37 @@
 /* eslint-disable @next/next/no-img-element -- fixed-size mock screens inside a phone frame */
 "use client";
 
-// Gau Sampurna scan flows, recreated from the `prod` branch: gau-swastha-tenant/scan/new-scan-screen.jsx
-// (hub + My Herd sheet) and scan-orchestrator-screen.jsx with its steps (LOADING → IMAGE_CAPTURE →
-// IMAGE_CONFIRM → ANALYZING → BREED_SELECT → REPORT_READY / DUNG_REPORT_READY / DX_REPORT_READY, ERROR),
+// Gau Sampurna scan flows, recreated from the `prod` branch (synced 2026-11-04 at 5b36102):
+// gau-swastha-tenant/scan/new-scan-screen.jsx (hub + My Herd sheet) and scan-orchestrator-screen.jsx with
+// its steps (LOADING → IMAGE_CAPTURE → IMAGE_CAMERA (the app's own camera) → IMAGE_CONFIRM (with the
+// in-app crop editor) → ANALYZING → BREED_SELECT → REPORT_READY / DUNG_REPORT_READY / DX_REPORT_READY, ERROR),
 // the subscription gate (hooks/useSubscriptionGate.js) and the "Udder Not Detected" modal. Five scan
 // types share these steps; the full reports live in GauReports.tsx.
 import { useEffect, useState, type ComponentType } from "react";
 import {
   ArrowLeft,
+  CalendarSync,
   Camera,
   Check,
   CheckCircle2,
   ChevronRight,
   CircleAlert,
+  CircleHelp,
+  Crop,
+  Droplet,
+  EyeOff,
   FileText,
   Gauge,
-  HeartPulse,
+  Hospital,
   Images,
   IndianRupee,
   Plus,
+  RotateCcw,
   RotateCw,
   ShieldCheck,
   TriangleAlert,
   Weight,
+  X,
 } from "lucide-react";
 import s from "./gauScan.module.css";
 import { GauAlert, gimg, u } from "./GauShared";
@@ -136,11 +144,8 @@ function ScanHub({ next, goToFlow, kind }: ScreenProps & { kind: ScanKind }) {
           <ProCrownIcon size={19} color="#fff" />
           Upgrade to Pro
         </button>
-        <span className={s.counter}>
-          1/1
-          <br />
-          Scan
-        </span>
+        {/* The scan counter was removed from the header in prod; the slot keeps the badge centred */}
+        <span className={s.counterSlot} aria-hidden="true" />
       </div>
       <div className={u.scroll}>
         <div className={s.herdBand}>
@@ -326,7 +331,17 @@ const CAPTURE: Record<ScanKind, { title: string; subtitle: string; tips: Tip[] }
   },
 };
 
-function Capture({ next, back, kind }: ScreenProps & { kind: ScanKind }) {
+// Screen ids per scan type: the disease flow has the bare ids, the others a suffix
+const sid = (base: string, kind: ScanKind) => (kind === "disease" ? base : `${base}-${kind}`);
+
+// scan-orchestrator-screen.jsx getImageInstruction / getReviewHint
+const INSTRUCTION = (kind: ScanKind) => (kind === "dung" ? "Align the cow dung in the center of the frame" : "Capture the full side profile of the cow");
+const REVIEW_HINT = (kind: ScanKind) =>
+  kind === "dung" ? "Make sure the whole dung sample is clearly visible." : "Make sure the full body of the cow is visible in the frame.";
+// constants/captureFraming.js: a head-to-tail side profile is 4:3, a dung pile square
+const ASPECT = (kind: ScanKind) => (kind === "dung" ? "1 / 1" : "4 / 3");
+
+function Capture({ go, back, kind }: ScreenProps & { kind: ScanKind }) {
   const c = CAPTURE[kind];
   return (
     <div className={u.screen}>
@@ -336,7 +351,6 @@ function Capture({ next, back, kind }: ScreenProps & { kind: ScanKind }) {
           <span className={s.camCircle}>
             <Camera size={36} color="#004691" />
           </span>
-          <b className={s.h3}>{c.title}</b>
           <span className={s.sub}>{c.subtitle}</span>
         </div>
         <span className={s.overline}>BEFORE YOU CAPTURE</span>
@@ -351,11 +365,11 @@ function Capture({ next, back, kind }: ScreenProps & { kind: ScanKind }) {
         ))}
       </div>
       <div className={`${u.footer} ${s.greyFooter}`}>
-        <button type="button" className={`${u.btnReset} ${u.primary} ${u.hotspot}`} onClick={next}>
+        <button type="button" className={`${u.btnReset} ${u.primary} ${u.hotspot}`} onClick={() => go(sid("gs-camera", kind))}>
           <Camera size={22} />
           Open Camera
         </button>
-        <button type="button" className={`${u.btnReset} ${u.secondary}`} onClick={next}>
+        <button type="button" className={`${u.btnReset} ${u.secondary}`} onClick={() => go(sid("gs-confirm", kind))}>
           <Images size={22} />
           Choose from Gallery
         </button>
@@ -364,31 +378,114 @@ function Capture({ next, back, kind }: ScreenProps & { kind: ScanKind }) {
   );
 }
 
-// ---------- IMAGE_CONFIRM (orchestrator-steps/ImageConfirmStep.jsx) ----------
+// ---------- IMAGE_CAMERA (orchestrator-steps/CameraCaptureStep.jsx) ----------
+// The app's own camera (not the OS one): framing box with corner marks, a hint pill, gallery and shutter
+
+function CameraStep({ next, back, go, kind }: ScreenProps & { kind: ScanKind }) {
+  const photo = gimg(SCAN_PHOTO[kind]);
+  return (
+    <div className={`${u.screen} ${s.camRoot}`}>
+      <img className={s.camFeed} src={photo} alt="" />
+      <div className={s.camTop}>
+        <button type="button" className={`${u.btnReset} ${s.camIcon}`} onClick={back} aria-label="Back">
+          <ArrowLeft size={22} />
+        </button>
+        <b>{SCAN_TITLE[kind]}</b>
+        <span className={s.camIconSpace} />
+      </div>
+      <div className={s.frameWrap}>
+        <div className={s.frameBox} style={{ aspectRatio: ASPECT(kind) }}>
+          <img src={photo} alt="" />
+          <i className={s.cTL} />
+          <i className={s.cTR} />
+          <i className={s.cBL} />
+          <i className={s.cBR} />
+        </div>
+        <span className={s.hintPill}>{INSTRUCTION(kind)}</span>
+      </div>
+      <div className={s.camBottom}>
+        <button type="button" className={`${u.btnReset} ${s.galleryBtn}`} onClick={() => go(sid("gs-confirm", kind))} aria-label="Choose from Gallery">
+          <Images size={24} />
+        </button>
+        <button type="button" className={`${u.btnReset} ${s.shutter} ${u.hotspot}`} onClick={next} aria-label="Take photo">
+          <span>
+            <Camera size={28} />
+          </span>
+        </button>
+        <span className={s.galleryBtn} style={{ visibility: "hidden" }} />
+      </div>
+    </div>
+  );
+}
+
+// ---------- IMAGE_CONFIRM (orchestrator-steps/ImageConfirmStep.jsx + components/ImageCropEditor.jsx) ----------
+// The photo fills the screen; ✕ / ✓ on top, the same pair as Kissan's crop camera. Cropping is opt-in.
+
+function CropEditor({ kind, onDone }: { kind: ScanKind; onDone: () => void }) {
+  return (
+    <div className={`${u.screen} ${s.cropRoot}`}>
+      <div className={s.cropTop}>
+        <b>Crop Photo</b>
+        <small>Pinch to zoom and drag to fit the animal inside the box</small>
+      </div>
+      <div className={s.cropStage}>
+        <div className={s.cropWindow} style={{ aspectRatio: ASPECT(kind) }}>
+          <img src={gimg(SCAN_PHOTO[kind])} alt="" />
+          <i style={{ left: "33.33%" }} className={s.guideV} />
+          <i style={{ left: "66.66%" }} className={s.guideV} />
+          <i style={{ top: "33.33%" }} className={s.guideH} />
+          <i style={{ top: "66.66%" }} className={s.guideH} />
+        </div>
+      </div>
+      <div className={s.cropBottom}>
+        <span className={s.action}>
+          <button type="button" className={`${u.btnReset} ${s.roundBtn} ${s.rejectBtn}`} onClick={onDone} aria-label="Cancel">
+            <X size={30} />
+          </button>
+          <small>Cancel</small>
+        </span>
+        <button type="button" className={`${u.btnReset} ${s.resetBtn}`}>
+          <RotateCcw size={18} />
+          Reset
+        </button>
+        <span className={s.action}>
+          <button type="button" className={`${u.btnReset} ${s.roundBtn} ${s.confirmBtn} ${u.hotspot}`} onClick={onDone} aria-label="Apply">
+            <Check size={30} />
+          </button>
+          <small>Apply</small>
+        </span>
+      </div>
+    </div>
+  );
+}
 
 function Confirm({ next, back, kind }: ScreenProps & { kind: ScanKind }) {
+  const [cropping, setCropping] = useState(false);
+  if (cropping) return <CropEditor kind={kind} onDone={() => setCropping(false)} />;
   return (
-    <div className={u.screen}>
-      <ScanTopBar kind={kind} onBack={back} />
-      <div className={s.confirmBody}>
-        <div className={s.previewArea}>
-          <span className={s.overline}>PREVIEW</span>
-          <div className={s.previewImg}>
-            <img src={gimg(SCAN_PHOTO[kind])} alt="Captured photo" />
-          </div>
-          <small className={s.hint}>
-            {kind === "dung" ? "Make sure the whole dung pile is visible in the frame." : "Make sure the full body of the cow is visible in the frame."}
-          </small>
-        </div>
-        <div className={s.btnStack}>
-          <button type="button" className={`${u.btnReset} ${u.primary} ${u.hotspot}`} onClick={next}>
-            <Check size={22} />
-            Continue
-          </button>
-          <button type="button" className={`${u.btnReset} ${u.secondary}`} onClick={back}>
-            <RotateCw size={20} />
-            Retry
-          </button>
+    <div className={`${u.screen} ${s.reviewRoot}`}>
+      <img className={s.reviewImg} src={gimg(SCAN_PHOTO[kind])} alt="Captured photo" />
+      <div className={s.reviewTop}>
+        <p>{REVIEW_HINT(kind)}</p>
+      </div>
+      <div className={s.reviewBottom}>
+        <button type="button" className={`${u.btnReset} ${s.cropBtn}`} onClick={() => setCropping(true)}>
+          <Crop size={18} />
+          Crop Photo
+        </button>
+        <div className={s.actionRow}>
+          <span className={s.action}>
+            <button type="button" className={`${u.btnReset} ${s.roundBtn} ${s.rejectBtn}`} onClick={back} aria-label="Try Again">
+              <X size={32} />
+            </button>
+            <small>Try Again</small>
+          </span>
+          <span className={s.action}>
+            <button type="button" className={`${u.btnReset} ${s.roundBtn} ${s.confirmBtn} ${u.hotspot}`} onClick={next} aria-label="Continue">
+              <Check size={32} />
+            </button>
+            <small>Continue</small>
+          </span>
         </div>
       </div>
     </div>
@@ -514,12 +611,26 @@ function BreedSelect({ next, back }: ScreenProps) {
 
 // ---------- REPORT_READY variants (orchestrator-steps/ReportReadyStep.jsx) ----------
 
+// MetricCard: two to a row, left aligned (prod ReportReadyStep)
 function Metric({ Icon, label, value }: { Icon: ComponentType<{ size?: number; color?: string }>; label: string; value: string }) {
   return (
     <span className={s.metric}>
       <Icon size={20} color="#004691" />
       <small>{label}</small>
       <b>{value}</b>
+    </span>
+  );
+}
+
+// Sample scan: one pass over all 31 conditions (Gau Gopalan Seva, ui_version 1.1). Mirrors the shape of a
+// real response, where about a third of the screening comes back not assessable from one side photo.
+const DX = { detected: [{ name: "Mastitis", grade: "Moderate" }], suspected: [{ name: "Tick Infestation", grade: "Mild" }], ruledOut: 18, unchecked: 11, screened: 31 };
+
+function VetBanner({ color = "#dc2626" }: { color?: string }) {
+  return (
+    <span className={s.vetBanner} style={{ background: `${color}12`, color }}>
+      <Hospital size={18} />
+      A vet should see this cow
     </span>
   );
 }
@@ -538,41 +649,59 @@ function ReportReady({ next, back, goToFlow, kind }: ScreenProps & { kind: ScanK
 
         {kind === "disease" && (
           <>
+            {/* Detected, out of everything the pass covered */}
             <div className={s.scoreSection}>
               <span className={s.overline}>CONDITIONS CHECKED</span>
               <span className={s.scoreRow}>
-                <b style={{ color: "#dc2626" }}>1</b>
-                <small>/31</small>
+                <b style={{ color: "#dc2626" }}>{DX.detected.length}</b>
+                <small>/{DX.screened}</small>
               </span>
-              <b style={{ color: "#dc2626" }}>1 condition(s) detected</b>
+              <b style={{ color: "#dc2626" }}>{DX.detected.length} condition(s) detected</b>
             </div>
             <div className={s.sumCard}>
               <img src={gimg("gowri-side.jpg")} alt="" style={{ width: 70, height: 70 }} />
               <span className={s.sumContent}>
-                <b>Diagnosis</b>
-                <small>21 Oct 2026</small>
+                <span className={s.overline}>MOST LIKELY</span>
+                <b>Mastitis</b>
+                <span className={s.sumBadge} style={{ background: "#dc262618", color: "#dc2626" }}>
+                  Moderate · HIGH
+                </span>
               </span>
             </div>
+            <VetBanner />
             <span className={s.overline} style={{ color: "#dc2626" }}>
               DETECTED
             </span>
-            <div className={s.diseaseRow}>
-              <TriangleAlert size={18} color="#d97706" />
-              <span>
-                <b>Mastitis</b>
-                <small>NEEDS VET</small>
-              </span>
-            </div>
-            <span className={s.overline} style={{ color: "#16a34a" }}>
-              CLEAR
-            </span>
-            {["Lumpy Skin Disease", "Foot and Mouth Disease", "Bloat", "Uterine Prolapse"].map((d) => (
-              <span key={d} className={s.clearRow}>
-                <CheckCircle2 size={16} color="#16a34a" />
-                {d}
-              </span>
+            {DX.detected.map((d) => (
+              <div key={d.name} className={s.diseaseRow}>
+                <TriangleAlert size={18} color="#dc2626" />
+                <span>
+                  <b>{d.name}</b>
+                  <small>{d.grade}</small>
+                </span>
+              </div>
             ))}
-            <small className={s.muted}>+26 more clear in the full report</small>
+            <span className={s.overline} style={{ color: "#d97706" }}>
+              SUSPECTED
+            </span>
+            {DX.suspected.map((d) => (
+              <div key={d.name} className={s.diseaseRow}>
+                <CircleHelp size={18} color="#d97706" />
+                <span>
+                  <b>{d.name}</b>
+                  <small>{d.grade}</small>
+                </span>
+              </div>
+            ))}
+            {/* What the pass settled and what it could not see */}
+            <span className={s.tallyRow}>
+              <span>
+                <CheckCircle2 size={16} color="#16a34a" /> {DX.ruledOut} ruled out
+              </span>
+              <span>
+                <EyeOff size={16} color="#64748b" /> {DX.unchecked} could not be checked
+              </span>
+            </span>
           </>
         )}
 
@@ -584,24 +713,30 @@ function ReportReady({ next, back, goToFlow, kind }: ScreenProps & { kind: ScanK
                 <b style={{ color: "#d97706" }}>2</b>
                 <small>/5</small>
               </span>
-              <b style={{ color: "#d97706" }}>Digestive Imbalance</b>
+              <b style={{ color: "#d97706" }}>Needs attention</b>
             </div>
             <div className={s.sumCard}>
               <img src={gimg("dung-sample.webp")} alt="" />
               <span className={s.sumContent}>
-                <span className={s.sumBadge} style={{ background: "#d9770618", color: "#d97706" }}>
-                  Loose / runny
+                <span className={s.sumBadge} style={{ background: "#d9770618", color: "#d97706", marginTop: 0 }}>
+                  Digestive imbalance
                 </span>
-                <small>Loose, uneven consistency with undigested fibre visible.</small>
+                <small className={s.oneLine}>Consistency: loose and uneven</small>
+                <small className={s.oneLine}>Fibre: some undigested fibre</small>
               </span>
             </div>
             <span className={s.overline}>Possible Conditions</span>
-            {["Too much green fodder or concentrate", "Sudden change in feed", "Acidosis risk", "Worm load"].map((c) => (
+            {["Too much green fodder or concentrate", "Sudden change in feed", "Early acidosis", "Worm load"].map((c) => (
               <span key={c} className={s.bulletRow}>
                 • {c}
               </span>
             ))}
-            <small className={s.muted}>+1 more in full report</small>
+            {/* When to look again */}
+            <span className={s.tallyRow}>
+              <span>
+                <CalendarSync size={16} color="#64748b" /> Re-scan the dung in 3 days
+              </span>
+            </span>
           </>
         )}
 
@@ -617,11 +752,21 @@ function ReportReady({ next, back, goToFlow, kind }: ScreenProps & { kind: ScanK
                 <small>{kind === "full" ? "Full Health" : kind === "market" ? "Market Value" : "Animal Status"}</small>
               </span>
             </div>
+            {/* Market Value leads with the value; the body scans lead with milk */}
             <div className={s.metrics}>
               <Metric Icon={Weight} label="Weight" value="412 kg" />
               <Metric Icon={Gauge} label="BCS" value="3.5/5" />
-              {kind === "market" ? <Metric Icon={IndianRupee} label="Est. Value" value="₹78,000" /> : <Metric Icon={FileText} label="Milk" value="12 L/day" />}
-              {kind === "full" && <Metric Icon={HeartPulse} label="Systems" value="Checked" />}
+              {kind === "market" ? (
+                <>
+                  <Metric Icon={IndianRupee} label="Est. Value" value="₹78,000" />
+                  <Metric Icon={Droplet} label="Milk" value="12 L/day" />
+                </>
+              ) : (
+                <>
+                  <Metric Icon={Droplet} label="Milk" value="12 L/day" />
+                  <Metric Icon={IndianRupee} label="Est. Value" value="₹78,000" />
+                </>
+              )}
             </div>
           </>
         )}
@@ -704,6 +849,7 @@ export const gauScanScreens: Record<string, ComponentType<ScreenProps>> = {
   "gs-hub": withKind(ScanHub, "disease"),
   "gs-loading": withKind(Loading, "disease"),
   "gs-capture": withKind(Capture, "disease"),
+  "gs-camera": withKind(CameraStep, "disease"),
   "gs-confirm": withKind(Confirm, "disease"),
   "gs-analyzing": withKind(Analyzing, "disease"),
   "gs-ready": withKind(ReportReady, "disease"),
@@ -711,6 +857,7 @@ export const gauScanScreens: Record<string, ComponentType<ScreenProps>> = {
 
   "gs-hub-status": withKind(ScanHub, "status"),
   "gs-capture-status": withKind(Capture, "status"),
+  "gs-camera-status": withKind(CameraStep, "status"),
   "gs-confirm-status": withKind(Confirm, "status"),
   "gs-analyzing-status": withKind(Analyzing, "status"),
   "gs-breed": BreedSelect,
@@ -718,6 +865,7 @@ export const gauScanScreens: Record<string, ComponentType<ScreenProps>> = {
 
   "gs-hub-market": withKind(ScanHub, "market"),
   "gs-capture-market": withKind(Capture, "market"),
+  "gs-camera-market": withKind(CameraStep, "market"),
   "gs-confirm-market": withKind(Confirm, "market"),
   "gs-analyzing-market": withKind(Analyzing, "market"),
   "gs-udder": UdderNotDetected,
@@ -725,6 +873,7 @@ export const gauScanScreens: Record<string, ComponentType<ScreenProps>> = {
 
   "gs-hub-dung": withKind(ScanHub, "dung"),
   "gs-capture-dung": withKind(Capture, "dung"),
+  "gs-camera-dung": withKind(CameraStep, "dung"),
   "gs-confirm-dung": withKind(Confirm, "dung"),
   "gs-analyzing-dung": withKind(Analyzing, "dung"),
   "gs-ready-dung": withKind(ReportReady, "dung"),
@@ -732,6 +881,7 @@ export const gauScanScreens: Record<string, ComponentType<ScreenProps>> = {
   "gs-hub-full": withKind(ScanHub, "full"),
   "gs-gate-full": Gate,
   "gs-capture-full": withKind(Capture, "full"),
+  "gs-camera-full": withKind(CameraStep, "full"),
   "gs-confirm-full": withKind(Confirm, "full"),
   "gs-analyzing-full": withKind(Analyzing, "full"),
   "gs-ready-full": withKind(ReportReady, "full"),

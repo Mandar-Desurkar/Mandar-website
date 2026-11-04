@@ -1,24 +1,27 @@
 "use client";
 
-// Shared Kissan Sampurna prototype UI: the bottom tab bar ((tabs)/_layout.jsx), CustomAlert
+// Shared Kissan Sampurna prototype UI: the bottom tab bar ((tabs)/_layout.jsx: Home · Guide · Scan ·
+// Monitor · Shop, synced 2026-11-04), CustomAlert
 // (code/components/CustomAlert.jsx) and a bottom sheet. Overlays are absolutely positioned inside the
 // phone screen, so a screen root must be position: relative.
 import type { ComponentType, ReactNode } from "react";
 import { X } from "lucide-react";
 import ui from "./kissanShared.module.css";
 import type { ScreenProps } from "./KissanScreens";
-import { AccountTabIcon, GuideTabIcon, HomeTabIcon, MonitorTabIcon, ScanTabIcon } from "./KissanIcons";
+import { GuideTabIcon, HomeTabIcon, MonitorTabIcon, ScanTabIcon, ShopTabIcon } from "./KissanIcons";
 
 export { ui };
 
-export type KissanTab = "home" | "guide" | "scan" | "monitor" | "account";
+export type KissanTab = "home" | "guide" | "scan" | "monitor" | "shop";
 
 const TABS: { key: KissanTab; label: string; Icon: ComponentType<{ size?: number }>; flow?: string }[] = [
   { key: "home", label: "Home", Icon: HomeTabIcon, flow: "home-weather" },
   { key: "guide", label: "Guide", Icon: GuideTabIcon, flow: "crop-guide" },
   { key: "scan", label: "Scan", Icon: ScanTabIcon, flow: "crop-doctor" },
   { key: "monitor", label: "Monitor", Icon: MonitorTabIcon, flow: "farm-monitoring" },
-  { key: "account", label: "Account", Icon: AccountTabIcon },
+  // Shop took Account's slot in prod (Account is the avatar on the Home header). The store's catalogue
+  // comes from the live store API, so the prototype shows the tab but has no shop screens.
+  { key: "shop", label: "Shop", Icon: ShopTabIcon },
 ];
 
 export function KissanTabBar({ active, goToFlow }: { active: KissanTab; goToFlow: ScreenProps["goToFlow"] }) {

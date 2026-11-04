@@ -34,7 +34,8 @@ export type CaseStudy = {
   tags: string[];
   // Card on the Case Studies list
   // Stats are the feature card's proof row in the desktop window
-  card: { problem: string; metric: string; stats: { value: string; label: string }[] };
+  // `theme` names the kind of product problem, shown as the card's eyebrow
+  card: { theme: string; problem: string; metric: string; stats: { value: string; label: string }[] };
   meta: { label: string; value: string }[];
   // At a glance, consulting-style: challenge → approach → impact, each one plain takeaway (numbers
   // in bold inside it) and one supporting sentence
@@ -95,6 +96,7 @@ export const caseStudies: CaseStudy[] = [
     cover: `${IMG}/05-report.webp`,
     tags: ["AgriTech", "0→1", "Recommendation engine", "Low-literacy UX"],
     card: {
+      theme: "Recommendation engine",
       problem: "Most small farmers pick a crop by habit, by what neighbours plant or by last season's price.",
       metric: "Top 5 of 100+ crops for 655K+ farm profiles, 7.7K+ MAU at peak",
       stats: [
@@ -421,6 +423,7 @@ export const caseStudies: CaseStudy[] = [
     cover: `${FM}/06-report.webp`,
     tags: ["AgriTech", "Satellite / remote sensing", "Advisory UX", "0→1"],
     card: {
+      theme: "Satellite monitoring",
       problem: "A farmer checks the field from its edge, so problems in the middle are found late and treated everywhere.",
       metric: "9.8K+ MAU and 1.6K+ DAU at peak, in 13 languages",
       stats: [
@@ -745,6 +748,7 @@ export const caseStudies: CaseStudy[] = [
     cover: `${CD}/08-report.webp`,
     tags: ["AgriTech", "Computer vision", "Freemium", "Low-literacy UX"],
     card: {
+      theme: "Computer vision diagnosis",
       problem: "Farmers guess the disease from a few spots on a leaf, then spray what the shop sells.",
       metric: "4.8K+ MAU at peak, one photo to a stage-by-stage plan",
       stats: [
@@ -1064,9 +1068,10 @@ export const caseStudies: CaseStudy[] = [
     subtitle:
       "How I shipped Gau Sampurna's AI health checks for dairy farmers: one side photo screens a cow for 31 conditions across eight body systems, says what to do next, and keeps the free vet line outside the paywall.",
     product: "Gau Sampurna",
-    cover: `${CH}/11-report.webp`,
+    cover: `${CH}/07-diagnosis.webp`,
     tags: ["DairyTech", "Computer vision", "Freemium", "Low-literacy UX"],
     card: {
+      theme: "Computer vision screening",
       problem: "A cow eats less or gives less milk, the farmer can't tell why, and the vet is hours away.",
       metric: "One side photo screens 31 conditions, with a vet one tap away",
       stats: [
@@ -1097,10 +1102,10 @@ export const caseStudies: CaseStudy[] = [
       {
         label: "The impact",
         takeaway: "The paid core of the plan, with safety kept free.",
-        text: "Health checks carry the subscription and the **vet helpline stays free**. Across Kissan and Gau Sampurna, redesigned paywalls **tripled** onboarding-to-trial conversion.",
+        text: "The allowance is spent when a scan starts, so every report is **open in full** and the vet helpline is free. Across Kissan and Gau Sampurna, redesigned paywalls **tripled** onboarding-to-trial conversion.",
       },
     ],
-    heroScreens: [`${CH}/02-photo-guide.webp`, `${CH}/11-report.webp`, `${CH}/05-ready.webp`],
+    heroScreens: [`${CH}/03-camera.webp`, `${CH}/07-diagnosis.webp`, `${CH}/06-ready.webp`],
     headlines: {
       problem: "A sick cow shows it late, and the vet is far away",
       people: "Two farmers who find out too late",
@@ -1216,19 +1221,19 @@ export const caseStudies: CaseStudy[] = [
       },
       {
         insight: "A blurry or partial photo gets a confident wrong answer.",
-        principle: "Coach a full side profile, level and in daylight, and preview the photo before it uses a scan.",
+        principle: "Coach a full side profile into a framing box, and review it full screen before it uses a scan.",
       },
       {
         insight: "Farmers act on how serious it is, not on disease names.",
-        principle: "Lead with counts (clear, watch, vet) and one plain summary; condition names and detail come after.",
+        principle: "Lead with how many of the 31 were found and the one most likely; the detail comes after.",
       },
       {
         insight: "A model sees signs, not certainty.",
         principle: "Mark each finding as detected, suspected or not assessable, and say the report is an AI estimate.",
       },
       {
-        insight: "A sick cow is the worst moment to hit a paywall.",
-        principle: "Never paywall safety: the finding and the vet helpline are free; the expert guidance is on the plan.",
+        insight: "Charging a scan for a report the farmer can't read breaks trust.",
+        principle: "Spend the allowance when the scan starts, then show the whole report; the vet line is never behind anything.",
       },
       {
         insight: "Farmers trust the local vet more than any app.",
@@ -1241,87 +1246,88 @@ export const caseStudies: CaseStudy[] = [
       beforeReport: [
         {
           title: "Triage before routine",
-          what: "The Scan page puts 'Cow unwell or Off-feed?' on top in an urgent card, routine scans below and the 360° report last. The cow is picked first, and a counter shows the scans left.",
+          what: "The Scan page puts 'Cow unwell or Off-feed?' on top in an urgent card, routine scans below and the 360° report last. The cow is picked first.",
           why: "A worried farmer shouldn't have to read a menu. Picking the cow first ties every report to an animal, so the next scan has something to compare with.",
           screens: [
             { image: `${CH}/01-scan-hub.webp`, label: "Scan page" },
-            { image: `${CH}/13-scan-hub-full.webp`, label: "360° report" },
+            { image: `${CH}/14-scan-hub-full.webp`, label: "360° report" },
           ],
         },
         {
           title: "Coach one photo",
-          what: "Four tips before the camera opens (full side profile, level angle, good daylight, nothing in the way), then a preview with Continue or Retry.",
-          why: "One side photo feeds every body check, so a bad photo would spoil all of them. Catching it at the preview costs a retake, not a scan.",
+          what: "Four tips (full side profile, level angle, good daylight, nothing in the way), then the app's own camera with a 4:3 framing box, then the photo full screen with ✕ and ✓ and an optional crop.",
+          why: "One side photo feeds every body check, so a bad photo would spoil all of them. The phone's own camera and crop screen differ on every Android handset; the app's camera is the same everywhere, and catching a bad shot at review costs a retake, not a scan.",
           screens: [
             { image: `${CH}/02-photo-guide.webp`, label: "Photo guide" },
-            { image: `${CH}/03-confirm.webp`, label: "Preview" },
+            { image: `${CH}/03-camera.webp`, label: "Camera" },
+            { image: `${CH}/04-review.webp`, label: "Review" },
           ],
         },
         {
           title: "Check the plan before the photo",
           what: "The app checks the plan and the scan allowance before the camera opens. The 360° report, which isn't in the free plan, says so and offers Upgrade.",
           why: "A farmer should never take a photo only to meet a paywall afterwards.",
-          screens: [{ image: `${CH}/08-plan-gate.webp`, label: "Plan check" }],
+          screens: [{ image: `${CH}/09-plan-gate.webp`, label: "Plan check" }],
         },
         {
           title: "Show the work",
           what: "Named steps tick off while the model runs (image received, detecting visual symptoms, matching against conditions), with a note not to close the app.",
           why: "15 to 30 seconds of analysis, or 1 to 2 minutes for the 360° report, feels like progress instead of a frozen screen.",
           screens: [
-            { image: `${CH}/04-analyzing.webp`, label: "Disease Diagnosis" },
-            { image: `${CH}/09-full-analyzing.webp`, label: "360° report" },
+            { image: `${CH}/05-analyzing.webp`, label: "Disease Diagnosis" },
+            { image: `${CH}/10-full-analyzing.webp`, label: "360° report" },
           ],
         },
         {
           title: "The verdict at a glance",
-          what: "'1 of 31 conditions detected', what was found and what is clear, then View Full Report. The 360° version adds breed, purity grade and milk.",
-          why: "The farmer gets the answer before any detail, in a few words and a colour.",
+          what: "'1 of 31 conditions detected', the most likely condition and how sure the model is, 'A vet should see this cow' when it's serious, then what was detected, what is suspected, and how many were ruled out or couldn't be checked.",
+          why: "The farmer gets the answer and the one urgent action before any detail. A suspected finding is never shown as clear.",
           screens: [
-            { image: `${CH}/05-ready.webp`, label: "Disease Diagnosis" },
-            { image: `${CH}/10-full-ready.webp`, label: "360° report" },
+            { image: `${CH}/06-ready.webp`, label: "Disease Diagnosis" },
+            { image: `${CH}/11-full-ready.webp`, label: "360° report" },
           ],
         },
       ],
       afterReport: [
         {
-          title: "Safety is never paywalled",
-          what: "On the Disease Diagnosis report, free users see the finding, how many signs were flagged and the vet helpline. The reason, prevention and early warning signs unlock with the plan.",
-          why: "Charging for the expert guidance pays for the model; holding back 'call a vet' would put a cow at risk. The plan banner collapses so it never covers the report.",
-          screens: [{ image: `${CH}/06-diagnosis.webp`, label: "Disease Diagnosis" }],
+          title: "Paid for at the start, open at the end",
+          what: "Every report a farmer runs is readable in full. The scan allowance is spent when the scan starts, so nothing in a report is blurred and there is no 'Unlock Full Report' banner.",
+          why: "The free plan's own report used to show locked sections: the farmer was charged a scan for a result they couldn't read. The upsell now sits where it's true, on the Scan page's plan card and in the prompt when the allowance runs out.",
+          screens: [{ image: `${CH}/12-full-report.webp`, label: "360° report, open" }],
         },
         {
           title: "Honest errors",
-          what: "If a scan can't start, the screen says so, and Try Again goes back to the camera.",
-          why: "Start-up failures used to send farmers to the paywall, which told people on a valid plan to pay again. Now an error is just an error.",
-          screens: [{ image: `${CH}/07-error.webp`, label: "Scan error" }],
+          what: "If a scan can't start, the screen says so, and Try Again goes back to the camera. A spent allowance leads to the plan, an outage to Retry.",
+          why: "Start-up failures used to send farmers to the paywall, and a spent allowance used to read 'Something went wrong'. Each now says what actually happened.",
+          screens: [{ image: `${CH}/08-error.webp`, label: "Scan error" }],
         },
         {
           title: "Every scan, kept",
           what: "Scan history lists every report by type and cow, with filters for both; a scan with no cow is labelled as unlinked.",
           why: "'How has Gowri been?' needs her last scan next to this one.",
-          screens: [{ image: `${CH}/12-history.webp`, label: "Scan history" }],
+          screens: [{ image: `${CH}/13-history.webp`, label: "Scan history" }],
         },
       ],
       anatomy: {
-        image: `${CH}/11-report-full.webp`,
+        image: `${CH}/07-diagnosis-full.webp`,
         width: 750,
-        height: 7702,
+        height: 7860,
         title: "Anatomy of the report",
-        intro: "The 360° Full Health report answers, in order, what a farmer asks about a cow: is she all right, what's wrong, what is she worth and what do I do now. This is the whole report, top to bottom (the prototype's sample values).",
+        intro: "The Disease Diagnosis report is one pass over all 31 conditions. It answers, in order, what a farmer asks about a cow that looks unwell: what is it, how sure are you, does a vet need to see her, what do I do, and what couldn't you see. This is the whole report, top to bottom (the prototype's sample values, shaped like a real response).",
         callouts: [
-          { x: 88, y: 3.4, title: "Jump to what you came for", body: "Status, Diseases and Nutrition at the top, so a farmer goes straight to the part they care about." },
-          { x: 90, y: 8.6, title: "How serious, before what", body: "28 clear, 2 to watch, 1 for the vet: the counts come before any condition is named." },
-          { x: 6, y: 15.7, title: "One plain summary", body: "'Needs attention', then two sentences: good body condition, early udder swelling, treat early to protect her milk." },
-          { x: 90, y: 19.45, title: "Signs, put together", body: "A milk drop plus udder swelling points to early mastitis rather than a feed problem." },
-          { x: 6, y: 23.1, title: "Breed purity, explained", body: "Her grade on a scale from C to A1, with the purity range of each grade, so 'A2' means something." },
-          { x: 90, y: 31.3, title: "Milk and money", body: "Milk capacity a day, lactation yield, an estimated value range and a buying recommendation." },
-          { x: 6, y: 49.65, title: "Grouped by body system", body: "Each condition sits under its body system (here udder, skin and digestive) with its own severity." },
-          { x: 90, y: 52.25, title: "What the photo shows, and what to do", body: "A condition opens to its interpretation and a recommendation: strip-test the milk, milk her last, call a vet." },
-          { x: 6, y: 64.8, title: "A plan that ends in a rescan", body: "Day 1, days 2 to 4, then a rescan on day 7 to confirm she has recovered." },
-          { x: 90, y: 66.7, title: "A ration for her", body: "Balanced ration options by diet, then her daily feed split into morning, afternoon and evening." },
-          { x: 6, y: 80.5, title: "Products that fit the finding", body: "Our own supplements, matched to the report: a complete feed supplement, and a teat dip for an udder problem." },
-          { x: 90, y: 94.2, title: "When to call a vet", body: "The signs that mean call now, and a free vet helpline button." },
-          { x: 6, y: 96.3, title: "Honest about AI", body: "The report says it is an AI estimate from the photo, and that a vet makes final decisions." },
+          { x: 90, y: 9.77, title: "Most likely, in plain words", body: "The top finding by name, the code a vet will recognise (D28), and two sentences of reasoning." },
+          { x: 6, y: 14.71, title: "What the scan covered", body: "Detected, suspected, ruled out and unchecked add up to all 31, so a clean result never hides what wasn't looked at." },
+          { x: 90, y: 17.75, title: "A vet, one tap away", body: "'A vet should see this cow' with a free call, above any detail." },
+          { x: 6, y: 23.32, title: "Proof from her photo", body: "The signs the model saw on this cow." },
+          { x: 90, y: 27.19, title: "And what argues against it", body: "Evidence that doesn't fit is shown too, the way a vet would weigh it." },
+          { x: 6, y: 28.57, title: "How urgent", body: "Severity with a deadline: treat within 24 hours to protect this lactation's milk." },
+          { x: 90, y: 30.88, title: "Confirm, then treat", body: "A strip-cup test the farmer can do today, what the vet will do, and the milk withdrawal." },
+          { x: 6, y: 33.7, title: "Questions only the farmer can answer", body: "Clots in the milk, a hot udder, a drop in yield: what a photo can't see and a vet will ask." },
+          { x: 90, y: 37.56, title: "Suspected, not detected", body: "A low-confidence finding is labelled Suspected and never shown as clear." },
+          { x: 6, y: 43.34, title: "What the photo couldn't show", body: "11 conditions grouped by body part into six photos worth taking, each saying what to shoot." },
+          { x: 90, y: 58.28, title: "Scan again", body: "One button back to the camera for the photos that were missing." },
+          { x: 6, y: 66.48, title: "Ruled out, with reasons", body: "Each cleared condition says why; a sign that was seen but explained by something else is still noted." },
+          { x: 90, y: 91.02, title: "Products for the finding", body: "A feed supplement and a teat dip for an udder problem, from our own range." },
         ],
       },
       engineIntro:
@@ -1339,8 +1345,8 @@ export const caseStudies: CaseStudy[] = [
       engineRules: [
         "**Not everything is a yes.** Each condition comes back detected, suspected or not assessable, with a severity, so a suspicion never reads like a diagnosis.",
         "**Grouped the way a vet thinks.** The 31 conditions sit under eight body systems: digestive, metabolic, udder, skin, eyes, muscles and bones, reproductive, and viral diseases.",
-        "**One photo, three reports.** The 360° Full Health scan returns the disease screening, Animal Status and Market Value from the same photo.",
-        "**Checks before the camera.** The plan and scan allowance are verified first, so no farmer takes a photo only to be told it isn't included.",
+        "**Say what wasn't seen.** In a real response about a third of the 31 came back not assessable from one side photo. The report groups them by body part, turning eleven instructions into about six photos worth taking.",
+        "**Paid when the scan starts.** The plan and allowance are checked before the camera opens, so the report that comes back is never locked, and no farmer takes a photo only to be told it isn't included.",
       ],
       decisions: [
         {
@@ -1354,9 +1360,9 @@ export const caseStudies: CaseStudy[] = [
           tradeoff: "Less definite answers, so a suspected finding comes with what to watch for and when to call a vet.",
         },
         {
-          decision: "Finding and vet line free, guidance on the plan",
-          why: "Every scan runs a model; charging for the expert layer pays for it, while 'call a vet' stays free for the cow's sake.",
-          tradeoff: "Free users see less at a worrying moment, so the plan banner collapses and never blocks the report.",
+          decision: "Charge when the scan starts, not on the report",
+          why: "Free farmers were shown a verdict and charged a scan for a result they couldn't read, which is the fastest way to lose their trust.",
+          tradeoff: "The report can't sell the plan any more, so the upsell moved to the Scan page's plan card and the prompt when the allowance runs out.",
         },
         {
           decision: "Check the plan before the photo",
@@ -1367,7 +1373,7 @@ export const caseStudies: CaseStudy[] = [
     },
     outcomes: {
       intro:
-        "The health checks shipped in Gau Sampurna: Disease Diagnosis for a cow that looks unwell, and the 360° Full Health report on the paid plan. They are the paid core of the freemium model, and the vet helpline stays free.",
+        "The health checks shipped in Gau Sampurna: Disease Diagnosis for a cow that looks unwell, and the 360° Full Health report on the paid plan. They are the paid core of the freemium model: the allowance is spent when a scan starts, every report is open, and the vet helpline is free.",
       metrics: [
         { value: "31", label: "conditions screened from one side photo" },
         { value: "8", label: "body systems in the report" },
@@ -1384,7 +1390,7 @@ export const caseStudies: CaseStudy[] = [
         { metric: "Not assessable", how: "Share of conditions returned as not assessable, by condition and phone model", tells: "Where the photo or the model needs work" },
         { metric: "Escalation", how: "Helpline calls from reports flagged for a vet, and from those that weren't", tells: "Whether serious cases reach a vet" },
         { metric: "Rescan", how: "Share of flagged cows scanned again within 10 days", tells: "Whether farmers follow the recovery plan" },
-        { metric: "Plan start", how: "Share of free users who start the plan from a Disease Diagnosis report", tells: "Whether health checks earn the subscription" },
+        { metric: "Plan start", how: "Share of free users who start the plan after their free health check", tells: "Whether health checks earn the subscription" },
       ],
     },
     learnings: [
@@ -1406,9 +1412,10 @@ export const caseStudies: CaseStudy[] = [
     subtitle:
       "How I designed Gau Sampurna's valuation scan: one side photo gives a dairy farmer an estimated price range, breed purity, milk capacity and a buying recommendation, so the number starts from the cow, not the broker.",
     product: "Gau Sampurna",
-    cover: `${MV}/08-report.webp`,
+    cover: `${MV}/09-report.webp`,
     tags: ["DairyTech", "Computer vision", "Pricing", "Trust"],
     card: {
+      theme: "AI pricing",
       problem: "Cattle are priced in code words and hand signals, through brokers who keep a share.",
       metric: "One side photo to a price range, a breed grade and a milk estimate",
       stats: [
@@ -1442,7 +1449,7 @@ export const caseStudies: CaseStudy[] = [
         text: "The same analysis powers Animal Status and the **360°** report, so one model and one scan serve three reports.",
       },
     ],
-    heroScreens: [`${MV}/02-photo-guide.webp`, `${MV}/08-report.webp`, `${MV}/07-ready.webp`],
+    heroScreens: [`${MV}/03-camera.webp`, `${MV}/09-report.webp`, `${MV}/08-ready.webp`],
     headlines: {
       problem: "A cow's price is set in code",
       people: "A seller and a first-time buyer, both guessing",
@@ -1590,11 +1597,12 @@ export const caseStudies: CaseStudy[] = [
         },
         {
           title: "Coach the udder",
-          what: "The photo guide adds 'Udder clearly visible' to the side-profile tips, then shows a preview with Continue or Retry.",
-          why: "Udder size drives the milk estimate, and milk drives the price.",
+          what: "The photo guide adds 'Udder clearly visible' to the side-profile tips. The app's own camera frames the cow in a 4:3 box, and the review shows the whole photo with ✕ and ✓.",
+          why: "Udder size drives the milk estimate, and milk drives the price. A box the farmer lines the cow up in keeps the udder inside the shot.",
           screens: [
             { image: `${MV}/02-photo-guide.webp`, label: "Photo guide" },
-            { image: `${MV}/03-confirm.webp`, label: "Preview" },
+            { image: `${MV}/03-camera.webp`, label: "Camera" },
+            { image: `${MV}/04-review.webp`, label: "Review" },
           ],
         },
         {
@@ -1602,36 +1610,36 @@ export const caseStudies: CaseStudy[] = [
           what: "If the model can't identify the breed, the farmer picks the closest match (HF crossbred, Jersey crossbred, Gir, Sahiwal or none of these) and the same scan runs again.",
           why: "One question at the right moment beats a questionnaire for everyone: earlier up-front questions were cut because farmers dropped off.",
           screens: [
-            { image: `${MV}/04-analyzing.webp`, label: "Analysis" },
-            { image: `${MV}/05-breed.webp`, label: "Pick the breed" },
+            { image: `${MV}/05-analyzing.webp`, label: "Analysis" },
+            { image: `${MV}/06-breed.webp`, label: "Pick the breed" },
           ],
         },
         {
           title: "No made-up numbers",
           what: "If the udder isn't visible, the farmer chooses: re-upload for an accurate price, or continue with a report that says why the price is missing.",
           why: "A confident wrong price costs a farmer money at the market, and costs us their trust.",
-          screens: [{ image: `${MV}/06-udder.webp`, label: "Udder not detected" }],
+          screens: [{ image: `${MV}/07-udder.webp`, label: "Udder not detected" }],
         },
         {
           title: "Price in the summary",
-          what: "Report Ready shows the breed and purity grade, then the estimated value beside weight and body condition.",
-          why: "Value takes the place milk has in the other scans' summary, because price is the question this scan answers.",
-          screens: [{ image: `${MV}/07-ready.webp`, label: "Report ready" }],
+          what: "Report Ready shows the breed and purity grade, then the estimated value ahead of milk, weight and body condition, two to a row. A figure the model couldn't read is left out, never shown as N/A.",
+          why: "Value leads because price is the question this scan answers; the body scans lead with milk instead.",
+          screens: [{ image: `${MV}/08-ready.webp`, label: "Report ready" }],
         },
       ],
       afterReport: [
         {
-          title: "The full picture, on the plan",
-          what: "Animal Status runs the same scan with the long report. Health check counts, breed purity, milk and economic figures stay open; detailed checks, the AI summary and the diet plan unlock with the plan.",
-          why: "The facts a farmer needs to trust the estimate are free. The expert layer is what the subscription pays for.",
+          title: "The full picture, nothing locked",
+          what: "Animal Status runs the same scan with the long report: health checks, the AI summary, breed purity, economic figures, findings, recovery plan and ration, all open.",
+          why: "The scan is paid for when it starts, so the report never holds back what a farmer needs to trust the estimate.",
           screens: [
-            { image: `${MV}/09-status-ready.webp`, label: "Animal Status" },
-            { image: `${MV}/10-status-report.webp`, label: "Status report" },
+            { image: `${MV}/10-status-ready.webp`, label: "Animal Status" },
+            { image: `${MV}/11-status-report.webp`, label: "Status report" },
           ],
         },
       ],
       anatomy: {
-        image: `${MV}/08-report-full.webp`,
+        image: `${MV}/09-report-full.webp`,
         width: 750,
         height: 2530,
         title: "Anatomy of the valuation",
@@ -1727,9 +1735,10 @@ export const caseStudies: CaseStudy[] = [
     subtitle:
       "How I designed Gau Sampurna's dung scan: one photo of fresh dung gives a dairy farmer a digestion score from 1 to 5, what it means, what to change in the feed and when to call a vet.",
     product: "Gau Sampurna",
-    cover: `${DC}/06-report.webp`,
+    cover: `${DC}/07-report.webp`,
     tags: ["DairyTech", "Computer vision", "Nutrition", "Habit"],
     card: {
+      theme: "Nutrition habit",
       problem: "Feed is most of the cost of milk, and a feeding problem shows only when the milk drops.",
       metric: "A photo of fresh dung to a 1–5 digestion score and a feed fix",
       stats: [
@@ -1764,7 +1773,7 @@ export const caseStudies: CaseStudy[] = [
         text: "At **10–15 seconds** it is the fastest scan, and every report ends by asking for a rescan in a few days.",
       },
     ],
-    heroScreens: [`${DC}/02-photo-guide.webp`, `${DC}/06-report.webp`, `${DC}/05-ready.webp`],
+    heroScreens: [`${DC}/03-camera.webp`, `${DC}/07-report.webp`, `${DC}/06-ready.webp`],
     headlines: {
       problem: "Most of the cost of milk is feed, and it's fed by guesswork",
       people: "Two farmers feeding by habit",
@@ -1913,24 +1922,25 @@ export const caseStudies: CaseStudy[] = [
         },
         {
           title: "Coach a fresh sample",
-          what: "Four tips before the camera (fresh manure only, the full pile from above, good daylight, close enough to fill most of the frame), then a preview with Continue or Retry.",
-          why: "Older samples change colour and texture as they dry, and would mislead the model.",
+          what: "Four tips (fresh manure only, the full pile from above, good daylight, close enough to fill most of the frame), then the app's camera with a square framing box, because a dung pile is square, not a side profile. The review shows the whole sample with ✕ and ✓.",
+          why: "Older samples change colour and texture as they dry, and would mislead the model. The same square is the crop window if the farmer trims the photo.",
           screens: [
             { image: `${DC}/02-photo-guide.webp`, label: "Photo guide" },
-            { image: `${DC}/03-confirm.webp`, label: "Preview" },
+            { image: `${DC}/03-camera.webp`, label: "Camera" },
+            { image: `${DC}/04-review.webp`, label: "Review" },
           ],
         },
         {
           title: "The fastest scan",
           what: "Three steps tick off (checking consistency, analysing colour and texture, generating recommendations), usually in 10 to 15 seconds.",
           why: "A check that takes seconds is one a farmer will repeat.",
-          screens: [{ image: `${DC}/04-analyzing.webp`, label: "Analysis" }],
+          screens: [{ image: `${DC}/05-analyzing.webp`, label: "Analysis" }],
         },
         {
           title: "Score first",
-          what: "Report Ready leads with the manure score (2 of 5, Digestive Imbalance), then the consistency and the possible causes.",
-          why: "The farmer sees how far from healthy she is before any explanation.",
-          screens: [{ image: `${DC}/05-ready.webp`, label: "Report ready" }],
+          what: "Report Ready leads with the manure score (2 of 5) and its status, then what the sample looked like, the possible causes and when to scan again. A score of 1 or 5 also says a vet should see the cow, before the full report.",
+          why: "The farmer sees how far from healthy she is, and whether today needs a vet, before any explanation.",
+          screens: [{ image: `${DC}/06-ready.webp`, label: "Report ready" }],
         },
       ],
       afterReport: [
@@ -1938,11 +1948,11 @@ export const caseStudies: CaseStudy[] = [
           title: "History by cow and by scan",
           what: "Scan history filters by scan type and by cow, and labels dung scans that weren't linked to a cow.",
           why: "'What did her last dung scan say?' needs the two scans side by side.",
-          screens: [{ image: `${DC}/07-history.webp`, label: "Scan history" }],
+          screens: [{ image: `${DC}/08-history.webp`, label: "Scan history" }],
         },
       ],
       anatomy: {
-        image: `${DC}/06-report-full.webp`,
+        image: `${DC}/07-report-full.webp`,
         width: 750,
         height: 4160,
         title: "Anatomy of the report",

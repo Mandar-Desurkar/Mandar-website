@@ -25,7 +25,10 @@ export const kissanSampurnaPrototype: Prototype = {
   name: "Kissan Sampurna",
   tagline: "AI farming app for Indian farmers",
   logo: "/prototypes/kissan-sampurna/logo.webp",
-  // code/helpers/scaled.js: designs are drawn on a 393 × 852 iPhone 15/16 Pro and almost every size
+  // Synced with the app's `prod` branch (e5e83f3) on 2026-11-04: tab bar with Shop, Home header, Crop Guide
+// livestock multi-select and compare card, My Farms empty state, Full Details badge. The new Kissan shop
+// (store, product page, cart, checkout, orders) is not rebuilt: its catalogue comes from the live store API.
+// code/helpers/scaled.js: designs are drawn on a 393 × 852 iPhone 15/16 Pro and almost every size
   // is `@ms` (moderate scale 0.5), so the design numbers are exact on a 393pt-wide phone
   device: { width: 393, height: 852, scaling: "moderate" },
   flows: [
@@ -38,7 +41,7 @@ export const kissanSampurnaPrototype: Prototype = {
           id: "k-home",
           title: "Home",
           note:
-            "Weather leads because it decides today's work. The card turns a forecast into one headline, one piece of advice and one warning. Below it, four big quick actions cover the jobs farmers open the app for, and the rest of the feed (scans, mandi prices, crop advice, farm monitoring) is re-ordered by the concerns the farmer picked during onboarding. Every empty state is a coloured call to action instead of a blank list.",
+            "Weather leads because it decides today's work. The card turns a forecast into one headline, one piece of advice and one warning. Below it, four big quick actions cover the jobs farmers open the app for, and the rest of the feed (scans, mandi prices, crop advice, farm monitoring) is re-ordered by the concerns the farmer picked during onboarding. Every empty state is a coloured call to action instead of a blank list. Since late October the header carries the account avatar (Shop took Account's place in the tab bar) and the Season Guide card is gone.",
         },
         {
           id: "k-weather",
@@ -184,7 +187,7 @@ export const kissanSampurnaPrototype: Prototype = {
           id: "cg-farm-type",
           title: "Farm type",
           note:
-            "Livestock changes the advice (fodder crops, manure). On the has-farm path this is the last question, so the button becomes \"See Crop Recommendations\".",
+            "Livestock changes the advice (fodder crops, manure). Farms often keep more than one kind of animal, so this is multi-select with checkboxes; \"I don't have any live stock\" clears the rest. On the has-farm path this is the last question, so the button becomes \"See Crop Recommendations\".",
         },
         {
           id: "cg-farm-name",
@@ -196,7 +199,7 @@ export const kissanSampurnaPrototype: Prototype = {
           id: "cg-report",
           title: "Recommendation",
           note:
-            "Explain the pick, don't just rank it. A % match, a pass/fail fit check, weather needs, risks with fixes, practical tips and soil/income benefits make a top-5 out of 100+ crops (ranked across 655K+ farm profiles) feel trustworthy. Tap another crop in the comparison to open it as an alternative pick. \"Go to my farm\" hands off into Farm Monitoring. Sample values for this demo.",
+            "Explain the pick, don't just rank it. A % match, a pass/fail fit check, weather needs, risks with fixes, practical tips and soil/income benefits make a top-5 out of 100+ crops (ranked across 655K+ farm profiles) feel trustworthy. Tap another crop in the comparison (ranked rows with the match %, the crop being viewed tinted blue) to open it as an alternative pick. \"Go to my farm\" hands off into Farm Monitoring. Sample values for this demo.",
         },
         {
           id: "cg-no-fit",
@@ -222,6 +225,12 @@ export const kissanSampurnaPrototype: Prototype = {
           title: "My Farms",
           note:
             "Every farm as a card with its satellite thumbnail, crop and acreage. A farm saved without a boundary shows \"NO IMAGE · Locate your Farm\" so unfinished setups are easy to resume. The ⓘ sheet explains what monitoring shows (crop health, water, weather impact, early alerts) with social proof. Free users past their farm limit hit the paywall from + Add Farm.",
+        },
+        {
+          id: "fm-no-farms",
+          title: "No farms yet",
+          note:
+            "The first visit to Monitor, before any farm exists: an illustration of a mapped field behind the top bar, \"No Farms Added Yet\", and the three things adding a farm unlocks (crop growth, crop nutrition, farm reports), so the empty tab sells the feature instead of showing a blank list. One action: + Add Farm.",
         },
         {
           id: "fm-q-grow",

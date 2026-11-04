@@ -888,3 +888,12 @@
   color: #fff;
   display: flex;
 }
+
+/* The one line the herd card delivers (my-herd-section.jsx) */
+.cowInfo .cowLine {
+  margin-top: 2px;
+  font-size: 13.5px;
+  line-height: 18px;
+  font-weight: 700;
+  color: #003166;
+}

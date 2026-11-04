@@ -958,3 +958,104 @@
   align-items: center;
   gap: 6px;
 }
+
+/* Livestock multi-select (farm-type-screen.jsx, aaeabdd): square checkboxes instead of radios */
+.checkbox,
+.checkboxOn {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+}
+
+.checkbox {
+  border: 1.5px solid #d1d5db;
+  background: #fff;
+}
+
+.checkboxOn {
+  background: #004691;
+}
+
+/* CompareOptions, redesigned per Figma (de6c647) */
+.compareCard {
+  gap: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.compareList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.compareRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #f1f5f9;
+  border-radius: 8px;
+  background: #fff;
+  text-align: left;
+}
+
+.compareRowCurrent {
+  border-color: #bfdbfe;
+  background: #eff6ff;
+}
+
+.rankBox {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.compareHead {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.compareName {
+  flex-shrink: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f2a4a;
+}
+
+.compareNameCurrent {
+  font-size: 16px;
+}
+
+.seasonChip {
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: #f1f5f9;
+  font-size: 12px;
+  color: #475569;
+}
+
+.seasonChipCurrent {
+  background: rgba(0, 113, 247, 0.25);
+}
+
+.compareMatch {
+  font-size: 12px;
+  font-weight: 700;
+  color: #2e2e2e;
+}

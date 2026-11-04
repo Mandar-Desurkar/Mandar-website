@@ -78,14 +78,10 @@
   letter-spacing: 0.28px;
 }
 
-.counter {
+/* Where the scan counter used to be: an empty 36pt slot keeps "Upgrade to Pro" centred */
+.counterSlot {
   width: 36px;
-  color: #003166;
-  font-size: 12px;
-  line-height: 16px;
-  font-weight: 700;
-  letter-spacing: 0.24px;
-  text-align: center;
+  height: 36px;
 }
 
 .herdBand {
@@ -1089,17 +1085,18 @@
   color: #0f172a;
 }
 
+/* MetricCard: two to a row, left aligned (width 47% in prod) */
 .metrics {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
 }
 
 .metric {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 14px 6px;
+  align-items: flex-start;
+  padding: 16px;
   border-radius: 14px;
   border: 1px solid #e2e8f0;
   background: #fff;
@@ -1185,4 +1182,363 @@
 
 @media (prefers-reduced-motion: reduce) {
   .ring, .activeCircle i { animation: none; }
+}
+
+/* ---------- IMAGE_CAMERA (CameraCaptureStep.jsx) ---------- */
+.camRoot {
+  background: #000;
+  color: #fff;
+  overflow: hidden;
+}
+
+/* The viewfinder: the scene behind, softened, with the framed subject sharp inside the box */
+.camFeed {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(6px) brightness(0.7);
+  transform: scale(1.12);
+}
+
+.camTop {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.camTop b {
+  flex: 1;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.camIcon,
+.camIconSpace {
+  width: 44px;
+  height: 44px;
+  border-radius: 22px;
+  flex-shrink: 0;
+}
+
+.camIcon {
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.4);
+  color: #fff;
+}
+
+.frameWrap {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 24px;
+}
+
+.frameBox {
+  position: relative;
+  width: 100%;
+  max-height: 70%;
+}
+
+.frameBox img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.cTL,
+.cTR,
+.cBL,
+.cBR {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border: 0 solid #fff;
+}
+
+.cTL { top: 0; left: 0; border-top-width: 3px; border-left-width: 3px; border-top-left-radius: 8px; }
+.cTR { top: 0; right: 0; border-top-width: 3px; border-right-width: 3px; border-top-right-radius: 8px; }
+.cBL { bottom: 0; left: 0; border-bottom-width: 3px; border-left-width: 3px; border-bottom-left-radius: 8px; }
+.cBR { bottom: 0; right: 0; border-bottom-width: 3px; border-right-width: 3px; border-bottom-right-radius: 8px; }
+
+.hintPill {
+  margin-top: 16px;
+  padding: 8px 16px;
+  border-radius: 24px;
+  background: rgba(0, 0, 0, 0.55);
+  font-size: 13px;
+  text-align: center;
+}
+
+.camBottom {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 32px 34px;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.galleryBtn {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+.shutter {
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  border-radius: 38px;
+  border: 4px solid rgba(255, 255, 255, 0.85);
+}
+
+.shutter span {
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+}
+
+/* ---------- IMAGE_CONFIRM (ImageConfirmStep.jsx) ---------- */
+.reviewRoot {
+  justify-content: space-between;
+  background: #000;
+  color: #fff;
+}
+
+/* contain, not cover: the farmer checks that the whole animal is in frame */
+.reviewImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.reviewTop {
+  position: relative;
+  padding: 16px 24px;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.reviewTop p {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 21px;
+  text-align: center;
+}
+
+.reviewBottom {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 24px 34px;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.cropBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 10px 18px;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.actionRow {
+  display: flex;
+  justify-content: space-evenly;
+  align-self: stretch;
+}
+
+.action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 96px;
+}
+
+.action small {
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.roundBtn {
+  display: grid;
+  place-items: center;
+  width: 68px;
+  height: 68px;
+  border-radius: 34px;
+  color: #fff;
+}
+
+.rejectBtn {
+  border: 2px solid rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.confirmBtn {
+  background: #16a34a;
+}
+
+/* ---------- ImageCropEditor.jsx ---------- */
+.cropRoot {
+  background: #000;
+  color: #fff;
+}
+
+.cropTop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 24px 16px;
+  text-align: center;
+}
+
+.cropTop b {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.cropTop small {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.cropStage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+}
+
+.cropWindow {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  background: #111;
+}
+
+.cropWindow img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.guideV,
+.guideH {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.guideV {
+  top: 0;
+  bottom: 0;
+  width: 1px;
+}
+
+.guideH {
+  left: 0;
+  right: 0;
+  height: 1px;
+}
+
+.cropBottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 32px 34px;
+}
+
+.cropBottom .action {
+  width: 72px;
+}
+
+.cropBottom .roundBtn {
+  width: 64px;
+  height: 64px;
+}
+
+.cropBottom .action small {
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.resetBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.14);
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+}
+
+/* ---------- REPORT_READY additions ---------- */
+.vetBanner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.tallyRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.tallyRow > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: #475569;
+}
+
+.oneLine {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

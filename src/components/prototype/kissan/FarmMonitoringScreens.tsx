@@ -88,12 +88,56 @@ const INFO_ITEMS = [
   ["Early Alerts", "fm-info-early-alerts.webp"],
 ];
 
-function MyFarms({ next, go, goToFlow }: ScreenProps) {
+// ---------- No farms yet (my-farms-screen.jsx empty state, 97b7cc9) ----------
+// The illustration runs up behind the top bar; three features say what adding a farm unlocks
+
+function NoFarms({ go, goToFlow }: ScreenProps) {
+  return (
+    <div className={`${base.screen} ${f.noFarms}`} style={{ position: "relative" }}>
+      <img className={f.noFarmsHero} src={img("fm-no-farms-bg.webp")} alt="" />
+      <div className={f.noFarmsTop}>
+        <TopBarNew title="My Farms" noBack right={<Info size={22} color="#111827" />} />
+      </div>
+      <div className={f.noFarmsBody}>
+        <img className={f.noFarmsLeaves} src={img("fm-no-farms-leaves.webp")} alt="" />
+        <p className={f.noFarmsTitle}>
+          No Farms
+          <br />
+          Added Yet
+        </p>
+        <p className={f.noFarmsSub}>Add your farm to get personalized crop recommendations and generate farm reports.</p>
+        <div className={f.noFarmsFeatures}>
+          {[
+            ["fm-no-farms-crop-growth.webp", "Crop", "Growth"],
+            ["fm-no-farms-crop-nutrition.webp", "Crop", "Nutrition"],
+            ["fm-no-farms-farm-reports.webp", "Farm", "Reports"],
+          ].map(([icon, a, b]) => (
+            <span key={b} className={f.noFarmsFeature}>
+              <img src={img(icon)} alt="" />
+              <span>
+                {a}
+                <br />
+                {b}
+              </span>
+            </span>
+          ))}
+        </div>
+      </div>
+      <button type="button" className={`${ui.btnReset} ${f.noFarmsBtn} ${base.hotspot}`} onClick={() => go("fm-q-grow")}>
+        + Add Farm
+      </button>
+      <KissanTabBar active="monitor" goToFlow={goToFlow} />
+    </div>
+  );
+}
+
+function MyFarms({ go, goToFlow }: ScreenProps) {
   const [info, setInfo] = useState(false);
   return (
     <div className={base.screen} style={{ position: "relative" }}>
       <TopBarNew
         title="My Farms"
+        noBack
         right={
           <button type="button" className={`${ui.btnReset} ${s.topBarSpacer}`} onClick={() => setInfo(true)} aria-label="About Farm Monitoring">
             <Info size={22} color="#111827" />
@@ -133,7 +177,7 @@ function MyFarms({ next, go, goToFlow }: ScreenProps) {
           </button>
         </div>
       </div>
-      <button type="button" className={`${ui.btnReset} ${f.fab} ${base.hotspot}`} onClick={next}>
+      <button type="button" className={`${ui.btnReset} ${f.fab} ${base.hotspot}`} onClick={() => go("fm-q-grow")}>
         + Add Farm
       </button>
       <KissanTabBar active="monitor" goToFlow={goToFlow} />
@@ -1255,10 +1299,11 @@ const TIMELINE = [
 
 function FullDetails({ go, goToFlow }: ScreenProps) {
   const [more, setMore] = useState<Record<string, boolean>>({});
-  const { openMenu, overlays } = useFarmActions(go, goToFlow);
+  const { overlays } = useFarmActions(go, goToFlow);
   return (
     <div className={base.screen} style={{ position: "relative" }}>
-      <TopBarNew title="Full Details" onMenu={openMenu} />
+      {/* No menu button on Full Details since 7b543d4 */}
+      <TopBarNew title="Full Details" />
       <div className={f.badgeRow}>
         <span className={f.cropBadge}>Wheat · Stage 2</span>
       </div>
@@ -1288,12 +1333,15 @@ function FullDetails({ go, goToFlow }: ScreenProps) {
                     <span className={f.stepText} style={status === "current" ? { color: "#475569" } : undefined}>
                       <span className={f.stepName} style={{ color: status === "upcoming" ? "#64748B" : status === "current" ? "#0F2942" : "#1E293B" }}>
                         {st.name}
-                        {status === "current" && <span className={f.currentBadge}>CURRENT</span>}
                       </span>
                       {st.note}
                     </span>
-                    <span className={f.range} style={status === "current" ? { color: "#004691", fontWeight: 700 } : undefined}>
-                      {st.range}
+                    {/* 7b543d4: the Current badge sits above the day range on the right */}
+                    <span className={f.rightStack}>
+                      {status === "current" && <span className={f.currentBadge}>CURRENT</span>}
+                      <span className={f.range} style={status === "current" ? { color: "#004691", fontWeight: 700 } : undefined}>
+                        {st.range}
+                      </span>
                     </span>
                   </div>
                 );
@@ -1529,7 +1577,7 @@ function NoCropReport({ go, goToFlow }: ScreenProps) {
           </span>
           <b>No crop growing on this field right now</b>
           <p>You can still see what would grow well here.</p>
-          <button type="button" className={`${ui.btnReset} ${f.solidPill} ${base.hotspot}`} style={{ alignSelf: "stretch", flex: "none" }} onClick={() => goToFlow("crop-guide")}>
+          <button type="button" className={`${ui.btnReset} ${f.solidPill} ${base.hotspot}`} style={{ alignSelf: "stretch", flex: "none" }} onClick={() => goToFlow("crop-guide", "cg-season")}>
             See What to Plant
           </button>
           <button type="button" className={`${ui.btnReset} ${f.planted}`} onClick={() => go("fr-update-crop")}>
@@ -1565,6 +1613,7 @@ function Generating({ go }: ScreenProps) {
 
 export const farmMonitoringScreens: Record<string, ComponentType<ScreenProps>> = {
   "fm-my-farms": MyFarms,
+  "fm-no-farms": NoFarms,
   "fm-q-grow": GrowStep,
   "fm-q-crop": QCrop,
   "fm-q-sow": QSow,

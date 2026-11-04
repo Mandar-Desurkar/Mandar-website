@@ -49,16 +49,21 @@ export function TopBarNew({
   onBack,
   onMenu,
   right,
+  noBack = false,
 }: {
   title: string;
   menu?: boolean;
   onBack?: () => void;
   onMenu?: () => void;
   right?: ReactNode;
+  // showBackButton={false} in the app (tab roots such as My Farms)
+  noBack?: boolean;
 }) {
   return (
     <div className={s.topBarNew}>
-      {onBack === undefined ? (
+      {noBack ? (
+        <span className={s.topBarSpacer} aria-hidden="true" />
+      ) : onBack === undefined ? (
         <span className={s.backCircle} aria-hidden="true">
           <BackChevron />
         </span>
@@ -167,7 +172,6 @@ function SelectFarm({ go, goToFlow }: ScreenProps) {
                     <span className={g.chip}>{f.acres} acres</span>
                   </span>
                 </span>
-                {!on && <span className={g.radio} />}
               </button>
             );
           })}
@@ -580,7 +584,11 @@ const FARM_TYPES = [
 ];
 
 function FarmType({ next, go }: ScreenProps) {
-  const [selected, setSelected] = useState<string | null>(null);
+  // Multi-select since aaeabdd: "no livestock" can't be combined with an animal
+  const [selected, setSelected] = useState<string[]>([]);
+  const noneSelected = selected.includes("none");
+  const toggle = (value: string) =>
+    setSelected((prev) => (prev.includes(value) ? prev.filter((x) => x !== value) : [...prev.filter((x) => x !== "none"), value]));
   const last = hasFarmPath;
   return (
     <div className={base.screen}>
@@ -589,17 +597,18 @@ function FarmType({ next, go }: ScreenProps) {
         <div className={g.body}>
           <div>
             <p className={g.title}>What type of farm do you have?</p>
-            <p className={g.subtitle}>Choose the option that best fits your farm. We&apos;ll tailor practical advice to your animals.</p>
+            <p className={g.subtitle}>Choose all the options that fit your farm. We&apos;ll tailor practical advice to your animals.</p>
           </div>
           <div className={g.typeGrid}>
             {FARM_TYPES.map((t) => {
-              const on = selected === t.value;
+              const on = selected.includes(t.value);
               return (
                 <button
                   key={t.value}
                   type="button"
-                  className={`${ui.btnReset} ${g.typeCard} ${on ? g.typeCardOn : ""} ${!selected && t.value === "cattle" ? ui.hotspot : ""}`}
-                  onClick={() => setSelected(t.value)}
+                  className={`${ui.btnReset} ${g.typeCard} ${on ? g.typeCardOn : ""} ${selected.length === 0 && t.value === "cattle" ? ui.hotspot : ""}`}
+                  onClick={() => toggle(t.value)}
+                  aria-pressed={on}
                 >
                   <img src={img(t.image)} alt="" />
                   <span className={g.typeRow}>
@@ -607,7 +616,7 @@ function FarmType({ next, go }: ScreenProps) {
                       <b>{t.title}</b>
                       <span>{t.hint}</span>
                     </span>
-                    <span className={`${g.radio} ${on ? g.radioOn : ""}`} />
+                    <span className={on ? g.checkboxOn : g.checkbox}>{on && <Check size={16} color="#fff" />}</span>
                   </span>
                 </button>
               );
@@ -615,8 +624,9 @@ function FarmType({ next, go }: ScreenProps) {
           </div>
           <button
             type="button"
-            className={`${ui.btnReset} ${g.none} ${selected === "none" ? g.noneOn : ""}`}
-            onClick={() => setSelected("none")}
+            className={`${ui.btnReset} ${g.none} ${noneSelected ? g.noneOn : ""}`}
+            onClick={() => setSelected(noneSelected ? [] : ["none"])}
+            aria-pressed={noneSelected}
           >
             I don&apos;t have any live stock
           </button>
@@ -625,8 +635,8 @@ function FarmType({ next, go }: ScreenProps) {
       <div className={s.footer}>
         <PillButton
           label={last ? CTA_LAST : "Continue"}
-          disabled={!selected}
-          hint={!!selected}
+          disabled={selected.length === 0}
+          hint={selected.length > 0}
           onClick={() => (last ? go("cg-report") : next())}
         />
       </div>
@@ -662,14 +672,18 @@ function FarmName({ next }: ScreenProps) {
 
 // ---------- Report (crop-guide-report-screen.jsx + components/report-sections.jsx) ----------
 
+// Every icon in "Why we recommend" uses the water icon's blue since 2ef4bad
+const FIT_ICON = { color: "#2563EB", bg: "#DBEAFE" };
 const FIT = [
-  { label: "Soil Match", value: "Excellent", icon: "▦", color: "#2E7D32", bg: "#DCEFE3" },
-  { label: "Water Fit", value: "Good", icon: "💧", color: "#2563EB", bg: "#DBEAFE" },
-  { label: "Season Fit", value: "Perfect", icon: "☀", color: "#D97706", bg: "#FEF3C7" },
-  { label: "Budget Fit", value: "Good", icon: "₹", color: "#9333EA", bg: "#F3E8FF" },
+  { label: "Soil Match", value: "Excellent", icon: "▦" },
+  { label: "Water Fit", value: "Good", icon: "💧" },
+  { label: "Season Fit", value: "Perfect", icon: "☀" },
+  { label: "Budget Fit", value: "Good", icon: "₹" },
 ];
 
 // Top 5 for a Rabi, drip-irrigated, ₹10–25k/acre farm (illustrative)
+const RANK_COLORS = ["#DBEAFE", "#FEF3C7", "#FFEDD5", "#EDE9FE", "#FCE7F3"];
+
 const COMPARE = [
   { name: "Wheat", season: "Rabi", match: 94, window: "Nov 1 – Nov 25" },
   { name: "Mustard", season: "Rabi", match: 88, window: "Oct 10 – Oct 31" },
@@ -732,7 +746,7 @@ function Report({ goToFlow }: ScreenProps) {
           <div className={s.fitGrid}>
             {FIT.map((f) => (
               <div key={f.label} className={s.fitCell}>
-                <span className={s.fitIcon} style={{ background: f.bg, color: f.color }}>
+                <span className={s.fitIcon} style={{ background: FIT_ICON.bg, color: FIT_ICON.color }}>
                   {f.icon}
                 </span>
                 <span>
@@ -743,7 +757,7 @@ function Report({ goToFlow }: ScreenProps) {
             ))}
           </div>
           <div className={s.profit}>
-            <span className={s.fitIcon} style={{ background: "#FDEBD6", color: "#D97706" }}>
+            <span className={s.fitIcon} style={{ background: FIT_ICON.bg, color: FIT_ICON.color }}>
               ↗
             </span>
             <span className={s.profitText}>
@@ -762,48 +776,37 @@ function Report({ goToFlow }: ScreenProps) {
           </button>
         </div>
 
-        <div className={s.card}>
+        {/* CompareOptions (report-sections.jsx, redesigned per Figma in de6c647): engine rank, name,
+            season chip and match %, the crop being viewed tinted blue */}
+        <div className={`${s.card} ${g.compareCard}`}>
           <div>
             <p className={s.cardTitle}>How it compares with other options</p>
-            <p className={s.caption}>Compare progress, seasonality, and harvest readiness. Tap a crop to open it.</p>
+            <p className={s.caption}>Compare progress, seasonality, and harvest readiness.</p>
           </div>
-          {COMPARE.map((c, i) => {
-            const color = c.match >= 80 ? "#059669" : "#D97706";
-            const viewing = i === current;
-            return (
-              <button
-                key={c.name}
-                type="button"
-                className={`${ui.btnReset} ${s.compareRow} ${viewing ? s.compareCurrent : ""}`}
-                onClick={() => setCurrent(i)}
-                disabled={viewing}
-              >
-                <span className={s.compareIcon} style={{ background: c.match >= 80 ? "#D1FAE5" : "#FEF3C7", color }}>
-                  🌾
-                </span>
-                <span className={s.compareBody}>
-                  <span className={s.compareHead}>
-                    <span className={s.compareName}>{c.name}</span>
-                    <span className={s.seasonPill}>{c.season}</span>
-                    <span className={s.flex} />
-                    {viewing ? (
-                      <span className={s.viewingPill}>Viewing now</span>
-                    ) : (
-                      <span className={s.matchScorePill} style={{ background: c.match >= 80 ? "#10B981" : "#F59E0B" }}>
-                        {c.match}%
-                      </span>
-                    )}
+          <div className={g.compareList}>
+            {COMPARE.map((c, i) => {
+              const viewing = i === current;
+              return (
+                <button
+                  key={c.name}
+                  type="button"
+                  className={`${ui.btnReset} ${g.compareRow} ${viewing ? g.compareRowCurrent : ""}`}
+                  onClick={() => setCurrent(i)}
+                  disabled={viewing}
+                >
+                  <span className={g.rankBox} style={{ background: viewing ? "#004691" : RANK_COLORS[i % RANK_COLORS.length], color: viewing ? "#fff" : "#6B868F" }}>
+                    {i + 1}
                   </span>
-                  <span className={s.progressRow}>
-                    <span className={s.track}>
-                      <span className={s.fill} style={{ width: `${c.match}%`, background: color }} />
-                    </span>
-                    <span className={s.progressText}>{c.match}%</span>
+                  <span className={g.compareHead}>
+                    <span className={`${g.compareName} ${viewing ? g.compareNameCurrent : ""}`}>{c.name}</span>
+                    <span className={`${g.seasonChip} ${viewing ? g.seasonChipCurrent : ""}`}>{c.season}</span>
                   </span>
-                </span>
-              </button>
-            );
-          })}
+                  <span className={g.compareMatch}>{c.match}%</span>
+                  <ChevronRight size={14} color="#004691" />
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {/* WeatherSuitability */}

@@ -1380,3 +1380,45 @@
   font-size: 16px;
   font-weight: 700;
 }
+
+/* Home header (WeatherCard showAccountButton, synced 2026-11-04) */
+.homeHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.homeLocation {
+  flex: 1;
+  margin-right: 12px;
+}
+
+.avatarBtn {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
+  background: #b3dfef;
+}
+
+.homeWeatherRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.homeTemp {
+  font-size: 20px;
+  font-weight: 900;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.homeCondition {
+  padding: 2px 12px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.25);
+  font-size: 14px;
+  font-weight: 500;
+}

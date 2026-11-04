@@ -1,6 +1,7 @@
 // Interactive prototype content for Gau Sampurna (dairy farming app), opened from the hero's
 // "Apps I've built" card. Screens are recreated from the `prod` branch of
-// silo-prod/gausampurna-react-app (code/screens/gau-swastha-tenant/* and shared screens): real colours, Lato,
+// silo-prod/gausampurna-react-app (code/screens/gau-swastha-tenant/* and shared screens; scan flow and
+// reports synced to 5b36102 on 2026-11-04): real colours, Lato,
 // English copy and artwork. Report values are illustrative sample values; PM notes are editable.
 import type { Prototype } from "./kissanSampurna";
 
@@ -22,7 +23,7 @@ export const gauSampurnaPrototype: Prototype = {
           id: "gs-home",
           title: "Home",
           note:
-            "The home screen is a daily dashboard, not a menu. A health-alert banner opens a two-step symptom check that routes straight into a scan, quick actions cover the three jobs farmers come for (scan a cow, add a cow, call the helpline), and the herd, recent scans and vet-picked products follow. Scan sits in the middle of the tab bar as the one action that matters most.",
+            "The home screen is a daily dashboard, not a menu. A health-alert banner opens a two-step symptom check that routes straight into a scan, quick actions cover the three jobs farmers come for (scan a cow, add a cow, call the helpline), then the herd card, recent scans and vet-picked products. The herd card names one cow and one thing to do (\"Critical result — open her report today\"), picked by a priority ladder from a critical result down to healthy, instead of listing every cow with a badge. Scan sits in the middle of the tab bar as the one action that matters most.",
         },
       ],
     },
@@ -35,7 +36,7 @@ export const gauSampurnaPrototype: Prototype = {
           id: "gs-hub",
           title: "Scan hub",
           note:
-            "Triage first. The urgent \"Cow unwell or Off-feed?\" path sits on top in a dark card, routine scans below, and the paid 360° report last. The cow is chosen up front (Change Cow opens the My Herd sheet), so every AI report is tied to an animal in the herd. The \"1/1 Scan\" counter and the Upgrade to Pro pill make the free allowance visible before it runs out.",
+            "Triage first. The urgent \"Cow unwell or Off-feed?\" path sits on top in a dark card, routine scans below, and the 360° report last. The cow is chosen up front (Change Cow opens the My Herd sheet), so every AI report is tied to an animal in the herd. The scan counter was taken out of the header: how many scans are left is said by the gate that admits a scan, not by the page.",
         },
         {
           id: "gs-loading",
@@ -47,13 +48,19 @@ export const gauSampurnaPrototype: Prototype = {
           id: "gs-capture",
           title: "Photo guide",
           note:
-            "Coach the photo before the model sees it. One side-profile photo powers disease screening and body analysis, so simple tips (full profile, level angle, daylight, nothing blocking) protect accuracy for everything downstream.",
+            "Coach the photo before the model sees it. One side-profile photo powers disease screening and body analysis, so simple tips (full profile, level angle, daylight, nothing blocking) protect accuracy for everything downstream. Open Camera now opens the app's own camera; the gallery skips straight to review.",
+        },
+        {
+          id: "gs-camera",
+          title: "Camera",
+          note:
+            "The app's own camera instead of the phone's: on Android the OS camera and crop screen differ on every handset. A framing box (4:3 for a side profile, square for dung) with a hint pill shows where the cow goes, and the same box is the crop window later.",
         },
         {
           id: "gs-confirm",
-          title: "Confirm photo",
+          title: "Review photo",
           note:
-            "A preview with Continue / Retry catches blurry or cropped photos before they cost a scan. The photo goes straight to the model in the same call (an earlier S3 upload step was removed because it was a second point of failure).",
+            "The photo fills the screen with the question on top and a round ✕ / ✓ pair below, the same shape as Kissan's crop camera, so a farmer who uses both apps meets one interaction. Cropping is opt-in: Crop Photo opens an in-app cropper locked to the framing box's shape.",
         },
         {
           id: "gs-analyzing",
@@ -65,13 +72,13 @@ export const gauSampurnaPrototype: Prototype = {
           id: "gs-ready",
           title: "Report ready",
           note:
-            "A one-glance verdict (\"1 of 31 conditions detected\") with what was detected and what is clear, then one clear next step: View Full Report.",
+            "What a farmer needs off the scan, in order: how many of the 31 were found, which one is most likely and how sure the model is, whether a vet has to see the cow, then detected and suspected findings and a tally of what was ruled out and what the photo could not show. Suspected is never shown as clear.",
         },
         {
           id: "gs-diagnosis",
           title: "Diagnosis",
           note:
-            "Turn AI output into a safe next step: indicators checked, then the reason, prevention and warning signs. Free users see the verdict and the vet helpline, but the guidance is frosted behind \"Unlock Full Report\", and a collapsible banner sells the plan without blocking the report. Safety (call a vet) is never paywalled. Sample values for this demo.",
+            "One pass over all 31 diseases, read from the real response: a Most likely verdict with the model's reasoning, a Detected / Suspected / Ruled out / Unchecked tally, \"A vet should see this cow\" with a free call, and finding cards (what the photo shows, why, points against, urgency, how to confirm and treat, questions only the farmer can answer). About a third of a real screening comes back not assessable, so those are grouped by body part into the photos worth retaking. Nothing is blurred: the scan was paid for when it started. Sample values for this demo.",
         },
         {
           id: "gs-error",
@@ -98,9 +105,14 @@ export const gauSampurnaPrototype: Prototype = {
           note: "The same side-profile guide as the disease check: one photo habit serves every body scan.",
         },
         {
+          id: "gs-camera-status",
+          title: "Camera",
+          note: "The same in-app camera and 4:3 framing box as every side-profile scan.",
+        },
+        {
           id: "gs-confirm-status",
-          title: "Confirm photo",
-          note: "Preview before spending a scan.",
+          title: "Review photo",
+          note: "Full-screen review with ✕ / ✓ and an optional crop, before the scan is spent.",
         },
         {
           id: "gs-analyzing-status",
@@ -116,13 +128,13 @@ export const gauSampurnaPrototype: Prototype = {
         {
           id: "gs-ready-status",
           title: "Report ready",
-          note: "Breed, grade and three metrics (weight, BCS, milk) answer \"how is my cow?\" before the long report.",
+          note: "Breed and grade, then up to four figures, two to a row (weight, BCS, milk, value). A figure the model could not read is left out rather than shown as N/A.",
         },
         {
           id: "gs-status-report",
           title: "Status report",
           note:
-            "Free vs premium in one screen. Facts the farmer needs to trust the AI (health check counts, breed purity, economic parameters, health parameters) stay open; the expert layer (detailed checks, AI summary, pattern detected, key findings, recovery plan, diet and daily ration) is frosted for free users. Sample values for this demo.",
+            "The whole report, open to everyone who ran the scan: health check counts, detailed checks, AI summary, the pattern detected, breed purity, economic figures, key findings, recovery plan, ration and daily feed. The frosted premium layer and the Unlock Full Report banner were removed, because the free tier's own report was being shown locked. Sample values for this demo.",
         },
       ],
     },
@@ -142,9 +154,14 @@ export const gauSampurnaPrototype: Prototype = {
           note: "Adds an \"Udder clearly visible\" tip, because udder size drives the milk estimate and therefore the price.",
         },
         {
+          id: "gs-camera-market",
+          title: "Camera",
+          note: "The same in-app camera: the framing box keeps the whole udder inside the shot.",
+        },
+        {
           id: "gs-confirm-market",
-          title: "Confirm photo",
-          note: "Same preview step as every scan.",
+          title: "Review photo",
+          note: "Same full-screen review as every scan.",
         },
         {
           id: "gs-analyzing-market",
@@ -160,7 +177,7 @@ export const gauSampurnaPrototype: Prototype = {
         {
           id: "gs-ready-market",
           title: "Report ready",
-          note: "The estimated value replaces milk in the summary metrics, because price is the question this scan answers.",
+          note: "The estimated value leads the figures, ahead of milk, because price is the question this scan answers.",
         },
         {
           id: "gs-market-report",
@@ -186,9 +203,14 @@ export const gauSampurnaPrototype: Prototype = {
           note: "Dung-specific tips: fresh (under an hour), top-down, whole pile, good daylight.",
         },
         {
+          id: "gs-camera-dung",
+          title: "Camera",
+          note: "A square framing box, because a top-down dung pile is square, not a side profile.",
+        },
+        {
           id: "gs-confirm-dung",
-          title: "Confirm photo",
-          note: "Same preview step, with a dung-specific hint.",
+          title: "Review photo",
+          note: "Same full-screen review, asking whether the whole dung sample is visible.",
         },
         {
           id: "gs-analyzing-dung",
@@ -198,7 +220,7 @@ export const gauSampurnaPrototype: Prototype = {
         {
           id: "gs-ready-dung",
           title: "Report ready",
-          note: "A 1–5 manure score with the classification and the top possible causes.",
+          note: "A 1–5 manure score with its status, what the sample looked like, the possible causes and when to scan again. A score of 1 or 5 also says a vet should see the cow, before the full report.",
         },
         {
           id: "gs-dung-results",
@@ -230,9 +252,14 @@ export const gauSampurnaPrototype: Prototype = {
           note: "As a Pro member: the same side-profile photo now powers body, disease and nutrition analysis at once.",
         },
         {
+          id: "gs-camera-full",
+          title: "Camera",
+          note: "The same in-app camera and side-profile framing box.",
+        },
+        {
           id: "gs-confirm-full",
-          title: "Confirm photo",
-          note: "Same preview step.",
+          title: "Review photo",
+          note: "Same full-screen review step.",
         },
         {
           id: "gs-analyzing-full",
@@ -242,7 +269,7 @@ export const gauSampurnaPrototype: Prototype = {
         {
           id: "gs-ready-full",
           title: "Report ready",
-          note: "Adds a \"Systems: Checked\" metric to signal the wider scope.",
+          note: "Breed and grade with weight, BCS, milk and value, two to a row.",
         },
         {
           id: "gs-full-report",

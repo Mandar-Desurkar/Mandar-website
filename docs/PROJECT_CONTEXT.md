@@ -49,7 +49,10 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
   Market Value and Cow Dung Check 2026-11-03): six in all, content in `src/data/caseStudies.ts` (typed; every public statistic
   has a `source` id pointing at a verified URL), one statically generated page per slug at
   `/case-studies/<slug>` (`src/app/case-studies/[slug]/page.tsx` + `CaseStudy.module.css`). The Case
-  Studies window lists them as feature cards (the "Products I've shipped" list was removed on 2026-11-01),
+  Studies window (redesigned 2026-11-03) groups them by app with a filter (All / Kissan / Gau), a method line
+  (Problem → Insight → Decision → Outcome) and per card a storyboard: the problem's key stat (`problem.featured`), "My
+  call" (`solution.decisions[0]`) and what shipped (`card.metric`); `card.theme` is the eyebrow. The first study of each
+  app is the wide feature card. The "Products I've shipped" list was removed on 2026-11-01,
   and Spotlight has a "Case studies" group. **To add one:** append an entry to `caseStudies`, add
   screenshots under `public/case-studies/<slug>/` (captured from the desktop prototype viewer at 2×),
   and run `next build` (the page prerenders via `generateStaticParams`). Deep links:
@@ -147,6 +150,20 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
 - [ ] **Before pushing:** owner to confirm Silo Fortune is OK with public app screens, the install-to-signup
       "3%" wording, and whether Contact keeps "SYSTEM HALTED".
 - [x] Pushed `prod` and `dev` to origin (2026-10-21) using the Mandar-Desurkar account.
+
+- [x] **Prototype vs reference repos (audited and synced 2026-11-04).** Clones fast-forwarded (read-only): Kissan
+      `dev` eb2acde, Kissan `prod` e5e83f3, Gau `prod` 5b36102. Fetch with git's keychain login
+      (`GIT_TERMINAL_PROMPT=0 git -C _external/<clone> fetch`); neither `gh` account can see these repos. Synced:
+      Gau in-app camera (framing box 4:3 / square), full-screen ✕ / ✓ review with in-app crop, Report Ready per scan
+      type (Most likely, vet banner, detected / suspected, ruled out / unchecked tally), the 31-condition Disease
+      Diagnosis report, every report unlocked (no blur, no Unlock banner), no scan counter, no Health Parameters,
+      Home herd card with one priority cow. Kissan tab bar Home · Guide · Scan · Monitor · Shop with the avatar on
+      Home, no Season Guide card, livestock multi-select, compare card per Figma, blue fit icons, no select-farm
+      radio, My Farms "No farms yet" screen and no back button, Full Details badge and no menu, See What to Plant
+      opens the farm's questions. Crop Doctor unchanged upstream.
+- [ ] **Not rebuilt from the 2026-11-04 sync:** the new Kissan shop (store, product page, cart, checkout, orders;
+      its catalogue comes from the live store API, so recreating it would mean inventing products; the Shop tab is
+      shown but goes nowhere) and Gau's new My Subscription screen and Add Cow edit mode.
 
 ## Mobile & responsive layout (2026-10-21)
 
@@ -370,6 +387,24 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 
 ## Changelog
 
+- 2026-11-04: **Prototypes and Gau case studies synced with the apps' latest code** (owner: check the reference
+  repos and update). See the backlog item for the full list. Case studies: Cattle Health Check now annotates the
+  new 31-condition Disease Diagnosis report (13 callouts measured from the DOM) instead of the 360° report, and its
+  "never paywalled" card, rule 5 and D3 became "charge when the scan starts, not on the report"; Market Value and
+  Cow Dung Check show the camera and review steps and the new Report Ready, and Animal Status is shown unlocked. All
+  Gau screens re-captured into `public/case-studies/<slug>/` with new sequential names (old files removed). Kissan
+  "No farms yet" assets copied from the app (`fm-no-farms-*.webp`, resized). Checked: every screen of both prototypes
+  (81 Gau, 53 Kissan) with no page errors or broken images, phone viewer at 393, case studies at 1440 and 393 with
+  no overflow; `tsc`, `next build` pass, lint unchanged. Committed and pushed to `dev` and `prod`.
+- 2026-11-03: **Case Studies window redesigned** (owner: six identical blue cards looked repetitive; show product
+  thinking through the design). Header with a segmented filter (All 6 / Kissan Sampurna 3 / Gau Sampurna 3, event
+  `Filtered Case Studies`) and the method every study follows; one group per app with its icon, who it serves and Try
+  the app (opens the prototype, placement `projects`); a wide feature card per app (phone fan) and compact frosted cards
+  two to a row (one screen at the corner). Each card is a storyboard: The problem (key stat in the app's accent), My
+  call (first decision), What shipped. Accents: crop green for Kissan, warm amber for Gau. New `card.theme` per study.
+  Phone: iOS segmented control (Kissan / Gau), app section headers, amber tint for Gau cards. Mission Control's Case
+  Studies preview re-captured (note "Six features…", click target moved to the new button). Checked 1440, 1024 and
+  393: no overflow or errors. Committed and pushed to `dev` and `prod` on 2026-11-04.
 - 2026-11-03: **Three Gau Sampurna case studies** (owner sent the Gau Sampurna marketing brief: "add case studies about
   reports and features"): `/case-studies/cattle-health` (Disease Diagnosis + 360° Full Health: 31 conditions in 8 body
   systems, detected / suspected / not assessable, vet line never paywalled), `/case-studies/market-value` (price range,
