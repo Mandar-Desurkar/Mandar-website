@@ -60,6 +60,7 @@ export type AnalyticsEvents = {
   "Opened Spotlight": Record<string, never>;
   // Case studies (the Case Studies window lists them; each is a page at /case-studies/<slug>)
   "Opened Case Study": { slug: string; placement: "case_studies" | "spotlight" | "desktop" };
+  "Filtered Case Studies": { product: "all" | "kissan-sampurna" | "gau-sampurna" };
   "Viewed Case Study": { slug: string };
   "Clicked Case Study CTA": { slug: string; cta: "prototype" | "back" | "source" | "next_case_study" | "contact" | "copy_link" };
   "Clicked Case Study TOC": { slug: string; section: string };

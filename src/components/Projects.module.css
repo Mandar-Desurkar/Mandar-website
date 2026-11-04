@@ -1,3 +1,8 @@
+/* Case Studies window: a filter, the method every study follows, then one group per app. Each group
+   opens with a wide feature card and continues with compact cards, so six studies read as two
+   products. Cards carry the thinking (problem → my call → what shipped), not just a blurb.
+   Base rules are the phone (iOS) layout; the desktop window is styled at the end of the file. */
+
 .projectsSection {
   padding: 2.25rem 0;
 }
@@ -8,10 +13,8 @@
 }
 
 .headerBox {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
-
-/* ---------- Case studies ---------- */
 
 .intro {
   margin-top: 0.5rem;
@@ -19,30 +22,154 @@
   color: #6e6e73;
 }
 
-.caseList {
-  display: grid;
-  gap: 1.25rem;
-  padding: 0 1rem;
+/* ---------- Filter (an iOS segmented control on phones) ---------- */
+
+.filter {
+  display: flex;
+  gap: 2px;
+  margin-top: 1rem;
+  padding: 2px;
+  border-radius: 9px;
+  background: rgba(118, 118, 128, 0.12);
 }
 
-/* App Store-style feature card: a brand-tinted panel with the app screen peeking out, then the
-   problem, the headline metric and the way in. Stacks in narrow windows. */
+.filter button {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 32px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 7px;
+  background: none;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  color: #1c1c1e;
+  cursor: pointer;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.filter button span {
+  margin-left: 3px;
+  color: #8e8e93;
+  font-variant-numeric: tabular-nums;
+}
+
+.filter b {
+  font-weight: inherit;
+}
+
+/* Phones say "Kissan" and "Gau"; the full app names fit from the desktop window up */
+.nameFull {
+  display: none;
+}
+
+:global(.os-window:not(.ios-app)) .nameFull {
+  display: inline;
+}
+
+:global(.os-window:not(.ios-app)) .nameShort {
+  display: none;
+}
+
+.filter button[aria-pressed="true"] {
+  background: #fff;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12), 0 0 0 0.5px rgba(0, 0, 0, 0.04);
+  font-weight: 600;
+}
+
+.filter button:focus-visible {
+  outline: 2px solid #004691;
+  outline-offset: 1px;
+}
+
+/* ---------- Method ---------- */
+
+.method {
+  display: none;
+}
+
+/* ---------- App groups ---------- */
+
+.group + .group {
+  margin-top: 1.75rem;
+}
+
+.groupHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 0.75rem;
+}
+
+.groupIcon {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.12);
+}
+
+.groupText {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.groupText h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.groupText span {
+  font-size: 0.8125rem;
+  line-height: 1.35;
+  color: #6e6e73;
+}
+
+.tryApp {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 5px;
+  min-height: 32px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(0, 70, 145, 0.1);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: #004691;
+  cursor: pointer;
+}
+
+.tryApp:focus-visible {
+  outline: 2px solid #004691;
+  outline-offset: 2px;
+}
+
+/* ---------- Cards (phone: screen on top, then the text) ---------- */
+
+.caseList {
+  display: grid;
+  gap: 1rem;
+}
+
 .caseCard {
   display: grid;
   grid-template-columns: 1fr;
   overflow: hidden;
   border-radius: 16px;
-  background: #ffffff;
+  background: #fff;
   border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
   color: var(--ink-black);
   text-decoration: none;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.caseCard:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1);
 }
 
 .caseCard:focus-visible {
@@ -52,22 +179,25 @@
 
 .caseVisual {
   position: relative;
-  height: 190px;
-  overflow: hidden;
   display: flex;
   justify-content: center;
+  height: 176px;
+  overflow: hidden;
   background: linear-gradient(160deg, #e8f0fa, #cfe0f5);
 }
 
-.caseShotSide,
-.caseStats {
+.group[data-app="gau-sampurna"] .caseVisual {
+  background: linear-gradient(160deg, #fdf1e2, #f6dcbc);
+}
+
+.caseShotSide {
   display: none;
 }
 
 .caseShot {
-  width: 150px;
+  width: 140px;
   height: auto;
-  margin-top: 22px;
+  margin-top: 20px;
   border-radius: 18px;
   box-shadow: 0 12px 30px rgba(0, 70, 145, 0.22);
 }
@@ -75,8 +205,8 @@
 .caseBody {
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
-  padding: 1.25rem 1.25rem 1.4rem;
+  gap: 0.4rem;
+  padding: 1.1rem 1.2rem 1.3rem;
 }
 
 .caseEyebrow {
@@ -87,8 +217,12 @@
   color: #004691;
 }
 
+.group[data-app="gau-sampurna"] .caseEyebrow {
+  color: #b2560d;
+}
+
 .caseTitle {
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   font-weight: 700;
   line-height: 1.25;
   letter-spacing: -0.01em;
@@ -96,13 +230,18 @@
 
 .caseProblem {
   font-size: 0.95rem;
-  line-height: 1.5;
+  line-height: 1.45;
   color: #48484a;
+}
+
+/* The storyboard is a desktop feature; phones keep the short card */
+.thinking {
+  display: none;
 }
 
 .caseMetric {
   align-self: flex-start;
-  padding: 0.3rem 0.7rem;
+  padding: 0.3rem 0.65rem;
   border-radius: 8px;
   background: #e8f0fa;
   color: #004691;
@@ -111,70 +250,46 @@
   line-height: 1.4;
 }
 
+.group[data-app="gau-sampurna"] .caseMetric {
+  background: #fdf1e2;
+  color: #8a420a;
+}
+
 .caseCta {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin-top: 0.35rem;
+  margin-top: 0.3rem;
   font-size: 0.95rem;
   font-weight: 600;
   color: #004691;
 }
 
-@container window (min-width: 560px) {
-  .caseCard {
-    grid-template-columns: 220px 1fr;
-  }
-
-  .caseVisual {
-    height: auto;
-    min-height: 240px;
-  }
-
-  .caseShot {
-    width: 158px;
-    margin-top: 28px;
-  }
-
-  .caseBody {
-    justify-content: center;
-    padding: 1.5rem 1.75rem;
-  }
-}
-
-/* Phone: cards use the full width instead of sitting inside an extra 1rem gutter */
-@container window (max-width: 599.98px) {
-  .projectsSection {
-    padding: 1.5rem 0 2rem;
-  }
-
-  .headerBox {
-    margin-bottom: 1rem;
-  }
-}
-
-/* Phone, inside the iOS app shell (`.ios-app` exists only in the phone layout, at any width): white rounded cards on the grouped background, an iOS tinted
- button for the prototype, and the large title in place of the section heading. */
+/* Phone, inside the iOS app shell: the large title replaces the heading, cards sit on the grouped
+   background, and each app reads as an iOS section with its header above it */
 :global(.ios-app) .projectsSection {
   padding: 8px 0 28px;
 }
 
 :global(.ios-app) .headerBox {
+  margin-bottom: 18px;
+}
+
+:global(.ios-app) .headerText {
   display: none;
 }
 
-:global(.ios-app) .caseList {
-  padding: 0;
+:global(.ios-app) .filter {
+  margin-top: 0;
+}
+
+:global(.ios-app) .groupHead {
+  padding: 0 4px;
 }
 
 :global(.ios-app) .caseCard {
   border: 0;
   border-radius: 12px;
-  box-shadow: none;
-}
-
-:global(.ios-app) .caseCard:hover {
-  transform: none;
 }
 
 :global(.ios-app) .caseTitle {
@@ -189,10 +304,10 @@
 }
 
 /* ==================== Desktop window ====================
-   On the shared dark glass (globals.css). `.ios-app` marks the phone shell, so everything here is
-   desktop only and the phone keeps its grouped iOS cards. */
+   On the shared dark glass (globals.css). Each app has an accent: crop green for Kissan Sampurna,
+   warm amber for Gau Sampurna, used for the glow, the key number and the eyebrow. */
 :global(.os-window:not(.ios-app)) .projectsSection {
-  padding: 30px 0 36px;
+  padding: 30px 0 40px;
 }
 
 :global(.os-window:not(.ios-app)) .container {
@@ -200,8 +315,25 @@
   padding: 0 36px;
 }
 
+:global(.os-window:not(.ios-app)) .group {
+  --accent: #a6e36b;
+  --glow: rgba(64, 190, 120, 0.42);
+  --tint: rgba(166, 227, 107, 0.14);
+}
+
+:global(.os-window:not(.ios-app)) .group[data-app="gau-sampurna"] {
+  --accent: #ffbe5c;
+  --glow: rgba(255, 166, 64, 0.38);
+  --tint: rgba(255, 190, 92, 0.14);
+}
+
+/* Header: title and intro on the left, the filter on the right, the method underneath */
 :global(.os-window:not(.ios-app)) .headerBox {
-  margin-bottom: 22px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 14px 24px;
+  margin-bottom: 8px;
 }
 
 :global(.os-window:not(.ios-app)) .intro {
@@ -210,26 +342,167 @@
   color: rgba(235, 235, 245, 0.66);
 }
 
-:global(.os-window:not(.ios-app)) .caseList {
-  padding: 0;
+:global(.os-window:not(.ios-app)) .filter {
+  margin: 0;
+  padding: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
-/* The feature: copy on the left, a fan of real screens running off the bottom on the right */
-:global(.os-window:not(.ios-app)) .caseCard {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 46%);
-  min-height: 352px;
-  border: 0;
-  border-radius: 20px;
-  background:
-    radial-gradient(460px 340px at 82% 8%, rgba(70, 150, 240, 0.55), transparent 70%),
-    linear-gradient(150deg, #0a4a9c 0%, #062a59 100%);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+:global(.os-window:not(.ios-app)) .filter button {
+  flex: 0 0 auto;
+  min-height: 30px;
+  padding: 0 14px;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  color: rgba(235, 235, 245, 0.78);
+}
+
+:global(.os-window:not(.ios-app)) .filter button span {
+  color: rgba(235, 235, 245, 0.45);
+}
+
+:global(.os-window:not(.ios-app)) .filter button:hover {
   color: #fff;
 }
 
-:global(.os-window:not(.ios-app)) .caseCard:hover {
-  transform: none;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28);
+:global(.os-window:not(.ios-app)) .filter button[aria-pressed="true"] {
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  color: #0a2c5c;
+}
+
+:global(.os-window:not(.ios-app)) .filter button[aria-pressed="true"] span {
+  color: #5b6b80;
+}
+
+:global(.os-window:not(.ios-app)) .filter button:focus-visible {
+  outline-color: #fff;
+}
+
+/* The method: four numbered steps joined by a hairline */
+:global(.os-window:not(.ios-app)) .method {
+  display: flex;
+  grid-column: 1 / -1;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+:global(.os-window:not(.ios-app)) .methodLabel {
+  font-size: 0.75rem;
+  color: rgba(235, 235, 245, 0.5);
+}
+
+:global(.os-window:not(.ios-app)) .method ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+:global(.os-window:not(.ios-app)) .method li {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: rgba(235, 235, 245, 0.86);
+}
+
+:global(.os-window:not(.ios-app)) .method li + li::before {
+  content: "";
+  width: 26px;
+  height: 1px;
+  margin: 0 10px 0 4px;
+  background: rgba(255, 255, 255, 0.24);
+}
+
+:global(.os-window:not(.ios-app)) .method li span {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Group header: the app as a product, with its prototype one click away */
+:global(.os-window:not(.ios-app)) .group {
+  margin-top: 30px;
+}
+
+:global(.os-window:not(.ios-app)) .group + .group {
+  margin-top: 40px;
+}
+
+:global(.os-window:not(.ios-app)) .groupHead {
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+:global(.os-window:not(.ios-app)) .groupIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 11px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14), 0 6px 16px rgba(0, 0, 0, 0.35);
+}
+
+:global(.os-window:not(.ios-app)) .groupText h3 {
+  font-size: 1.125rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+
+:global(.os-window:not(.ios-app)) .groupText span {
+  margin-top: 2px;
+  font-size: 0.8125rem;
+  color: rgba(235, 235, 245, 0.6);
+}
+
+:global(.os-window:not(.ios-app)) .tryApp {
+  min-height: 32px;
+  padding: 0 14px;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+  font-size: 0.8125rem;
+  color: #fff;
+  transition: background 0.15s ease;
+}
+
+:global(.os-window:not(.ios-app)) .tryApp svg {
+  color: var(--accent);
+  fill: currentColor;
+}
+
+:global(.os-window:not(.ios-app)) .tryApp:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+:global(.os-window:not(.ios-app)) .tryApp:focus-visible {
+  outline-color: #fff;
+}
+
+/* Grid: the feature spans the row, compact cards sit two to a row */
+:global(.os-window:not(.ios-app)) .caseList {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+:global(.os-window:not(.ios-app)) .caseCard {
+  position: relative;
+  border: 0;
+  color: #fff;
 }
 
 :global(.os-window:not(.ios-app)) .caseCard:focus-visible {
@@ -237,9 +510,7 @@
 }
 
 :global(.os-window:not(.ios-app)) .caseVisual {
-  position: relative;
   order: 2;
-  min-height: 0;
   height: auto;
   background: none;
 }
@@ -247,7 +518,6 @@
 :global(.os-window:not(.ios-app)) .caseShot,
 :global(.os-window:not(.ios-app)) .caseShotSide {
   position: absolute;
-  display: block;
   height: auto;
   margin: 0;
   border: 4px solid #0d0e10;
@@ -255,64 +525,29 @@
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-:global(.os-window:not(.ios-app)) .caseShot {
-  z-index: 1;
-  top: 34px;
-  left: 50%;
-  width: 196px;
-  margin-left: -98px;
-  box-shadow: 0 24px 50px -10px rgba(0, 0, 0, 0.6);
-}
-
-:global(.os-window:not(.ios-app)) .caseShotSide {
-  top: 62px;
-  left: 50%;
-  width: 168px;
-  margin-left: -84px;
-  opacity: 0.92;
-  box-shadow: 0 16px 34px -10px rgba(0, 0, 0, 0.5);
-}
-
-:global(.os-window:not(.ios-app)) .caseShotSide:nth-child(1) {
-  transform: translateX(-104px) rotate(-5deg);
-}
-
-:global(.os-window:not(.ios-app)) .caseShotSide:nth-child(2) {
-  transform: translateX(104px) rotate(5deg);
-}
-
-:global(.os-window:not(.ios-app)) .caseCard:hover .caseShot {
-  transform: translateY(-8px);
-}
-
-:global(.os-window:not(.ios-app)) .caseCard:hover .caseShotSide:nth-child(1) {
-  transform: translateX(-118px) rotate(-7deg);
-}
-
-:global(.os-window:not(.ios-app)) .caseCard:hover .caseShotSide:nth-child(2) {
-  transform: translateX(118px) rotate(7deg);
-}
-
 :global(.os-window:not(.ios-app)) .caseBody {
-  justify-content: center;
   gap: 0;
-  padding: 30px 12px 30px 34px;
+  padding: 28px 12px 28px 30px;
 }
 
 :global(.os-window:not(.ios-app)) .caseEyebrow {
-  font-size: 0.75rem;
+  align-self: flex-start;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--tint);
+  font-size: 0.6875rem;
   font-weight: 600;
-  letter-spacing: 0;
+  letter-spacing: 0.02em;
   text-transform: none;
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--accent);
 }
 
 :global(.os-window:not(.ios-app)) .caseName {
   display: block;
-  margin-top: 6px;
-  font-size: 2.125rem;
-  line-height: 1.1;
-  letter-spacing: -0.028em;
+  margin-top: 10px;
+  font-size: 1.625rem;
+  line-height: 1.12;
+  letter-spacing: -0.025em;
 }
 
 :global(.os-window:not(.ios-app)) .caseColon {
@@ -321,12 +556,11 @@
 
 :global(.os-window:not(.ios-app)) .caseLine {
   display: block;
-  margin-top: 6px;
-  font-size: 1rem;
+  margin-top: 5px;
+  font-size: 0.9375rem;
   line-height: 1.4;
   font-weight: 500;
-  letter-spacing: -0.005em;
-  color: rgba(255, 255, 255, 0.92);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 :global(.os-window:not(.ios-app)) .caseLine::first-letter {
@@ -337,44 +571,61 @@
   margin-top: 10px;
   font-size: 0.875rem;
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 :global(.os-window:not(.ios-app)) .caseMetric {
   display: none;
 }
 
-:global(.os-window:not(.ios-app)) .caseStats {
-  display: flex;
-  gap: 22px;
+/* The storyboard: the problem's key number, the call I made, what shipped */
+:global(.os-window:not(.ios-app)) .thinking {
+  display: grid;
+  gap: 10px;
   margin-top: 18px;
-  padding-top: 14px;
-  border-top: 1px solid rgba(255, 255, 255, 0.16);
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.72);
 }
 
-:global(.os-window:not(.ios-app)) .caseStats > span {
-  white-space: nowrap;
+:global(.os-window:not(.ios-app)) .beat {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
 }
 
-:global(.os-window:not(.ios-app)) .caseStats b {
-  display: block;
-  font-size: 1.25rem;
-  line-height: 1.2;
+:global(.os-window:not(.ios-app)) .beatLabel {
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(235, 235, 245, 0.5);
+}
+
+:global(.os-window:not(.ios-app)) .beatText {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+:global(.os-window:not(.ios-app)) .beatProblem b {
+  font-size: 1.75rem;
+  line-height: 1;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+
+:global(.os-window:not(.ios-app)) .beatCall .beatText {
+  padding-left: 10px;
+  border-left: 2px solid var(--accent);
   font-weight: 600;
-  letter-spacing: -0.015em;
   color: #fff;
 }
 
 :global(.os-window:not(.ios-app)) .caseCta {
   align-self: flex-start;
-  margin-top: 18px;
-  padding: 8px 16px;
-  border-radius: 999px;
-  background: #fff;
+  margin-top: 20px;
   font-size: 0.875rem;
-  color: #0a2c5c;
 }
 
 :global(.os-window:not(.ios-app)) .caseCta svg {
@@ -385,22 +636,194 @@
   transform: translateX(3px);
 }
 
-/* Narrow windows (a 1024px laptop): the fan needs about 420px, so one phone stands in for it */
+/* ----- The feature: brand blue with the app's glow, a fan of real screens on the right ----- */
+:global(.os-window:not(.ios-app)) .featured {
+  grid-column: 1 / -1;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 42%);
+  min-height: 380px;
+  border-radius: 20px;
+  background:
+    radial-gradient(420px 320px at 84% 4%, var(--glow), transparent 70%),
+    radial-gradient(520px 360px at 70% 20%, rgba(70, 150, 240, 0.45), transparent 70%),
+    linear-gradient(150deg, #0a4a9c 0%, #062a59 100%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+:global(.os-window:not(.ios-app)) .featured:hover {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28);
+}
+
+:global(.os-window:not(.ios-app)) .featured .caseName {
+  font-size: 2.125rem;
+  letter-spacing: -0.028em;
+}
+
+/* Three beats side by side, joined by hairlines */
+:global(.os-window:not(.ios-app)) .featured .thinking {
+  grid-template-columns: 1.1fr 1fr 1fr;
+  gap: 0;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+:global(.os-window:not(.ios-app)) .featured .beat {
+  padding-right: 16px;
+}
+
+:global(.os-window:not(.ios-app)) .featured .beat + .beat {
+  padding-left: 16px;
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+:global(.os-window:not(.ios-app)) .featured .caseCta {
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: #fff;
+  color: #0a2c5c;
+}
+
+:global(.os-window:not(.ios-app)) .featured .caseShot {
+  z-index: 1;
+  top: 34px;
+  left: 50%;
+  width: 196px;
+  margin-left: -98px;
+  box-shadow: 0 24px 50px -10px rgba(0, 0, 0, 0.6);
+}
+
+:global(.os-window:not(.ios-app)) .featured .caseShotSide {
+  display: block;
+  top: 62px;
+  left: 50%;
+  width: 168px;
+  margin-left: -84px;
+  opacity: 0.92;
+  box-shadow: 0 16px 34px -10px rgba(0, 0, 0, 0.5);
+}
+
+:global(.os-window:not(.ios-app)) .featured .caseShotSide:nth-child(1) {
+  transform: translateX(-104px) rotate(-5deg);
+}
+
+:global(.os-window:not(.ios-app)) .featured .caseShotSide:nth-child(2) {
+  transform: translateX(104px) rotate(5deg);
+}
+
+:global(.os-window:not(.ios-app)) .featured:hover .caseShot {
+  transform: translateY(-8px);
+}
+
+:global(.os-window:not(.ios-app)) .featured:hover .caseShotSide:nth-child(1) {
+  transform: translateX(-118px) rotate(-7deg);
+}
+
+:global(.os-window:not(.ios-app)) .featured:hover .caseShotSide:nth-child(2) {
+  transform: translateX(118px) rotate(7deg);
+}
+
+/* ----- Compact: frosted glass, the problem and the call, one screen peeking in at the corner ----- */
+:global(.os-window:not(.ios-app)) .compact {
+  grid-template-columns: minmax(0, 1fr) 150px;
+  min-height: 300px;
+  border-radius: 18px;
+  background:
+    radial-gradient(260px 220px at 100% 0%, var(--glow), transparent 70%),
+    rgba(255, 255, 255, 0.055);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+:global(.os-window:not(.ios-app)) .compact:hover {
+  background:
+    radial-gradient(260px 220px at 100% 0%, var(--glow), transparent 70%),
+    rgba(255, 255, 255, 0.085);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+}
+
+:global(.os-window:not(.ios-app)) .compact .caseBody {
+  padding: 24px 4px 24px 24px;
+}
+
+:global(.os-window:not(.ios-app)) .compact .caseProblem,
+:global(.os-window:not(.ios-app)) .compact .beatShipped {
+  display: none;
+}
+
+:global(.os-window:not(.ios-app)) .compact .beatProblem {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: 10px;
+}
+
+:global(.os-window:not(.ios-app)) .compact .beatProblem .beatLabel {
+  grid-column: 1 / -1;
+}
+
+:global(.os-window:not(.ios-app)) .compact .beatProblem b {
+  font-size: 1.5rem;
+}
+
+:global(.os-window:not(.ios-app)) .compact .beatProblem .beatText {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+:global(.os-window:not(.ios-app)) .compact .caseCta {
+  margin-top: auto;
+  padding-top: 18px;
+  color: var(--accent);
+}
+
+:global(.os-window:not(.ios-app)) .compact .caseShot {
+  top: 30px;
+  left: 6px;
+  width: 150px;
+  transform: rotate(4deg);
+  transform-origin: top left;
+  box-shadow: 0 18px 40px -10px rgba(0, 0, 0, 0.6);
+}
+
+:global(.os-window:not(.ios-app)) .compact:hover .caseShot {
+  transform: rotate(2deg) translateY(-8px);
+}
+
+/* Narrow windows (a 1024px laptop): one phone stands in for the fan, compact cards stack */
 @container window (max-width: 899.98px) {
-  :global(.os-window:not(.ios-app)) .caseCard {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 36%);
+  :global(.os-window:not(.ios-app)) .caseList {
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  :global(.os-window:not(.ios-app)) .caseShotSide {
+  :global(.os-window:not(.ios-app)) .featured {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 34%);
+  }
+
+  :global(.os-window:not(.ios-app)) .featured .caseShotSide {
     display: none;
   }
 
-  :global(.os-window:not(.ios-app)) .caseStats {
-    gap: 14px;
+  :global(.os-window:not(.ios-app)) .featured .thinking {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  :global(.os-window:not(.ios-app)) .featured .beat + .beat {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  :global(.os-window:not(.ios-app)) .headerBox {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  :global(.os-window:not(.ios-app)) .filter {
+    justify-self: start;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .caseCard,
   :global(.os-window:not(.ios-app)) .caseShot,
   :global(.os-window:not(.ios-app)) .caseShotSide,
   :global(.os-window:not(.ios-app)) .caseCta svg {
