@@ -410,6 +410,10 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 
 ## Changelog
 
+- 2026-11-10: Committed everything since e90440e as **d75e769** on `dev` (website prototype, blue Case Studies cards,
+  Chai, the owner's resume edits and regenerated PDF), fast-forwarded `prod`, pushed both. Vercel production deploy
+  succeeded; checked live: home, a case study, /resume, website prototype assets and `/api/agent` (offline answers,
+  no key set). Lint errors remain only in Dock, DraggableWindow and Navbar (backlog).
 - 2026-11-10: **Case Studies window simplified** (owner: too overwhelming; remove the filter and the "Every case
   study follows" method row; then chose "all six as blue cards"). Desktop: under each app's quiet header (icon, name,
   Try the app) every study is the same wide brand-blue card: theme pill, name, one line, the result (`card.metric`) and
@@ -417,7 +421,7 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
   shipped panels and no per-app accent colours. Narrow windows show one screen, then stack it above the text. Phone:
   an iOS grouped list (thumbnail cropped past the status bar, name, line, chevron). Mission Control's Case Studies
   preview and the case study peek re-captured; the peek's click target is now 14.1% / 54.7%. The `Filtered Case
-  Studies` event is no longer sent. Checked 1440, 1024 and 393: no overflow or errors. Uncommitted.
+  Studies` event is no longer sent. Checked 1440, 1024 and 393: no overflow or errors. Pushed in d75e769.
 - 2026-11-10: **Case study pages: minimal redesign reverted** (owner: keep the blue hero with screens and the left
   "On this page" index with reading progress). The 2026-11-09 minimal layout was undone: `page.tsx` and
   `CaseStudy.module.css` are back to the committed version, and Mission Control's `peek/case-study.webp` too. Don't
@@ -429,12 +433,12 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
   `Switched Prototype Layout`, Roboto in `prototype/fonts.ts`, icon `public/apps/gau-sampurna-web-icon.png`,
   `shortName` on `ShippedApp`. Verified in Chrome: all 8 screens in both layouts with no errors or broken images;
   add to cart → checkout → COD check → confirmed (₹1,950), Buy Now → Pay Online (₹1,350), menu, vet booking;
-  phone viewer at 390 × 844 with no sideways overflow. `tsc`, lint (no errors) and `next build` pass. Uncommitted.
+  phone viewer at 390 × 844 with no sideways overflow. `tsc`, lint (no errors) and `next build` pass. Pushed in d75e769.
 - 2026-11-08: **Chai, the AI desk cat** (owner: a cute AI agent that sleeps on the desktop and wakes when
   touched). See Current state. Verified in Chrome at 1440 and 1024: sleep → wake → chat, starter question → reply
   with buttons, action opens Experience, Esc closes only the chat, petting, hidden in Mission Control and in a
   prototype, no page errors; offline answers and a 400 on a bad body checked with curl. `tsc`, lint on the new
-  files and `next build` pass. Live AI needs `ANTHROPIC_API_KEY` in Vercel (not set yet). Uncommitted.
+  files and `next build` pass. Live AI needs `ANTHROPIC_API_KEY` in Vercel (not set yet). Pushed in d75e769.
 - 2026-11-04: **Prototypes and Gau case studies synced with the apps' latest code** (owner: check the reference
   repos and update). See the backlog item for the full list. Case studies: Cattle Health Check now annotates the
   new 31-condition Disease Diagnosis report (13 callouts measured from the DOM) instead of the 360° report, and its
