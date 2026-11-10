@@ -32,7 +32,7 @@ export const resumeDocument = {
             "**Shipped AI-powered satellite farm monitoring** in **13 languages**: farmers geotag field boundaries on their phone to track crop health (vegetation indices), disease risk, and irrigation needs; peaked at **9.8K+ MAU** and **1.6K+ DAU**.",
             "Architected a no-code **crop recommendation engine** ranking each farmer's **top 5 of 100+ crops** across **655K+ farm profiles** by climate zone, soil, budget, and rotation; peaked at **7.7K+ MAU**.",
             "Integrated **computer vision** for one-photo diagnosis of crop diseases (with **severity stage**) and **20+ cattle diseases**, plus cattle price, BCS, and dung score estimates; crop diagnosis peaked at **4.8K+ MAU**.",
-            "Grew both apps into a one-stop farmer platform with a **32+ SKU** marketplace, weather alerts, and market price forecasts.",
+            "Grew both apps into a one-stop farmer platform with a **32+ SKU** marketplace, weather alerts, and market price forecasts; Gau Sampurna's in-app D2C store alone generates **Rs. 1L+ in monthly revenue**.",
           ],
         },
         {
@@ -48,7 +48,7 @@ export const resumeDocument = {
           bullets: [
             "Delivered a 0→1 in-house CRM replacing Excel for **150+ telecallers**, now handling **130K+ leads** and **Rs. 1 Cr+ in sales a month**.",
             "Automated lead capture from D2C web and app for the **32+ SKU** catalog, following each customer from first touchpoint to repeat purchase.",
-            "Engineered **rule-based lead routing** by language, region, and source, pairing each farmer with a local, same-language agent to sustain **9% lead-to-sale conversion**.",
+            "Engineered **rule-based lead routing** by language, region, and source, pairing each farmer with a local, same-language agent.",
             "Integrated Exotel click-to-call, call recording, and automated WhatsApp follow-ups, ending manual dialing and **saving 6,000+ agent-hours/month** (∼40/agent).",
           ],
         },

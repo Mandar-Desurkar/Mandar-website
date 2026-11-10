@@ -102,10 +102,10 @@ function ClassicHero() {
                             type="button"
                             className={`${styles.appLink} ${styles.appLinkApp}`}
                             onClick={launchPrototype}
-                            aria-label={`Try the ${app.name} app (interactive prototype)`}
+                            aria-label={`Try the ${app.name} (interactive prototype)`}
                           >
                             <Smartphone size={12} strokeWidth={2.4} aria-hidden="true" />
-                            Try app
+                            {app.prototype === "gau-sampurna-web" ? "Try site" : "Try app"}
                           </button>
                         ) : (
                           <span className={`${styles.appLink} ${styles.appLinkSoon}`} title="Interactive app prototype coming soon">

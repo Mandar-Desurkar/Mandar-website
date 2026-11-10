@@ -7,9 +7,9 @@ import { trackEvent, secondsSince } from '@/lib/analytics';
 export type SectionId = 'about' | 'experience' | 'education' | 'projects' | 'contact';
 const SECTION_IDS: SectionId[] = ['about', 'experience', 'education', 'projects', 'contact'];
 const isSectionId = (v: string | null): v is SectionId => SECTION_IDS.includes(v as SectionId);
-export type PrototypeId = 'kissan-sampurna' | 'gau-sampurna';
-export type PrototypePlacement = 'hero' | 'desktop' | 'experience' | 'projects' | 'home_screen' | 'deep_link' | 'spotlight' | 'mission_control';
-export type OpenSource = 'desktop_icon' | 'menu_bar' | 'system_menu' | 'hero_cta' | 'notification' | 'mobile_dock' | 'home_widget' | 'spotlight' | 'deep_link' | 'mission_control';
+export type PrototypeId = 'kissan-sampurna' | 'gau-sampurna' | 'gau-sampurna-web';
+export type PrototypePlacement = 'hero' | 'desktop' | 'experience' | 'projects' | 'home_screen' | 'deep_link' | 'spotlight' | 'mission_control' | 'desk_cat';
+export type OpenSource = 'desktop_icon' | 'menu_bar' | 'system_menu' | 'hero_cta' | 'notification' | 'mobile_dock' | 'home_widget' | 'spotlight' | 'deep_link' | 'mission_control' | 'desk_cat';
 
 type WindowContextType = {
   isMinimized: boolean;
@@ -75,7 +75,7 @@ export function WindowProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const protoId = params.get('prototype');
-    if (protoId === 'kissan-sampurna' || protoId === 'gau-sampurna') {
+    if (protoId === 'kissan-sampurna' || protoId === 'gau-sampurna' || protoId === 'gau-sampurna-web') {
       const raf = requestAnimationFrame(() => {
         trackEvent('Opened Prototype', { prototype: protoId, placement: 'deep_link' });
         setPrototype(protoId);

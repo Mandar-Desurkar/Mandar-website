@@ -39,10 +39,12 @@ export const hiringNudge = {
 // available: the interactive prototype if there is one, otherwise the live website.
 export type ShippedApp = {
   name: string;
+  // Label under the phone home-screen icon when the name is too long for two lines
+  shortName?: string;
   caption: string;
   icon: string;
   website: string;
-  prototype?: "kissan-sampurna" | "gau-sampurna";
+  prototype?: "kissan-sampurna" | "gau-sampurna" | "gau-sampurna-web";
 };
 
 export const shippedApps: ShippedApp[] = [
@@ -59,6 +61,15 @@ export const shippedApps: ShippedApp[] = [
     icon: "/apps/gau-sampurna-icon.png", // official app icon (prod app.json)
     website: "https://www.gausampurna.com/",
     prototype: "gau-sampurna",
+  },
+  {
+    // The Gau Sampurna website (D2C store), prototyped from the site's code
+    name: "Gau Sampurna Website",
+    shortName: "Gau Website",
+    caption: "D2C cattle care store",
+    icon: "/apps/gau-sampurna-web-icon.png",
+    website: "https://www.gausampurna.com/",
+    prototype: "gau-sampurna-web",
   },
 ];
 
@@ -101,7 +112,7 @@ export const experiences: Experience[] = [
           "**Shipped AI-powered satellite monitoring**, letting farmers geotag field boundaries on their phones to track crop health (via vegetation indices), disease risk and irrigation needs across the whole farm in **13 languages**, peaking at **9.8K+ MAU** and **1.6K+ DAU**.",
           "Architected a no-code **crop recommendation engine** that ranks each farmer's **top 5 of 100+ crops** across **655K+ farm profiles** by climate zone, soil, budget and rotation, reaching **7.7K+ MAU** at peak.",
           "Integrated **computer vision models** that diagnose crop diseases with their **severity stage** and **20+ cattle diseases** from one photo, and estimate cattle price, BCS and dung score; crop diagnosis peaked at **4.8K+ MAU**.",
-          "Grew both apps into a one-stop farmer platform with a **32+ SKU** marketplace, weather alerts and market price forecasts.",
+          "Grew both apps into a one-stop farmer platform with a **32+ SKU** marketplace, weather alerts and market price forecasts; Gau Sampurna's in-app D2C store alone generates **₹1L+ in monthly revenue**.",
         ],
       },
       {
@@ -117,7 +128,7 @@ export const experiences: Experience[] = [
         bullets: [
           "Delivered a 0→1 in-house CRM replacing legacy Excel tracking for **150+ telecallers**, now powering **₹1 Cr+ in monthly sales** across **130K+ leads/month**.",
           "Automated lead capture from D2C web and app channels for the **32+ SKU** catalog, following each customer from first touchpoint to repeat purchase.",
-          "Engineered **rule-based lead routing** by agent language, region and lead source, matching every farmer with a local, same-language agent to sustain **9% lead-to-sale conversion**.",
+          "Engineered **rule-based lead routing** by language, region, and source, pairing each farmer with a local, same-language agent.",
           "Integrated Exotel click-to-call, auto-call recording and automated WhatsApp follow-up flows, eliminating manual dialing and **saving 6,000+ agent-hours/month** (~40 hours/agent).",
         ],
       },
@@ -261,7 +272,7 @@ export const projects: Project[] = [
     context: "Silo Fortune · Internal platform, 0→1",
     metrics: ["₹1 Cr+ sales / month", "130K+ leads / month", "6,000+ agent-hrs saved / month"],
     description:
-      "Replaced Excel tracking for 150+ telecallers with automated lead capture, rule-based routing by language and region, Exotel click-to-call and WhatsApp follow-ups, sustaining 9% lead-to-sale conversion.",
+      "Replaced Excel tracking for 150+ telecallers with automated lead capture, rule-based routing by language and region, Exotel click-to-call and WhatsApp follow-ups.",
     tags: ["CRM", "Sales Ops", "Automation"],
   },
   {
@@ -295,7 +306,7 @@ export const skills = [
   {
     label: "Domains",
     items:
-      "FinTech & WealthTech, AgriTech & Dairy-tech, CRM & Sales Platforms, ERP & Last-Mile Delivery, AI/Computer Vision Features",
+      "FinTech & WealthTech, Consumer Mobile Apps (B2C), CRM & Sales Platforms, ERP & Last-Mile Delivery, AI/Computer Vision Features",
   },
 ];
 
@@ -310,6 +321,7 @@ export const skillStages = [
 
 export const domainProof: Record<string, string> = {
   "FinTech & WealthTech": "AltQube Wealth Platform",
+  "Consumer Mobile Apps (B2C)": "Kissan & Gau Sampurna",
   "AgriTech & Dairy-tech": "Kissan & Gau Sampurna",
   "CRM & Sales Platforms": "Sales CRM & Telecalling",
   "ERP & Last-Mile Delivery": "Rider App & Outlet ERP",

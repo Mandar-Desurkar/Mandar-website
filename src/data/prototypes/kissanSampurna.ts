@@ -4,19 +4,24 @@
 //   - Crop Guide and Farm Monitoring: `dev` branch
 // Screen ids must be unique across flows. PM notes explain the product reasoning; edit freely.
 
-export type PrototypeScreen = { id: string; title: string; note: string };
+// `path` is set for website prototypes: the page's URL, shown in the browser's address bar.
+export type PrototypeScreen = { id: string; title: string; note: string; path?: string };
 export type PrototypeFlow = { id: string; title: string; summary: string; screens: PrototypeScreen[] };
 // The phone an app is designed on and how its sizes adapt to other phones, taken from the app's own
 // sizing helpers, so the prototype draws text and spacing at the size that phone really shows.
 //   "moderate": react-native-size-matters `@ms` (sizes grow at half the width ratio)
 //   "linear":   sizes scale in proportion to the width
-export type PrototypeDevice = { width: number; height: number; scaling: "moderate" | "linear" };
+//   "none":     a website, laid out in CSS pixels at whatever width the phone has
+export type PrototypeDevice = { width: number; height: number; scaling: "moderate" | "linear" | "none" };
 export type Prototype = {
   id: string;
   name: string;
   tagline: string;
   logo: string;
   device: PrototypeDevice;
+  // Website prototypes: the desktop viewport, shown in a browser window when the viewer's
+  // mSite / Desktop switch is on Desktop (the phone layout uses `device`)
+  web?: { domain: string; desktop: { width: number; height: number } };
   flows: PrototypeFlow[];
 };
 

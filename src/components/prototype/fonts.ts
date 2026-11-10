@@ -1,3 +1,4 @@
+import { Roboto } from "next/font/google";
 import localFont from "next/font/local";
 
 // The typefaces the two apps bundle (SIL OFL, see fonts/OFL.txt and fonts/Poppins-OFL.txt), as
@@ -28,4 +29,14 @@ export const poppins = localFont({
   display: "swap",
   preload: false,
   variable: "--font-poppins",
+});
+
+// Roboto: the Gau Sampurna website's product pages (app/globals.css, `.product-roboto`). Loaded with
+// the website prototype's chunk only.
+export const roboto = Roboto({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  display: "swap",
+  preload: false,
+  variable: "--font-roboto",
 });

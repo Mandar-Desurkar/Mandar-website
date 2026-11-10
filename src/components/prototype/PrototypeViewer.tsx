@@ -8,12 +8,16 @@ import { lato, poppins } from "./fonts";
 import { trackEvent } from "@/lib/analytics";
 import type { Prototype } from "@/data/prototypes/kissanSampurna";
 import type { ScreenProps } from "./kissan/KissanScreens";
+import type { PrototypeId } from "@/context/WindowContext";
 import PrototypeMobile from "./PrototypeMobile";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { WebModeContext, type WebMode } from "./web/webMode";
 
 // The phone frame is the app's own design device (Kissan 393 × 852, Gau 375 × 812), so screens
 // render at exactly their design sizes before the whole phone is scaled to fit the stage
 const BEZEL = 12;
+// Height of the browser window's title + address bar around a website's desktop layout
+const BROWSER_BAR = 44;
 
 type NavMethod = "tap" | "next_button" | "prev_button" | "list" | "keyboard" | "restart" | "cross_flow";
 
@@ -21,8 +25,36 @@ type Props = {
   prototype: Prototype;
   screens: Record<string, ComponentType<ScreenProps>>;
   onClose: () => void;
-  onSwitchPrototype?: (id: "kissan-sampurna" | "gau-sampurna") => void;
+  onSwitchPrototype?: (id: PrototypeId) => void;
 };
+
+// Browser padlock (website prototypes)
+function LockGlyph() {
+  return (
+    <svg width="9" height="11" viewBox="0 0 9 11" fill="currentColor" aria-hidden="true">
+      <path d="M2 4.5V3.2a2.5 2.5 0 0 1 5 0v1.3h.4c.6 0 1.1.5 1.1 1.1v3.8c0 .6-.5 1.1-1.1 1.1H1.6C1 10.5.5 10 .5 9.4V5.6c0-.6.5-1.1 1.1-1.1H2Zm1.2 0h2.6V3.2a1.3 1.3 0 0 0-2.6 0v1.3Z" />
+    </svg>
+  );
+}
+
+// Layout switch glyphs (website prototypes)
+function PhoneGlyph() {
+  return (
+    <svg width="11" height="13" viewBox="0 0 11 13" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true">
+      <rect x="1" y="0.7" width="9" height="11.6" rx="1.8" />
+      <path d="M4.3 10.2h2.4" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function MonitorGlyph() {
+  return (
+    <svg width="14" height="13" viewBox="0 0 14 13" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true">
+      <rect x="0.7" y="0.7" width="12.6" height="8.6" rx="1.4" />
+      <path d="M4.5 12.3h5M7 9.5v2.6" strokeLinecap="round" />
+    </svg>
+  );
+}
 
 // Official Figma 5-color Logo
 function FigmaLogo() {
@@ -101,8 +133,21 @@ export default function PrototypeViewer({ prototype, screens, onClose, onSwitchP
   const [screenIndex, setScreenIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const [scale, setScale] = useState(0.7);
-  const phoneW = prototype.device.width + BEZEL * 2;
-  const phoneH = prototype.device.height + BEZEL * 2;
+  // Website prototypes (prototype.web) can be shown as the phone site (mSite) or the desktop site
+  const [webMode, setWebMode] = useState<WebMode>("msite");
+
+  const isKissan = prototype.id === "kissan-sampurna";
+  const isGauApp = prototype.id === "gau-sampurna";
+  const isGauWeb = prototype.id === "gau-sampurna-web";
+  const web = prototype.web;
+  const isDesktop = !!web && webMode === "desktop";
+
+  // The screen's size: the app's design device, or the website's desktop viewport
+  const targetW = isDesktop && web ? web.desktop.width : prototype.device.width;
+  const targetH = isDesktop && web ? web.desktop.height : prototype.device.height;
+  const phoneW = isDesktop ? targetW : targetW + BEZEL * 2;
+  const phoneH = isDesktop ? targetH + BROWSER_BAR : targetH + BEZEL * 2;
+
   const [mounted, setMounted] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [titleDropdownOpen, setTitleDropdownOpen] = useState(false);
@@ -122,8 +167,6 @@ export default function PrototypeViewer({ prototype, screens, onClose, onSwitchP
   const flow = prototype.flows[flowIndex];
   const screen = flow.screens[screenIndex];
   const Screen = screens[screen.id];
-
-  const isKissan = prototype.id === "kissan-sampurna";
 
   // The live position. A screen that is animating out keeps its old callbacks, so its
   // auto-advance timers could otherwise pull the viewer back to the flow the visitor just left.
@@ -336,9 +379,9 @@ export default function PrototypeViewer({ prototype, screens, onClose, onSwitchP
 
             <button
               type="button"
-              className={`${styles.tabItem} ${!isKissan ? styles.tabItemActive : ""}`}
+              className={`${styles.tabItem} ${isGauApp ? styles.tabItemActive : ""}`}
               onClick={() => {
-                if (isKissan && onSwitchPrototype) {
+                if (!isGauApp && onSwitchPrototype) {
                   trackEvent("Switched Prototype", { from_prototype: prototype.id, to_prototype: "gau-sampurna" });
                   onSwitchPrototype("gau-sampurna");
                 }
@@ -346,6 +389,21 @@ export default function PrototypeViewer({ prototype, screens, onClose, onSwitchP
             >
               <span className={styles.tabPlayIcon}>▶</span>
               <span>Gau Sampurna Mobile App - Prototype</span>
+              <span className={styles.tabCloseBtn} onClick={(e) => { e.stopPropagation(); close(); }}>✕</span>
+            </button>
+
+            <button
+              type="button"
+              className={`${styles.tabItem} ${isGauWeb ? styles.tabItemActive : ""}`}
+              onClick={() => {
+                if (!isGauWeb && onSwitchPrototype) {
+                  trackEvent("Switched Prototype", { from_prototype: prototype.id, to_prototype: "gau-sampurna-web" });
+                  onSwitchPrototype("gau-sampurna-web");
+                }
+              }}
+            >
+              <span className={styles.tabPlayIcon}>▶</span>
+              <span>Gau Sampurna Website - Prototype</span>
               <span className={styles.tabCloseBtn} onClick={(e) => { e.stopPropagation(); close(); }}>✕</span>
             </button>
 
@@ -379,6 +437,29 @@ export default function PrototypeViewer({ prototype, screens, onClose, onSwitchP
               >
                 <RestartIcon />
               </button>
+
+              {web && (
+                <div className={styles.deviceModeToggle} role="radiogroup" aria-label="Website layout">
+                  {(["msite", "desktop"] as const).map((mode) => (
+                    <button
+                      key={mode}
+                      type="button"
+                      role="radio"
+                      aria-checked={webMode === mode}
+                      className={`${styles.deviceModeBtn} ${webMode === mode ? styles.deviceModeBtnActive : ""}`}
+                      onClick={() => {
+                        if (mode === webMode) return;
+                        setWebMode(mode);
+                        trackEvent("Switched Prototype Layout", { prototype: prototype.id, layout: mode });
+                      }}
+                      title={mode === "msite" ? "The phone website (mSite)" : "The desktop website"}
+                    >
+                      {mode === "msite" ? <PhoneGlyph /> : <MonitorGlyph />}
+                      {mode === "msite" ? "mSite" : "Desktop"}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Centered Prototype Title with Dropdown */}
@@ -416,7 +497,7 @@ export default function PrototypeViewer({ prototype, screens, onClose, onSwitchP
 
                   <button
                     type="button"
-                    className={`${styles.projectDropdownItem} ${!isKissan ? styles.projectDropdownItemActive : ""}`}
+                    className={`${styles.projectDropdownItem} ${isGauApp ? styles.projectDropdownItemActive : ""}`}
                     onClick={() => {
                       if (onSwitchPrototype) onSwitchPrototype("gau-sampurna");
                       setTitleDropdownOpen(false);
@@ -425,9 +506,26 @@ export default function PrototypeViewer({ prototype, screens, onClose, onSwitchP
                     <div className={styles.dropdownItemContent}>
                       <span className={styles.dropdownItemTitle}>
                         <span>🐄 Gau Sampurna Mobile App</span>
-                        {!isKissan && <span style={{ color: "#0d99ff", fontSize: 11 }}>✓</span>}
+                        {isGauApp && <span style={{ color: "#0d99ff", fontSize: 11 }}>✓</span>}
                       </span>
                       <span className={styles.dropdownItemSubtitle}>AI Disease Check & Animal Status</span>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    className={`${styles.projectDropdownItem} ${isGauWeb ? styles.projectDropdownItemActive : ""}`}
+                    onClick={() => {
+                      if (onSwitchPrototype) onSwitchPrototype("gau-sampurna-web");
+                      setTitleDropdownOpen(false);
+                    }}
+                  >
+                    <div className={styles.dropdownItemContent}>
+                      <span className={styles.dropdownItemTitle}>
+                        <span>🌐 Gau Sampurna Website</span>
+                        {isGauWeb && <span style={{ color: "#0d99ff", fontSize: 11 }}>✓</span>}
+                      </span>
+                      <span className={styles.dropdownItemSubtitle}>D2C store, on phone and desktop</span>
                     </div>
                   </button>
 
@@ -609,57 +707,120 @@ export default function PrototypeViewer({ prototype, screens, onClose, onSwitchP
               </aside>
             )}
 
-            {/* Pure Dark Canvas Stage with Centered iPhone */}
+            {/* Pure Dark Canvas Stage with Centered Device */}
             <div className={styles.stage} ref={stageRef}>
               <div
                 className={styles.phoneSlot}
                 style={{ width: phoneW * scale, height: phoneH * scale }}
                 onClick={handleStageClick}
               >
-                <div className={styles.phone} style={{ width: phoneW, height: phoneH, transform: `scale(${scale})` }}>
-                  <div
-                    className={`${styles.screenArea} ${lato.variable} ${poppins.variable}`}
-                    style={{ width: prototype.device.width, height: prototype.device.height }}
-                  >
-                    {/* Native iOS Status Bar */}
-                    <div className={styles.statusBar} aria-hidden="true">
-                      <span>9:41</span>
-                      <span className={styles.island} />
-                      <span className={styles.statusIcons}>
-                        <svg width="18" height="12" viewBox="0 0 18 12">
-                          <rect x="0" y="8" width="3" height="4" rx="1" />
-                          <rect x="5" y="5" width="3" height="7" rx="1" />
-                          <rect x="10" y="2.5" width="3" height="9.5" rx="1" />
-                          <rect x="15" y="0" width="3" height="12" rx="1" />
-                        </svg>
-                        <svg width="25" height="12" viewBox="0 0 25 12">
-                          <rect x="0.5" y="0.5" width="21" height="11" rx="3" fill="none" stroke="currentColor" opacity="0.4" />
-                          <rect x="2" y="2" width="16" height="8" rx="1.5" />
-                          <rect x="23" y="4" width="1.5" height="4" rx="0.75" opacity="0.4" />
-                        </svg>
-                      </span>
+                {isDesktop && web ? (
+                  <div className={styles.browserWindow} style={{ width: phoneW, height: phoneH, transform: `scale(${scale})` }}>
+                    {/* Browser chrome around the desktop website */}
+                    <div className={styles.browserHeaderBar}>
+                      <div className={styles.browserControls} aria-hidden="true">
+                        <span className={`${styles.trafficLight} ${styles.trafficRed}`} />
+                        <span className={`${styles.trafficLight} ${styles.trafficYellow}`} />
+                        <span className={`${styles.trafficLight} ${styles.trafficGreen}`} />
+                      </div>
+                      <div className={styles.browserNavIcons}>
+                        <button type="button" className={styles.browserNavBtn} onClick={back} aria-label="Back">
+                          <svg width="9" height="14" viewBox="0 0 9 14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M7.5 1.5 2 7l5.5 5.5" /></svg>
+                        </button>
+                        <button type="button" className={styles.browserNavBtn} onClick={next} aria-label="Forward">
+                          <svg width="9" height="14" viewBox="0 0 9 14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M1.5 1.5 7 7l-5.5 5.5" /></svg>
+                        </button>
+                      </div>
+                      <div className={styles.browserAddressBar}>
+                        <LockGlyph />
+                        <span className={styles.browserUrl}>
+                          {web.domain}
+                          <span className={styles.browserPath}>{screen.path && screen.path !== "/" ? screen.path : ""}</span>
+                        </span>
+                      </div>
+                      <button type="button" className={styles.browserNavBtn} onClick={restart} aria-label="Reload">
+                        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"><path d="M11 6.5A4.5 4.5 0 1 1 9.4 3" /><path d="M9.6 0.9v2.4H7.2" strokeLinejoin="round" /></svg>
+                      </button>
                     </div>
 
-                    {/* Phone Screen Content */}
-                    <div className={`${styles.screenContent} ${isFigmaFlashing ? styles.figmaFlash : ""}`}>
-                      <AnimatePresence mode="popLayout" initial={false} custom={direction}>
-                        <motion.div
-                          key={screen.id}
-                          className={styles.screenSlide}
-                          custom={direction}
-                          initial={{ x: direction * 50, opacity: 0 }}
-                          animate={{ x: 0, opacity: 1 }}
-                          exit={{ x: direction * -50, opacity: 0 }}
-                          transition={{ duration: 0.18, ease: "easeOut" }}
-                        >
-                          <Screen next={next} back={back} restart={restart} go={go} goToFlow={goToFlow} />
-                        </motion.div>
-                      </AnimatePresence>
+                    {/* The website at its desktop width; each page scrolls itself */}
+                    <div
+                      className={`${styles.browserContentArea} ${lato.variable} ${poppins.variable} ${isFigmaFlashing ? styles.figmaFlash : ""}`}
+                      style={{ width: targetW, height: targetH }}
+                    >
+                      <WebModeContext.Provider value="desktop">
+                        <AnimatePresence mode="popLayout" initial={false} custom={direction}>
+                          <motion.div
+                            key={screen.id}
+                            className={styles.webScreenSlide}
+                            custom={direction}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.15 }}
+                          >
+                            <Screen next={next} back={back} restart={restart} go={go} goToFlow={goToFlow} />
+                          </motion.div>
+                        </AnimatePresence>
+                      </WebModeContext.Provider>
                     </div>
-
-                    <span className={styles.homeIndicator} aria-hidden="true" />
                   </div>
-                </div>
+                ) : (
+                  <div className={styles.phone} style={{ width: phoneW, height: phoneH, transform: `scale(${scale})` }}>
+                    <div
+                      className={`${styles.screenArea} ${lato.variable} ${poppins.variable}`}
+                      style={{ width: targetW, height: targetH }}
+                    >
+                      {/* Native iOS Status Bar */}
+                      <div className={styles.statusBar} aria-hidden="true">
+                        <span>9:41</span>
+                        <span className={styles.island} />
+                        <span className={styles.statusIcons}>
+                          <svg width="18" height="12" viewBox="0 0 18 12">
+                            <rect x="0" y="8" width="3" height="4" rx="1" />
+                            <rect x="5" y="5" width="3" height="7" rx="1" />
+                            <rect x="10" y="2.5" width="3" height="9.5" rx="1" />
+                            <rect x="15" y="0" width="3" height="12" rx="1" />
+                          </svg>
+                          <svg width="25" height="12" viewBox="0 0 25 12">
+                            <rect x="0.5" y="0.5" width="21" height="11" rx="3" fill="none" stroke="currentColor" opacity="0.4" />
+                            <rect x="2" y="2" width="16" height="8" rx="1.5" />
+                            <rect x="23" y="4" width="1.5" height="4" rx="0.75" opacity="0.4" />
+                          </svg>
+                        </span>
+                      </div>
+
+                      {/* A website on a phone sits under the browser's address bar */}
+                      {web && (
+                        <div className={styles.mAddressBar} aria-hidden="true">
+                          <span>
+                            <LockGlyph />
+                            {web.domain}
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Phone Screen Content */}
+                      <div className={`${styles.screenContent} ${isFigmaFlashing ? styles.figmaFlash : ""}`}>
+                        <AnimatePresence mode="popLayout" initial={false} custom={direction}>
+                          <motion.div
+                            key={screen.id}
+                            className={styles.screenSlide}
+                            custom={direction}
+                            initial={{ x: direction * 50, opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            exit={{ x: direction * -50, opacity: 0 }}
+                            transition={{ duration: 0.18, ease: "easeOut" }}
+                          >
+                            <Screen next={next} back={back} restart={restart} go={go} goToFlow={goToFlow} />
+                          </motion.div>
+                        </AnimatePresence>
+                      </div>
+
+                      <span className={styles.homeIndicator} aria-hidden="true" />
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

@@ -23,6 +23,29 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
   remain at `/?about=live | showcase | store | native | classic` until the owner confirms the design;
   then remove them, the `?about` checks in `Hero.tsx` and `DraggableWindow.tsx`, and unused
   `public/about/*`. The music widget is no longer rendered.
+- **Chai, the AI desk cat (2026-11-08, desktop only):** a chai-latte tabby (`components/desk-cat/`, one SVG
+  in `CatArt.tsx`) naps bottom-left (breathing, z z z, "click to wake" hint). A click wakes it (stretch, yawn,
+  "Mrrp?") and opens a dark-glass chat: starter questions, replies with up to two buttons into the site (open a
+  window, a case study, a prototype, the resume). Awake, its eyes follow the pointer; clicking again pets it
+  (hearts); 25s with the chat closed and it curls back up. Hidden in Mission Control, in prototypes and on
+  phones. Brain: `POST /api/agent` (`app/api/agent/route.ts`) calls Claude (`claude-opus-5-5`, effort low,
+  structured output `{reply, actions}`, cached system prompt built from `resume.ts` + `caseStudies.ts` in
+  `lib/agent/knowledge.ts`) **only when `ANTHROPIC_API_KEY` is set** (Vercel env, server only); otherwise, or on
+  any error, keyword answers over the same facts. 20 requests / 10 min per IP per instance, 400 chars, 10 turns.
+  Actions and starters: `src/data/agent.ts`. Events: `Woke / Petted Desk Cat`, `Asked Desk Cat` {mode ai |
+  offline | error}, `Clicked Desk Cat Action`, `Closed Desk Cat Chat`. Next's dev badge moved bottom-right.
+- **Gau Sampurna Website prototype (2026-11-09):** the D2C store gausampurna.com as a third prototype
+  (`gau-sampurna-web`), next to the two apps (desktop icon, phone home "Gau Website", Spotlight, About Me links,
+  the viewer's tab strip). Rebuilt from the site's code (`~/Desktop/GS SITE/frontend`, Next.js + Medusa, read-only:
+  never run it, never copy `.env.local` or `gausampurna-website-prod.json`) and its live pages: copy, catalogue (7
+  products, prices as listed Nov 2026), images (`public/prototypes/gau-website/`, 68 WebPs, 1.5 MB). Flows: Shop &
+  checkout (home → products → product page → checkout → order confirmed), Gau Swastha, Cattle Trading, Ask a Vet.
+  Every screen has the phone layout (mSite) and the desktop layout; the viewer shows an **mSite / Desktop** switch
+  when `prototype.web` is set (desktop renders in a browser window with the page path in the address bar; the phone
+  frame gets a browser address bar). Code: `src/components/prototype/web/` (`gsData.ts` catalogue + a shared cart
+  store, `GsShared.tsx` headers / footer / cards, one file per area). Checkout follows the site: Pay Online
+  pre-selected (10% off), Cash on Delivery shows the lime nudge and the "You'll miss an online discount" check. Cart,
+  address and orders are samples. Delivery dates use the site's rule (5 business days). Not in Mission Control.
 - **Phone:** dawn wallpaper crop (`public/wallpaper-phone.webp`, moon placed in the gap between the two
   small widgets) and the Back button in `PhoneBack.tsx`. Keep in-app overlays in `depth` there.
 - Stack: Next.js 16.3 App Router, React 19.2, TypeScript, CSS Modules + tokens in
@@ -49,10 +72,8 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
   Market Value and Cow Dung Check 2026-11-03): six in all, content in `src/data/caseStudies.ts` (typed; every public statistic
   has a `source` id pointing at a verified URL), one statically generated page per slug at
   `/case-studies/<slug>` (`src/app/case-studies/[slug]/page.tsx` + `CaseStudy.module.css`). The Case
-  Studies window (redesigned 2026-11-03) groups them by app with a filter (All / Kissan / Gau), a method line
-  (Problem → Insight → Decision → Outcome) and per card a storyboard: the problem's key stat (`problem.featured`), "My
-  call" (`solution.decisions[0]`) and what shipped (`card.metric`); `card.theme` is the eyebrow. The first study of each
-  app is the wide feature card. The "Products I've shipped" list was removed on 2026-11-01,
+  Studies window (simplified 2026-11-10) groups them by app; on desktop each study is the same wide blue card
+  (`card.theme`, name, one line, `card.metric`, a fan of `heroScreens`), on phones an iOS list row. The "Products I've shipped" list was removed on 2026-11-01,
   and Spotlight has a "Case studies" group. **To add one:** append an entry to `caseStudies`, add
   screenshots under `public/case-studies/<slug>/` (captured from the desktop prototype viewer at 2×),
   and run `next build` (the page prerenders via `generateStaticParams`). Deep links:
@@ -87,6 +108,8 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
 | Date | Decision | Why |
 |---|---|---|
 | 2026-10-31 | Phone exit uses a history guard added on the first tap; the second Back on home is the browser's own | A site can't close itself, and Chrome skips history entries added without a user gesture |
+| 2026-11-09 | The website prototype renders one component per screen for both layouts (`useDesktop()`), not two screen sets | Mirrors how the real site is built (one page, `md:` breakpoints) and keeps the two layouts in step |
+| 2026-11-08 | Desk cat answers with Claude only when a server key is set, with keyword answers as the fallback | The cat must never go silent or show an error to a recruiter; the site works with no key and no cost, and a key upgrades it |
 | 2026-11-02 | Windows sit at true screen centre, 20px under the 30px menu bar and 20px above the bottom; wide windows are sized to stay centred with 48px clear of the desktop icons (never below 760px, where they shift left instead) | Owner's call: centred and evenly framed, never touching the icons. Sizes use `--icons-w` (one or two icon columns); the left shift is computed from `--win-w` |
 | 2026-10-30 | Site font: Apple's **SF Pro** on Apple devices (system font), **Inter** elsewhere (self-hosted via `next/font`) | SF Pro's licence forbids web hosting; most visitors are on Android, where the old stack fell back to Roboto. Platform-aware stack because Chrome maps `BlinkMacSystemFont` to `system-ui` everywhere |
 | 2026-10-30 | "Projects" renamed **Case Studies** in the UI only; the tab id stays `projects` | Keeps analytics (`Opened Section` history) comparable and avoids touching every wiring point |
@@ -387,6 +410,31 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 
 ## Changelog
 
+- 2026-11-10: **Case Studies window simplified** (owner: too overwhelming; remove the filter and the "Every case
+  study follows" method row; then chose "all six as blue cards"). Desktop: under each app's quiet header (icon, name,
+  Try the app) every study is the same wide brand-blue card: theme pill, name, one line, the result (`card.metric`) and
+  "Read case study", beside a fan of three real screens (`heroScreens`, cover in front). No stat / My call / What
+  shipped panels and no per-app accent colours. Narrow windows show one screen, then stack it above the text. Phone:
+  an iOS grouped list (thumbnail cropped past the status bar, name, line, chevron). Mission Control's Case Studies
+  preview and the case study peek re-captured; the peek's click target is now 14.1% / 54.7%. The `Filtered Case
+  Studies` event is no longer sent. Checked 1440, 1024 and 393: no overflow or errors. Uncommitted.
+- 2026-11-10: **Case study pages: minimal redesign reverted** (owner: keep the blue hero with screens and the left
+  "On this page" index with reading progress). The 2026-11-09 minimal layout was undone: `page.tsx` and
+  `CaseStudy.module.css` are back to the committed version, and Mission Control's `peek/case-study.webp` too. Don't
+  restyle the case study pages without asking; the owner likes this design.
+- 2026-11-09: **Gau Sampurna Website prototype** (owner: add the GS site so it shows with the apps; take the
+  frontend design from its repo). An earlier session had left an unfinished draft (invented copy, wrong helpline
+  number); it was replaced. Built from the site's source and live pages (phone 390 and desktop 1440 captures). New
+  `prototype.web`, screen `path`, device scaling `"none"` (a website lays out at the phone's own width), event
+  `Switched Prototype Layout`, Roboto in `prototype/fonts.ts`, icon `public/apps/gau-sampurna-web-icon.png`,
+  `shortName` on `ShippedApp`. Verified in Chrome: all 8 screens in both layouts with no errors or broken images;
+  add to cart → checkout → COD check → confirmed (₹1,950), Buy Now → Pay Online (₹1,350), menu, vet booking;
+  phone viewer at 390 × 844 with no sideways overflow. `tsc`, lint (no errors) and `next build` pass. Uncommitted.
+- 2026-11-08: **Chai, the AI desk cat** (owner: a cute AI agent that sleeps on the desktop and wakes when
+  touched). See Current state. Verified in Chrome at 1440 and 1024: sleep → wake → chat, starter question → reply
+  with buttons, action opens Experience, Esc closes only the chat, petting, hidden in Mission Control and in a
+  prototype, no page errors; offline answers and a 400 on a bad body checked with curl. `tsc`, lint on the new
+  files and `next build` pass. Live AI needs `ANTHROPIC_API_KEY` in Vercel (not set yet). Uncommitted.
 - 2026-11-04: **Prototypes and Gau case studies synced with the apps' latest code** (owner: check the reference
   repos and update). See the backlog item for the full list. Case studies: Cattle Health Check now annotates the
   new 31-condition Disease Diagnosis report (13 callouts measured from the DOM) instead of the 360° report, and its

@@ -117,9 +117,9 @@ export default function MobileHome() {
             {shippedApps.map((app) => (
               <AppIcon
                 key={app.name}
-                label={app.name}
+                label={app.shortName ?? app.name}
                 image={app.icon}
-                ariaLabel={`Try the ${app.name} app prototype`}
+                ariaLabel={`Try the ${app.name} prototype`}
                 onClick={() => app.prototype && openPrototype(app.prototype, "home_screen")}
               />
             ))}

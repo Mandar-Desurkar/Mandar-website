@@ -41,7 +41,7 @@ type Props = {
   onJump: (flow: number, screen: number) => void;
   onRestart: () => void;
   onClose: () => void;
-  onSwitchPrototype?: (id: "kissan-sampurna" | "gau-sampurna") => void;
+  onSwitchPrototype?: (id: "kissan-sampurna" | "gau-sampurna" | "gau-sampurna-web") => void;
 };
 
 // The prototypes are portrait phone apps: a phone held sideways gets a rotate prompt instead
@@ -61,6 +61,7 @@ const subscribeFullscreen = (cb: () => void) => {
 const APPS = [
   { id: "kissan-sampurna" as const, label: "🌾 Kissan Sampurna" },
   { id: "gau-sampurna" as const, label: "🐄 Gau Sampurna" },
+  { id: "gau-sampurna-web" as const, label: "🌐 Gau Sampurna Website" },
 ];
 
 export default function PrototypeMobile({

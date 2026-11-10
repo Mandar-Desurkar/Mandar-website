@@ -885,6 +885,170 @@
   box-shadow: 0 0 0 4px rgba(13, 153, 255, 0.4) !important;
 }
 
+/* ==================== Desktop Browser Frame ==================== */
+.deviceModeToggle {
+  display: flex;
+  align-items: center;
+  background: #19191b;
+  border: 1px solid #333336;
+  border-radius: 6px;
+  padding: 2px;
+  gap: 2px;
+  margin-left: 4px;
+}
+
+.deviceModeBtn {
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #88888e;
+  cursor: pointer;
+  transition: all 0.12s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.deviceModeBtn:hover {
+  color: #ffffff;
+}
+
+.deviceModeBtnActive {
+  background: #0d99ff !important;
+  color: #ffffff !important;
+}
+
+.browserWindow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.12),
+    0 28px 80px rgba(0, 0, 0, 0.85);
+  transform-origin: top left;
+}
+
+/* Browser title + address bar (44px, BROWSER_BAR in PrototypeViewer.tsx) */
+.browserHeaderBar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 44px;
+  flex-shrink: 0;
+  padding: 0 14px;
+  background: #ececee;
+  border-bottom: 1px solid #d6d6d9;
+}
+
+.browserControls {
+  display: flex;
+  gap: 8px;
+}
+
+.browserControls .trafficLight {
+  pointer-events: none;
+}
+
+.browserControls .trafficLight::before {
+  display: none;
+}
+
+.browserNavIcons {
+  display: flex;
+  gap: 2px;
+}
+
+.browserNavBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 26px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #5b5b60;
+  cursor: pointer;
+}
+
+.browserNavBtn:hover {
+  background: rgba(0, 0, 0, 0.07);
+  color: #1d1d1f;
+}
+
+.browserAddressBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex: 1;
+  max-width: 520px;
+  height: 28px;
+  margin: 0 auto;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #6e6e73;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+.browserUrl {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+  font-size: 12.5px;
+  color: #1d1d1f;
+  letter-spacing: -0.1px;
+}
+
+.browserPath {
+  color: #86868b;
+}
+
+/* The page: fixed viewport, each website screen scrolls itself */
+.browserContentArea {
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.webScreenSlide {
+  position: absolute;
+  inset: 0;
+  background: #ffffff;
+}
+
+/* Phone: the browser's address bar above a website */
+.mAddressBar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 2px 14px 8px;
+  background: #ffffff;
+}
+
+.mAddressBar span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  height: 34px;
+  border-radius: 999px;
+  background: #f1f1f4;
+  color: #3c3c43;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-size: 14px;
+}
+
 /* ==================== Responsive ==================== */
 @media (max-width: 860px) {
   .overlay {

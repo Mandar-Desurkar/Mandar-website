@@ -1,10 +1,9 @@
-/* Case Studies window: a filter, the method every study follows, then one group per app. Each group
-   opens with a wide feature card and continues with compact cards, so six studies read as two
-   products. Cards carry the thinking (problem → my call → what shipped), not just a blurb.
-   Base rules are the phone (iOS) layout; the desktop window is styled at the end of the file. */
+/* Case Studies window: one group per app, the same card for every study.
+   Base rules are the phone (iOS) layout, a grouped list; the desktop window (dark glass) is styled at
+   the end of the file: one wide brand-blue card per study, text left, a fan of screens right. */
 
 .projectsSection {
-  padding: 2.25rem 0;
+  padding: 8px 0 28px;
 }
 
 .container {
@@ -13,820 +12,438 @@
 }
 
 .headerBox {
-  margin-bottom: 1.5rem;
+  margin-bottom: 8px;
 }
 
 .intro {
-  margin-top: 0.5rem;
-  font-size: 0.95rem;
+  margin-top: 6px;
+  font-size: 15px;
+  line-height: 20px;
   color: #6e6e73;
 }
 
-/* ---------- Filter (an iOS segmented control on phones) ---------- */
+/* ---------- Group ---------- */
 
-.filter {
-  display: flex;
-  gap: 2px;
-  margin-top: 1rem;
-  padding: 2px;
-  border-radius: 9px;
-  background: rgba(118, 118, 128, 0.12);
-}
-
-.filter button {
-  flex: 1 1 0;
-  min-width: 0;
-  min-height: 32px;
-  padding: 0 8px;
-  border: 0;
-  border-radius: 7px;
-  background: none;
-  font: inherit;
-  font-size: 13px;
-  font-weight: 500;
-  white-space: nowrap;
-  color: #1c1c1e;
-  cursor: pointer;
-  transition: background 0.2s ease, box-shadow 0.2s ease;
-}
-
-.filter button span {
-  margin-left: 3px;
-  color: #8e8e93;
-  font-variant-numeric: tabular-nums;
-}
-
-.filter b {
-  font-weight: inherit;
-}
-
-/* Phones say "Kissan" and "Gau"; the full app names fit from the desktop window up */
-.nameFull {
-  display: none;
-}
-
-:global(.os-window:not(.ios-app)) .nameFull {
-  display: inline;
-}
-
-:global(.os-window:not(.ios-app)) .nameShort {
-  display: none;
-}
-
-.filter button[aria-pressed="true"] {
-  background: #fff;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12), 0 0 0 0.5px rgba(0, 0, 0, 0.04);
-  font-weight: 600;
-}
-
-.filter button:focus-visible {
-  outline: 2px solid #004691;
-  outline-offset: 1px;
-}
-
-/* ---------- Method ---------- */
-
-.method {
-  display: none;
-}
-
-/* ---------- App groups ---------- */
-
-.group + .group {
-  margin-top: 1.75rem;
+.group {
+  margin-top: 22px;
 }
 
 .groupHead {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 0.75rem;
+  gap: 8px;
+  margin-bottom: 8px;
+  padding: 0 4px;
 }
 
 .groupIcon {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
   flex-shrink: 0;
-  width: 36px;
-  height: 36px;
-  border-radius: 9px;
-  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.12);
 }
 
-.groupText {
+.groupHead h3 {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #6e6e73;
+}
+
+.tryApp {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 15px;
+  color: #007aff;
+  cursor: pointer;
+}
+
+/* ---------- Phone: an iOS grouped list ---------- */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 12px 12px 14px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.card + .card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 90px;
+  right: 0;
+  height: 0.5px;
+  background: rgba(60, 60, 67, 0.29);
+}
+
+.card:active {
+  background: #e5e5ea;
+}
+
+.shot {
+  display: block;
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #eef2f7;
+}
+
+/* Crop past the screen's status bar so the thumbnail shows the app itself */
+.shot img {
+  display: block;
+  width: 124%;
+  height: auto;
+  margin: -12px 0 0 -12%;
+}
+
+.body {
   display: flex;
   flex: 1;
   min-width: 0;
   flex-direction: column;
 }
 
-.groupText h3 {
-  margin: 0;
-  font-size: 1.05rem;
-  font-weight: 700;
-  line-height: 1.25;
-}
-
-.groupText span {
-  font-size: 0.8125rem;
-  line-height: 1.35;
-  color: #6e6e73;
-}
-
-.tryApp {
-  display: inline-flex;
-  flex-shrink: 0;
-  align-items: center;
-  gap: 5px;
-  min-height: 32px;
-  padding: 0 12px;
-  border: 0;
-  border-radius: 999px;
-  background: rgba(0, 70, 145, 0.1);
-  font: inherit;
-  font-size: 13px;
-  font-weight: 600;
-  color: #004691;
-  cursor: pointer;
-}
-
-.tryApp:focus-visible {
-  outline: 2px solid #004691;
-  outline-offset: 2px;
-}
-
-/* ---------- Cards (phone: screen on top, then the text) ---------- */
-
-.caseList {
-  display: grid;
-  gap: 1rem;
-}
-
-.caseCard {
-  display: grid;
-  grid-template-columns: 1fr;
-  overflow: hidden;
-  border-radius: 16px;
-  background: #fff;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  color: var(--ink-black);
-  text-decoration: none;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.caseCard:focus-visible {
-  outline: 2px solid #004691;
-  outline-offset: 3px;
-}
-
-.caseVisual {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  height: 176px;
-  overflow: hidden;
-  background: linear-gradient(160deg, #e8f0fa, #cfe0f5);
-}
-
-.group[data-app="gau-sampurna"] .caseVisual {
-  background: linear-gradient(160deg, #fdf1e2, #f6dcbc);
-}
-
-.caseShotSide {
+.theme,
+.result,
+.read,
+.shot .side {
   display: none;
 }
 
-.caseShot {
-  width: 140px;
-  height: auto;
-  margin-top: 20px;
-  border-radius: 18px;
-  box-shadow: 0 12px 30px rgba(0, 70, 145, 0.22);
-}
-
-.caseBody {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  padding: 1.1rem 1.2rem 1.3rem;
-}
-
-.caseEyebrow {
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #004691;
-}
-
-.group[data-app="gau-sampurna"] .caseEyebrow {
-  color: #b2560d;
-}
-
-.caseTitle {
-  font-size: 1.25rem;
-  font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: -0.01em;
-}
-
-.caseProblem {
-  font-size: 0.95rem;
-  line-height: 1.45;
-  color: #48484a;
-}
-
-/* The storyboard is a desktop feature; phones keep the short card */
-.thinking {
-  display: none;
-}
-
-.caseMetric {
-  align-self: flex-start;
-  padding: 0.3rem 0.65rem;
-  border-radius: 8px;
-  background: #e8f0fa;
-  color: #004691;
-  font-size: 0.85rem;
+.name {
+  font-size: 17px;
   font-weight: 600;
-  line-height: 1.4;
-}
-
-.group[data-app="gau-sampurna"] .caseMetric {
-  background: #fdf1e2;
-  color: #8a420a;
-}
-
-.caseCta {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 0.3rem;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #004691;
-}
-
-/* Phone, inside the iOS app shell: the large title replaces the heading, cards sit on the grouped
-   background, and each app reads as an iOS section with its header above it */
-:global(.ios-app) .projectsSection {
-  padding: 8px 0 28px;
-}
-
-:global(.ios-app) .headerBox {
-  margin-bottom: 18px;
-}
-
-:global(.ios-app) .headerText {
-  display: none;
-}
-
-:global(.ios-app) .filter {
-  margin-top: 0;
-}
-
-:global(.ios-app) .groupHead {
-  padding: 0 4px;
-}
-
-:global(.ios-app) .caseCard {
-  border: 0;
-  border-radius: 12px;
-}
-
-:global(.ios-app) .caseTitle {
-  font-size: 20px;
-  line-height: 25px;
+  line-height: 22px;
   letter-spacing: -0.4px;
+  color: #000000;
 }
 
-:global(.ios-app) .caseProblem {
+.line {
+  margin-top: 2px;
   font-size: 15px;
   line-height: 20px;
+  color: #6e6e73;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.chevron {
+  flex-shrink: 0;
+  color: #c4c4c7;
+}
+
+/* Inside the iOS app shell the large title replaces the heading */
+:global(.ios-app) .headerBox :global(.hand-heading-2) {
+  display: none;
 }
 
 /* ==================== Desktop window ====================
-   On the shared dark glass (globals.css). Each app has an accent: crop green for Kissan Sampurna,
-   warm amber for Gau Sampurna, used for the glow, the key number and the eyebrow. */
+   On the shared dark glass (globals.css): one wide brand-blue card per case study. */
+
 :global(.os-window:not(.ios-app)) .projectsSection {
-  padding: 30px 0 40px;
+  padding: 34px 0 44px;
 }
 
 :global(.os-window:not(.ios-app)) .container {
   max-width: none;
-  padding: 0 36px;
+  padding: 0 40px;
 }
 
-:global(.os-window:not(.ios-app)) .group {
-  --accent: #a6e36b;
-  --glow: rgba(64, 190, 120, 0.42);
-  --tint: rgba(166, 227, 107, 0.14);
-}
-
-:global(.os-window:not(.ios-app)) .group[data-app="gau-sampurna"] {
-  --accent: #ffbe5c;
-  --glow: rgba(255, 166, 64, 0.38);
-  --tint: rgba(255, 190, 92, 0.14);
-}
-
-/* Header: title and intro on the left, the filter on the right, the method underneath */
 :global(.os-window:not(.ios-app)) .headerBox {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: end;
-  gap: 14px 24px;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
+}
+
+:global(.os-window:not(.ios-app)) .headerBox :global(.hand-heading-2) {
+  margin: 0;
 }
 
 :global(.os-window:not(.ios-app)) .intro {
-  margin-top: 4px;
-  font-size: 0.9375rem;
-  color: rgba(235, 235, 245, 0.66);
+  margin-top: 6px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.55);
 }
 
-:global(.os-window:not(.ios-app)) .filter {
-  margin: 0;
-  padding: 3px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.07);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-}
-
-:global(.os-window:not(.ios-app)) .filter button {
-  flex: 0 0 auto;
-  min-height: 30px;
-  padding: 0 14px;
-  border-radius: 999px;
-  font-size: 0.8125rem;
-  color: rgba(235, 235, 245, 0.78);
-}
-
-:global(.os-window:not(.ios-app)) .filter button span {
-  color: rgba(235, 235, 245, 0.45);
-}
-
-:global(.os-window:not(.ios-app)) .filter button:hover {
-  color: #fff;
-}
-
-:global(.os-window:not(.ios-app)) .filter button[aria-pressed="true"] {
-  background: #fff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  color: #0a2c5c;
-}
-
-:global(.os-window:not(.ios-app)) .filter button[aria-pressed="true"] span {
-  color: #5b6b80;
-}
-
-:global(.os-window:not(.ios-app)) .filter button:focus-visible {
-  outline-color: #fff;
-}
-
-/* The method: four numbered steps joined by a hairline */
-:global(.os-window:not(.ios-app)) .method {
-  display: flex;
-  grid-column: 1 / -1;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 14px;
-  padding-top: 14px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-:global(.os-window:not(.ios-app)) .methodLabel {
-  font-size: 0.75rem;
-  color: rgba(235, 235, 245, 0.5);
-}
-
-:global(.os-window:not(.ios-app)) .method ol {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px 0;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-:global(.os-window:not(.ios-app)) .method li {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: rgba(235, 235, 245, 0.86);
-}
-
-:global(.os-window:not(.ios-app)) .method li + li::before {
-  content: "";
-  width: 26px;
-  height: 1px;
-  margin: 0 10px 0 4px;
-  background: rgba(255, 255, 255, 0.24);
-}
-
-:global(.os-window:not(.ios-app)) .method li span {
-  display: inline-grid;
-  place-items: center;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  font-size: 0.6875rem;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-}
-
-/* Group header: the app as a product, with its prototype one click away */
 :global(.os-window:not(.ios-app)) .group {
-  margin-top: 30px;
-}
-
-:global(.os-window:not(.ios-app)) .group + .group {
-  margin-top: 40px;
+  margin-top: 36px;
 }
 
 :global(.os-window:not(.ios-app)) .groupHead {
-  gap: 14px;
+  gap: 10px;
   margin-bottom: 14px;
+  padding: 0;
 }
 
 :global(.os-window:not(.ios-app)) .groupIcon {
-  width: 44px;
-  height: 44px;
-  border-radius: 11px;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14), 0 6px 16px rgba(0, 0, 0, 0.35);
+  width: 24px;
+  height: 24px;
 }
 
-:global(.os-window:not(.ios-app)) .groupText h3 {
-  font-size: 1.125rem;
-  font-weight: 650;
-  letter-spacing: -0.01em;
-  color: #fff;
-}
-
-:global(.os-window:not(.ios-app)) .groupText span {
-  margin-top: 2px;
-  font-size: 0.8125rem;
-  color: rgba(235, 235, 245, 0.6);
+:global(.os-window:not(.ios-app)) .groupHead h3 {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: rgba(255, 255, 255, 0.92);
 }
 
 :global(.os-window:not(.ios-app)) .tryApp {
-  min-height: 32px;
-  padding: 0 14px;
-  background: rgba(255, 255, 255, 0.08);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
-  font-size: 0.8125rem;
-  color: #fff;
-  transition: background 0.15s ease;
-}
-
-:global(.os-window:not(.ios-app)) .tryApp svg {
-  color: var(--accent);
-  fill: currentColor;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.55);
+  transition: color 0.15s ease;
 }
 
 :global(.os-window:not(.ios-app)) .tryApp:hover {
-  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
 }
 
 :global(.os-window:not(.ios-app)) .tryApp:focus-visible {
-  outline-color: #fff;
+  outline: 2px solid #4da3ff;
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 
-/* Grid: the feature spans the row, compact cards sit two to a row */
-:global(.os-window:not(.ios-app)) .caseList {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+:global(.os-window:not(.ios-app)) .list {
+  display: flex;
+  flex-direction: column;
   gap: 16px;
-}
-
-:global(.os-window:not(.ios-app)) .caseCard {
-  position: relative;
-  border: 0;
-  color: #fff;
-}
-
-:global(.os-window:not(.ios-app)) .caseCard:focus-visible {
-  outline-color: #fff;
-}
-
-:global(.os-window:not(.ios-app)) .caseVisual {
-  order: 2;
-  height: auto;
+  border-radius: 0;
   background: none;
+  overflow: visible;
 }
 
-:global(.os-window:not(.ios-app)) .caseShot,
-:global(.os-window:not(.ios-app)) .caseShotSide {
-  position: absolute;
+/* One wide brand-blue card per study: the text on the left, a fan of its real screens on the right */
+:global(.os-window:not(.ios-app)) .card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 44%);
+  align-items: stretch;
+  gap: 0;
+  min-height: 300px;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 20px;
+  background:
+    radial-gradient(520px 360px at 78% 10%, rgba(70, 150, 240, 0.42), transparent 70%),
+    linear-gradient(150deg, #0a4a9c 0%, #062a59 100%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  transition: box-shadow 0.2s ease;
+}
+
+:global(.os-window:not(.ios-app)) .card + .card::before {
+  display: none;
+}
+
+:global(.os-window:not(.ios-app)) .card:hover {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28);
+}
+
+:global(.os-window:not(.ios-app)) .card:active {
+  background:
+    radial-gradient(520px 360px at 78% 10%, rgba(70, 150, 240, 0.42), transparent 70%),
+    linear-gradient(150deg, #0a4a9c 0%, #062a59 100%);
+}
+
+:global(.os-window:not(.ios-app)) .card:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+:global(.os-window:not(.ios-app)) .body {
+  order: 1;
+  justify-content: center;
+  padding: 32px 16px 32px 34px;
+}
+
+:global(.os-window:not(.ios-app)) .theme {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+:global(.os-window:not(.ios-app)) .name {
+  margin-top: 14px;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  color: #ffffff;
+}
+
+:global(.os-window:not(.ios-app)) .line {
+  margin-top: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.88);
+  -webkit-line-clamp: 3;
+}
+
+:global(.os-window:not(.ios-app)) .result {
+  display: block;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+:global(.os-window:not(.ios-app)) .read {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  margin-top: 22px;
+  padding: 9px 16px;
+  border-radius: 999px;
+  background: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0a2c5c;
+}
+
+:global(.os-window:not(.ios-app)) .read svg {
+  transition: transform 0.2s ease;
+}
+
+:global(.os-window:not(.ios-app)) .card:hover .read svg {
+  transform: translateX(3px);
+}
+
+/* The fan: the cover in front, two screens tilted behind, cropped by the card's bottom edge */
+:global(.os-window:not(.ios-app)) .shot {
+  order: 2;
+  position: relative;
+  width: auto;
   height: auto;
+  border-radius: 0;
+  background: none;
+  overflow: visible;
+}
+
+:global(.os-window:not(.ios-app)) .shot img {
+  position: absolute;
+  left: 50%;
   margin: 0;
   border: 4px solid #0d0e10;
   border-radius: 26px;
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-:global(.os-window:not(.ios-app)) .caseBody {
-  gap: 0;
-  padding: 28px 12px 28px 30px;
-}
-
-:global(.os-window:not(.ios-app)) .caseEyebrow {
-  align-self: flex-start;
-  padding: 3px 9px;
-  border-radius: 999px;
-  background: var(--tint);
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  text-transform: none;
-  color: var(--accent);
-}
-
-:global(.os-window:not(.ios-app)) .caseName {
-  display: block;
-  margin-top: 10px;
-  font-size: 1.625rem;
-  line-height: 1.12;
-  letter-spacing: -0.025em;
-}
-
-:global(.os-window:not(.ios-app)) .caseColon {
-  display: none;
-}
-
-:global(.os-window:not(.ios-app)) .caseLine {
-  display: block;
-  margin-top: 5px;
-  font-size: 0.9375rem;
-  line-height: 1.4;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-:global(.os-window:not(.ios-app)) .caseLine::first-letter {
-  text-transform: uppercase;
-}
-
-:global(.os-window:not(.ios-app)) .caseProblem {
-  margin-top: 10px;
-  font-size: 0.875rem;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-:global(.os-window:not(.ios-app)) .caseMetric {
-  display: none;
-}
-
-/* The storyboard: the problem's key number, the call I made, what shipped */
-:global(.os-window:not(.ios-app)) .thinking {
-  display: grid;
-  gap: 10px;
-  margin-top: 18px;
-}
-
-:global(.os-window:not(.ios-app)) .beat {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  min-width: 0;
-}
-
-:global(.os-window:not(.ios-app)) .beatLabel {
-  font-size: 0.625rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(235, 235, 245, 0.5);
-}
-
-:global(.os-window:not(.ios-app)) .beatText {
-  font-size: 0.8125rem;
-  line-height: 1.4;
-  color: rgba(255, 255, 255, 0.82);
-}
-
-:global(.os-window:not(.ios-app)) .beatProblem b {
-  font-size: 1.75rem;
-  line-height: 1;
-  font-weight: 650;
-  letter-spacing: -0.03em;
-  font-variant-numeric: tabular-nums;
-  color: var(--accent);
-}
-
-:global(.os-window:not(.ios-app)) .beatCall .beatText {
-  padding-left: 10px;
-  border-left: 2px solid var(--accent);
-  font-weight: 600;
-  color: #fff;
-}
-
-:global(.os-window:not(.ios-app)) .caseCta {
-  align-self: flex-start;
-  margin-top: 20px;
-  font-size: 0.875rem;
-}
-
-:global(.os-window:not(.ios-app)) .caseCta svg {
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-:global(.os-window:not(.ios-app)) .caseCard:hover .caseCta svg {
-  transform: translateX(3px);
-}
-
-/* ----- The feature: brand blue with the app's glow, a fan of real screens on the right ----- */
-:global(.os-window:not(.ios-app)) .featured {
-  grid-column: 1 / -1;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 42%);
-  min-height: 380px;
-  border-radius: 20px;
-  background:
-    radial-gradient(420px 320px at 84% 4%, var(--glow), transparent 70%),
-    radial-gradient(520px 360px at 70% 20%, rgba(70, 150, 240, 0.45), transparent 70%),
-    linear-gradient(150deg, #0a4a9c 0%, #062a59 100%);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
-}
-
-:global(.os-window:not(.ios-app)) .featured:hover {
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28);
-}
-
-:global(.os-window:not(.ios-app)) .featured .caseName {
-  font-size: 2.125rem;
-  letter-spacing: -0.028em;
-}
-
-/* Three beats side by side, joined by hairlines */
-:global(.os-window:not(.ios-app)) .featured .thinking {
-  grid-template-columns: 1.1fr 1fr 1fr;
-  gap: 0;
-  margin-top: 20px;
-  padding-top: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.16);
-}
-
-:global(.os-window:not(.ios-app)) .featured .beat {
-  padding-right: 16px;
-}
-
-:global(.os-window:not(.ios-app)) .featured .beat + .beat {
-  padding-left: 16px;
-  border-left: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-:global(.os-window:not(.ios-app)) .featured .caseCta {
-  padding: 8px 16px;
-  border-radius: 999px;
-  background: #fff;
-  color: #0a2c5c;
-}
-
-:global(.os-window:not(.ios-app)) .featured .caseShot {
+:global(.os-window:not(.ios-app)) .front {
   z-index: 1;
   top: 34px;
-  left: 50%;
-  width: 196px;
-  margin-left: -98px;
+  width: 188px !important;
+  margin-left: -94px !important;
   box-shadow: 0 24px 50px -10px rgba(0, 0, 0, 0.6);
 }
 
-:global(.os-window:not(.ios-app)) .featured .caseShotSide {
+:global(.os-window:not(.ios-app)) .side {
   display: block;
-  top: 62px;
-  left: 50%;
-  width: 168px;
-  margin-left: -84px;
+  top: 60px;
+  width: 160px !important;
+  margin-left: -80px !important;
   opacity: 0.92;
   box-shadow: 0 16px 34px -10px rgba(0, 0, 0, 0.5);
 }
 
-:global(.os-window:not(.ios-app)) .featured .caseShotSide:nth-child(1) {
-  transform: translateX(-104px) rotate(-5deg);
+:global(.os-window:not(.ios-app)) .side:nth-child(1) {
+  transform: translateX(-100px) rotate(-5deg);
 }
 
-:global(.os-window:not(.ios-app)) .featured .caseShotSide:nth-child(2) {
-  transform: translateX(104px) rotate(5deg);
+:global(.os-window:not(.ios-app)) .side:nth-child(2) {
+  transform: translateX(100px) rotate(5deg);
 }
 
-:global(.os-window:not(.ios-app)) .featured:hover .caseShot {
+:global(.os-window:not(.ios-app)) .card:hover .front {
   transform: translateY(-8px);
 }
 
-:global(.os-window:not(.ios-app)) .featured:hover .caseShotSide:nth-child(1) {
-  transform: translateX(-118px) rotate(-7deg);
+:global(.os-window:not(.ios-app)) .card:hover .side:nth-child(1) {
+  transform: translateX(-114px) rotate(-7deg);
 }
 
-:global(.os-window:not(.ios-app)) .featured:hover .caseShotSide:nth-child(2) {
-  transform: translateX(118px) rotate(7deg);
+:global(.os-window:not(.ios-app)) .card:hover .side:nth-child(2) {
+  transform: translateX(114px) rotate(7deg);
 }
 
-/* ----- Compact: frosted glass, the problem and the call, one screen peeking in at the corner ----- */
-:global(.os-window:not(.ios-app)) .compact {
-  grid-template-columns: minmax(0, 1fr) 150px;
-  min-height: 300px;
-  border-radius: 18px;
-  background:
-    radial-gradient(260px 220px at 100% 0%, var(--glow), transparent 70%),
-    rgba(255, 255, 255, 0.055);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-  transition: background 0.2s ease, box-shadow 0.2s ease;
-}
-
-:global(.os-window:not(.ios-app)) .compact:hover {
-  background:
-    radial-gradient(260px 220px at 100% 0%, var(--glow), transparent 70%),
-    rgba(255, 255, 255, 0.085);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
-}
-
-:global(.os-window:not(.ios-app)) .compact .caseBody {
-  padding: 24px 4px 24px 24px;
-}
-
-:global(.os-window:not(.ios-app)) .compact .caseProblem,
-:global(.os-window:not(.ios-app)) .compact .beatShipped {
+:global(.os-window:not(.ios-app)) .chevron {
   display: none;
 }
 
-:global(.os-window:not(.ios-app)) .compact .beatProblem {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: center;
-  column-gap: 10px;
-}
-
-:global(.os-window:not(.ios-app)) .compact .beatProblem .beatLabel {
-  grid-column: 1 / -1;
-}
-
-:global(.os-window:not(.ios-app)) .compact .beatProblem b {
-  font-size: 1.5rem;
-}
-
-:global(.os-window:not(.ios-app)) .compact .beatProblem .beatText {
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-:global(.os-window:not(.ios-app)) .compact .caseCta {
-  margin-top: auto;
-  padding-top: 18px;
-  color: var(--accent);
-}
-
-:global(.os-window:not(.ios-app)) .compact .caseShot {
-  top: 30px;
-  left: 6px;
-  width: 150px;
-  transform: rotate(4deg);
-  transform-origin: top left;
-  box-shadow: 0 18px 40px -10px rgba(0, 0, 0, 0.6);
-}
-
-:global(.os-window:not(.ios-app)) .compact:hover .caseShot {
-  transform: rotate(2deg) translateY(-8px);
-}
-
-/* Narrow windows (a 1024px laptop): one phone stands in for the fan, compact cards stack */
+/* Narrower windows: one screen instead of the fan, then the screen above the text */
 @container window (max-width: 899.98px) {
-  :global(.os-window:not(.ios-app)) .caseList {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  :global(.os-window:not(.ios-app)) .featured {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 34%);
-  }
-
-  :global(.os-window:not(.ios-app)) .featured .caseShotSide {
+  :global(.os-window:not(.ios-app)) .side {
     display: none;
   }
 
-  :global(.os-window:not(.ios-app)) .featured .thinking {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 12px;
+  :global(.os-window:not(.ios-app)) .card {
+    grid-template-columns: minmax(0, 1fr) 220px;
   }
 
-  :global(.os-window:not(.ios-app)) .featured .beat + .beat {
-    padding-left: 0;
-    border-left: 0;
+  :global(.os-window:not(.ios-app)) .name {
+    font-size: 26px;
+  }
+}
+
+@container window (max-width: 599.98px) {
+  :global(.os-window:not(.ios-app)) .card {
+    grid-template-columns: 1fr;
+    min-height: 0;
   }
 
-  :global(.os-window:not(.ios-app)) .headerBox {
-    grid-template-columns: minmax(0, 1fr);
+  :global(.os-window:not(.ios-app)) .shot {
+    order: 0;
+    height: 190px;
   }
 
-  :global(.os-window:not(.ios-app)) .filter {
-    justify-self: start;
+  :global(.os-window:not(.ios-app)) .front {
+    top: 26px;
+    width: 160px !important;
+    margin-left: -80px !important;
+  }
+
+  :global(.os-window:not(.ios-app)) .body {
+    padding: 22px 22px 26px;
+  }
+
+  :global(.os-window:not(.ios-app)) .container {
+    padding: 0 22px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .caseCard,
-  :global(.os-window:not(.ios-app)) .caseShot,
-  :global(.os-window:not(.ios-app)) .caseShotSide,
-  :global(.os-window:not(.ios-app)) .caseCta svg {
+  :global(.os-window:not(.ios-app)) .shot img,
+  :global(.os-window:not(.ios-app)) .card:hover .front,
+  :global(.os-window:not(.ios-app)) .read svg {
     transition: none;
   }
 }

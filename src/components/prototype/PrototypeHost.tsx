@@ -8,10 +8,12 @@ import { useWindow } from "@/context/WindowContext";
 
 const KissanPrototype = dynamic(() => import("./KissanPrototype"), { ssr: false });
 const GauPrototype = dynamic(() => import("./GauPrototype"), { ssr: false });
+const GauWebPrototype = dynamic(() => import("./GauWebPrototype"), { ssr: false });
 
 export default function PrototypeHost() {
   const { prototype, switchPrototype, closePrototype } = useWindow();
   if (prototype === "kissan-sampurna") return <KissanPrototype onClose={closePrototype} onSwitchPrototype={switchPrototype} />;
   if (prototype === "gau-sampurna") return <GauPrototype onClose={closePrototype} onSwitchPrototype={switchPrototype} />;
+  if (prototype === "gau-sampurna-web") return <GauWebPrototype onClose={closePrototype} onSwitchPrototype={switchPrototype} />;
   return null;
 }

@@ -5,11 +5,11 @@
 import PrototypeViewer from "./PrototypeViewer";
 import { kissanScreenMap } from "./kissan/screenMap";
 import { kissanSampurnaPrototype } from "@/data/prototypes/kissanSampurna";
-
+import type { PrototypeId } from "@/context/WindowContext";
 
 type Props = {
   onClose: () => void;
-  onSwitchPrototype?: (id: "kissan-sampurna" | "gau-sampurna") => void;
+  onSwitchPrototype?: (id: PrototypeId) => void;
 };
 
 export default function KissanPrototype({ onClose, onSwitchPrototype }: Props) {

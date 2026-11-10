@@ -6,6 +6,7 @@ import type { PrototypeDevice } from "@/data/prototypes/kissanSampurna";
 // out in so the screen exactly fills the phone. Kissan's `@ms` sizes grow at half the width ratio,
 // so wider phones also get more room in design points, as in the app; Gau scales linearly.
 export function fitToPhone(device: PrototypeDevice, phoneWidth: number) {
+  if (device.scaling === "none") return { scale: 1, layoutWidth: phoneWidth };
   const ratio = phoneWidth / device.width;
   const scale = device.scaling === "moderate" ? 1 + (ratio - 1) * 0.5 : ratio;
   return { scale, layoutWidth: phoneWidth / scale };
