@@ -421,6 +421,14 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 
 ## Changelog
 
+- 2026-11-16: **Crop Guide case study: Gemini art on desktop and phone** (owner approved the plan and its
+  ≈ ₹24 estimate; actual ₹24.76, ledger total ₹69.50 of ₹80). New optional fields: `portrait` on
+  `CaseStudyPersona` (the card shows it in place of the monogram, 72px; the personas are composites, so
+  they are drawn, never photographed) and `scene` on `CaseStudy` (an illustration with a caption, after
+  the Problem intro). Crop Guide has three portraits (Ramesh, Lakshmi, the agronomy lead) and a sowing-day
+  scene. Every case study's "Next case study" card in the reading sidebar now shows the next study's
+  `thumb` cover art instead of a phone screenshot. The other case studies have no portraits or scene yet
+  (they keep monograms). The hero keeps the real app screens.
 - 2026-11-16: **Fix: phone About buttons hidden under the tab bar** (owner's screenshot, Android, ≈393×760
   visible). The two-paragraph intro no longer fit the "one screen, no scrolling" sizes, and the size steps
   used `@media (min-height)`, which Android Chrome measures as if its toolbar were hidden. The phone scroll

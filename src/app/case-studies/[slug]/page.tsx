@@ -311,8 +311,8 @@ export default async function CaseStudyPage({ params }: PageProps<"/case-studies
             {next && (
               <TrackedLink slug={cs.slug} cta="next_case_study" href={`/case-studies/${next.slug}`} className={styles.nextCase}>
                 <span className={styles.companionLabel}>Next case study</span>
-                <span className={styles.nextThumb} aria-hidden="true">
-                  <Image src={next.cover} alt="" width={393} height={852} sizes="96px" />
+                <span className={`${styles.nextThumb} ${styles.nextArt}`} aria-hidden="true">
+                  <Image src={next.thumb} alt="" width={1200} height={670} sizes="200px" />
                 </span>
                 <b>{next.title.split(":")[0]}</b>
                 <span className={styles.nextMeta}>
@@ -340,6 +340,13 @@ export default async function CaseStudyPage({ params }: PageProps<"/case-studies
           {/* 01 Problem */}
           <Section cs={cs} id="problem" n={1}>
             <p className={styles.lead}>{cs.problem.intro}</p>
+
+            {cs.scene && (
+              <figure className={styles.scene}>
+                <Image src={cs.scene.src} alt={cs.scene.alt} width={1376} height={768} sizes="(max-width: 767px) 100vw, 760px" />
+                <figcaption>{cs.scene.caption}</figcaption>
+              </figure>
+            )}
 
             <figure className={styles.featuredStat}>
               <Waffle value={featured.value} />
@@ -387,8 +394,12 @@ export default async function CaseStudyPage({ params }: PageProps<"/case-studies
                     {/* Profile header: a tinted band with the avatar sitting on its edge */}
                     <header className={styles.personaHead}>
                       <span className={styles.personaBand} aria-hidden="true" />
-                      <span className={styles.monogram} aria-hidden="true">
-                        {name.replace(/^The /, "").charAt(0).toUpperCase()}
+                      <span className={`${styles.monogram} ${p.portrait ? styles.portrait : ""}`} aria-hidden="true">
+                        {p.portrait ? (
+                          <Image src={p.portrait} alt="" width={320} height={320} sizes="72px" />
+                        ) : (
+                          name.replace(/^The /, "").charAt(0).toUpperCase()
+                        )}
                       </span>
                       <span className={styles.personaId}>
                         <h3>

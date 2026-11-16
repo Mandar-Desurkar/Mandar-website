@@ -13,6 +13,9 @@ export type CaseStudyPersona = {
   goals: string[];
   frustrations: string[];
   internal?: boolean;
+  // Illustrated portrait for the persona card (generated art: the personas are composites, so they are
+  // drawn, never photographed); without one the card shows a monogram
+  portrait?: string;
 };
 // `feel` (-2 anxious … +2 confident) draws the journey map's emotion curve; it is a design
 // synthesis of the pain points, labelled illustrative on the page
@@ -33,6 +36,8 @@ export type CaseStudy = {
   cover: string;
   // Illustrated cover art for the phone's Case Studies cards (generated with Gemini; see docs/GEMINI_LEDGER.md)
   thumb: string;
+  // Optional illustration that sets the scene at the top of the Problem section
+  scene?: { src: string; alt: string; caption: string };
   tags: string[];
   // Card on the Case Studies list
   // Stats are the feature card's proof row in the desktop window
@@ -97,6 +102,11 @@ export const caseStudies: CaseStudy[] = [
     product: "Kissan Sampurna",
     cover: `${IMG}/05-report.webp`,
     thumb: "/case-studies/crop-guide/thumb.webp",
+    scene: {
+      src: "/case-studies/crop-guide/scene-sowing.webp",
+      alt: "Illustration: a smallholder stands at the edge of his ploughed, empty field with a bag of seed, looking at the neighbouring plots of tomato and ragi.",
+      caption: "Sowing day on a one-hectare farm: the seed is in hand, and the choice is made by habit or by what the neighbours plant.",
+    },
     tags: ["AgriTech", "0→1", "Recommendation engine", "Low-literacy UX"],
     card: {
       theme: "Recommendation engine",
@@ -176,6 +186,7 @@ export const caseStudies: CaseStudy[] = [
           { label: "Grows", value: "Ragi, groundnut" },
         ],
         quote: "I grow what my father grew. When I tried tomato like everyone else, the price fell to nothing.",
+        portrait: "/case-studies/crop-guide/persona-ramesh.webp",
         goals: ["A crop that survives a weak monsoon", "A fair price at the local mandi", "Advice in Kannada he can follow"],
         frustrations: [
           "Borewell runs low mid-season",
@@ -193,6 +204,7 @@ export const caseStudies: CaseStudy[] = [
           { label: "Grows", value: "Rice today" },
         ],
         quote: "I want to try something that pays more near the city, but I can't afford to lose a season experimenting.",
+        portrait: "/case-studies/crop-guide/persona-lakshmi.webp",
         goals: ["Switch to a higher-value crop", "Stay within a tight budget per acre", "Compare options before committing"],
         frustrations: [
           "YouTube advice is generic, not for her soil or budget",
@@ -209,6 +221,7 @@ export const caseStudies: CaseStudy[] = [
           { label: "Tools", value: "The engine's scoring sheets" },
         ],
         quote: "When a recommendation is wrong for a region, I need to fix it today, not in the next app release.",
+        portrait: "/case-studies/crop-guide/persona-agronomist.webp",
         goals: ["Correct a crop's zone, soil or season fit quickly", "Change the questions without engineering", "See why a crop ranked where it did"],
         frustrations: ["Every rule change needs an engineer", "Logic hidden in code is hard to audit"],
         internal: true,
