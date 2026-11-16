@@ -421,6 +421,15 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 
 ## Changelog
 
+- 2026-11-16: Committed everything since ebd4157 as **f0bcae3** on `dev` (glass phone apps, IconArt icons,
+  dock alignment, new photo + 55K+ MAU, About positioning, Experience resume content, Case Study covers,
+  haptics, typography pass, the owner's resume bullet + regenerated PDF), fast-forwarded `prod`, pushed both.
+  Preflight: tsc and `next build` pass; content, link-safety, secrets and SEO checks pass; the two FAILs
+  were already there before this push: lint (the same 5 errors in Dock, DraggableWindow, Navbar,
+  WindowContext) and assets over 300 KB (3 music tracks, 2 wallpapers). Vercel production deploy was live
+  about 30s after the push; checked live: home (55K+ MAU), Experience, a case study, /resume, the resume
+  PDF, new photo and cover art all 200, phone Case Studies renders the new cards. Entries below that say
+  "Uncommitted" shipped in f0bcae3.
 - 2026-11-16: **Phone typography audit** (Experience, Education, Case Studies, Contact), measured from
   computed styles. Font stack is right (SF Pro on Apple, Inter elsewhere, `--font-system`). Snapped to the
   iOS scale, phone only (`.ios-app` rules):
