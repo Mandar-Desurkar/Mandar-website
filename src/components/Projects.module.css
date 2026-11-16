@@ -98,24 +98,6 @@
   background: #e5e5ea;
 }
 
-.shot {
-  display: block;
-  width: 64px;
-  height: 64px;
-  flex-shrink: 0;
-  overflow: hidden;
-  border-radius: 12px;
-  background: #eef2f7;
-}
-
-/* Crop past the screen's status bar so the thumbnail shows the app itself */
-.shot img {
-  display: block;
-  width: 124%;
-  height: auto;
-  margin: -12px 0 0 -12%;
-}
-
 .body {
   display: flex;
   flex: 1;
@@ -125,8 +107,7 @@
 
 .theme,
 .result,
-.read,
-.shot .side {
+.read {
   display: none;
 }
 
@@ -170,9 +151,10 @@
   letter-spacing: 0.4px;
 }
 
-/* Cover art and the result icon exist only on the phone */
+/* Cover art and the result icon exist only on the phone; the 3:2 desktop cover only on desktop */
 .art,
-.resultIcon {
+.resultIcon,
+.deskArt {
   display: none;
 }
 
@@ -182,7 +164,6 @@
 }
 
 :global(.ios-app) .tryApp,
-:global(.ios-app) .shot,
 :global(.ios-app) .chevron,
 :global(.ios-app) .read,
 :global(.ios-app) .card + .card::before {
@@ -474,75 +455,39 @@
   transform: translateX(3px);
 }
 
-/* The fan: the cover in front, two screens tilted behind, cropped by the card's bottom edge */
-:global(.os-window:not(.ios-app)) .shot {
+/* The cover fills the card's right column edge to edge (3:2 art, subject centred, so the crop stays
+   on the subject); a hairline separates it from the blue. It eases in a touch on hover. */
+:global(.os-window:not(.ios-app)) .deskArt {
   order: 2;
   position: relative;
-  width: auto;
-  height: auto;
-  border-radius: 0;
-  background: none;
-  overflow: visible;
-}
-
-:global(.os-window:not(.ios-app)) .shot img {
-  position: absolute;
-  left: 50%;
-  margin: 0;
-  border: 4px solid #0d0e10;
-  border-radius: 26px;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-:global(.os-window:not(.ios-app)) .front {
-  z-index: 1;
-  top: 34px;
-  width: 188px !important;
-  margin-left: -94px !important;
-  box-shadow: 0 24px 50px -10px rgba(0, 0, 0, 0.6);
-}
-
-:global(.os-window:not(.ios-app)) .side {
   display: block;
-  top: 60px;
-  width: 160px !important;
-  margin-left: -80px !important;
-  opacity: 0.92;
-  box-shadow: 0 16px 34px -10px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  background: var(--paper-bg);
+  box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.12);
 }
 
-:global(.os-window:not(.ios-app)) .side:nth-child(1) {
-  transform: translateX(-100px) rotate(-5deg);
+:global(.os-window:not(.ios-app)) .deskArt img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-:global(.os-window:not(.ios-app)) .side:nth-child(2) {
-  transform: translateX(100px) rotate(5deg);
-}
-
-:global(.os-window:not(.ios-app)) .card:hover .front {
-  transform: translateY(-8px);
-}
-
-:global(.os-window:not(.ios-app)) .card:hover .side:nth-child(1) {
-  transform: translateX(-114px) rotate(-7deg);
-}
-
-:global(.os-window:not(.ios-app)) .card:hover .side:nth-child(2) {
-  transform: translateX(114px) rotate(7deg);
+:global(.os-window:not(.ios-app)) .card:hover .deskArt img {
+  transform: scale(1.03);
 }
 
 :global(.os-window:not(.ios-app)) .chevron {
   display: none;
 }
 
-/* Narrower windows: one screen instead of the fan, then the screen above the text */
+/* Narrower windows: a square cover column (wide subjects such as the cow still fit), then the cover
+   above the text */
 @container window (max-width: 899.98px) {
-  :global(.os-window:not(.ios-app)) .side {
-    display: none;
-  }
-
   :global(.os-window:not(.ios-app)) .card {
-    grid-template-columns: minmax(0, 1fr) 220px;
+    grid-template-columns: minmax(0, 1fr) 300px;
   }
 
   :global(.os-window:not(.ios-app)) .name {
@@ -556,15 +501,10 @@
     min-height: 0;
   }
 
-  :global(.os-window:not(.ios-app)) .shot {
+  :global(.os-window:not(.ios-app)) .deskArt {
     order: 0;
-    height: 190px;
-  }
-
-  :global(.os-window:not(.ios-app)) .front {
-    top: 26px;
-    width: 160px !important;
-    margin-left: -80px !important;
+    aspect-ratio: 16 / 9;
+    box-shadow: none;
   }
 
   :global(.os-window:not(.ios-app)) .body {
@@ -577,8 +517,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :global(.os-window:not(.ios-app)) .shot img,
-  :global(.os-window:not(.ios-app)) .card:hover .front,
+  :global(.os-window:not(.ios-app)) .deskArt img,
+  :global(.os-window:not(.ios-app)) .card:hover .deskArt img,
   :global(.os-window:not(.ios-app)) .read svg {
     transition: none;
   }

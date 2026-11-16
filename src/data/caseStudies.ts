@@ -36,6 +36,9 @@ export type CaseStudy = {
   cover: string;
   // Illustrated cover art for the phone's Case Studies cards (generated with Gemini; see docs/GEMINI_LEDGER.md)
   thumb: string;
+  // The same art recomposed for the desktop Case Studies card (3:2, subject centred so it still reads
+  // when the narrow layout crops it to a square)
+  thumbDesk: string;
   // Optional illustration that sets the scene at the top of the Problem section
   scene?: { src: string; alt: string; caption: string };
   tags: string[];
@@ -102,6 +105,7 @@ export const caseStudies: CaseStudy[] = [
     product: "Kissan Sampurna",
     cover: `${IMG}/05-report.webp`,
     thumb: "/case-studies/crop-guide/thumb.webp",
+    thumbDesk: "/case-studies/crop-guide/thumb-desk.webp",
     scene: {
       src: "/case-studies/crop-guide/scene-sowing.webp",
       alt: "Illustration: a smallholder stands at the edge of his ploughed, empty field with a bag of seed, looking at the neighbouring plots of tomato and ragi.",
@@ -438,6 +442,7 @@ export const caseStudies: CaseStudy[] = [
     product: "Kissan Sampurna",
     cover: `${FM}/06-report.webp`,
     thumb: "/case-studies/farm-monitoring/thumb.webp",
+    thumbDesk: "/case-studies/farm-monitoring/thumb-desk.webp",
     tags: ["AgriTech", "Satellite / remote sensing", "Advisory UX", "0→1"],
     card: {
       theme: "Satellite monitoring",
@@ -764,6 +769,7 @@ export const caseStudies: CaseStudy[] = [
     product: "Kissan Sampurna",
     cover: `${CD}/08-report.webp`,
     thumb: "/case-studies/crop-doctor/thumb.webp",
+    thumbDesk: "/case-studies/crop-doctor/thumb-desk.webp",
     tags: ["AgriTech", "Computer vision", "Freemium", "Low-literacy UX"],
     card: {
       theme: "Computer vision diagnosis",
@@ -1088,6 +1094,7 @@ export const caseStudies: CaseStudy[] = [
     product: "Gau Sampurna",
     cover: `${CH}/07-diagnosis.webp`,
     thumb: "/case-studies/cattle-health/thumb.webp",
+    thumbDesk: "/case-studies/cattle-health/thumb-desk.webp",
     tags: ["DairyTech", "Computer vision", "Freemium", "Low-literacy UX"],
     card: {
       theme: "Computer vision screening",
@@ -1433,6 +1440,7 @@ export const caseStudies: CaseStudy[] = [
     product: "Gau Sampurna",
     cover: `${MV}/09-report.webp`,
     thumb: "/case-studies/market-value/thumb.webp",
+    thumbDesk: "/case-studies/market-value/thumb-desk.webp",
     tags: ["DairyTech", "Computer vision", "Pricing", "Trust"],
     card: {
       theme: "AI pricing",
@@ -1757,6 +1765,7 @@ export const caseStudies: CaseStudy[] = [
     product: "Gau Sampurna",
     cover: `${DC}/07-report.webp`,
     thumb: "/case-studies/dung-check/thumb.webp",
+    thumbDesk: "/case-studies/dung-check/thumb-desk.webp",
     tags: ["DairyTech", "Computer vision", "Nutrition", "Habit"],
     card: {
       theme: "Nutrition habit",

@@ -421,6 +421,13 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 
 ## Changelog
 
+- 2026-11-16: **Desktop Case Studies cards now lead with the cover art** (owner's request; Gemini, +₹50
+  budget approved, ₹46.89 spent, ledger ₹116.39 of ₹130). Each phone cover was recomposed by Gemini into
+  a 3:2 frame (the phone image sent as a reference, so the art matches) and saved as
+  `thumb-desk.webp` (new `thumbDesk` field). The cover fills the card's right column edge to edge (44%);
+  below 900px of window it is a 300px square column (so wide subjects such as the Market Value cow still
+  fit); below 600px it sits above the text at 16:9. The fan of real phone screens is gone from these
+  cards (`.shot`/`.side`/`.front` removed); real screens remain on the case study pages.
 - 2026-11-16: **About text replaced with the owner's own three paragraphs** (word for word) in
   `profile.intro` (phone; bold on "two consumer apps" and "four more") and `profile.about` (desktop; pills
   on products, PRD, freemium). Phone size steps re-measured for the longer text: large ≥ 812px of app

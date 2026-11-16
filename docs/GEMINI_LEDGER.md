@@ -3,9 +3,9 @@
 Every paid call made with the owner's Gemini key, with what it was for and what it cost. The key itself
 is never stored in this repo.
 
-- **Budget:** ₹80 (set by the owner, 2026-11-16)
-- **Spent:** ₹69.50 ($0.772)
-- **Left:** ₹10.50
+- **Budget:** ₹130 (set by the owner, 2026-11-16: ₹80, raised by ₹50 for the desktop covers)
+- **Spent:** ₹116.39 ($1.293)
+- **Left:** ₹13.61
 
 ## How costs are estimated
 
@@ -34,10 +34,18 @@ Free calls (listing models) are not logged.
 | 8 | 2026-11-16 15:52 | Crop Guide persona portrait: Lakshmi (512px) | gemini-3.1-flash-image | 161 / 1,069 | ₹5.78 |
 | 9 | 2026-11-16 15:52 | Crop Guide persona portrait: agronomy lead (512px) | gemini-3.1-flash-image | 162 / 1,004 | ₹5.43 |
 | 10 | 2026-11-16 15:52 | Crop Guide Problem-section scene (1K, 16:9) | gemini-3.1-flash-image | 234 / 1,471 | ₹7.95 |
-| | | **Total** | | **1,906 / 12,852** | **₹69.50** |
+| 11 | 2026-11-16 16:07 | Desktop cover, Crop Guide (3:2 recompose of the phone cover; test, kept) | gemini-3.1-flash-image | 383 / 1,447 | ₹7.83 |
+| 12 | 2026-11-16 16:08 | Desktop cover, Farm Monitoring | gemini-3.1-flash-image | 383 / 1,422 | ₹7.70 |
+| 13 | 2026-11-16 16:08 | Desktop cover, AI Crop Doctor | gemini-3.1-flash-image | 383 / 1,386 | ₹7.50 |
+| 14 | 2026-11-16 16:08 | Desktop cover, Cattle Health Check | gemini-3.1-flash-image | 383 / 1,499 | ₹8.11 |
+| 15 | 2026-11-16 16:08 | Desktop cover, Market Value | gemini-3.1-flash-image | 383 / 1,485 | ₹8.04 |
+| 16 | 2026-11-16 16:09 | Desktop cover, Cow Dung Check | gemini-3.1-flash-image | 383 / 1,424 | ₹7.71 |
+| | | **Total** | | **4,204 / 21,515** | **₹116.39** |
 
 Approvals: calls 1–6 within the ₹80 budget (2026-11-16); calls 7–10 approved by the owner as a plan
-estimated at ≈ ₹24 (actual ₹24.76).
+estimated at ≈ ₹24 (actual ₹24.76); calls 11–16 approved with a +₹50 budget raise, estimated at ≈ ₹46
+(up to ≈ ₹61 with retries; actual ₹46.89, no retries). Recompose calls send the phone cover as a
+reference image (~260 input tokens), so the art matches across phone and desktop.
 
 Output:
 - `public/case-studies/<slug>/thumb.webp` (1200×670): phone Case Studies cards, and the case study pages'
@@ -45,3 +53,4 @@ Output:
 - `public/case-studies/crop-guide/persona-{ramesh,lakshmi,agronomist}.webp` (320×320): Crop Guide
   persona cards.
 - `public/case-studies/crop-guide/scene-sowing.webp` (1376×768): Crop Guide Problem section.
+- `public/case-studies/<slug>/thumb-desk.webp` (1200×805, 3:2): desktop Case Studies cards.

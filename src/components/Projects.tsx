@@ -1,11 +1,11 @@
 "use client";
 
 // The "Case Studies" section (tab id `projects`): long-form case studies, each opening its own page
-// at /case-studies/<slug>. Grouped under the app they belong to; on desktop every study is the same
-// wide brand-blue card (the theme, the feature, one line and one result beside a fan of its real
-// screens). On phones each study is a card led by its illustrated cover (`thumb`), then the theme,
-// the feature, one line and the result; the page is about the case studies, so the phone drops the
-// "Try the app" links. The thinking lives on the case study page, not on the card.
+// at /case-studies/<slug>. Grouped under the app they belong to. Every study is led by the same
+// illustrated cover: on desktop a wide brand-blue card (the theme, the feature, one line and one result
+// beside the cover recomposed for that shape, `thumbDesk`); on phones a card with the cover on top
+// (`thumb`), and no "Try the app" links, since the page is about the case studies. The thinking lives
+// on the case study page, not on the card.
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ChevronRight, TrendingUp } from "lucide-react";
@@ -24,18 +24,13 @@ function CaseCard({ cs }: { cs: CaseStudy }) {
       data-haptic="light"
       onClick={() => trackEvent("Opened Case Study", { slug: cs.slug, placement: "case_studies" })}
     >
-      {/* Phones: the illustrated cover. Desktop: a fan of three real screens, cover in front */}
+      {/* The illustrated cover: the phone's 16:9 version, or the desktop's 3:2 recomposition (only the
+          one on screen loads; the other is display: none) */}
       <span className={styles.art} aria-hidden="true">
         <Image src={cs.thumb} alt="" width={1200} height={670} sizes="(max-width: 767px) 100vw, 1px" />
       </span>
-      <span className={styles.shot} aria-hidden="true">
-        {cs.heroScreens
-          .filter((src) => src !== cs.cover)
-          .slice(0, 2)
-          .map((src) => (
-            <Image key={src} src={src} alt="" width={393} height={852} sizes="170px" className={styles.side} />
-          ))}
-        <Image src={cs.cover} alt="" width={393} height={852} sizes="(max-width: 767px) 64px, 200px" className={styles.front} />
+      <span className={styles.deskArt} aria-hidden="true">
+        <Image src={cs.thumbDesk} alt="" width={1200} height={805} sizes="(max-width: 767px) 1px, 500px" />
       </span>
       <span className={styles.body}>
         <span className={styles.theme}>{cs.card.theme}</span>
