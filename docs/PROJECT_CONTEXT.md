@@ -421,6 +421,13 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 
 ## Changelog
 
+- 2026-11-16: **Fix: phone About buttons hidden under the tab bar** (owner's screenshot, Android, ≈393×760
+  visible). The two-paragraph intro no longer fit the "one screen, no scrolling" sizes, and the size steps
+  used `@media (min-height)`, which Android Chrome measures as if its toolbar were hidden. The phone scroll
+  area is now `container-type: size` (globals.css), and Hero sizes by `@container window (min-height /
+  max-height)`: large ≥ 772px (≈ 820px screen), medium, small < 657, extra small < 592 (also hides the
+  second intro paragraph). Fit test (buttons above the tab bar, no scrolling) passes at 12 sizes from
+  360×600 to 430×932 (was 8 overlapping, 393×760 at −36px). Other phone sections unchanged.
 - 2026-11-16: **Fix: phones opened stuck on About and Back did nothing** (live in f0bcae3, reported by the
   owner on their phone). Cause: the `key="mobile-window"` added to the phone `motion.div` in
   `DraggableWindow` (for the deep-link 40px offset). On load the desktop window renders, then the phone

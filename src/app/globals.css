@@ -665,7 +665,10 @@ html[data-mc] .os-window.absolute-window {
     letter-spacing: 0.01em;
   }
 
+  /* Height queries too (@container window (min-height: …)): the app's real visible height, which
+     media queries can't give on Android Chrome (they measure as if its toolbar were hidden) */
   .mobile-window .window-content-scroll {
+    container-type: size;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
   }

@@ -599,8 +599,11 @@
 }
 
 /* ==================== Phone About: one screen, no scrolling ====================
-   Sized against the tightest real case (iPhone SE in Safari: ~380px of content between the nav bar
-   and the dock) so the CTAs are always visible. iOS type scale: Title 1 headline (28/34), Subheadline
+   The CTAs must clear the tab bar without scrolling. Size steps follow the app's own visible height
+   (the scroll area is a size container; it is the screen minus the 48px nav bar), measured with the
+   two-paragraph intro: large ≥ 772px (≈ 820px screen), medium by default (≈ 705–819), small < 657px
+   (≈ 640–704), extra small < 592px (iPhone SE in Safari), which also drops the intro's second
+   paragraph so the buttons still fit. iOS type scale: Title 1 headline (28/34), Subheadline
    intro (15/20), Title 3 numbers (20), Caption labels (12). Both CTAs share one row, as iOS pairs a
    filled and a tinted button. */
 @container window (max-width: 599.98px) {
@@ -738,7 +741,7 @@
 
   /* Tall phones (iPhone 12–16 and Pro Max with room to spare): step up to the iOS Large Title (34/41)
      and Body (17/22) sizes so the page fills the screen instead of ending halfway down */
-  @media (min-height: 760px) {
+  @container window (min-height: 772px) {
     .heroSection {
       padding-top: 1rem;
     }
@@ -785,8 +788,8 @@
     }
   }
 
-  /* Short phones (iPhone SE in Safari and smaller): everything steps down one size */
-  @media (max-height: 640px) {
+  /* Shorter phones (most Androids and iPhones with the browser toolbars showing): one size down */
+  @container window (max-height: 656.98px) {
     .heroSection {
       padding-top: 0.75rem;
       padding-bottom: 0.75rem;
@@ -816,6 +819,34 @@
     .kpiValue {
       font-size: 18px;
       line-height: 22px;
+    }
+  }
+
+  /* Smallest (iPhone SE in Safari, small Androids): a smaller photo and type, and only the lead
+     paragraph, so both buttons still sit above the tab bar */
+  @container window (max-height: 591.98px) {
+    .profileFrame {
+      width: 56px;
+      height: 56px;
+    }
+
+    .heroContainer {
+      gap: 0.6rem;
+    }
+
+    .heroContent :global(.hand-heading-1) {
+      margin-bottom: 0.45rem;
+      font-size: 22px;
+      line-height: 27px;
+    }
+
+    .description {
+      font-size: 13px;
+      line-height: 18px;
+    }
+
+    .description p + p {
+      display: none;
     }
   }
 }
