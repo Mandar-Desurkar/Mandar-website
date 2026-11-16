@@ -231,9 +231,16 @@ export default function DraggableWindow({
   };
 
   // Opening a section zooms it up like an iOS app launch; going Home shrinks it back
+  // On first load the desktop window renders (the phone query resolves after hydration) and this same
+  // element becomes the phone app, so the phone states reset everything the desktop animates (its 40px
+  // entry offset, size and corners); the CSS then places the app full screen. Don't give the phone
+  // element its own key to get a fresh element instead: on load the home screen closes the window in
+  // the same moment, and AnimatePresence then waits forever for the replaced element's exit, leaving a
+  // closed window stuck on screen (it only shows in production builds).
+  const phoneReset = { x: 0, y: 0, width: "auto", height: "auto", borderRadius: 0 };
   const mobileVariants: Variants = {
-    initial: { opacity: 0, scale: 0.9 },
-    open: { opacity: 1, scale: 1, transition: { duration: 0.34, ease: [0.2, 0.9, 0.3, 1] } },
+    initial: { opacity: 0, scale: 0.9, ...phoneReset },
+    open: { opacity: 1, scale: 1, ...phoneReset, transition: { duration: 0.34, ease: [0.2, 0.9, 0.3, 1] } },
     minimized: { opacity: 0, scale: 0.9, transition: { duration: 0.2 } },
     closed: { opacity: 0, scale: 0.9, transition: { duration: 0.2 } },
   };
@@ -245,10 +252,7 @@ export default function DraggableWindow({
     const grouped = activeTab !== "about";
     const largeTitle = grouped && activeTab !== "contact";
     return (
-      // Own key: on a deep link the desktop window renders first (before the phone query resolves), and
-      // reusing that element would keep its 40px entry offset, leaving the app 40px low
       <motion.div
-        key="mobile-window"
         className={`os-window mobile-window ios-app ${grouped ? "ios-grouped" : ""}`}
         variants={mobileVariants}
         initial="initial"

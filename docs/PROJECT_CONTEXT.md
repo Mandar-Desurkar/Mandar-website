@@ -421,6 +421,17 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 
 ## Changelog
 
+- 2026-11-16: **Fix: phones opened stuck on About and Back did nothing** (live in f0bcae3, reported by the
+  owner on their phone). Cause: the `key="mobile-window"` added to the phone `motion.div` in
+  `DraggableWindow` (for the deep-link 40px offset). On load the desktop window renders, then the phone
+  query resolves and the keyed element replaces it in the same moment the home screen closes the window;
+  `AnimatePresence` then waited forever for the replaced element's exit, so a closed window stayed on screen
+  covering the home screen (state said closed, so Back had nothing to close). Only in production builds; the
+  dev server's timing hid it. Fix: no key; the phone variants reset `x`, `y`, `width`, `height` and
+  `borderRadius`, which also fixes the original offset. Verified on a local production build (`next start`):
+  load shows home, the nav Back and browser Back return home (Android and iPhone paths), deep links open full
+  screen at top 0, desktop unaffected. **Lesson: check phone flows on a production build before pushing to
+  `prod`, not only on `npm run dev`.**
 - 2026-11-16: Committed everything since ebd4157 as **f0bcae3** on `dev` (glass phone apps, IconArt icons,
   dock alignment, new photo + 55K+ MAU, About positioning, Experience resume content, Case Study covers,
   haptics, typography pass, the owner's resume bullet + regenerated PDF), fast-forwarded `prod`, pushed both.
