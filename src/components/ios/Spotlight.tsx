@@ -5,14 +5,15 @@
 // and on keywords pulled from the resume (companies, products, skills), so "CRM" finds Projects and
 // "Figma" finds Education. Return opens the first result; Esc or Cancel closes.
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { IoChevronForward, IoCloseCircle, IoDocumentText, IoSearch } from "react-icons/io5";
+import { IoChevronForward, IoCloseCircle, IoSearch } from "react-icons/io5";
 import { useWindow } from "@/context/WindowContext";
 import { experiences, profile, shippedApps, skills } from "@/data/resume";
 import { caseStudies } from "@/data/caseStudies";
 import { trackEvent } from "@/lib/analytics";
 import { AppTile } from "./AppIcon";
 import { CONTACT_APPS } from "./contactApps";
-import { SECTION_APPS, glyphSize } from "./sections";
+import { ResumeArt } from "./IconArt";
+import { SECTION_APPS } from "./sections";
 import styles from "./Spotlight.module.css";
 
 type Kind = "app" | "case_study" | "section" | "contact";
@@ -70,7 +71,7 @@ export default function Spotlight({ onClose }: { onClose: () => void }) {
         title: app.name,
         subtitle: `${app.caption} · Try the prototype`,
         keywords: "prototype demo app play store agritech",
-        tile: <AppTile image={app.icon} size={38} />,
+        tile: <AppTile image={app.phoneIcon ?? app.icon} web={app.isWebsite} size={38} />,
         run: () => app.prototype && openPrototype(app.prototype, "spotlight"),
       })),
       ...caseStudies.map((c) => ({
@@ -79,7 +80,7 @@ export default function Spotlight({ onClose }: { onClose: () => void }) {
         title: `${c.title.split(":")[0]} case study`,
         subtitle: c.card.problem,
         keywords: `${c.title} ${c.subtitle} ${c.tags.join(" ")} case study`,
-        tile: <AppTile size={38} colors={CASE_APP.colors} glyph={<CASE_APP.Glyph size={glyphSize(CASE_APP)} />} />,
+        tile: <AppTile size={38} art={<CASE_APP.Art />} />,
         href: `/case-studies/${c.slug}`,
         run: () => trackEvent("Opened Case Study", { slug: c.slug, placement: "spotlight" }),
       })),
@@ -89,7 +90,7 @@ export default function Spotlight({ onClose }: { onClose: () => void }) {
         title: "Resume",
         subtitle: "View or download the PDF",
         keywords: "resume cv pdf download print hire",
-        tile: <AppTile size={38} colors={["#FF6B5E", "#E5312B"]} glyph={<IoDocumentText size="54%" />} />,
+        tile: <AppTile size={38} art={<ResumeArt />} />,
         href: profile.resumeUrl,
         run: () => trackEvent("Opened Resume", { placement: "spotlight" }),
       },
@@ -99,16 +100,16 @@ export default function Spotlight({ onClose }: { onClose: () => void }) {
         title: app.title,
         subtitle: SECTION_SUBTITLES[app.id],
         keywords: `${app.keywords} ${SECTION_KEYWORDS[app.id] ?? ""}`,
-        tile: <AppTile size={38} colors={app.colors} glyph={<app.Glyph size={glyphSize(app)} />} />,
+        tile: <AppTile size={38} art={<app.Art />} />,
         run: () => openSection(app.id, "spotlight"),
       })),
-      ...CONTACT_APPS.map(({ method, title, subtitle, href, external, Glyph, colors }) => ({
+      ...CONTACT_APPS.map(({ method, title, subtitle, href, external, Art }) => ({
         id: method,
         kind: "contact" as const,
         title,
         subtitle,
         keywords: "contact reach hire",
-        tile: <AppTile size={38} colors={colors} glyph={<Glyph size="54%" />} />,
+        tile: <AppTile size={38} art={<Art />} />,
         href,
         external,
         run: () => trackEvent("Clicked Contact Method", { method, placement: "spotlight" }),
@@ -201,6 +202,7 @@ export default function Spotlight({ onClose }: { onClose: () => void }) {
                       {r.href ? (
                         <a
                           className={styles.row}
+                          data-haptic="light"
                           href={r.href}
                           onClick={() => select(r)}
                           {...(r.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}

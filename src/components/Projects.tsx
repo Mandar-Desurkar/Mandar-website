@@ -3,10 +3,12 @@
 // The "Case Studies" section (tab id `projects`): long-form case studies, each opening its own page
 // at /case-studies/<slug>. Grouped under the app they belong to; on desktop every study is the same
 // wide brand-blue card (the theme, the feature, one line and one result beside a fan of its real
-// screens), on phones an iOS list row. The thinking lives on the case study page, not on the card.
+// screens). On phones each study is a card led by its illustrated cover (`thumb`), then the theme,
+// the feature, one line and the result; the page is about the case studies, so the phone drops the
+// "Try the app" links. The thinking lives on the case study page, not on the card.
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ChevronRight } from "lucide-react";
+import { ArrowRight, ChevronRight, TrendingUp } from "lucide-react";
 import styles from "./Projects.module.css";
 import { caseStudies, type CaseStudy } from "@/data/caseStudies";
 import { shippedApps } from "@/data/resume";
@@ -19,9 +21,13 @@ function CaseCard({ cs }: { cs: CaseStudy }) {
     <Link
       href={`/case-studies/${cs.slug}`}
       className={styles.card}
+      data-haptic="light"
       onClick={() => trackEvent("Opened Case Study", { slug: cs.slug, placement: "case_studies" })}
     >
-      {/* Phones: the cover as a thumbnail. Desktop: a fan of three real screens, cover in front */}
+      {/* Phones: the illustrated cover. Desktop: a fan of three real screens, cover in front */}
+      <span className={styles.art} aria-hidden="true">
+        <Image src={cs.thumb} alt="" width={1200} height={670} sizes="(max-width: 767px) 100vw, 1px" />
+      </span>
       <span className={styles.shot} aria-hidden="true">
         {cs.heroScreens
           .filter((src) => src !== cs.cover)
@@ -35,7 +41,10 @@ function CaseCard({ cs }: { cs: CaseStudy }) {
         <span className={styles.theme}>{cs.card.theme}</span>
         <span className={styles.name}>{name}</span>
         {line && <span className={styles.line}>{line.charAt(0).toUpperCase() + line.slice(1)}</span>}
-        <span className={styles.result}>{cs.card.metric}</span>
+        <span className={styles.result}>
+          <TrendingUp size={14} strokeWidth={2.2} className={styles.resultIcon} aria-hidden="true" />
+          {cs.card.metric}
+        </span>
         <span className={styles.read}>
           Read case study <ArrowRight size={14} aria-hidden="true" />
         </span>

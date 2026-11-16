@@ -159,6 +159,142 @@
   display: none;
 }
 
+/* ---------- Phone app (dark glass): one card per study, led by its cover art ----------
+   The page exists to get a case study opened, so each study gets a full-width card: the illustrated
+   cover (generated art, 2:1, subject centred), the kind of problem, the feature, one line, then the
+   result under a hairline. No "Try the app" here; the prototypes live on the home screen. */
+
+/* Section header: iOS Footnote caps (13/18, 0.4px), the same as "Beyond Work" and "Skills & Toolkit" */
+:global(.ios-app) .groupHead h3 {
+  line-height: 18px;
+  letter-spacing: 0.4px;
+}
+
+/* Cover art and the result icon exist only on the phone */
+.art,
+.resultIcon {
+  display: none;
+}
+
+:global(.ios-app) .intro,
+:global(.ios-app) .groupHead h3 {
+  color: var(--glass-label-secondary);
+}
+
+:global(.ios-app) .tryApp,
+:global(.ios-app) .shot,
+:global(.ios-app) .chevron,
+:global(.ios-app) .read,
+:global(.ios-app) .card + .card::before {
+  display: none;
+}
+
+:global(.ios-app) .group {
+  margin-top: 26px;
+}
+
+:global(.ios-app) .groupHead {
+  margin-bottom: 10px;
+}
+
+:global(.ios-app) .list {
+  gap: 14px;
+  overflow: visible;
+  border-radius: 0;
+  background: none;
+}
+
+:global(.ios-app) .card {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 16px;
+  background: var(--glass-card);
+  box-shadow: inset 0 0 0 0.5px var(--glass-rim), 0 8px 24px rgba(0, 0, 0, 0.18);
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.18s ease, background-color 0.18s ease;
+}
+
+:global(.ios-app) .card:active {
+  transform: scale(0.98);
+  background: var(--glass-card-pressed);
+}
+
+:global(.ios-app) .card:focus-visible {
+  outline: 2px solid var(--glass-tint);
+  outline-offset: 3px;
+}
+
+:global(.ios-app) .art {
+  display: block;
+  aspect-ratio: 2 / 1;
+  overflow: hidden;
+  /* Behind the image while it loads: the cream the art fades to */
+  background: var(--paper-bg);
+}
+
+:global(.ios-app) .art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+:global(.ios-app) .body {
+  padding: 12px 14px 14px;
+}
+
+/* Caption caps: the kind of problem, in the tint so it reads as a category */
+:global(.ios-app) .theme {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--glass-tint);
+}
+
+:global(.ios-app) .name {
+  margin-top: 4px;
+  font-size: 20px;
+  line-height: 25px;
+  letter-spacing: -0.4px;
+  color: var(--glass-label);
+}
+
+:global(.ios-app) .line {
+  margin-top: 3px;
+  color: var(--glass-label-secondary);
+}
+
+:global(.ios-app) .result {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin-top: 12px;
+  padding-top: 11px;
+  border-top: 0.5px solid var(--glass-separator);
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--glass-label-secondary);
+}
+
+:global(.ios-app) .resultIcon {
+  display: block;
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--glass-positive);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global(.ios-app) .card {
+    transition: none;
+  }
+}
+
 /* ==================== Desktop window ====================
    On the shared dark glass (globals.css): one wide brand-blue card per case study. */
 

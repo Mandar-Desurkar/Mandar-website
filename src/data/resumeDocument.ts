@@ -41,6 +41,7 @@ export const resumeDocument = {
             "Defined the **freemium monetization model**: free core advisory to drive adoption, with AI diagnostics behind a paid subscription.",
             "Restructured onboarding from Amplitude funnel drop-offs, lifting install-to-signup conversion by **3%**.",
             "**Tripled onboarding-to-trial conversion (2.4% → 7.2%)** with redesigned paywalls and behaviour-triggered nudges, and raised trial-to-paid **from 27% to 30%**.",
+            "Developed an **in-house, event-based push notification system** triggered by disease-risk alerts, weather changes, and other farm events, **raising DAU by 15%**.",
           ],
         },
         {

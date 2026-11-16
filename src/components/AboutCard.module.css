@@ -125,8 +125,10 @@
 }
 
 .stats {
+  /* One column per number, however many there are */
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
   margin: 22px 0 12px;
   padding-top: 16px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -138,7 +140,7 @@
 }
 
 .stats > div + div {
-  padding-left: 18px;
+  padding-left: 14px;
   border-left: 1px solid rgba(255, 255, 255, 0.1);
 }
 

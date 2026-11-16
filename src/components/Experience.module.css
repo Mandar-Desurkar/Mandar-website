@@ -254,8 +254,8 @@
   }
 }
 
-/* Phone, inside the iOS app shell (`.ios-app` exists only in the phone layout, at any width): an inset grouped list. Each role is a white rounded card on the
- grouped background; the large title in the nav bar replaces the section heading. */
+/* Phone, inside the iOS app shell (`.ios-app` exists only in the phone layout, at any width): an inset grouped list. Each role is a lighter glass card on the
+ app's dark glass; the large title in the nav bar replaces the section heading. */
 :global(.ios-app) .experienceSection {
   padding: 8px 0 28px;
 }
@@ -271,7 +271,9 @@
   padding: 16px;
   border: 0;
   border-radius: 12px;
-  background: #fff;
+  /* A lighter glass pane on the dark glass of the app */
+  background: var(--glass-card);
+  box-shadow: inset 0 0 0 0.5px var(--glass-rim);
 }
 
 :global(.ios-app) .role {
@@ -279,7 +281,7 @@
   font-weight: 600;
   line-height: 25px;
   letter-spacing: -0.4px;
-  color: #000;
+  color: var(--glass-label);
 }
 
 :global(.ios-app) .metaData {
@@ -291,7 +293,7 @@
 :global(.ios-app) .period {
   font-size: 15px;
   line-height: 20px;
-  color: #3c3c43;
+  color: var(--glass-label-secondary);
 }
 
 :global(.ios-app) .company {
@@ -299,7 +301,7 @@
 }
 
 :global(.ios-app) .period {
-  color: #8e8e93;
+  color: var(--glass-label-tertiary);
 }
 
 :global(.ios-app) .period::before,
@@ -311,21 +313,21 @@
   margin-top: 0;
   font-size: 16px;
   line-height: 21px;
-  color: #3c3c43;
+  color: var(--glass-label-secondary);
 }
 
 /* Each product group sits under a hairline separator, like rows in an iOS list */
 :global(.ios-app) .group {
   margin-top: 14px;
   padding-top: 14px;
-  border-top: 0.5px solid rgba(60, 60, 67, 0.29);
+  border-top: 0.5px solid var(--glass-separator);
 }
 
 :global(.ios-app) .groupTitle {
   font-size: 17px;
   font-weight: 600;
   line-height: 22px;
-  color: #000;
+  color: var(--glass-label);
 }
 
 :global(.ios-app) .groupTitleButton .groupTitle {
@@ -337,41 +339,287 @@
   min-height: 34px;
   padding: 7px 14px;
   border-radius: 999px;
-  background: rgba(0, 122, 255, 0.12);
-  color: #007aff;
+  background: var(--glass-tint-fill);
+  color: var(--glass-tint);
   font-size: 15px;
   font-weight: 600;
   box-shadow: none;
 }
 
 :global(.ios-app) .groupTitleButton:active .prototypePill {
-  background: rgba(0, 122, 255, 0.2);
+  background: var(--glass-tint-fill-pressed);
 }
 
 :global(.ios-app) .bulletList,
 :global(.ios-app) .beyondWorkList {
   font-size: 15px;
   line-height: 20px;
-  color: #3c3c43;
+  color: var(--glass-label-secondary);
 }
 
 :global(.ios-app) .bulletList strong,
 :global(.ios-app) .beyondWorkList strong {
-  color: #000;
+  color: var(--glass-label);
   font-weight: 600;
 }
 
 :global(.ios-app) .beyondWorkHeader {
   margin-bottom: 12px;
   padding-bottom: 10px;
-  border-bottom: 0.5px solid rgba(60, 60, 67, 0.29);
+  border-bottom: 0.5px solid var(--glass-separator);
 }
 
 :global(.ios-app) .beyondWorkTitle {
   font-size: 13px;
   font-weight: 600;
+  line-height: 18px;
   letter-spacing: 0.4px;
-  color: #6d6d72;
+  color: var(--glass-label-tertiary);
+}
+
+/* Type on the iOS scale (phone only): headings track -0.4px; small text gets iOS line heights
+   (13/18 Footnote, 12/16 Caption 1, 11/13 Caption 2) instead of ratios like 1.45 */
+:global(.ios-app) .groupTitle {
+  letter-spacing: -0.4px;
+}
+
+:global(.ios-app) .swimStats b {
+  font-size: 28px;
+  line-height: 34px;
+  letter-spacing: 0.36px;
+}
+
+:global(.ios-app) .statLabel {
+  line-height: 18px;
+}
+
+:global(.ios-app) .statNote,
+:global(.ios-app) .videoMeta,
+:global(.ios-app) .pressMeta {
+  line-height: 16px;
+}
+
+:global(.ios-app) .videoHeadline {
+  line-height: 20px;
+}
+
+/* Subheadline emphasized (15/20 semibold), not an in-between 14 */
+:global(.ios-app) .pressHeadline {
+  font-size: 15px;
+  line-height: 20px;
+}
+
+:global(.ios-app) .pressTitle {
+  line-height: 16px;
+}
+
+:global(.ios-app) .videoBadge {
+  line-height: 13px;
+}
+
+/* ---------- Phone only (these elements render only in the phone layout) ---------- */
+
+/* "Show less" scrolls the group's start back into view with a little room above it */
+.phoneGroup,
+.pressList {
+  scroll-margin-top: 12px;
+}
+
+/* Role header, profile-card style: logo tile, role, company + Current, then dates and length */
+.phoneHead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.phoneLogo {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 10px;
+  /* The logos are drawn on white squares */
+  background: var(--paper-bg);
+  box-shadow: 0 0 0 0.5px var(--glass-rim), 0 2px 8px rgba(0, 0, 0, 0.3);
+  color: var(--ink-black);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.phoneLogo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.phoneHeadText {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.phoneCompany {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  margin: 0;
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 500;
+  color: var(--glass-label);
+}
+
+.phoneCurrent {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--glass-positive-fill);
+  box-shadow: inset 0 0 0 0.5px var(--glass-positive-rim);
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 600;
+  color: var(--glass-positive);
+}
+
+.phoneDates {
+  margin: 0;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--glass-label-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Product eyebrow over the group's short heading */
+.groupProduct {
+  margin: 0 0 2px;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--glass-label-tertiary);
+}
+
+/* Filled capsule: trying the app is the strongest action on the page */
+.phonePrototype {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  margin: 2px 0 12px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--glass-button);
+  color: var(--glass-label);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 20px;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.phonePrototype:active {
+  opacity: 0.85;
+  transform: scale(0.97);
+}
+
+.phonePrototype:focus-visible,
+.showMore:focus-visible {
+  outline: 2px solid var(--glass-tint);
+  outline-offset: 2px;
+}
+
+/* Folded bullets unfold in place: the row grows from 0fr to 1fr, so the height animates without
+   measuring */
+.more {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.32s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.2s ease;
+}
+
+.moreOpen {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.moreInner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.showMore {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 44px;
+  margin: -8px 0 -10px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--glass-tint);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 20px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.showMoreChevron {
+  transition: transform 0.25s ease;
+}
+
+.showMore[aria-expanded="true"] .showMoreChevron {
+  transform: rotate(180deg);
+}
+
+/* The press list folds after two articles; the first unfolded row keeps its separator */
+.pressList .more li:first-child {
+  border-top: 0.5px solid var(--glass-separator);
+}
+
+.pressList .showMore {
+  margin: -2px 0 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .more,
+  .showMoreChevron,
+  .phonePrototype {
+    transition: none;
+  }
+}
+
+/* The swimming stats and press list, as glass panes inside the card (nested one level lighter) */
+:global(.ios-app) .swimStats li,
+:global(.ios-app) .pressList {
+  background: var(--glass-card);
+}
+
+:global(.ios-app) .pressList li + li {
+  border-top-color: var(--glass-separator);
+}
+
+:global(.ios-app) .swimStats b,
+:global(.ios-app) .statLabel,
+:global(.ios-app) .pressHeadline {
+  color: var(--glass-label);
+}
+
+:global(.ios-app) .statNote,
+:global(.ios-app) .pressMeta,
+:global(.ios-app) .pressArrow {
+  color: var(--glass-label-tertiary);
+}
+
+/* 12pt caps on a nested pane: one step brighter to stay legible */
+:global(.ios-app) .pressTitle {
+  color: var(--glass-label-secondary);
 }
 
 /* The video leads; the numbers sit under it as one strip (2 × 2 on the phone, 4 across on desktop) */

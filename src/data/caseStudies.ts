@@ -31,6 +31,8 @@ export type CaseStudy = {
   subtitle: string;
   product: string;
   cover: string;
+  // Illustrated cover art for the phone's Case Studies cards (generated with Gemini; see docs/GEMINI_LEDGER.md)
+  thumb: string;
   tags: string[];
   // Card on the Case Studies list
   // Stats are the feature card's proof row in the desktop window
@@ -94,6 +96,7 @@ export const caseStudies: CaseStudy[] = [
       "How I designed a crop recommendation feature for India's smallholder farmers, and the no-code engine that ranks the top 5 of 100+ crops for each farm.",
     product: "Kissan Sampurna",
     cover: `${IMG}/05-report.webp`,
+    thumb: "/case-studies/crop-guide/thumb.webp",
     tags: ["AgriTech", "0→1", "Recommendation engine", "Low-literacy UX"],
     card: {
       theme: "Recommendation engine",
@@ -421,6 +424,7 @@ export const caseStudies: CaseStudy[] = [
       "How I turned satellite imagery into a farm report a smallholder can act on: three colour maps of the field and zone-by-zone advice cards, in 13 Indian languages.",
     product: "Kissan Sampurna",
     cover: `${FM}/06-report.webp`,
+    thumb: "/case-studies/farm-monitoring/thumb.webp",
     tags: ["AgriTech", "Satellite / remote sensing", "Advisory UX", "0→1"],
     card: {
       theme: "Satellite monitoring",
@@ -746,6 +750,7 @@ export const caseStudies: CaseStudy[] = [
       "How I shipped a computer-vision crop diagnosis that tells a smallholder how bad it is, what waiting will cost and what to do each day, as the paid core of Kissan Sampurna.",
     product: "Kissan Sampurna",
     cover: `${CD}/08-report.webp`,
+    thumb: "/case-studies/crop-doctor/thumb.webp",
     tags: ["AgriTech", "Computer vision", "Freemium", "Low-literacy UX"],
     card: {
       theme: "Computer vision diagnosis",
@@ -1069,6 +1074,7 @@ export const caseStudies: CaseStudy[] = [
       "How I shipped Gau Sampurna's AI health checks for dairy farmers: one side photo screens a cow for 31 conditions across eight body systems, says what to do next, and keeps the free vet line outside the paywall.",
     product: "Gau Sampurna",
     cover: `${CH}/07-diagnosis.webp`,
+    thumb: "/case-studies/cattle-health/thumb.webp",
     tags: ["DairyTech", "Computer vision", "Freemium", "Low-literacy UX"],
     card: {
       theme: "Computer vision screening",
@@ -1413,6 +1419,7 @@ export const caseStudies: CaseStudy[] = [
       "How I designed Gau Sampurna's valuation scan: one side photo gives a dairy farmer an estimated price range, breed purity, milk capacity and a buying recommendation, so the number starts from the cow, not the broker.",
     product: "Gau Sampurna",
     cover: `${MV}/09-report.webp`,
+    thumb: "/case-studies/market-value/thumb.webp",
     tags: ["DairyTech", "Computer vision", "Pricing", "Trust"],
     card: {
       theme: "AI pricing",
@@ -1736,6 +1743,7 @@ export const caseStudies: CaseStudy[] = [
       "How I designed Gau Sampurna's dung scan: one photo of fresh dung gives a dairy farmer a digestion score from 1 to 5, what it means, what to change in the feed and when to call a vet.",
     product: "Gau Sampurna",
     cover: `${DC}/07-report.webp`,
+    thumb: "/case-studies/dung-check/thumb.webp",
     tags: ["DairyTech", "Computer vision", "Nutrition", "Habit"],
     card: {
       theme: "Nutrition habit",

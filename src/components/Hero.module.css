@@ -70,6 +70,10 @@
   font-weight: 600;
 }
 
+.description p + p {
+  margin-top: 0.75em;
+}
+
 .kpiGrid {
   display: flex;
   gap: 1rem;
@@ -814,4 +818,55 @@
       line-height: 22px;
     }
   }
+}
+
+/* Phone app on dark glass (`.ios-app` exists only in the phone shell): light labels, hairlines and
+   the tinted button in their iOS dark-mode colours */
+:global(.ios-app) .heroContent :global(.hand-heading-1),
+:global(.ios-app) .kpiValue {
+  color: var(--glass-label);
+}
+
+:global(.ios-app) .highlight {
+  color: var(--glass-tint);
+}
+
+:global(.ios-app) .description {
+  color: var(--glass-label-secondary);
+}
+
+:global(.ios-app) .description strong {
+  color: var(--glass-label);
+}
+
+:global(.ios-app) .kpiGrid {
+  border-color: var(--glass-separator);
+}
+
+:global(.ios-app) .kpiCard + .kpiCard {
+  border-left-color: var(--glass-separator);
+}
+
+:global(.ios-app) .kpiLabel {
+  color: var(--glass-label-tertiary);
+}
+
+/* The portrait gets a soft glass ring instead of a white mat */
+:global(.ios-app) .profileFrame {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.16), 0 10px 28px rgba(0, 0, 0, 0.45);
+}
+
+:global(.ios-app) .ctaPrimary,
+:global(.ios-app) .ctaPrimary:active {
+  background: var(--glass-button);
+}
+
+:global(.ios-app) .linkScribble,
+:global(.ios-app) .linkScribble:hover {
+  background: var(--glass-tint-fill);
+  color: var(--glass-tint);
+}
+
+:global(.ios-app) .linkScribble:active {
+  background: var(--glass-tint-fill-pressed);
 }

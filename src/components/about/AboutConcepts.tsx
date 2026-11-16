@@ -11,6 +11,7 @@ import { FaLinkedin } from "react-icons/fa";
 import { kpis, profile, shippedApps } from "@/data/resume";
 import { useWindow } from "@/context/WindowContext";
 import { trackEvent } from "@/lib/analytics";
+import RichText from "@/components/RichText";
 import styles from "./AboutConcepts.module.css";
 
 type PrototypeId = "kissan-sampurna" | "gau-sampurna";
@@ -240,7 +241,11 @@ export function AboutLive() {
           <br />
           builder.
         </h1>
-        <p className={styles.intro}>{profile.intro}</p>
+        {profile.intro.map((para) => (
+          <p key={para} className={styles.intro}>
+            <RichText text={para} />
+          </p>
+        ))}
         <dl className={styles.statRow}>
           {kpis.map((k) => (
             <div key={k.label}>
@@ -288,7 +293,11 @@ export function AboutShowcase() {
           <br />
           builder.
         </h1>
-        <p className={styles.intro}>{profile.intro}</p>
+        {profile.intro.map((para) => (
+          <p key={para} className={styles.intro}>
+            <RichText text={para} />
+          </p>
+        ))}
         <dl className={styles.statRow}>
           {kpis.map((k) => (
             <div key={k.label}>

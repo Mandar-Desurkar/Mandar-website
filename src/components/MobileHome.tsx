@@ -4,20 +4,23 @@
 // open). Page 1: a medium profile widget (→ About) and two small widgets (impact → Projects, current
 // role → Experience) in Liquid Glass, and an app grid where each portfolio section is an "app" next to
 // the two real apps I built (their icons open the interactive prototypes). Swipe left for page 2: a
-// clock + calendar widget on Mandar's time. Pages use native scroll snapping, so the swipe has real
-// momentum; the page dots, the iOS "Search" pill (opens Spotlight) and the dock of contact apps stay
-// put, as on iOS. Widgets sit on the same 4-column grid as the icons.
+// clock + calendar widget on Mandar's time, with the Gau Sampurna website's icon below it. Pages use
+// native scroll snapping, so the swipe has real momentum; the page dots, the iOS "Search" pill (opens
+// Spotlight) and the dock of contact apps stay put, as on iOS. Widgets sit on the same 4-column grid as the icons. While a section app is open the
+// home screen stays mounted behind it, inert, so it shows through the app's translucent glass as the
+// desktop shows through a window.
 import Image from "next/image";
 import { useCallback, useRef, useState } from "react";
 import { IoSearch } from "react-icons/io5";
 import { useWindow } from "@/context/WindowContext";
 import { profile, kpis, shippedApps, experiences } from "@/data/resume";
 import { trackEvent } from "@/lib/analytics";
+import { haptic } from "@/lib/haptics";
 import AppIcon from "./ios/AppIcon";
 import ClockWidget from "./ios/ClockWidget";
 import dynamic from "next/dynamic";
 import { CONTACT_APPS } from "./ios/contactApps";
-import { SECTION_APPS, glyphSize } from "./ios/sections";
+import { SECTION_APPS } from "./ios/sections";
 import styles from "./MobileHome.module.css";
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -31,6 +34,9 @@ const since = (() => {
 const fmt = (k: (typeof kpis)[number]) => `${k.prefix}${k.value}${k.suffix}`;
 const [lead, ...rest] = kpis;
 const PAGES = 2;
+// The apps sit on page 1 beside the sections; the website moves to page 2, under the calendar
+const apps = shippedApps.filter((a) => !a.isWebsite);
+const websites = shippedApps.filter((a) => a.isWebsite);
 
 // Search is rarely used on arrival, and it carries every section's keywords
 const Spotlight = dynamic(() => import("./ios/Spotlight"), { ssr: false });
@@ -51,6 +57,8 @@ export default function MobileHome() {
     const next = Math.round(el.scrollLeft / el.clientWidth);
     if (next === page) return;
     setPage(next);
+    // A swipe landing on a new page ticks, as on iOS (a dot tap already ticked on press)
+    if (!viaDots.current) haptic("selection");
     trackEvent("Viewed Home Screen Page", { page: next + 1, method: viaDots.current ? "dots" : "swipe" });
     viaDots.current = false;
   };
@@ -63,10 +71,21 @@ export default function MobileHome() {
     el.scrollTo({ left: i * el.clientWidth, behavior: smooth ? "smooth" : "auto" });
   };
 
-  if (!isClosed && !isMinimized) return null;
+  const behind = !isClosed && !isMinimized;
+
+  const appIcon = (app: (typeof shippedApps)[number]) => (
+    <AppIcon
+      key={app.name}
+      label={app.shortName ?? app.name}
+      image={app.phoneIcon ?? app.icon}
+      web={app.isWebsite}
+      ariaLabel={`Try the ${app.name} prototype`}
+      onClick={() => app.prototype && openPrototype(app.prototype, "home_screen")}
+    />
+  );
 
   return (
-    <div className={styles.home}>
+    <div className={`${styles.home} ${behind ? styles.behind : ""}`} inert={behind} aria-hidden={behind || undefined}>
       <div className={styles.pager} ref={pagerRef} onScroll={onPagerScroll}>
         <section className={styles.page} aria-label={`Home screen page 1 of ${PAGES}`}>
           {/* Medium widget: who I am; tap for the full story */}
@@ -109,26 +128,18 @@ export default function MobileHome() {
               <AppIcon
                 key={app.id}
                 label={app.label}
-                colors={app.colors}
-                glyph={<app.Glyph size={glyphSize(app)} />}
+                art={<app.Art />}
                 onClick={() => openSection(app.id, "home_widget")}
               />
             ))}
-            {shippedApps.map((app) => (
-              <AppIcon
-                key={app.name}
-                label={app.shortName ?? app.name}
-                image={app.icon}
-                ariaLabel={`Try the ${app.name} prototype`}
-                onClick={() => app.prototype && openPrototype(app.prototype, "home_screen")}
-              />
-            ))}
+            {apps.map(appIcon)}
           </div>
         </section>
 
-        {/* Page 2: clock + calendar */}
+        {/* Page 2: clock + calendar, then the website, on the same grid as page 1 */}
         <section className={styles.page} aria-label={`Home screen page 2 of ${PAGES}`}>
           <ClockWidget />
+          <div className={styles.grid}>{websites.map(appIcon)}</div>
         </section>
       </div>
 
@@ -139,6 +150,7 @@ export default function MobileHome() {
             key={i}
             type="button"
             className={`${styles.dot} ${i === page ? styles.dotActive : ""}`}
+            data-haptic="selection"
             aria-label={`Home screen page ${i + 1} of ${PAGES}`}
             aria-current={i === page ? "page" : undefined}
             onClick={() => goToPage(i)}
@@ -162,20 +174,19 @@ export default function MobileHome() {
 
       {/* Dock: contact apps, unlabelled as on iOS */}
       <nav className={styles.dock} aria-label="Contact">
-        {CONTACT_APPS.map(({ method, ariaLabel, href, external, Glyph, colors }) => (
+        {CONTACT_APPS.map(({ method, ariaLabel, href, external, Art }) => (
           <AppIcon
             key={method}
             ariaLabel={ariaLabel}
             href={href}
             external={external}
-            colors={colors}
-            glyph={<Glyph size="54%" />}
+            art={<Art />}
             onClick={() => trackEvent("Clicked Contact Method", { method, placement: "home_dock" })}
           />
         ))}
       </nav>
 
-      {searchOpen && <Spotlight onClose={closeSearch} />}
+      {searchOpen && !behind && <Spotlight onClose={closeSearch} />}
     </div>
   );
 }

@@ -2,13 +2,14 @@
 
 import Image from "next/image";
 import styles from "./Experience.module.css";
-import { useEffect, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useWindow } from "@/context/WindowContext";
-import { ArrowUpRight, Newspaper, Play, Trophy } from "lucide-react";
+import { ArrowUpRight, ChevronDown, Newspaper, Play, Trophy } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import RichText from "./RichText";
-import { experiences, beyondWork } from "@/data/resume";
+import { experiences, beyondWork, type ExperienceGroup } from "@/data/resume";
 
 const companyName = (company: string) => company.replace(/ Private Limited$/, "");
 // "Silo Fortune" → "SF", "AltQube" → "AQ"
@@ -36,8 +37,138 @@ function duration(period: string) {
 }
 
 
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+// "09/2025 - Present" → "Sep 2025 – Present"
+const prettyPeriod = (period: string) =>
+  period
+    .split(" - ")
+    .map((v) => {
+      const [m, y] = v.split("/").map(Number);
+      return m && y ? `${MONTHS[m - 1]} ${y}` : v;
+    })
+    .join(" – ");
+
+// Phone: each group shows its first two achievements (the strongest come first) and folds the rest
+// behind "Show N more". A single extra bullet isn't worth a tap, so short groups show everything.
+const PREVIEW = 2;
+const previewCount = (total: number) => (total <= PREVIEW + 1 ? total : PREVIEW);
+
+const smooth = () =>
+  typeof window !== "undefined" && !window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "smooth" : "auto";
+
+// "Kissan Sampurna & Gau Sampurna Apps: Growth & Monetization" → product eyebrow + short heading
+function splitTitle(title?: string): [string | null, string | null] {
+  if (!title) return [null, null];
+  const at = title.indexOf(": ");
+  return at > 0 ? [title.slice(0, at), title.slice(at + 2)] : [null, title];
+}
+
+// Phone: content folded behind a "Show N more" button that unfolds in place. Folded content is inert,
+// so it is skipped by Tab and screen readers until shown.
+function ShowMore({
+  count,
+  anchor,
+  onExpand,
+  children,
+}: {
+  count: number;
+  anchor: React.RefObject<HTMLElement | null>;
+  onExpand: () => void;
+  children: React.ReactNode;
+}) {
+  const [open, setOpen] = useState(false);
+  const id = useId();
+  const toggle = () => {
+    if (!open) {
+      setOpen(true);
+      onExpand();
+      return;
+    }
+    setOpen(false);
+    // Folding from far down would leave the reader below the group, so bring its start back into view
+    const el = anchor.current;
+    const scroller = el?.closest(".window-content-scroll");
+    if (el && scroller && el.getBoundingClientRect().top < scroller.getBoundingClientRect().top + 60) {
+      el.scrollIntoView({ block: "start", behavior: smooth() });
+    }
+  };
+  return (
+    <>
+      <div id={id} className={`${styles.more} ${open ? styles.moreOpen : ""}`} inert={!open}>
+        <div className={styles.moreInner}>{children}</div>
+      </div>
+      <button type="button" className={styles.showMore} aria-expanded={open} aria-controls={id} onClick={toggle}>
+        {open ? "Show less" : `Show ${count} more`}
+        <ChevronDown size={16} strokeWidth={2.4} className={styles.showMoreChevron} aria-hidden="true" />
+      </button>
+    </>
+  );
+}
+
+// Phone: one product group, an eyebrow naming the product over a short heading, then its lead bullets
+function PhoneGroup({ group, company, onPrototype }: { group: ExperienceGroup; company: string; onPrototype: () => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [product, heading] = splitTitle(group.title);
+  const shown = previewCount(group.bullets.length);
+  const rest = group.bullets.slice(shown);
+  return (
+    <div ref={ref} className={`${styles.group} ${styles.phoneGroup}`}>
+      {product && <p className={styles.groupProduct}>{product}</p>}
+      {heading && <h4 className={styles.groupTitle}>{heading}</h4>}
+      {group.prototype && (
+        <button type="button" className={styles.phonePrototype} data-haptic="medium" onClick={onPrototype}>
+          <Play size={11} fill="currentColor" aria-hidden="true" /> View app prototype
+        </button>
+      )}
+      <ul className={styles.bulletList}>
+        {group.bullets.slice(0, shown).map((bullet) => (
+          <li key={bullet}><RichText text={bullet} /></li>
+        ))}
+      </ul>
+      {rest.length > 0 && (
+        <ShowMore
+          count={rest.length}
+          anchor={ref}
+          onExpand={() =>
+            trackEvent("Expanded Experience Group", { company: companyName(company), group: group.title ?? "Overview", hidden_bullets: rest.length })
+          }
+        >
+          <ul className={styles.bulletList}>
+            {rest.map((bullet) => (
+              <li key={bullet}><RichText text={bullet} /></li>
+            ))}
+          </ul>
+        </ShowMore>
+      )}
+    </div>
+  );
+}
+
+function PressItem({ item }: { item: (typeof beyondWork.press)[number] }) {
+  return (
+    <li>
+      <a
+        className={styles.press}
+        href={item.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() => trackEvent("Clicked External Link", { link_type: "press", label: item.headline })}
+      >
+        <span className={styles.pressText}>
+          <span className={styles.pressHeadline}>{item.headline}</span>
+          <span className={styles.pressMeta}>{[item.source, item.date].filter(Boolean).join(" · ")}</span>
+        </span>
+        <ArrowUpRight size={16} className={styles.pressArrow} aria-hidden="true" />
+        <span className={styles.srOnly}> (opens in a new tab)</span>
+      </a>
+    </li>
+  );
+}
+
 export default function Experience() {
   const { openPrototype: open } = useWindow();
+  const isMobile = useIsMobile();
+  const pressRef = useRef<HTMLDivElement>(null);
   const openPrototype = () => open("kissan-sampurna", "experience");
   const [playing, setPlaying] = useState(false);
   const [viewing, setViewing] = useState<(typeof beyondWork.photos)[number][number] | null>(null);
@@ -62,7 +193,7 @@ export default function Experience() {
           <h2 className="hand-heading-2" style={{ marginBottom: 0 }}>
             Experience
           </h2>
-          <p className={styles.headerIntro}>2.5+ years taking AI-powered products from 0→1.</p>
+          <p className={styles.headerIntro}>3+ years building AI-powered 0→1 consumer apps.</p>
         </div>
 
         <div className={styles.entries}>
@@ -84,6 +215,26 @@ export default function Experience() {
                 {length && <span className={styles.railLength}>{length}</span>}
               </aside>
               <div className={styles.entryBody}>
+              {isMobile ? (
+                // Phone: logo, role, then company, "Current", and when + how long, as on a profile card
+                <div className={styles.phoneHead}>
+                  <span className={styles.phoneLogo} aria-hidden="true">
+                    {exp.logo ? <Image src={exp.logo} alt="" width={88} height={88} /> : initials(exp.company)}
+                  </span>
+                  <div className={styles.phoneHeadText}>
+                    <h3 className={styles.role}>{exp.role}</h3>
+                    <p className={styles.phoneCompany}>
+                      {companyName(exp.company)}
+                      {current && <span className={styles.phoneCurrent}>Current</span>}
+                    </p>
+                    <p className={styles.phoneDates}>
+                      {prettyPeriod(exp.period)}
+                      {length && <> · {length}</>}
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <>
               <div className={styles.entryTitle}>
                 <h3 className={styles.role}>{exp.role}</h3>
                 {current && <span className={styles.currentBadge}>Current</span>}
@@ -94,10 +245,16 @@ export default function Experience() {
                 <span className={styles.company}>{exp.company}</span>
                 <span className={styles.period}>{exp.period}</span>
               </div>
+                </>
+              )}
 
               <p className={styles.description}>{exp.summary}</p>
 
-              {exp.groups?.map((group, i) => (
+              {isMobile && exp.groups?.map((group, i) => (
+                <PhoneGroup key={group.title ?? i} group={group} company={exp.company} onPrototype={openPrototype} />
+              ))}
+
+              {!isMobile && exp.groups?.map((group, i) => (
                 <div key={group.title ?? i} className={styles.group}>
                   {group.title && group.prototype ? (
                     <button type="button" className={styles.groupTitleButton} onClick={openPrototype}>
@@ -193,30 +350,28 @@ export default function Experience() {
                 <li key={bullet}><RichText text={bullet} /></li>
               ))}
             </ul>
-          <div className={styles.pressList}>
+          <div className={styles.pressList} ref={pressRef}>
             <p className={styles.pressTitle}>
               <Newspaper size={14} aria-hidden="true" /> In the press
             </p>
             <ul>
-              {beyondWork.press.map((item) => (
-                <li key={item.url}>
-                  <a
-                    className={styles.press}
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => trackEvent("Clicked External Link", { link_type: "press", label: item.headline })}
-                  >
-                    <span className={styles.pressText}>
-                      <span className={styles.pressHeadline}>{item.headline}</span>
-                      <span className={styles.pressMeta}>{[item.source, item.date].filter(Boolean).join(" · ")}</span>
-                    </span>
-                    <ArrowUpRight size={16} className={styles.pressArrow} aria-hidden="true" />
-                    <span className={styles.srOnly}> (opens in a new tab)</span>
-                  </a>
-                </li>
+              {(isMobile ? beyondWork.press.slice(0, PREVIEW) : beyondWork.press).map((item) => (
+                <PressItem key={item.url} item={item} />
               ))}
             </ul>
+            {isMobile && beyondWork.press.length > PREVIEW && (
+              <ShowMore
+                count={beyondWork.press.length - PREVIEW}
+                anchor={pressRef}
+                onExpand={() => trackEvent("Expanded Press List", { hidden_items: beyondWork.press.length - PREVIEW })}
+              >
+                <ul>
+                  {beyondWork.press.slice(PREVIEW).map((item) => (
+                    <PressItem key={item.url} item={item} />
+                  ))}
+                </ul>
+              </ShowMore>
+            )}
           </div>
 
           </div>

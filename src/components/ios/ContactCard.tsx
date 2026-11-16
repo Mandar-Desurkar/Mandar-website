@@ -50,7 +50,7 @@ export default function ContactCard() {
 
       <div className={styles.actions}>
         {ACTIONS.map(({ method, label, href, Icon, external }) => (
-          <a key={method} href={href} className={styles.action} onClick={() => track(method)} {...(external ? newTab : {})}>
+          <a key={method} href={href} className={styles.action} data-haptic="light" onClick={() => track(method)} {...(external ? newTab : {})}>
             <Icon size={22} />
             <span>{label}</span>
           </a>
@@ -58,19 +58,19 @@ export default function ContactCard() {
       </div>
 
       <div className={styles.group}>
-        <a href={`tel:${tel}`} className={styles.row} onClick={() => track("phone")}>
+        <a href={`tel:${tel}`} className={styles.row} data-haptic="light" onClick={() => track("phone")}>
           <span className={styles.rowLabel}>mobile</span>
           <span className={styles.rowValue}>{profile.phone}</span>
         </a>
-        <a href={`mailto:${profile.email}`} className={styles.row} onClick={() => track("email")}>
+        <a href={`mailto:${profile.email}`} className={styles.row} data-haptic="light" onClick={() => track("email")}>
           <span className={styles.rowLabel}>email</span>
           <span className={styles.rowValue}>{profile.email}</span>
         </a>
-        <a href={profile.linkedin} className={styles.row} onClick={() => track("linkedin")} {...newTab}>
+        <a href={profile.linkedin} className={styles.row} data-haptic="light" onClick={() => track("linkedin")} {...newTab}>
           <span className={styles.rowLabel}>LinkedIn</span>
           <span className={styles.rowValue}>{linkedinHandle}</span>
         </a>
-        <a href={profile.resumeUrl} className={styles.row} onClick={() => trackEvent("Opened Resume", { placement: "contact_card" })}>
+        <a href={profile.resumeUrl} className={styles.row} data-haptic="light" onClick={() => trackEvent("Opened Resume", { placement: "contact_card" })}>
           <span className={styles.rowLabel}>resume</span>
           <span className={styles.rowValue}>View or download PDF</span>
         </a>
@@ -94,6 +94,7 @@ export default function ContactCard() {
           href={`data:text/vcard;charset=utf-8,${encodeURIComponent(vcard)}`}
           download={`${profile.name.replace(/\s+/g, "-")}.vcf`}
           className={`${styles.row} ${styles.button}`}
+          data-haptic="success"
           onClick={() => {
             track("vcard");
             trackEvent("Downloaded vCard", { placement: "contact_window" });

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import NoInspect from "@/components/NoInspect";
+import Haptics from "@/components/Haptics";
 import { profile } from "@/data/resume";
 import { SITE_URL } from "@/data/site";
 
@@ -70,6 +71,7 @@ export default function RootLayout({
       </head>
       <body>
         <NoInspect />
+        <Haptics />
         {children}
       </body>
     </html>

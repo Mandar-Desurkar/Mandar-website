@@ -1,5 +1,6 @@
-/* iOS tab bar, Liquid Glass style: a capsule floating above the home indicator, translucent glass
-   with a bright rim and a soft shadow; the selected tab sits on a glass pill in system blue.
+/* iOS tab bar, Liquid Glass style: a capsule floating above the home indicator, in the same dark
+   glass as the open app, with a bright rim and a soft shadow; the selected tab sits on a glass pill
+   in system blue.
    Content scrolls underneath it (see .mobile-window in globals.css). */
 
 .tabBar {
@@ -20,15 +21,15 @@
     margin: 0 auto;
     padding: 4px;
     border-radius: 31px;
-    /* Opaque enough that text scrolling underneath never competes with the labels */
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(250, 250, 252, 0.84));
+    /* Dense enough that text scrolling underneath never competes with the labels */
+    background: linear-gradient(180deg, rgba(44, 48, 60, 0.72), rgba(26, 30, 40, 0.78));
     -webkit-backdrop-filter: saturate(180%) blur(30px);
     backdrop-filter: saturate(180%) blur(30px);
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 1),
-      0 0 0 0.5px rgba(0, 0, 0, 0.1),
-      0 10px 30px rgba(0, 0, 0, 0.16),
-      0 2px 8px rgba(0, 0, 0, 0.08);
+      inset 0 1px 0 rgba(255, 255, 255, 0.16),
+      0 0 0 0.5px var(--glass-rim),
+      0 10px 30px rgba(0, 0, 0, 0.4),
+      0 2px 8px rgba(0, 0, 0, 0.2);
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
     animation: rise 0.36s cubic-bezier(0.2, 0.9, 0.3, 1) both;
   }
@@ -48,7 +49,7 @@
   border: 0;
   border-radius: 27px;
   background: none;
-  color: #3a3a3c;
+  color: var(--glass-label-secondary);
   -webkit-tap-highlight-color: transparent;
   transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
 }
@@ -74,12 +75,12 @@
 }
 
 .active {
-  background: rgba(0, 122, 255, 0.1);
-  color: #007aff;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--glass-tint);
 }
 
 .tab:focus-visible {
-  outline: 2px solid #007aff;
+  outline: 2px solid var(--glass-tint);
   outline-offset: -2px;
 }
 

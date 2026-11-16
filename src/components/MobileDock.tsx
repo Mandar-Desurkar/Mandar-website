@@ -24,6 +24,7 @@ export default function MobileDock() {
             key={id}
             type="button"
             className={`${styles.tab} ${current ? styles.active : ""}`}
+            data-haptic="selection"
             aria-current={current ? "page" : undefined}
             onClick={() => {
               if (current) window.dispatchEvent(new Event(SECTION_SCROLL_TOP));

@@ -150,12 +150,13 @@ function ClassicHero() {
             I&apos;m a <span className={styles.highlight}>product builder.</span>
           </motion.h1>
 
-          <motion.p 
-            className={styles.description}
-            variants={rise}
-          >
-            <RichText text={profile.intro} />
-          </motion.p>
+          <motion.div className={styles.description} variants={rise}>
+            {profile.intro.map((para) => (
+              <p key={para}>
+                <RichText text={para} />
+              </p>
+            ))}
+          </motion.div>
 
           <motion.div 
             className={styles.kpiGrid}

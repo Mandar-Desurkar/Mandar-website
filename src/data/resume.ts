@@ -11,19 +11,26 @@ export const profile = {
   // Status badge on the About photo
   availability: "Open to PM roles",
   // The About window, desktop only. {tag:word} renders a coloured link to that work.
+  // Positioning, same message as `intro`: a product builder whose lead story is two consumer apps taken
+  // from 0→1, then the range from the resume summary. The header above already says "Product builder".
   about: [
-    "I build AI {build:products} people actually pay for, and I own them from the first {write:PRD} through launch and {grow:growth}.",
-    "Currently Associate PM at Silo Fortune, building agritech apps for India's farmers.",
+    "I've spent 3+ years building AI-powered products from 0→1, above all two consumer {build:apps} for India's farmers: Kissan Sampurna and Gau Sampurna.",
+    "I owned both from discovery and the first {write:PRD} to launch, AI features and {grow:monetization} via freemium and a D2C store.",
+    "In all, 6 products from 0→1, including an LLM chatbot and the CRM, rider app and ERP behind ₹12 Cr+ a year in sales. Building in‑house cut tool costs by ₹27L+ a year.",
   ],
   // The PDF-style resume viewer (src/app/resume); its Download button serves the generated PDF
   resumeUrl: "/resume",
-  // Short hero line; keep it to about 3 lines so the About window fits without scrolling.
-  // Supports **bold** via RichText.
-  intro:
-    "I take AI-powered products from 0→1, from the first PRD to launch, growth and monetization. Currently Associate PM at Silo Fortune, building agritech apps for India's farmers.",
+  // ("in‑house" uses a non-breaking hyphen so it never splits across lines.)
+  // The phone About intro, one string per paragraph, under the "I'm a product builder." headline: the
+  // two consumer apps and their 0→1, then the range and impact from the resume summary. The KPI row
+  // right below carries installs, MAU and trial conversion. Supports **bold** via RichText.
+  intro: [
+    "I've spent 3+ years building AI-powered products from 0→1, above all two consumer apps for India's farmers, **Kissan Sampurna** and **Gau Sampurna**. I owned both from discovery and the first PRD to launch, AI features, a freemium subscription and a D2C store.",
+    "In all, **6 products from 0→1**: the two apps, an LLM chatbot, and the CRM, rider app and ERP behind ₹12 Cr+ a year in sales. Building in‑house cut tool costs by ₹27L+ a year.",
+  ],
   // Full resume summary, for longer-form use (e.g. structured data).
   summary:
-    "Associate Product Manager with 2.5+ years of owning AI-powered 0→1 products with cross-functional teams, from product strategy, PRDs and roadmaps to launch, growth and monetization. I grew two agritech apps to a combined 250K+ installs, tripled trial conversion through funnel optimization, and shipped computer-vision disease diagnosis and livestock valuation, satellite farm monitoring and a crop recommendation engine. I also built the CRM and last-mile stack behind ₹1 Cr+ of sales a month.",
+    "Associate Product Manager with 3+ years of experience building AI-powered 0→1 consumer apps. Built 6 products from 0→1 (2 consumer apps with 250K+ installs and 55K+ MAU, an LLM chatbot, a CRM, a rider app and an ERP) and monetized the apps with a freemium subscription and D2C commerce, tripling trial conversion. The CRM and delivery platforms now power ₹12 Cr+ in annual sales, and in-house builds cut tool costs by ₹27L+ a year. Open to APM and Product Manager roles in AI, consumer tech, growth or D2C.",
   metaDescription:
     "Associate Product Manager building AI-powered 0→1 products: 250K+ app installs, 3× trial conversion, and the CRM behind ₹1 Cr+ in monthly sales.",
 };
@@ -43,6 +50,10 @@ export type ShippedApp = {
   shortName?: string;
   caption: string;
   icon: string;
+  // A website rather than an app: the phone home screen and Spotlight show `phoneIcon` (the clean
+  // app icon) with a globe chip on the tile, instead of `icon`, whose globe is baked into the image
+  isWebsite?: boolean;
+  phoneIcon?: string;
   website: string;
   prototype?: "kissan-sampurna" | "gau-sampurna" | "gau-sampurna-web";
 };
@@ -68,6 +79,8 @@ export const shippedApps: ShippedApp[] = [
     shortName: "Gau Website",
     caption: "D2C cattle care store",
     icon: "/apps/gau-sampurna-web-icon.png",
+    isWebsite: true,
+    phoneIcon: "/apps/gau-sampurna-icon.png",
     website: "https://www.gausampurna.com/",
     prototype: "gau-sampurna-web",
   },
@@ -77,6 +90,7 @@ export const shippedApps: ShippedApp[] = [
 // numbers (3, 1) still visibly tick before landing on the clean final value.
 export const kpis = [
   { prefix: "", value: 250, suffix: "K+", decimals: 0, label: "App Installs" },
+  { prefix: "", value: 55, suffix: "K+", decimals: 0, label: "MAU" },
   { prefix: "", value: 3, suffix: "×", decimals: 1, label: "Trial Conversion" },
   { prefix: "₹", value: 1, suffix: " Cr+", decimals: 1, label: "Monthly Sales" },
 ];
@@ -102,44 +116,41 @@ export const experiences: Experience[] = [
     period: "09/2025 - Present",
     logo: "/logos/silo-fortune.png",
     summary:
-      "Owning AI-powered 0→1 farmer apps and the sales and last-mile stack behind them, working with engineering, design and data science.",
+      "Omnichannel D2C company (app, telesales, 98 outlets across 4 states). Own product strategy and roadmap for two consumer apps, Kissan Sampurna and Gau Sampurna, and the internal sales and delivery platforms behind them.",
+    // Bullets are word for word from the owner's LaTeX resume (2026-11-16), in its order. The resume's single
+    // "Consumer Apps (0→1 Launch, Growth & AI Features)" list is split in two here so the phone's folding
+    // groups stay short: launch/growth/monetization (bullets 1–6), then the AI features (7–11).
     groups: [
       {
-        title: "Kissan Sampurna & Gau Sampurna Apps: 0→1 Launch & AI Features",
+        title: "Kissan Sampurna & Gau Sampurna Apps: 0→1 Launch, Growth & Monetization",
         prototype: "kissan-sampurna",
         bullets: [
-          "Led the launch of two farmer apps with a **15-person team** (Engineering, Design, Data Science) to **250K+ combined installs** and 25K+ MAU, and designed the V1 UI/UX hands-on in Figma, from user flows to developer-ready screens.",
-          "**Shipped AI-powered satellite monitoring**, letting farmers geotag field boundaries on their phones to track crop health (via vegetation indices), disease risk and irrigation needs across the whole farm in **13 languages**, peaking at **9.8K+ MAU** and **1.6K+ DAU**.",
-          "Architected a no-code **crop recommendation engine** that ranks each farmer's **top 5 of 100+ crops** across **655K+ farm profiles** by climate zone, soil, budget and rotation, reaching **7.7K+ MAU** at peak.",
-          "Integrated **computer vision models** that diagnose crop diseases with their **severity stage** and **20+ cattle diseases** from one photo, and estimate cattle price, BCS and dung score; crop diagnosis peaked at **4.8K+ MAU**.",
-          "Grew both apps into a one-stop farmer platform with a **32+ SKU** marketplace, weather alerts and market price forecasts; Gau Sampurna's in-app D2C store alone generates **₹1L+ in monthly revenue**.",
+          "Scaled two consumer apps from **0→1 to 250K+ installs and 55K+ MAU**, owning discovery, PRDs, roadmap and the first version's design in Figma, and leading a 15-person team (Engineering, Design, Data Science) from build to release.",
+          "**Tripled onboarding-to-trial conversion (2.4% → 7.2%)** by A/B testing paywalls, adding behaviour-triggered nudges and restructuring onboarding around Amplitude drop-offs, taking install-to-trial from 1.4% to 4.2%.",
+          "**Lifted DAU by 15% and saved ₹12L+ a year** in vendor fees by building an in-house, event-based push notification system that fires alerts on disease-risk, weather and other real-time events.",
+          "Defined the freemium model and raised **trial-to-paid from 27% to 30%** via an A/B test on the trial plan.",
+          "Generated **₹3L+ in monthly D2C orders** across the website (₹2L+) and Gau Sampurna's in-app store (₹1L+, 15+ SKUs).",
+          "**Cut drop-off at the crop selection step by 15%** with fuzzy search, voice search and state-based crop ranking, helping farmers find their crop faster across most features.",
         ],
       },
       {
-        title: "Kissan Sampurna & Gau Sampurna Apps: Growth & Monetization",
+        title: "Kissan Sampurna & Gau Sampurna Apps: AI Features",
         bullets: [
-          "Defined the **freemium monetization model**, keeping core advisory free to drive adoption while gating AI diagnostics behind a paid subscription.",
-          "Restructured onboarding using Amplitude drop-off funnel analytics, lifting install-to-signup conversion by **3%**.",
-          "**Tripled onboarding-to-trial conversion (2.4% → 7.2%)** with redesigned paywalls and behaviour-triggered engagement nudges, and raised trial-to-paid **from 27% to 30%**.",
+          "Built **Farm Monitoring** from scratch so farmers track crop health, disease risk and irrigation needs across their farm via satellite without field visits, in 13 languages (9.8K+ MAU, 1.6K+ peak DAU).",
+          "Created **Crop Guide** to answer farmers' \"what should I plant?\" with a no-code engine that ranks the top 5 of 100+ crops for 655K+ farm profiles by climate, soil, budget and rotation, reaching 7.7K+ MAU.",
+          "Shipped **Crop Doctor** end to end, using computer vision to detect crop diseases, their severity and disease stage from one photo for an instant diagnosis without waiting for an expert (4.8K+ MAU).",
+          "Developed cattle AI for Gau Sampurna that detects 20+ diseases from a photo, scores health, predicts market value and gives cattle-buying recommendations.",
+          "Launched an **LLM-powered chatbot** on the D2C website and app that helps users describe and diagnose their problems in plain language.",
         ],
       },
       {
-        title: "Internal Sales CRM & Telecalling Platform",
+        title: "Sales, Lifecycle Messaging & Delivery Platforms",
         bullets: [
-          "Delivered a 0→1 in-house CRM replacing legacy Excel tracking for **150+ telecallers**, now powering **₹1 Cr+ in monthly sales** across **130K+ leads/month**.",
-          "Automated lead capture from D2C web and app channels for the **32+ SKU** catalog, following each customer from first touchpoint to repeat purchase.",
-          "Engineered **rule-based lead routing** by language, region, and source, pairing each farmer with a local, same-language agent.",
-          "Integrated Exotel click-to-call, auto-call recording and automated WhatsApp follow-up flows, eliminating manual dialing and **saving 6,000+ agent-hours/month** (~40 hours/agent).",
-        ],
-      },
-      {
-        title: "Sampurna Rider App & Outlet ERP: Last-Mile Logistics & Operations",
-        bullets: [
-          "Drove the 0→1 build of a custom rider app and outlet ERP, from PRD to UI/UX prototypes, replacing manual order fulfillment with end-to-end tracking from CRM sale to doorstep delivery.",
-          "Architected serviceability-based order routing across **98 outlets in 4 states**, while piloting algorithmic rider assignment to eliminate manual order allocation by outlet managers.",
-          "Deployed the rider mobile app to **100+ in-house riders** handling **9K+ deliveries/month**, with in-app map navigation, photo + 4-digit OTP proof of delivery, and instant SMS/WhatsApp updates.",
-          "Digitized doorstep payment collection via cash and dynamic in-app UPI QR codes, reconciling **₹3L+ in daily collections** against delivered orders.",
-          "Designed a closed-loop delivery disposition flow escalating cancellations and postponements back to the CRM for verification, **cutting order cancellations by ~8%** and lifting deliveries per rider.",
+          "Delivered a 0→1 in-house CRM for 150+ telecallers that now handles 130K+ leads and **₹1 Cr+ in monthly sales (₹12 Cr+ a year)**, with lead scoring and same-language routing, avoiding **₹15L+ a year** in CRM licences.",
+          "**Saved 6,000+ agent-hours a month** by automating click-to-call, call recording and WhatsApp follow-ups.",
+          "Replaced manual fulfillment with end-to-end tracking across 98 outlets in 4 states by owning a 0→1 rider app and outlet ERP, used by 100+ riders for **9K+ deliveries a month** and ₹3L+ daily UPI collections.",
+          "**Cut order cancellations by ~8% and RTO by 4%** with a closed-loop disposition flow and an RTO-risk score on every order.",
+          "Designed **cohort-based WhatsApp lifecycle journeys** for lead gen and D2C (lead nurture, cart recovery, delivery confirmation, win-back, replenishment), with frequency caps and CRM sync.",
         ],
       },
     ],
@@ -147,17 +158,15 @@ export const experiences: Experience[] = [
   {
     role: "Product Management Intern",
     company: "AltQube",
-    period: "06/2023 - 09/2025",
+    period: "06/2023 - 08/2025",
     logo: "/logos/altqube.png",
     summary:
-      "Built a hyper-personalized wealth management platform from 0→1 alongside engineers, designers, data scientists and economists.",
+      "Part-time internship alongside B.E. studies at a wealth management startup. From Oct 2024, also worked on Silo Fortune's apps through AltQube's partnership, converting to full-time APM at Silo in Sep 2025.",
     groups: [
       {
         bullets: [
-          "Launched a 0→1 hyper-personalized wealth management platform (web & mobile) with a **15-member cross-functional team** of engineers, designers, data scientists and economists, scaling AUM past **₹1 Cr**.",
-          "Owned V1 product design end-to-end in Figma, taking **80+ screens** from research-backed user flows and wireframes to high-fidelity interactive prototypes.",
-          "Co-developed a SEBI-compliant **AI recommendation engine** analyzing **12+ investor parameters** (risk tolerance, financial goals, behavioral patterns) to deliver real-time portfolio suggestions in the \"Build Your Own Portfolio\" feature.",
-          "Unlocked direct in-app investing by connecting **9 fintech partners** (Razorpay, Signzy, CAMS, KFintech, CVL, MF Central and 3 others) and **42 AMCs**, documenting **40+ APIs** across equity execution, mutual fund processing and e-KYC.",
+          "Helped launch a 0→1 hyper-personalized wealth management platform (web & mobile) with an 8-member team, designing its 80+ first-release screens in Figma, as AUM grew past ₹1 Cr.",
+          "Enabled in-app investing across 9 fintech partners and 42 AMCs, and co-developed a SEBI-compliant AI recommendation engine using 12+ investor parameters.",
         ],
       },
     ],
@@ -169,9 +178,8 @@ export const beyondWork = {
   discipline: "Open Water Swimming",
   period: "2013 - 2020",
   bullets: [
-    "Competed professionally for **7+ years**, representing India at the **World Open Water Championships 2018** (Israel) in the 5 km event against 200+ elite athletes from 50+ countries.",
-    "Led the **Indian National Relay Team** at international competition.",
-    "Won **3 National Gold**, 2 Silver and 1 Bronze medals in open water swimming.",
+    "Competed professionally for 7+ years, representing India at the **World Open Water Championships 2018** (Israel) in the 5 km event against 200+ elite athletes from 50+ countries.",
+    "Led India's national relay team and won 3 National Gold, 2 Silver and 1 Bronze medals.",
   ],
   // Headline numbers for the swimming story, all from the resume and the press coverage
   stats: [

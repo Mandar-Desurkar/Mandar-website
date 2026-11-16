@@ -28,6 +28,27 @@
   
   --line-height: 1.5;
 
+  /* Phone apps: dark Liquid Glass over the wallpaper, matching the desktop windows. Labels follow
+     iOS dark-mode label colours, nudged brighter because the glass is translucent. */
+  --glass-app: rgba(12, 16, 26, 0.62);
+  --glass-app-edge: rgba(12, 16, 26, 0.78);
+  --glass-card: rgba(255, 255, 255, 0.075);
+  --glass-card-pressed: rgba(255, 255, 255, 0.13);
+  --glass-rim: rgba(255, 255, 255, 0.11);
+  --glass-control: rgba(255, 255, 255, 0.14);
+  --glass-separator: rgba(255, 255, 255, 0.12);
+  --glass-label: #fff;
+  --glass-label-secondary: rgba(235, 235, 245, 0.78);
+  --glass-label-tertiary: rgba(235, 235, 245, 0.7);
+  --glass-tint: #8cc6ff; /* iOS dark systemBlue, lifted for text on glass */
+  --glass-button: #0071e3; /* Filled button: white label at 4.5:1 */
+  --glass-tint-fill: rgba(10, 132, 255, 0.18);
+  --glass-tint-fill-pressed: rgba(10, 132, 255, 0.32);
+  --glass-positive: #7ee2a0; /* "Current" badge text (iOS systemGreen, lifted) */
+  --glass-positive-fill: rgba(52, 199, 89, 0.16);
+  --glass-positive-rim: rgba(52, 199, 89, 0.45);
+  --icon-web-chip: #004691; /* Globe chip marking a website app icon: the Gau Sampurna brand blue */
+
   /* Typography: Apple's SF Pro on Apple devices, Inter (the closest open match, self-hosted via
      next/font in layout.tsx) everywhere else. SF Pro can't be served as a web font (Apple's
      licence), so it is reached through the system font, which only Apple platforms map to SF. */
@@ -606,7 +627,12 @@ html[data-mc] .os-window.absolute-window {
     border: 0;
     border-radius: 0;
     box-shadow: none;
-    background: #fff;
+    /* Dark frosted glass, as on the desktop: the wallpaper's dusk glow shows through */
+    background: var(--glass-app);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    backdrop-filter: blur(40px) saturate(180%);
+    color: var(--glass-label);
+    color-scheme: dark;
     transform-origin: 50% 40%;
     font-family: var(--font-system);
   }
@@ -617,10 +643,10 @@ html[data-mc] .os-window.absolute-window {
     }
   }
 
-  /* Grouped pages use the iOS grouped background (systemGroupedBackground) behind white cards */
-  .mobile-window.ios-grouped,
-  .mobile-window.ios-grouped .notebook-bg {
-    background-color: #f2f2f7;
+  /* Every page sits straight on the glass; grouped pages put their rows on lighter glass cards */
+  .mobile-window .notebook-bg {
+    background: none;
+    color: var(--glass-label);
   }
 
   /* Plain pages on phones: the dotted notebook grid is visual noise at this size. Text follows
@@ -660,12 +686,8 @@ html[data-mc] .os-window.absolute-window {
     bottom: 0;
     z-index: 3;
     height: calc(var(--ios-tabbar) + 36px + env(safe-area-inset-bottom));
-    background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.92) 55%);
+    background: linear-gradient(rgba(12, 16, 26, 0), var(--glass-app-edge) 60%);
     pointer-events: none;
-  }
-
-  .mobile-window.ios-grouped::after {
-    background: linear-gradient(rgba(242, 242, 247, 0), rgba(242, 242, 247, 0.92) 55%);
   }
 
   /* iOS nav bar, Liquid Glass style: 44pt under the status bar with small round glass buttons
@@ -688,18 +710,14 @@ html[data-mc] .os-window.absolute-window {
     position: absolute;
     inset: 0 0 -18px;
     z-index: -1;
-    background: rgba(255, 255, 255, 0.82);
-    -webkit-backdrop-filter: saturate(180%) blur(14px);
-    backdrop-filter: saturate(180%) blur(14px);
+    background: var(--glass-app-edge);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    backdrop-filter: saturate(180%) blur(20px);
     -webkit-mask-image: linear-gradient(#000 62%, transparent);
     mask-image: linear-gradient(#000 62%, transparent);
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s ease;
-  }
-
-  .ios-grouped .ios-navbar::before {
-    background: rgba(242, 242, 247, 0.82);
   }
 
   .ios-navbar.is-scrolled::before {
@@ -718,14 +736,13 @@ html[data-mc] .os-window.absolute-window {
     padding: 0;
     border: 0;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.9);
+    background: var(--glass-control);
     -webkit-backdrop-filter: saturate(180%) blur(12px);
     backdrop-filter: saturate(180%) blur(12px);
     box-shadow:
-      inset 0 0.5px 0 rgba(255, 255, 255, 1),
-      0 0 0 0.5px rgba(0, 0, 0, 0.05),
-      0 1px 4px rgba(0, 0, 0, 0.06);
-    color: #1c1c1e;
+      inset 0 0.5px 0 rgba(255, 255, 255, 0.35),
+      0 0 0 0.5px var(--glass-rim);
+    color: var(--glass-label);
     -webkit-tap-highlight-color: transparent;
     transition: transform 0.15s ease;
   }
@@ -735,13 +752,6 @@ html[data-mc] .os-window.absolute-window {
     content: "";
     position: absolute;
     inset: -4px;
-  }
-
-  /* On white pages (About, Contact) a white button needs a tint, not a shadow, to be seen */
-  .ios-app:not(.ios-grouped) .ios-nav-back,
-  .ios-app:not(.ios-grouped) .ios-nav-btn {
-    background: rgba(118, 118, 128, 0.12);
-    box-shadow: none;
   }
 
   .ios-nav-back {
@@ -763,7 +773,7 @@ html[data-mc] .os-window.absolute-window {
 
   .ios-nav-back:focus-visible,
   .ios-nav-btn:focus-visible {
-    outline: 2px solid #007aff;
+    outline: 2px solid var(--glass-tint);
     outline-offset: 2px;
   }
 
@@ -772,7 +782,7 @@ html[data-mc] .os-window.absolute-window {
     font-weight: 600;
     line-height: 22px;
     letter-spacing: -0.4px;
-    color: #000;
+    color: var(--glass-label);
     white-space: nowrap;
     opacity: 0;
     transform: translateY(4px);
@@ -798,7 +808,7 @@ html[data-mc] .os-window.absolute-window {
     font-weight: 700;
     line-height: 34px;
     letter-spacing: 0.36px;
-    color: #000;
+    color: var(--glass-label);
   }
 
   .mobile-toast {

@@ -4,6 +4,7 @@ import { motion, useDragControls, Variants } from "framer-motion";
 import TrafficLights from "./TrafficLights";
 import { useWindow } from "@/context/WindowContext";
 import { trackEvent } from "@/lib/analytics";
+import { haptic } from "@/lib/haptics";
 import { useEffect, useState, useRef } from "react";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { SECTION_SCROLL_TOP } from "./MobileDock";
@@ -40,6 +41,7 @@ export default function DraggableWindow({
     if (navigator.share) {
       try {
         await navigator.share(data);
+        haptic("success");
         trackEvent("Shared Profile", { method: "native", section: activeTab });
       } catch {
         // dismissed: nothing to do
@@ -48,6 +50,7 @@ export default function DraggableWindow({
     }
     try {
       await navigator.clipboard.writeText(url);
+      haptic("success");
       trackEvent("Shared Profile", { method: "copy", section: activeTab });
       setToast("Link copied");
       setTimeout(() => setToast(null), 1800);
@@ -242,7 +245,10 @@ export default function DraggableWindow({
     const grouped = activeTab !== "about";
     const largeTitle = grouped && activeTab !== "contact";
     return (
+      // Own key: on a deep link the desktop window renders first (before the phone query resolves), and
+      // reusing that element would keep its 40px entry offset, leaving the app 40px low
       <motion.div
+        key="mobile-window"
         className={`os-window mobile-window ios-app ${grouped ? "ios-grouped" : ""}`}
         variants={mobileVariants}
         initial="initial"

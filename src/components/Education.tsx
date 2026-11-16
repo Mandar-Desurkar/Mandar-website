@@ -115,7 +115,7 @@ export default function Education() {
                     <span className={styles.school}>{edu.school}</span>
                   </>
                 )}
-                <span className={styles.period}>{edu.period}</span>
+                <span className={styles.period}>{edu.period.replace(" - ", " – ")}</span>
                 {edu.grade && <span className={styles.grade}>{edu.grade}</span>}
               </div>
               

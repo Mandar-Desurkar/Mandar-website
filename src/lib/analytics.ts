@@ -81,6 +81,10 @@ export type AnalyticsEvents = {
   };
   "Closed Prototype": { prototype: string; screens_viewed: number; seconds_open: number };
 
+  // Experience on phones: which achievements visitors unfold beyond each group's lead bullets
+  "Expanded Experience Group": { company: string; group: string; hidden_bullets: number };
+  "Expanded Press List": { hidden_items: number };
+
   // Beyond Work Photo Lightbox
   "Opened Photo Lightbox": { photo: string; caption: string };
   "Closed Photo Lightbox": { photo: string; method: "click" | "escape" };

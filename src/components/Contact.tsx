@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Check, Copy, Mail, Phone } from "lucide-react";
 import { FaLinkedin } from "react-icons/fa";
 import { trackEvent } from "@/lib/analytics";
+import { haptic } from "@/lib/haptics";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import ContactCard from "./ios/ContactCard";
 
@@ -37,6 +38,7 @@ export default function Contact() {
                 className={styles.copyBtn}
                 onClick={() => {
                   navigator.clipboard?.writeText("mandardesurkar3@gmail.com").then(() => {
+                    haptic("success");
                     setCopied(true);
                     window.setTimeout(() => setCopied(false), 1800);
                   });

@@ -14,6 +14,8 @@
     --gx: 22px;
     --gy: 20px;
     --icon: 60px;
+    /* The dock floats this far in from the screen edge; its padding makes up the rest of --margin */
+    --dock-inset: 12px;
     position: fixed;
     inset: 0;
     z-index: 4;
@@ -30,6 +32,15 @@
 /* Returning to the home screen: icons settle in from slightly larger, as on iOS */
 @keyframes zoomIn {
   from { opacity: 0; transform: scale(1.06); }
+}
+
+/* Behind an open app: the home screen recedes a little and is seen only through the app's glass.
+   Clearing the animation here lets it replay when the app closes. */
+.behind {
+  animation: none;
+  opacity: 0.7;
+  transform: scale(0.94);
+  transition: transform 0.34s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.34s ease;
 }
 
 /* Home pages side by side; native scroll snapping gives the iOS swipe with momentum */
@@ -340,13 +351,16 @@
   outline-offset: 2px;
 }
 
+/* The dock's icons sit exactly under the grid's four columns, as on iOS: the same column gap, and side
+   padding that makes up the page margin, so the inset plus padding equals --margin. */
 .dock {
   flex-shrink: 0;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: var(--gx);
   justify-items: center;
-  margin: 0 12px;
-  padding: 15px calc(var(--margin) - 12px);
+  margin: 0 var(--dock-inset);
+  padding: 16px calc(var(--margin) - var(--dock-inset));
   border-radius: 34px;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06)),
@@ -370,7 +384,7 @@
 
 /* 320pt phones: smaller icons and margins so four columns still fit */
 @media (max-width: 359.98px) {
-  .home { --margin: 14px; --gx: 12px; --gy: 16px; --icon: 54px; }
+  .home { --margin: 14px; --gx: 12px; --gy: 16px; --icon: 54px; --dock-inset: 6px; }
   .page { gap: 12px; }
   .profile { padding: 14px; gap: 12px; }
   .avatar { width: 54px; height: 54px; }
@@ -381,7 +395,7 @@
   .minor { margin-top: 8px; font-size: 11px; line-height: 15px; }
   .role { font-size: 15px; line-height: 19px; }
   .company { font-size: 14px; line-height: 18px; }
-  .dock { padding: 12px 4px; border-radius: 30px; }
+  .dock { padding-top: 10px; padding-bottom: 10px; border-radius: 28px; }
 }
 
 /* Short screens (Safari with its toolbars on an SE) */
@@ -396,11 +410,12 @@
   .home { max-width: 560px; }
   .search,
   .dots { display: none; }
-  .dock { --icon: 46px; margin-top: 6px; padding: 8px 40px; border-radius: 24px; }
+  .dock { --icon: 46px; margin-top: 6px; padding-top: 8px; padding-bottom: 8px; border-radius: 24px; }
   .small { aspect-ratio: auto; min-height: 150px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .home { animation: none; }
+  .behind { transform: none; transition: none; }
   .widget { transition: none; }
 }

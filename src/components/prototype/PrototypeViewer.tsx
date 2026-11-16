@@ -6,6 +6,7 @@ import { AnimatePresence, MotionConfig, motion } from "framer-motion";
 import styles from "./PrototypeViewer.module.css";
 import { lato, poppins } from "./fonts";
 import { trackEvent } from "@/lib/analytics";
+import { haptic } from "@/lib/haptics";
 import type { Prototype } from "@/data/prototypes/kissanSampurna";
 import type { ScreenProps } from "./kissan/KissanScreens";
 import type { PrototypeId } from "@/context/WindowContext";
@@ -235,6 +236,7 @@ export default function PrototypeViewer({ prototype, screens, onClose, onSwitchP
       const url = new URL(window.location.href);
       url.searchParams.set("prototype", prototype.id);
       navigator.clipboard?.writeText(url.toString()).then(() => {
+        haptic("success");
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
       });

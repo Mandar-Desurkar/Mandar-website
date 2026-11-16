@@ -82,7 +82,10 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
 - Branches: `main` (default), `dev`, `prod` (release). Remote: GitHub `Mandar-Desurkar/Mandar-website`.
 - Profile photo (2026-10-21): `public/profile-photo.jpg` (640px, full frame) for the About hero /
   desktop polaroid, and `public/profile-avatar.jpg` (320px head-and-shoulders crop) for the round
-  avatars (home widget, Contact card, hiring notification). To change the photo, replace both.
+  avatars (home widget, Contact card, hiring notification). To change the photo, replace both. Current photo
+  from 2026-11-16 (navy blazer on white; the owner's original carries a sparkle mark bottom-right, which both
+  crops leave out). Optimized images are cached for 4 h by `next/image`, so after replacing a file locally,
+  delete `.next/dev/cache/images` (and hard-refresh) to see it.
   `public/profile-new.jpg` is a **compatibility copy** of `profile-photo.jpg`, nothing references it:
   pages loaded before the 2026-10-21 deploy (open tabs, Safari / LinkedIn in-app cache) still request
   the old path and showed a broken photo after it was deleted. Safe to delete after a few weeks; when
@@ -196,10 +199,14 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
   CSS identical if it changes (globals.css, `MobileDock`, `DesktopIcon` modules).
 - **Phone layout = iOS (2026-10-21).** Shared pieces live in `src/components/ios/`:
   `AppIcon.tsx` (Apple-style squircle via an inline superellipse SVG **mask**, n=5, not border-radius;
-  iOS 26 glass sheen + rim; the drop shadow sits on a `.frame` wrapper because masks clip
-  box-shadows; gradient + glyph or real app image; `AppTile` is the non-interactive tile), `sections.tsx` (`SECTION_APPS`: filled + outline Ionicons 5 glyphs,
-  label, colour and Spotlight keywords per section, used by the home grid, Spotlight and the tab bar),
-  `contactApps.tsx` (`CONTACT_APPS`: Phone, Messages, Mail, LinkedIn for the dock and Spotlight),
+  iOS 26 glass rim on `::after`; the drop shadow sits on a `.frame` wrapper because masks clip
+  box-shadows; drawn `art` or a real app image; `web` adds a globe chip; `AppTile` is the
+  non-interactive tile), `IconArt.tsx` (since 2026-11-16: every home-screen/dock/Spotlight icon drawn as
+  one SVG: gradient background, white "paper" foreground with one accent, one shadow tinted with the
+  icon's own dark shade, ~60% of the tile per Apple's icon grid), `sections.tsx` (`SECTION_APPS`: `Art`,
+  filled + outline Ionicons 5 tab-bar glyphs, label and Spotlight keywords per section, used by the home
+  grid, Spotlight and the tab bar),
+  `contactApps.tsx` (`CONTACT_APPS`: Phone, Messages, Mail, LinkedIn with their `Art`, for the dock and Spotlight),
   `Spotlight.tsx` and `ContactCard.tsx`.
   - **Home screen** (`MobileHome.tsx`, the phone landing page). **Owner-approved layout, keep the
     positions:** medium profile widget (→ About), two small widgets side by side (Impact KPIs →
@@ -225,8 +232,12 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
     Liquid Glass nav bar with 36pt round glass ‹ (aria-label "Home screen") and Share buttons (44pt
     touch targets); the inline title and a soft blurred scroll edge fade in once the content scrolls; a
     28pt page title on Experience/Education/Projects
-    (`ios-grouped`, background `#F2F2F7`, white 12px-radius cards). About and Contact are profile pages
-    without a large title. Opening zooms in from 0.9 like an app launch.
+    (`ios-grouped`, lighter-glass 12px-radius cards). About and Contact are profile pages
+    without a large title. Opening zooms in from 0.9 like an app launch. Since 2026-11-16 every app is
+    **dark translucent glass** like the desktop windows (`--glass-*` tokens in `globals.css` `:root`):
+    the home screen stays mounted behind it (`.behind`: inert, aria-hidden, scaled 0.94, 70% opacity)
+    and shows through blurred; cards are `--glass-card` panes, labels use iOS dark-mode colours. All
+    phone colour overrides are scoped to `:global(.ios-app)`, so desktop is untouched.
   - **Tab bar** (`MobileDock.tsx`, `nav[aria-label="Sections"]`): only while a section is open; iOS 26
     floating glass capsule (62pt, 44pt in landscape), the active tab on a blue-tinted pill with a filled
     glyph, inactive tabs outlined; re-tapping the current tab scrolls to top. The window runs to the
@@ -410,6 +421,116 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 
 ## Changelog
 
+- 2026-11-16: **Phone typography audit** (Experience, Education, Case Studies, Contact), measured from
+  computed styles. Font stack is right (SF Pro on Apple, Inter elsewhere, `--font-system`). Snapped to the
+  iOS scale, phone only (`.ios-app` rules):
+  - Experience: swim stat values 26→28/34; press headlines 14→15/20; iOS line heights on stat labels,
+    notes, video meta/headline, press meta, caps labels; group headings tracked -0.4px.
+  - Education: dates and grade 15→13/18 with an en dash, on their own line under the school.
+  - Case Studies: section header 13/18 at 0.4px tracking, like "Beyond Work" and "Skills & Toolkit";
+    titles at -0.4px.
+  - Contact: name tracked 0.36px; Add to Contacts on 22px.
+  Desktop unchanged. Uncommitted.
+- 2026-11-16: **Reverted the concise phone Experience** (owner's call): back to the full resume bullets in
+  folding groups ("Show N more", product eyebrow + heading, "View app prototype"), the swim stat footnotes,
+  and the "Expanded Experience Group" event. The `brief` data, `Highlight`/`BriefGroup` types and highlight
+  styles are gone. Haptics stay (the prototype button is `data-haptic="medium"`). Page height matches the
+  pre-change capture (3150px at 393). Uncommitted.
+- 2026-11-16: **Haptic feedback on the phone layout.** `src/lib/haptics.ts` (`haptic(kind)`: light, selection,
+  medium, success) plus `components/Haptics.tsx`, one capture-phase click listener mounted in `app/layout.tsx`
+  so every route has it. Buttons, `[role=button|tab]` and anything with `data-haptic` tick on a real tap
+  (`isTrusted`); `data-haptic="none"` opts out; plain text links stay silent. Android: `navigator.vibrate`
+  (6/10/18 ms, success 12-70-14). iPhone (Safari 18+): no Vibration API, so a hidden
+  `<input type="checkbox" switch>` in a **closed shadow root** is clicked (analytics autocapture only sees an
+  anonymous span); it works only inside a tap, and success ticks twice. Tagged: tab bar + page dots + home
+  swipe = selection; dock icons, case study cards, Spotlight links, Contact card actions = light; Experience
+  "Try the app" = medium; share/copy link, copy email, copy prototype link, Add to Contacts = success.
+  Phone-only via `PHONE_QUERY` (now exported from `useIsMobile`). Verified with a mocked `vibrate` and a faked
+  iPhone path; desktop fires none. Not testable here on a real device. Uncommitted.
+- 2026-11-16: **Phone Case Studies redesigned around new cover art.** Six illustrated covers generated
+  with the owner's Gemini key (`gemini-3.1-flash-image`, 1K, 16:9; one soft clay 3D style; sage→cream for
+  Kissan, sky→cream for Gau; no text in the images), saved as `public/case-studies/<slug>/thumb.webp`
+  (1200×670) and referenced by the new `thumb` field on each case study. Spend is tracked in
+  **`docs/GEMINI_LEDGER.md`** (budget ₹80, spent ₹44.74): **log every paid call there and tell the owner the
+  estimate before each one.** The key lives only in the session scratchpad, never in the repo. On the phone
+  each study is now a full-width glass card: cover (2:1), theme in the tint, feature name, one line, then
+  the result with a trend icon under a hairline. "Try the app" is hidden on the phone (the page is for
+  the case studies; the prototypes are on the home screen). Desktop unchanged. Uncommitted.
+- 2026-11-16: **Phone Experience made concise and minimal** (owner's request, from the LaTeX resume). New
+  `brief` on each `experiences` entry (`summary` + `groups` of `{ lead, detail }` highlight rows; types
+  `Highlight`, `BriefGroup`) and `beyondWork.brief`; the phone renders these as rows (bold result over one
+  short line, no bullets, no folding), with "Try the app" beside the first group's title. Each detail is
+  written to fit one line at 393 wide. Trimmed from the resume for the phone: crop-selection drop-off,
+  WhatsApp lifecycle journeys, the ₹15L+ CRM saving. Swim stat footnotes hidden on the phone. The
+  desktop still shows the full `groups` bullets. Removed: `previewCount`, `splitTitle`, the
+  "Expanded Experience Group" event (press list folding stays). Phone page 3.9 → 3.3 screens. Uncommitted.
+- 2026-11-16: **About positioning rewritten** (owner asked to "sell" them to hiring managers, from the
+  LaTeX resume). First draft ("AI products people use and pay for, plus the growth and sales engines…,
+  6 products from 0→1") was rejected: the owner wants to be positioned as a **product builder who made two
+  consumer apps**, telling the 0→1. `profile.intro` (phone About, AboutConcepts) and `profile.about`
+  (desktop About) now say that: Kissan Sampurna and Gau Sampurna built from 0→1, from discovery and the
+  first PRD to launch, AI features and a paid subscription. Then, at the owner's request, the resume
+  summary was folded in: 3+ years, freemium + D2C store, **6 products from 0→1** (LLM chatbot, CRM, rider
+  app, ERP) behind ₹12 Cr+ a year, ₹27L+ a year saved by building in-house. `intro` is now `string[]`
+  (one paragraph each; Hero and AboutConcepts map it), desktop `about` has 3 lines. Desktop About fits
+  without scrolling at 1280×720 and 1024×768; on a 320×568 phone the KPIs and buttons sit below the fold.
+  `profile.summary` (desk cat knowledge) now follows the resume summary (3+ years, 55K+ MAU, ₹12 Cr+ a
+  year, ₹27L+ saved, roles sought). AboutConcepts now renders `intro` through RichText so its bold works.
+  Phone intro still 4 lines at 393; desktop About fits. Uncommitted.
+- 2026-11-16: **Phone dock aligned to the app grid**, as on iOS: dock icons now sit exactly under the
+  grid's four columns (they were 6–9px inward, with uneven gaps). The dock takes the grid's `--gx` column
+  gap and side padding of `--margin − --dock-inset` (new variable: 12px, 6px at 320 wide), in landscape
+  too. Vertical padding 15→16px (92px tall at 393). Icon sizes unchanged (60/62/54px match iOS's 60pt).
+  Measured at 393, 430, 375, 320 and 852×393 landscape. Uncommitted.
+- 2026-11-16: The **Gau Sampurna website icon moved to page 2 of the phone home screen**, under the
+  clock/calendar widget, on the same 4-column grid (owner's call); page 1 keeps the sections and the two
+  apps. `MobileHome` splits `shippedApps` by `isWebsite`. Spotlight still lists all three. Checked at 393
+  and 320 wide; tapping it opens the website prototype. Uncommitted.
+- 2026-11-16: **Phone app icons redrawn** (owner asked for icons that look like a real iOS design). New
+  `ios/IconArt.tsx` draws all 9 tiles (About, Experience, Education, Case Studies, Contact, Resume in
+  Spotlight, and the Phone, Messages, Mail and LinkedIn dock apps) in one iOS 26 system: profile picture,
+  briefcase with clasp, mortarboard with gold tassel, report pages with a rising bar chart, a heavier
+  handshake, an envelope with a blue flap. `AppTile` now takes `art` (the `colors`/`glyph` props,
+  `glyphScale`/`glyphSize()` and the unused `badge` are gone); the old top-half gloss is replaced by a thin
+  Liquid Glass rim that follows the squircle. The Gau website tile on the phone and in Spotlight uses the
+  clean app icon plus a small globe chip (`isWebsite`/`phoneIcon` on `shippedApps`; token
+  `--icon-web-chip`) instead of the image with the large baked-in globe; desktop still uses that image.
+  Tab-bar glyphs are unchanged. Checked at 393 and 320 wide and in Spotlight. Uncommitted.
+- 2026-11-16: Removed the phone Experience segmented control (owner's call), with its styles, tokens and the
+  `Jumped To Experience Entry` event; folding groups stay. **New profile photo** (owner-supplied) in
+  `profile-photo.jpg`, `profile-avatar.jpg` and the `profile-new.jpg` copy. **55K+ MAU** added as a fourth
+  About number (`kpis`, after installs); the desktop About card's stats grid now takes one column per number.
+  Checked: phone home widget, About (393 and 320 wide), Contact, desktop About at 1440/1024, OG image.
+  Uncommitted.
+- 2026-11-16: **Experience content updated from the owner's new LaTeX resume** (`experiences` and
+  `beyondWork.bullets` in `src/data/resume.ts`, word for word; "Rs." shown as ₹). Silo Fortune: new summary;
+  the resume's one 11-bullet "Consumer Apps" list is split for the web into "0→1 Launch, Growth & Monetization"
+  (bullets 1–6, keeps the prototype button) and "AI Features" (7–11); "Sales, Lifecycle Messaging & Delivery
+  Platforms" as in the resume. AltQube: 06/2023 – 08/2025, new summary, 2 bullets. Beyond Work: 2 bullets.
+  Experience intro now "3+ years building AI-powered 0→1 consumer apps." Not yet updated to match (owner to
+  decide): `resumeDocument.ts` + the PDF, the profile summary ("2.5+ years", `resume.ts`), AboutConcepts
+  ("2.5+ years"), and "25K+ MAU" (now 55K+) in `shippedApps` metrics and two Gau case studies. Uncommitted.
+- 2026-11-16: **Phone Experience redesigned for scanning** (owner: improve the mobile Experience design and
+  experience). Page 4,738px → 3,463px with no content removed. Phone-only (`useIsMobile`; desktop window
+  pixel-identical): an iOS **segmented control** pinned under the nav bar (Silo Fortune · AltQube · Beyond Work)
+  that follows the scroll and jumps on tap; a **profile-style role header** (logo tile, role, company + green
+  "Current", "Sep 2025 – Present · 1 yr 3 mos"); group titles split at ": " into a product eyebrow + short
+  heading; each group shows its **first 2 bullets** and folds the rest behind "Show N more" (groups of ≤ 3 show
+  all; folded content is `inert`; "Show less" scrolls back to the group), same for the press list (2 of 5); the
+  prototype link is a filled capsule button. New events `Expanded Experience Group`, `Expanded Press List`,
+  `Jumped To Experience Entry`. New tokens `--glass-positive*`, `--glass-segment-*`. Verified in headless Chrome
+  at 393 and 320 wide: taps, scroll-following, fold/unfold, no page errors, contrast ≥ 4.5:1 (except the
+  unchanged race-video caption). Uncommitted.
+- 2026-11-16: **Phone apps are translucent glass** (owner: make the opened app translucent like the desktop
+  window). The white iOS sheet became dark frosted glass over the wallpaper, with the home screen kept mounted
+  (inert) behind it so its widgets and icons glow through; cards, nav buttons, tab bar, Hero, Experience (incl.
+  swim stats and press list), Education, Projects and ContactCard recoloured via new `--glass-*` tokens, all
+  scoped to `.ios-app`. Contrast checked against the real rendered backdrop (text hidden, median/90th-pct pixel
+  behind each label): everything ≥ 4.5:1 except "In the press" at 4.41 against its brightest 10% and the race
+  video caption over the photo (unchanged). Desktop window pixel-identical before/after. Also fixed a phone
+  deep-link bug (`?section=`): the mobile window reused the desktop motion element and kept its 40px entry
+  offset, so the app sat 40px low with its bottom cut off; it now has its own `key`. `tsc` passes; lint errors
+  unchanged (Dock, DraggableWindow, Navbar, WindowContext). Uncommitted.
 - 2026-11-10: Committed everything since e90440e as **d75e769** on `dev` (website prototype, blue Case Studies cards,
   Chai, the owner's resume edits and regenerated PDF), fast-forwarded `prod`, pushed both. Vercel production deploy
   succeeded; checked live: home, a case study, /resume, website prototype assets and `/api/agent` (offline answers,

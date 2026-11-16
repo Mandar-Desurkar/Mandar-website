@@ -7,10 +7,10 @@ import { useSyncExternalStore } from "react";
 // resize and double-click are mouse interactions, so touch screens get the sheet + dock instead.
 // The structural CSS (window sheet, dock, home grid) uses the same query. The server and the first
 // client render assume desktop.
-const QUERY = "(max-width: 767.98px), (max-width: 1023.98px) and (pointer: coarse), (max-height: 500px) and (pointer: coarse)";
+export const PHONE_QUERY = "(max-width: 767.98px), (max-width: 1023.98px) and (pointer: coarse), (max-height: 500px) and (pointer: coarse)";
 
 function subscribe(onChange: () => void) {
-  const mql = window.matchMedia(QUERY);
+  const mql = window.matchMedia(PHONE_QUERY);
   mql.addEventListener("change", onChange);
   return () => mql.removeEventListener("change", onChange);
 }
@@ -18,7 +18,7 @@ function subscribe(onChange: () => void) {
 export function useIsMobile() {
   return useSyncExternalStore(
     subscribe,
-    () => window.matchMedia(QUERY).matches,
+    () => window.matchMedia(PHONE_QUERY).matches,
     () => false
   );
 }
