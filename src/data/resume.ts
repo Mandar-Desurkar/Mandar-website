@@ -11,22 +11,21 @@ export const profile = {
   // Status badge on the About photo
   availability: "Open to PM roles",
   // The About window, desktop only. {tag:word} renders a coloured link to that work.
-  // Positioning, same message as `intro`: a product builder whose lead story is two consumer apps taken
-  // from 0→1, then the range from the resume summary. The header above already says "Product builder".
+  // The owner's own About text (2026-11-16), word for word; same message as `intro`
   about: [
-    "I've spent 3+ years building AI-powered products from 0→1, above all two consumer {build:apps} for India's farmers: Kissan Sampurna and Gau Sampurna.",
-    "I owned both from discovery and the first {write:PRD} to launch, AI features and {grow:monetization} via freemium and a D2C store.",
-    "In all, 6 products from 0→1, including an LLM chatbot and the CRM, rider app and ERP behind ₹12 Cr+ a year in sales. Building in‑house cut tool costs by ₹27L+ a year.",
+    "I’ve spent 3+ years building AI-powered {build:products} from 0→1. Most recently, I owned two consumer apps end to end, from discovery and the first {write:PRD} through launch, AI features, a {grow:freemium} subscription and a D2C store.",
+    "Alongside them, I shipped four more: an LLM chatbot and the CRM, rider app and ERP that now handle ₹12 Cr+ a year in sales, cutting tool costs by ₹27L+ a year by keeping them in‑house.",
+    "I’m now looking for APM or Product Manager roles in AI, consumer tech, growth or D2C.",
   ],
   // The PDF-style resume viewer (src/app/resume); its Download button serves the generated PDF
   resumeUrl: "/resume",
-  // ("in‑house" uses a non-breaking hyphen so it never splits across lines.)
   // The phone About intro, one string per paragraph, under the "I'm a product builder." headline: the
-  // two consumer apps and their 0→1, then the range and impact from the resume summary. The KPI row
-  // right below carries installs, MAU and trial conversion. Supports **bold** via RichText.
+  // owner's own text (2026-11-16), word for word ("in‑house" with a non-breaking hyphen so it never
+  // splits). The KPI row right below carries installs, MAU and trial conversion. Supports **bold**.
   intro: [
-    "I've spent 3+ years building AI-powered products from 0→1, above all two consumer apps for India's farmers, **Kissan Sampurna** and **Gau Sampurna**. I owned both from discovery and the first PRD to launch, AI features, a freemium subscription and a D2C store.",
-    "In all, **6 products from 0→1**: the two apps, an LLM chatbot, and the CRM, rider app and ERP behind ₹12 Cr+ a year in sales. Building in‑house cut tool costs by ₹27L+ a year.",
+    "I’ve spent 3+ years building AI-powered products from 0→1. Most recently, I owned **two consumer apps** end to end, from discovery and the first PRD through launch, AI features, a freemium subscription and a D2C store.",
+    "Alongside them, I shipped **four more**: an LLM chatbot and the CRM, rider app and ERP that now handle ₹12 Cr+ a year in sales, cutting tool costs by ₹27L+ a year by keeping them in‑house.",
+    "I’m now looking for APM or Product Manager roles in AI, consumer tech, growth or D2C.",
   ],
   // Full resume summary, for longer-form use (e.g. structured data).
   summary:

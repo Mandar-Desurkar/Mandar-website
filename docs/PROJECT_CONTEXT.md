@@ -421,6 +421,12 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 
 ## Changelog
 
+- 2026-11-16: **About text replaced with the owner's own three paragraphs** (word for word) in
+  `profile.intro` (phone; bold on "two consumer apps" and "four more") and `profile.about` (desktop; pills
+  on products, PRD, freemium). Phone size steps re-measured for the longer text: large ≥ 812px of app
+  (≈ 860px screen), small < 657, extra small < 620; only below 585 (≈ 633px screens) is the middle
+  paragraph hidden. Fit test passes at all 12 sizes (all three paragraphs on 10 of them). Desktop About
+  card spacing tightened ~18px so the window still fits 1280×720 and 1024×768 without scrolling.
 - 2026-11-16: **Crop Guide case study: Gemini art on desktop and phone** (owner approved the plan and its
   ≈ ₹24 estimate; actual ₹24.76, ledger total ₹69.50 of ₹80). New optional fields: `portrait` on
   `CaseStudyPersona` (the card shows it in place of the monogram, 72px; the personas are composites, so

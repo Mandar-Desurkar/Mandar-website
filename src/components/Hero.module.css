@@ -601,9 +601,9 @@
 /* ==================== Phone About: one screen, no scrolling ====================
    The CTAs must clear the tab bar without scrolling. Size steps follow the app's own visible height
    (the scroll area is a size container; it is the screen minus the 48px nav bar), measured with the
-   two-paragraph intro: large ≥ 772px (≈ 820px screen), medium by default (≈ 705–819), small < 657px
-   (≈ 640–704), extra small < 592px (iPhone SE in Safari), which also drops the intro's second
-   paragraph so the buttons still fit. iOS type scale: Title 1 headline (28/34), Subheadline
+   three-paragraph intro: large ≥ 812px (≈ 860px screen), medium by default (≈ 705–859), small < 657px
+   (≈ 668–704), extra small < 620px (≈ 667px screens and below: iPhone SE, most Androids with
+   toolbars); below 585px (≈ 633px screens) it also drops the middle paragraph so the buttons fit. iOS type scale: Title 1 headline (28/34), Subheadline
    intro (15/20), Title 3 numbers (20), Caption labels (12). Both CTAs share one row, as iOS pairs a
    filled and a tinted button. */
 @container window (max-width: 599.98px) {
@@ -741,7 +741,7 @@
 
   /* Tall phones (iPhone 12–16 and Pro Max with room to spare): step up to the iOS Large Title (34/41)
      and Body (17/22) sizes so the page fills the screen instead of ending halfway down */
-  @container window (min-height: 772px) {
+  @container window (min-height: 812px) {
     .heroSection {
       padding-top: 1rem;
     }
@@ -822,9 +822,9 @@
     }
   }
 
-  /* Smallest (iPhone SE in Safari, small Androids): a smaller photo and type, and only the lead
-     paragraph, so both buttons still sit above the tab bar */
-  @container window (max-height: 591.98px) {
+  /* Smallest (iPhone SE, Androids with the browser toolbars showing): a smaller photo and type so
+     both buttons still sit above the tab bar */
+  @container window (max-height: 619.98px) {
     .profileFrame {
       width: 56px;
       height: 56px;
@@ -845,8 +845,11 @@
       line-height: 18px;
     }
 
-    .description p + p {
-      display: none;
+    /* Only the very shortest (< 585px of app, ≈ 633px screens) drop the middle paragraph */
+    @container window (max-height: 584.98px) {
+      .description p:nth-child(2) {
+        display: none;
+      }
     }
   }
 }
