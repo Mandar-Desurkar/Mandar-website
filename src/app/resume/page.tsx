@@ -82,9 +82,9 @@ function Section({ title, afterText, children }: { title: string; afterText?: bo
   );
 }
 
-// One role or activity: title and dates on one line, then its groups of bullets. `from` / `to` pick
-// groups, so a long entry can continue on the next page the way LaTeX breaks it
-function Entry({ entry, from = 0, to, continued }: { entry: ResumeEntry; from?: number; to?: number; continued?: boolean }) {
+// One role or activity: title and dates on one line, the italic description, then its groups of
+// bullets. `continued` drops the heading, for the part of an entry that carries over to the next page
+function Entry({ entry, continued }: { entry: ResumeEntry; continued?: boolean }) {
   return (
     <div className={styles.entry}>
       {!continued && (
@@ -93,7 +93,12 @@ function Entry({ entry, from = 0, to, continued }: { entry: ResumeEntry; from?: 
           <span>{entry.period}</span>
         </p>
       )}
-      {entry.groups.slice(from, to).map((g, i) => (
+      {!continued && entry.sub && (
+        <p className={styles.entrySub}>
+          <ResumeText text={entry.sub} />
+        </p>
+      )}
+      {entry.groups.map((g, i) => (
         <div key={g.title ?? i} className={styles.group}>
           {g.title && <p className={styles.groupTitle}>{g.title}</p>}
           <ul>
@@ -109,15 +114,29 @@ function Entry({ entry, from = 0, to, continued }: { entry: ResumeEntry; from?: 
   );
 }
 
+// Bullets of "Sales & Delivery Platforms" that fit on page 1; the LaTeX lets that list flow across the
+// page break, so the rest open page 2. Re-check with the page heights if the content changes.
+const SALES_ON_PAGE_1 = 4;
+
 export default function ResumePage() {
   const [silo, altqube] = doc.experience;
+  const [consumer, sales] = silo.groups;
+  const siloPage1 = { ...silo, groups: [consumer, { ...sales, bullets: sales.bullets.slice(0, SALES_ON_PAGE_1) }] };
+  const siloPage2 = { ...silo, groups: [{ bullets: sales.bullets.slice(SALES_ON_PAGE_1) }] };
   return (
     <ResumeViewer className={`${serif.variable} ${symbols.variable}`} pages={2}>
-      {/* Page 1: header, summary and the first three Silo Fortune groups; LaTeX keeps each group whole, so the
-          Rider App group doesn't fit and opens page 2 */}
+      {/* Page 1: header, summary, Silo Fortune's consumer apps and the start of its sales & delivery list */}
       <article className={styles.page} data-page="1" aria-label="Page 1">
         <header className={styles.head}>
           <h1 className={styles.name}>{doc.name}</h1>
+          <p className={styles.tagline}>
+            {doc.tagline.map((t, i) => (
+              <span key={t}>
+                {i > 0 && <span className={styles.bar} aria-hidden="true">|</span>}
+                {t}
+              </span>
+            ))}
+          </p>
           <hr className={styles.rule} />
           <p className={styles.contact}>
             {doc.contact.map((c, i) => (
@@ -143,13 +162,14 @@ export default function ResumePage() {
         </Section>
 
         <Section title="Experience" afterText>
-          <Entry entry={silo} to={3} />
+          <Entry entry={siloPage1} />
         </Section>
       </article>
 
-      {/* Page 2: the rest of Silo Fortune, AltQube (still under Experience), Beyond Work, Education, Skills */}
+      {/* Page 2: the rest of the sales & delivery list, AltQube (still under Experience), Beyond Work,
+          Education, Skills */}
       <article className={styles.page} data-page="2" aria-label="Page 2">
-        <Entry entry={silo} from={3} continued />
+        <Entry entry={siloPage2} continued />
         <Entry entry={altqube} />
 
         <Section title="Beyond Work">

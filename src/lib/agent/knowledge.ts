@@ -136,7 +136,7 @@ const INTENTS: Intent[] = [
   },
   {
     test: /\b(swim|swimming|athlete|sport|team india|olympic)/,
-    reply: `Before product, ${first} swam open water for Team India for 7+ years, including the 5 km at the 2018 World Championships, with 3 national golds.`,
+    reply: `Before product, ${first} swam open water for Team India for 7+ years, including the 5 km at the 2018 World Championships, where he led India's relay team, and won multiple national medals, including gold.`,
     actions: ["open_experience"],
   },
   {

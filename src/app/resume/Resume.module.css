@@ -235,6 +235,18 @@
   color: var(--accent);
 }
 
+/* {\large Associate Product Manager | AI & Consumer Growth | 0→1 Builder}: 12pt on 14pt, 2pt under the
+   name and 4pt above the rule */
+.tagline {
+  margin-top: 2pt !important;
+  font-size: 12pt;
+  line-height: 14pt;
+}
+
+.tagline + .rule {
+  margin-top: 4pt;
+}
+
 .rule {
   height: 0;
   margin: 2.35pt 0 0;
@@ -305,7 +317,8 @@
   font-variant-numeric: tabular-nums;
 }
 
-.degree {
+.degree,
+.entrySub {
   font-style: italic;
 }
 

@@ -1,16 +1,19 @@
-// The resume as it reads in the owner's LaTeX source (XCharter version, received 2026-11-03), rendered as a
+// The resume as it reads in the owner's LaTeX source (XCharter version, received 2026-11-19), rendered as a
 // PDF-style document at /resume and printed to public/Mandar_Desurkar_Resume.pdf.
 // Keep the wording identical to the LaTeX file; `**text**` renders bold. LaTeX's `\,` (Rs.\,1, 5\,km) is a
 // thin space (U+2009) here, and `$\sim$` is ∼.
 // After editing, regenerate the PDF (see "Resume" in docs/PROJECT_CONTEXT.md).
 
+// `sub`: the italic line under an entry (\entrysub); group titles are the bold product headings (\product)
 export type ResumeGroup = { title?: string; bullets: string[] };
-export type ResumeEntry = { title: string; period: string; groups: ResumeGroup[] };
+export type ResumeEntry = { title: string; period: string; sub?: string; groups: ResumeGroup[] };
 
 export const RESUME_FILE = "/Mandar_Desurkar_Resume.pdf";
 
 export const resumeDocument = {
   name: "Mandar Desurkar",
+  // The line under the name, its parts separated by bars
+  tagline: ["Associate Product Manager", "AI & Consumer Growth", "0→1 Builder"],
   contact: [
     { label: "+91 8073118693", href: "tel:+918073118693" },
     { label: "mandardesurkar3@gmail.com", href: "mailto:mandardesurkar3@gmail.com" },
@@ -19,62 +22,49 @@ export const resumeDocument = {
     { label: "Bangalore" },
   ],
   summary:
-    "Associate Product Manager with 2.5+ years of experience owning **AI-powered 0→1 products** with cross-functional teams, from product strategy, PRDs and roadmaps to launch, growth and monetization. Grew two consumer mobile apps to a combined **250K+ installs**, **tripled trial conversion** through funnel optimization, and shipped **computer vision** disease diagnosis and livestock valuation, satellite farm monitoring, and a crop recommendation engine. Built the CRM and last-mile stack behind **Rs. 1 Cr+ of sales a month**.",
+    "Associate Product Manager with 3+ years of experience building AI-powered 0→1 consumer apps. Built 6 products from 0→1, including 2 consumer apps with **250K+ installs**, an LLM chatbot, and the CRM and delivery platforms that now power **Rs. 12 Cr+ in annual sales**. **Tripled trial conversion** and monetized the apps through freemium and D2C commerce. Open to APM and PM roles in AI and consumer growth.",
   experience: [
     {
-      title: "Associate Product Manager - Silo Fortune Private Limited",
-      period: "09/2025 - Present",
+      title: "Associate Product Manager | Silo Fortune Private Limited",
+      period: "09/2025 – Present",
+      sub: "Omnichannel D2C company (app, telesales, 98 outlets across 4 states). Own product strategy and roadmap for two consumer apps, Kissan Sampurna and Gau Sampurna, and the internal sales and delivery platforms behind them.",
       groups: [
         {
-          title: "Kissan Sampurna & Gau Sampurna Apps (0→1 Launch & AI Features)",
+          title: "Consumer Apps (0→1 Launch, Growth & AI Features)",
           bullets: [
-            "Led a **15-person team** (Engineering, Design, Data Science) to launch two farmer apps to **250K+ combined installs** and 25K+ MAU, and designed the V1 UI/UX hands-on in Figma, from user flows to developer-ready screens.",
-            "**Shipped AI-powered satellite farm monitoring** in **13 languages**: farmers geotag field boundaries on their phone to track crop health (vegetation indices), disease risk, and irrigation needs; peaked at **9.8K+ MAU** and **1.6K+ DAU**.",
-            "Architected a no-code **crop recommendation engine** ranking each farmer's **top 5 of 100+ crops** across **655K+ farm profiles** by climate zone, soil, budget, and rotation; peaked at **7.7K+ MAU**.",
-            "Integrated **computer vision** for one-photo diagnosis of crop diseases (with **severity stage**) and **20+ cattle diseases**, plus cattle price, BCS, and dung score estimates; crop diagnosis peaked at **4.8K+ MAU**.",
-            "Grew both apps into a one-stop farmer platform with a **32+ SKU** marketplace, weather alerts, and market price forecasts; Gau Sampurna's in-app D2C store alone generates **Rs. 1L+ in monthly revenue**.",
+            "Scaled two consumer apps from **0→1 to 250K+ installs and 55K+ MAU**, owning discovery, PRDs, roadmap and first-version design, and leading a 15-person team.",
+            "**Tripled onboarding-to-trial conversion (2.4% → 7.2%)** by A/B testing paywalls, adding behaviour-triggered nudges and restructuring onboarding around Amplitude drop-offs.",
+            "**Lifted DAU by 10% and saved Rs. 20L+ a year** by building event-based push notifications in-house instead of buying a third-party tool.",
+            "Chose a freemium model so users see value before paying, raising **trial-to-paid from 27% to 30%**, and added D2C commerce that now brings Rs. 3L+ in monthly orders.",
+            "**Cut drop-off at the crop selection step by 15%** with fuzzy search, voice search and state-based ranking.",
+            "Built **Farm Monitoring** from scratch so farmers geotag their fields and track crop health, disease risk and irrigation on satellite vegetation maps in 13 languages (9.8K+ MAU, 1.6K+ peak DAU).",
+            "Created **Crop Guide**, a no-code engine that answers farmers' “what should I plant?” by ranking the top 5 crops on climate, soil, budget and rotation for 655K+ farm profiles (7.7K+ MAU).",
+            "Shipped **Crop Doctor** end to end, using computer vision to detect crop diseases, severity and stage from a photo (4.8K+ MAU).",
+            "Developed **cattle AI** for Gau Sampurna that detects 20+ diseases, assesses health, predicts market value and gives buying recommendations.",
+            "Launched an **LLM-powered chatbot** on the D2C website and app that helps users describe and diagnose problems in plain language.",
           ],
         },
         {
-          title: "Kissan Sampurna & Gau Sampurna Apps (Growth & Monetization)",
+          title: "Sales & Delivery Platforms",
           bullets: [
-            "Defined the **freemium monetization model**: free core advisory to drive adoption, with AI diagnostics behind a paid subscription.",
-            "Restructured onboarding from Amplitude funnel drop-offs, lifting install-to-signup conversion by **3%**.",
-            "**Tripled onboarding-to-trial conversion (2.4% → 7.2%)** with redesigned paywalls and behaviour-triggered nudges, and raised trial-to-paid **from 27% to 30%**.",
-            "Developed an **in-house, event-based push notification system** triggered by disease-risk alerts, weather changes, and other farm events, **raising DAU by 15%**.",
-          ],
-        },
-        {
-          title: "Internal Sales CRM & Telecalling Platform",
-          bullets: [
-            "Delivered a 0→1 in-house CRM replacing Excel for **150+ telecallers**, now handling **130K+ leads** and **Rs. 1 Cr+ in sales a month**.",
-            "Automated lead capture from D2C web and app for the **32+ SKU** catalog, following each customer from first touchpoint to repeat purchase.",
-            "Engineered **rule-based lead routing** by language, region, and source, pairing each farmer with a local, same-language agent.",
-            "Integrated Exotel click-to-call, call recording, and automated WhatsApp follow-ups, ending manual dialing and **saving 6,000+ agent-hours/month** (∼40/agent).",
-          ],
-        },
-        {
-          title: "Sampurna Rider App & Outlet ERP (Last-Mile Logistics & Operations)",
-          bullets: [
-            "Drove the 0→1 build of a rider app and outlet ERP from PRD to UI/UX prototypes, replacing manual fulfillment with end-to-end tracking from CRM sale to doorstep.",
-            "Architected serviceability-based order routing across **98 outlets in 4 states**, and piloted algorithmic rider assignment to remove manual allocation by outlet managers.",
-            "Deployed the rider app to **100+ in-house riders** handling **9K+ deliveries/month**, with map navigation, photo + OTP proof of delivery, and instant SMS/WhatsApp updates.",
-            "Digitized doorstep payments (cash and dynamic UPI QR), reconciling **Rs. 3L+ in daily collections** against delivered orders.",
-            "Designed a closed-loop disposition flow escalating cancellations and postponements to the CRM for verification, **cutting cancellations by ∼8%** and lifting deliveries per rider.",
+            "Delivered a 0→1 CRM for 150+ telecallers that auto-captures leads from lead-gen campaigns, the website and the app, now handling **130K+ leads** and **Rs. 1 Cr+ in monthly sales** with lead scoring and same-language routing, avoiding Rs. 15L+ a year in licences.",
+            "**Saved 3,000+ agent-hours a month** by automating click-to-call, call recording and WhatsApp follow-ups.",
+            "Replaced manual fulfillment at 98 outlets with a 0→1 rider app and outlet ERP that routes orders to the nearest serviceable outlet, used by 100+ riders for **9K+ monthly deliveries** and Rs. 3L+ in daily UPI collections.",
+            "**Cut order cancellations by ∼6% and RTO by 4%** with a closed-loop disposition flow and RTO-risk scoring.",
+            "Designed **cohort-based WhatsApp lifecycle journeys** for lead gen and D2C, covering lead nurture, cart recovery, delivery confirmation and win-back.",
           ],
         },
       ],
     },
     {
-      title: "Product Management Intern - AltQube",
-      period: "06/2023 - 09/2025",
+      title: "Product Management Intern | AltQube",
+      period: "06/2023 – 08/2025",
+      sub: "Part-time internship alongside B.E. studies at a wealth management startup. From Oct 2024, also worked on Silo Fortune's apps through AltQube's partnership, converting to full-time APM at Silo in Sep 2025.",
       groups: [
         {
           bullets: [
-            "Launched a 0→1 hyper-personalized wealth management platform (web & mobile) with a **15-member team** of engineers, designers, data scientists, and economists, scaling AUM past **Rs. 1 Cr**.",
-            "Owned V1 product design end-to-end in Figma: **80+ screens** from research-backed user flows and wireframes to high-fidelity interactive prototypes.",
-            "Co-developed a SEBI-compliant **AI recommendation engine** using **12+ investor parameters** (risk tolerance, goals, behaviour) for real-time portfolio suggestions in “Build Your Own Portfolio”.",
-            "Unlocked in-app investing by connecting **9 fintech partners** (Razorpay, Signzy, CAMS, KFintech, CVL, MF Central +3) and **42 AMCs**, documenting **40+ APIs** for equities, mutual funds, and e-KYC.",
+            "Helped launch a 0→1 wealth management platform (web & mobile) with an 8-member team, designing its 80+ first-release screens in Figma as AUM grew past Rs. 1 Cr.",
+            "Integrated 9 fintech partners and 42 AMCs for in-app investing, and co-developed a SEBI-compliant AI recommendation engine.",
           ],
         },
       ],
@@ -82,14 +72,13 @@ export const resumeDocument = {
   ] as ResumeEntry[],
   beyondWork: [
     {
-      title: "Former International Athlete, Team India - Open Water Swimming",
-      period: "2013 - 2020",
+      title: "Former International Athlete, Team India | Open Water Swimming",
+      period: "2013 – 2020",
       groups: [
         {
           bullets: [
-            "Competed professionally for **7+ years**, representing India at the **World Open Water Championships 2018** (Israel) in the 5 km event against 200+ elite athletes from 50+ countries.",
-            "Led the **Indian National Relay Team** at international competition.",
-            "Won **3 National Gold**, 2 Silver, and 1 Bronze medals in open water swimming.",
+            "Competed professionally for 7+ years, representing India at the **World Open Water Championships 2018** (Israel) in the 5 km event against 200+ athletes from 50+ countries, and led India's relay team there.",
+            "Won multiple national medals, including gold, in open water swimming.",
           ],
         },
       ],
@@ -98,22 +87,20 @@ export const resumeDocument = {
   education: [
     {
       school: "M. S. Ramaiah Institute of Technology, Bangalore",
-      period: "01/2021 - 07/2025",
+      period: "01/2021 – 07/2025",
       detail: "B.E. in Information Science and Engineering | CGPA: 8.30",
     },
   ],
   skills: [
     {
-      label: "Product & UX",
+      label: "Product",
       items:
-        "0→1 Product Development, Product Strategy, PRD Writing, Roadmapping, Feature Prioritization, Monetization (Freemium & Subscription), Funnel Optimization, A/B Testing, User Research, Usability Testing, Competitive Research, GTM Planning, Agile/Scrum, UI/UX",
+        "0→1 Product Development, Product Strategy, PRDs, Roadmapping, Prioritization, Growth & Monetization (Freemium, Subscription), Funnel Optimization, A/B Testing, User Research, GTM, UI/UX",
     },
-    { label: "Technical", items: "Python, SQL, API Integrations & Documentation, Data-Driven Decision Making" },
-    { label: "Tools & Analytics", items: "Figma, ClickUp, Mixpanel, Amplitude, Google Analytics, Lucidchart, Canva" },
+    { label: "Technical & Tools", items: "SQL, Python, API Integrations, Figma, Amplitude, Mixpanel, Google Analytics, ClickUp" },
     {
       label: "Domains",
-      items:
-        "FinTech & WealthTech, Consumer Mobile Apps (B2C), CRM & Sales Platforms, ERP & Last-Mile Delivery, AI/Computer Vision Features",
+      items: "AI Products (LLM, Computer Vision), Consumer Mobile Apps (B2C), FinTech & WealthTech, CRM & Delivery Platforms",
     },
   ],
 };

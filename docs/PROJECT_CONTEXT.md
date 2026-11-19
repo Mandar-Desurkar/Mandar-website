@@ -64,9 +64,12 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
   words never wrap (the LaTeX forbids breaks at hyphens). Page break: after the CRM group (each group is a LaTeX `keep`;
   if content changes, re-check which groups fit on page 1). Text is real and copyable (NoInspect lets
   copy and right-click through inside `[data-allow-copy]`). Content: `src/data/resumeDocument.ts`, word for
-  word from the LaTeX source. Download serves `public/Mandar_Desurkar_Resume.pdf` (95 KB). **After changing the resume, regenerate
-  the PDF:** open `/resume` in Chrome → Print → Save as PDF (paper Letter, margins none, background graphics
-  on), save over that file. Linked from About Me ("View resume", new tab), the phone hero ("View Resume"), phone
+  word from the LaTeX source (latest version received 2026-11-19: a tagline under the name, an italic
+  `sub` line under each entry, two Silo groups). Download serves `public/Mandar_Desurkar_Resume.pdf` (81 KB). **After
+  changing the resume, regenerate the PDF:** open `/resume` in Chrome → Print → Save as PDF (paper Letter, margins none,
+  background graphics on), save over that file (or puppeteer `page.pdf` with the same settings). Page break: the
+  "Sales & Delivery Platforms" list flows across it like the LaTeX (`SALES_ON_PAGE_1` in `app/resume/page.tsx`, now 4);
+  re-measure page 1 if the content changes. Linked from About Me ("View resume", new tab), the phone hero ("View Resume"), phone
   Search (a "Resume" result) and the phone Contact card (a "resume" row).
 - **Case studies** (2026-10-30; Farm Monitoring added 2026-10-31, AI Crop Doctor 2026-11-01; Gau Sampurna's Cattle Health Check,
   Market Value and Cow Dung Check 2026-11-03): six in all, content in `src/data/caseStudies.ts` (typed; every public statistic
@@ -421,6 +424,15 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 
 ## Changelog
 
+- 2026-11-19: **Site brought in line with the owner's new LaTeX resume.** `experiences`: new bullets word for
+  word (DAU +10% and ₹20L+ saved, freemium + D2C merged, 3,000+ agent-hours, ~6% cancellations, CRM
+  auto-capture, nearest-outlet routing), Sales group renamed "Sales & Delivery Platforms", consumer list still
+  split 5 + 5 for the phone; AltQube bullets; `beyondWork.bullets` (relay at the 2018 Worlds; "multiple
+  national medals, including gold"). Owner's calls: About savings ₹27L+ → **₹35L+** (₹20L+ + ₹15L+), and medal
+  counts dropped everywhere (the "3 national golds" stat tile is now "Relay · led India's team", and the desk
+  cat's swim answer changed). `profile.summary` = the resume summary. `/resume` rewritten from the new LaTeX
+  (tagline, entry `sub`, new skills), PDF regenerated (2 Letter pages, 4 links, text extracts "250K+",
+  "Rs. 12 Cr+"). The site's own Skills & Toolkit keeps its fuller list (a superset of the resume's).
 - 2026-11-16: **Desktop Case Studies cards now lead with the cover art** (owner's request; Gemini, +₹50
   budget approved, ₹46.89 spent, ledger ₹116.39 of ₹130). Each phone cover was recomposed by Gemini into
   a 3:2 frame (the phone image sent as a reference, so the art matches) and saved as
