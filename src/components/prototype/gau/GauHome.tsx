@@ -6,7 +6,7 @@
 // my-herd-section, recommended-for-you-section, recent-scans-section, home-products-section with
 // explore-dairy-supplies, category-content-banner and products/ParentProductCard). The category strip,
 // stats banner and product row are exported for the Shop tab. Herd and scan values are samples.
-import { useEffect, useState, type ComponentType } from "react";
+import { useEffect, useRef, useState, type ComponentType } from "react";
 import {
   ArrowUpRight,
   Bell,
@@ -26,6 +26,7 @@ import {
   Star,
   TriangleAlert,
   User,
+  Users,
   X,
 } from "lucide-react";
 import h from "./gauHome.module.css";
@@ -112,11 +113,11 @@ const DELIVERY = (() => {
   return d.toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long" });
 })();
 
-export function ProductRow({ p, onOpen, hint }: { p: Product; onOpen: () => void; hint?: boolean }) {
+export function ProductRow({ p, onOpen, hint, hideCart, className }: { p: Product; onOpen: () => void; hint?: boolean; hideCart?: boolean; className?: string }) {
   const [qty, setQty] = useState(0);
   const off = Math.round(((p.mrp - p.price) / p.mrp) * 100);
   return (
-    <div className={`${h.pRow} ${hint ? u.hotspot : ""}`}>
+    <div className={`${h.pRow} ${hint ? u.hotspot : ""} ${className ?? ""}`}>
       <button type="button" className={`${u.btnReset} ${h.pImgCol}`} onClick={onOpen} aria-label={p.title}>
         <img className={h.verified} src={gimg("verified-badge.webp")} alt="GS Verified" />
         <img className={h.pImg} src={gimg(p.image)} alt="" />
@@ -138,7 +139,7 @@ export function ProductRow({ p, onOpen, hint }: { p: Product; onOpen: () => void
         <div className={h.delivery}>
           Free Delivery by <b>{DELIVERY}</b>
         </div>
-        {qty > 0 ? (
+        {hideCart ? null : qty > 0 ? (
           <span className={h.pStepper}>
             <button type="button" className={u.btnReset} onClick={() => setQty((q) => q - 1)} aria-label="Remove one">
               <Minus size={18} />
@@ -221,10 +222,25 @@ function Home({ goToFlow }: ScreenProps) {
   const [category, setCategory] = useState<string | null>(null);
   const toast = useToast();
 
+  // health-alert-banner.jsx (prod, Nov 2026): the Dairy Fortune ambassador slide first, then the two
+  // health slides; it moves on by itself every 4 s and waits while you swipe
   const banners = [
-    { badge: "Health Alert", badgeBg: "#FFA000", badgeColor: "#fff", title: "Is your cow facing udder problems?", sub: "She may be suffering without you knowing.", cta: "Check Now", bg: "#F6EFE6", image: "banner-udder-cow.webp", onPress: () => setSheet(1) },
-    { badge: "Preventive Care", badgeBg: "#CBE5FE", badgeColor: "#004691", title: "Keep your cow Healthy & Productive", sub: "Regular health check helps prevent and improve milk yield.", cta: "Learn More", bg: "#EEF7FC", image: "banner-healthy-cow.webp", onPress: () => goToFlow("disease-check") },
+    { id: "dairy-fortune", onPress: () => goToFlow("gs-shop", "gs-product") },
+    { id: "udder", badge: "Health Alert", badgeBg: "#FFA000", badgeColor: "#fff", title: "Is your cow facing udder problems?", sub: "She may be suffering without you knowing.", cta: "Check Now", bg: "#F6EFE6", image: "banner-udder-cow.webp", imgW: 166, imgH: 126, onPress: () => setSheet(1) },
+    { id: "healthy", badge: "Preventive Care", badgeBg: "#CBE5FE", badgeColor: "#004691", title: "Keep your cow Healthy & Productive", sub: "Regular health check helps prevent and improve milk yield.", cta: "Learn More", bg: "#EEF7FC", image: "banner-healthy-cow.webp", imgW: 170, imgH: 122, onPress: () => goToFlow("disease-check") },
   ];
+  const trackRef = useRef<HTMLDivElement>(null);
+  const touching = useRef(false);
+  useEffect(() => {
+    if (sheet) return;
+    const t = window.setInterval(() => {
+      const el = trackRef.current;
+      if (!el || touching.current) return;
+      const next = (Math.round(el.scrollLeft / 355) + 1) % 3;
+      el.scrollTo({ left: next * 355, behavior: "smooth" });
+    }, 4000);
+    return () => window.clearInterval(t);
+  }, [sheet]);
 
   return (
     <div className={`${u.screen} ${h.page}`}>
@@ -249,13 +265,40 @@ function Home({ goToFlow }: ScreenProps) {
         {/* health-alert-banner.jsx */}
         <div className={h.carousel}>
           <div
+            ref={trackRef}
             className={h.track}
             onScroll={(e) => setBanner(Math.round(e.currentTarget.scrollLeft / 355))}
+            onPointerDown={() => (touching.current = true)}
+            onPointerUp={() => (touching.current = false)}
+            onPointerLeave={() => (touching.current = false)}
           >
-            {banners.map((b, i) => (
-              <button key={b.title} type="button" className={`${u.btnReset} ${h.banner} ${i === 0 ? u.hotspot : ""}`} style={{ background: b.bg }} onClick={b.onPress}>
+            {banners.map((b, i) =>
+              b.id === "dairy-fortune" ? (
+                // dairy-fortune-banner.jsx
+                <button key={b.id} type="button" className={`${u.btnReset} ${h.banner} ${h.df} ${i === 0 ? u.hotspot : ""}`} onClick={b.onPress}>
+                  <img className={h.dfBg} src={gimg("banner-dairy-fortune.webp")} alt="" />
+                  <span className={h.dfWash} />
+                  <span className={h.dfText}>
+                    <span>
+                      <span className={h.dfChip}>Dairy Fortune</span>
+                      <b className={h.dfHead}>
+                        SNF 9 and
+                        <br />
+                        Fat 4.5
+                      </b>
+                      <span className={h.dfTrust}>
+                        <Users size={16} strokeWidth={2.2} /> Used by 1 lakh farmers
+                      </span>
+                    </span>
+                    <span className={h.dfCta}>
+                      Buy now <ChevronRight size={16} />
+                    </span>
+                  </span>
+                </button>
+              ) : (
+              <button key={b.id} type="button" className={`${u.btnReset} ${h.banner}`} style={{ background: b.bg }} onClick={b.onPress}>
                 <span className={h.quadrant} />
-                <img className={h.bannerImg} src={gimg(b.image)} alt="" />
+                <img className={h.bannerImg} src={gimg(b.image ?? "")} alt="" style={{ width: b.imgW, height: b.imgH }} />
                 <span className={h.bannerText} style={{ display: "block" }}>
                   <span className={h.pill} style={{ background: b.badgeBg, color: b.badgeColor }}>
                     {b.badge}
@@ -267,11 +310,12 @@ function Home({ goToFlow }: ScreenProps) {
                   </span>
                 </span>
               </button>
-            ))}
+              ),
+            )}
           </div>
           <div className={h.dots}>
             {banners.map((b, i) => (
-              <i key={b.title} className={i === banner ? h.on : undefined} />
+              <i key={b.id} className={i === banner ? h.on : undefined} />
             ))}
           </div>
         </div>
@@ -296,7 +340,7 @@ function Home({ goToFlow }: ScreenProps) {
             </span>
             Add Cow
           </button>
-          <button type="button" className={`${u.btnReset} ${h.qa}`} onClick={() => toast.show("Calling vet helpline 1800 419 7848")}>
+          <button type="button" className={`${u.btnReset} ${h.qa}`} onClick={() => toast.show("Calling vet helpline 96867 62626")}>
             <span className={h.qaTop}>
               <img src={gimg("qa-helpline.webp")} alt="" />
               <span className={h.arrow}>

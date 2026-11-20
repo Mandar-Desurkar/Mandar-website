@@ -101,7 +101,7 @@ function Account({ go, goToFlow }: ScreenProps) {
         <div className={a.quick}>
           {[
             [<User key="u" size={18} color="#004691" />, "#E8F5E9", "Edit Profile", "gs-profile"],
-            [<Languages key="l" size={18} color="#1E88E5" />, "#E3F2FD", "English", "gs-language"],
+            [<Languages key="l" size={18} color="#1E88E5" />, "#E3F2FD", "Language", "gs-language"],
             [<MapPin key="m" size={18} color="#FB8C00" />, "#FFF3E0", "Address", "gs-addresses"],
           ].map(([icon, bg, label, screen]) => (
             <button key={label as string} type="button" className={`${u.btnReset} ${a.quickCard}`} onClick={() => go(screen as string)}>

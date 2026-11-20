@@ -5,7 +5,7 @@
 // launch, else login), account/language-screen.jsx, registration/login-screen-2.jsx (+91 number, 4-digit
 // code), otp-screen-2.jsx, register-screen.jsx (name + optional email) and onboarding/onboarding-screen.jsx
 // (4 slides with feature chips, then Home).
-import { useEffect, useRef, useState, type ComponentType } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type ComponentType } from "react";
 import { ArrowLeft } from "lucide-react";
 import w from "./gauWelcome.module.css";
 import { gimg, u } from "./GauShared";
@@ -14,20 +14,50 @@ import type { ScreenProps } from "../kissan/KissanScreens";
 
 const ICON = "/apps/gau-sampurna-icon.png";
 
+// splash-screen.jsx (prod, Nov 2026): a ~3.2 s piece on #04489B. Logo pops in, GAU SWASTHA and the lime
+// tagline rise, the ambassador photo slides up from 0.9 s and slowly zooms, a lime scan line sweeps the phone
+// in his hand twice from 2 s, then "Scan your cow in seconds" and the footer. The photo is 70% of the
+// screen (at least 594 at a 390 width) and never starts above 220.
 function Splash({ next }: ScreenProps) {
+  const ref = useRef<HTMLButtonElement>(null);
+  const [box, setBox] = useState({ w: 375, h: 812 });
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (el) setBox({ w: el.clientWidth, h: el.clientHeight });
+  }, []);
   useEffect(() => {
-    const t = setTimeout(next, 2200);
+    const t = setTimeout(next, 3400);
     return () => clearTimeout(t);
   }, [next]);
+  const photoH = Math.max(594 * (box.w / 390), box.h * 0.7);
+  const photoTop = Math.max(220, box.h - photoH);
+  const fadeH = photoTop + 190;
   return (
-    <button type="button" className={`${u.btnReset} ${w.splash}`} onClick={next} aria-label="Continue">
-      <img src={ICON} alt="" className={w.splashLogo} />
-      <span className={w.splashText}>
-        <b>GAU SWASTHA</b>
-        <i />
-        <small>DAIRY HEALTH, IN YOUR POCKET</small>
+    <button ref={ref} type="button" className={`${u.btnReset} ${w.splash}`} onClick={next} aria-label="Continue">
+      <span className={w.splashPhotoBox} style={{ top: photoTop, height: photoH }}>
+        <span className={w.splashPhoto}>
+          <img src={gimg("splash-photo.webp")} alt="" />
+          <span className={w.splashScan}>
+            <i className={w.splashPulse} />
+            <i className={w.splashLine} />
+          </span>
+        </span>
       </span>
-      <span className={w.splashFooter}>by Gau Sampurna · Silo Fortune</span>
+      <span
+        className={w.splashTopFade}
+        style={{
+          height: fadeH,
+          background: `linear-gradient(180deg, #04489B 0, #04489B ${Math.max(0, photoTop - 10)}px, rgba(4,72,155,0.55) ${photoTop + 75}px, rgba(4,72,155,0) 100%)`,
+        }}
+      />
+      <img src={gimg("logo-badge.webp")} alt="Gau Sampurna" className={w.splashLogo} />
+      <b className={w.splashTitle}>GAU SWASTHA</b>
+      <small className={w.splashTagline}>DAIRY HEALTH, IN YOUR POCKET</small>
+      <span className={w.splashBottomFade} />
+      <b className={w.splashFeature}>Scan your cow in seconds</b>
+      <span className={w.splashFooter}>
+        by Gau Sampurna <i>|</i> Silo Fortune
+      </span>
     </button>
   );
 }

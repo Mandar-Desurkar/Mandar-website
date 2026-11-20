@@ -5,10 +5,10 @@
 // paywall-flow-screen.jsx (3 steps: intro → features → checkout, with StepDots, TestimonialVideo,
 // TrustCarousel, PlanTimeline, TermsLine, SecurePill) in its trial / expired / failed checkout states,
 // and subscription-success-screen.jsx. Pricing follows the designs (₹1 trial, then ₹399/yr).
-import { useEffect, useState, type ComponentType } from "react";
-import { ArrowLeft, Check, CircleAlert, Lock, Star, Volume2, VolumeX, X } from "lucide-react";
+import { useEffect, useLayoutEffect, useRef, useState, type ComponentType } from "react";
+import { ArrowLeft, Check, ChevronRight, CircleAlert, CreditCard, Lock, Star, Volume2, VolumeX, X } from "lucide-react";
 import p from "./gauPratham.module.css";
-import { gimg, u } from "./GauShared";
+import { GauSheet, gimg, u } from "./GauShared";
 import type { ScreenProps } from "../kissan/KissanScreens";
 
 type Checkout = "trial" | "expired" | "failed";
@@ -226,16 +226,78 @@ function PlanCard({ state }: { state: Checkout }) {
   );
 }
 
+// subscriptions/UpiAppSheet.jsx: "Select UPI app", one row per installed app (square icon, name, chevron),
+// then "Other payment methods (Card, Netbanking)"
+const UPI_APPS = [
+  ["upi-gpay.webp", "Google Pay"],
+  ["upi-phonepe.webp", "PhonePe"],
+  ["upi-paytm.webp", "Paytm"],
+  ["upi-bhim.webp", "BHIM"],
+  ["upi-amazonpay.webp", "Amazon Pay"],
+];
+
+function UpiSheet({ onPick, onClose }: { onPick: () => void; onClose: () => void }) {
+  return (
+    <GauSheet label="Select UPI app" onClose={onClose}>
+      <div className={p.upiSheet}>
+        <i className={p.upiHandle} />
+        <div className={p.upiHead}>
+          <b>Select UPI app</b>
+          <button type="button" className={u.btnReset} onClick={onClose} aria-label="Close">
+            <X size={22} color="#7A7A7A" />
+          </button>
+        </div>
+        {UPI_APPS.map(([icon, name], i) => (
+          <button key={name} type="button" className={`${u.btnReset} ${p.upiRow} ${i === 0 ? u.hotspot : ""}`} onClick={onPick}>
+            <img src={gimg(icon)} alt="" />
+            <span>{name}</span>
+            <ChevronRight size={20} color="#D9E2EC" />
+          </button>
+        ))}
+        <button type="button" className={`${u.btnReset} ${p.upiOther}`} onClick={onPick}>
+          <CreditCard size={20} color="#004691" />
+          Other payment methods (Card, Netbanking)
+        </button>
+      </div>
+    </GauSheet>
+  );
+}
+
+// paywall/components/DhananjayAmbassador.jsx (prod, Nov 2026): the brand ambassador pointing down at the
+// first CTA, sitting on its top edge. 239 × 132, made smaller (same shape) when the gap between the
+// carousel dots and the button is shorter, always keeping 8 clear of the dots.
+function Ambassador() {
+  const ref = useRef<HTMLImageElement>(null);
+  const [h, setH] = useState(132);
+  useLayoutEffect(() => {
+    const img = ref.current;
+    const screen = img?.closest(`.${p.screen}`);
+    const dots = screen?.querySelector(`.${p.carouselDots}`);
+    const btn = img?.parentElement?.querySelector("button");
+    if (!img || !dots || !btn) return;
+    // rects are in screen pixels; the prototype may be scaled, so convert back to layout pixels
+    const k = btn.offsetHeight / btn.getBoundingClientRect().height || 1;
+    const gap = (btn.getBoundingClientRect().top - dots.getBoundingClientRect().bottom) * k;
+    setH(Math.max(0, Math.min(132, gap - 8)));
+  }, []);
+  if (h < 24) return null;
+  return <img ref={ref} className={p.ambassador} src={gimg("pw-dhananjay.webp")} alt="" style={{ height: h, width: Math.round((h * 239) / 132) }} />;
+}
+
 function Paywall({ step, state = "trial", next, back, go, goToFlow }: ScreenProps & { step: 1 | 2 | 3; state?: Checkout }) {
   const hero = step === 3 && state !== "failed";
   const [busy, setBusy] = useState(false);
+  const [upi, setUpi] = useState(false);
   const cta =
     step === 1 ? "See What's Included" : step === 2 ? "See Your Plan" : state === "failed" ? "Retry Payment" : state === "trial" ? "Start My ₹1 Trial" : `Subscribe for ₹${PRICE}`;
-  const onCta = () => {
-    if (step < 3) return next();
+  const pay = () => {
+    setUpi(false);
     setBusy(true);
     setTimeout(() => go(state === "expired" ? "gs-pw-success-annual" : "gs-pw-success"), 900);
   };
+  // useCashfreeSubscription.js (prod, Nov 2026): on Android the installed UPI apps are listed first and the
+  // mandate opens straight in the one picked; card and netbanking stay one tap away
+  const onCta = () => (step < 3 ? next() : setUpi(true));
   return (
     <div className={`${u.screen} ${p.screen} ${hero ? p.onHero : ""}`}>
       {hero && (
@@ -289,11 +351,15 @@ function Paywall({ step, state = "trial", next, back, go, goToFlow }: ScreenProp
             By continuing, you agree to our <b>Terms</b> and <b>Privacy Policy</b>
           </p>
         )}
-        <button type="button" className={`${u.btnReset} ${p.cta} ${u.hotspot}`} onClick={onCta} disabled={busy}>
-          {busy ? <span className={p.spinner} aria-label="Processing" /> : cta}
-        </button>
+        <div className={p.ctaWrap}>
+          {step === 1 && <Ambassador />}
+          <button type="button" className={`${u.btnReset} ${p.cta} ${u.hotspot}`} onClick={onCta} disabled={busy}>
+            {busy ? <span className={p.spinner} aria-label="Processing" /> : cta}
+          </button>
+        </div>
         {step === 3 && <SecurePill onImage={hero} label={state === "failed" ? "Secure Payments. Cancel anytime." : "Secure payment · Cancel anytime"} />}
       </div>
+      {upi && <UpiSheet onPick={pay} onClose={() => setUpi(false)} />}
     </div>
   );
 }

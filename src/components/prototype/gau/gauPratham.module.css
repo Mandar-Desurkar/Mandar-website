@@ -706,3 +706,89 @@
 @media (prefers-reduced-motion: reduce) {
   .trustCard, .spinner { animation: none; }
 }
+
+/* DhananjayAmbassador.jsx: anchored on the CTA's top edge, centred, above everything */
+.ctaWrap {
+  position: relative;
+  width: 100%;
+}
+
+.ctaWrap > .cta {
+  width: 100%;
+}
+
+.ambassador {
+  position: absolute;
+  left: 50%;
+  bottom: 56px;
+  transform: translateX(-50%);
+  object-fit: contain;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* subscriptions/UpiAppSheet.jsx */
+.upiSheet {
+  display: flex;
+  flex-direction: column;
+  margin: -4px 0 0;
+}
+
+.upiHandle {
+  align-self: center;
+  width: 40px;
+  height: 4px;
+  margin-bottom: 14px;
+  border-radius: 2px;
+  background: #d1d5db;
+}
+
+.upiHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+}
+
+.upiHead b {
+  color: #231f20;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.upiRow {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 14px 0;
+  border-bottom: 0.5px solid #e5e7eb;
+  text-align: left;
+}
+
+.upiRow img {
+  width: 38px;
+  height: 38px;
+  margin-right: 16px;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+.upiRow span {
+  flex: 1;
+  color: #231f20;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.upiOther {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 16px 0;
+  color: #004691;
+  font-size: 14px;
+  font-weight: 600;
+}

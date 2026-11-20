@@ -434,6 +434,24 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 
 ## Changelog
 
+- 2026-11-20: **App prototypes checked against the apps' latest `prod`.** Kissan `prod` 2736b3b: only deep-link
+  routing and analytics changed, no UI, so its prototype is unchanged. Gau `prod` 5b36102 → **b040163** (24
+  commits), synced: new **splash** (blue #04489B, round Gau Sampurna badge, GAU SWASTHA + lime tagline, the
+  ambassador photo slides up with a lime scan sweeping the phone in his hand, "Scan your cow in seconds", ~3.4 s);
+  **Home** carousel opens on the Dairy Fortune ambassador slide (SNF 9 and Fat 4.5 · Used by 1 lakh farmers ·
+  Buy now → product page), auto-advances every 4 s, smaller cow art on the two health slides, vet helpline
+  96867 62626 (was 1800 419 7848, also in the disease report); **scan landing** per scan type replaces the photo
+  tips (title bar with round back button, 240 hero photo, overlapping sheet with the question, HOW IT WORKS in
+  three pictures, Open Camera / Choose from Gallery); **Report ready step removed** (the app opens the report
+  straight from Analyzing; 5 screens dropped from the flows); **Recommended Products** row = 280-wide product
+  cards without the cart button, no View All, and the dung report now uses it ("RECOMMENDED FOR HER" + "For
+  digestive imbalance" pill) instead of one product card; breeding quality coloured by value; **Add cow** no
+  longer asks for breed (edit form too); cow profile **New Scan** repeats her last scan type, straight to its
+  landing; Account language button reads "Language"; **paywall** step 1 has the Dhananjay ambassador standing
+  on the CTA (shrinks to fit the gap above it); paying opens the **Select UPI app** sheet (GPay, PhonePe, Paytm,
+  BHIM, Amazon Pay, then Card / Netbanking). New art in `public/prototypes/gau-sampurna/` (WebP from the app's @2x
+  assets). Also: GS website header brand no longer wraps at 320px. Old CSS for the removed screens pruned.
+
 - 2026-11-20: **Gau Sampurna website prototype synced to the site's latest design** (owner: take the design
   from `~/Desktop/Codes/GS SITE` and the real images from `gs-products`, "nothing missed"). New product page
   (gallery with thumbs, USP icons, offer strip with shine, delivery/location sheet, Add to Cart → stepper + Go

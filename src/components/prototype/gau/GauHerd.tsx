@@ -8,7 +8,6 @@
 import { useState, type ComponentType } from "react";
 import {
   Camera,
-  Check,
   ChevronDown,
   ChevronRight,
   Droplets,
@@ -20,7 +19,6 @@ import {
   Plus,
   RotateCw,
   ScanLine,
-  Search,
   TriangleAlert,
   X,
 } from "lucide-react";
@@ -310,7 +308,9 @@ function CowProfile({ name, onEdit, goToFlow }: { name: string; onEdit: () => vo
         </button>
       </section>
 
-      <button type="button" className={`${u.btnReset} ${s.newScan} ${u.hotspot}`} onClick={() => goToFlow("disease-check", "gs-hub")}>
+      {/* my-herd-screen.jsx (prod, Nov 2026): New Scan repeats her last scan's type with her already picked,
+          straight to that scan's landing (no hub); a cow with no scans gets the Full Health Checkup */}
+      <button type="button" className={`${u.btnReset} ${s.newScan} ${u.hotspot}`} onClick={() => goToFlow(...rescan(last?.flow))}>
         <ScanLine size={20} />
         New Scan for {cow.name}
       </button>
@@ -371,6 +371,13 @@ function CowProfile({ name, onEdit, goToFlow }: { name: string; onEdit: () => vo
   );
 }
 
+const RESCAN: Record<string, [string, string]> = {
+  "dung-scan": ["dung-scan", "gs-capture-dung"],
+  "disease-check": ["disease-check", "gs-capture"],
+  "animal-status": ["animal-status", "gs-capture-status"],
+};
+const rescan = (flow?: string): [string, string] => RESCAN[flow ?? ""] ?? ["full-health", "gs-capture-full"];
+
 function EditCowModal({ name, onClose, onSave }: { name: string; onClose: () => void; onSave: () => void }) {
   const cow = HERD.find((c) => c.name === name) ?? HERD[0];
   const [pregnant, setPregnant] = useState(PROFILE[cow.name].pregnant !== "No");
@@ -381,10 +388,6 @@ function EditCowModal({ name, onClose, onSave }: { name: string; onClose: () => 
         <label className={s.inputLabel}>
           Cow Name
           <input className={s.modalInput} defaultValue={cow.name} />
-        </label>
-        <label className={s.inputLabel}>
-          Breed
-          <input className={s.modalInput} defaultValue={cow.breed} />
         </label>
         <label className={s.inputLabel}>
           Times Calved
@@ -451,7 +454,6 @@ function MyHerd({ go, goToFlow, back, initial }: ScreenProps & { initial: string
   );
 }
 
-const BREEDS = ["HF Cross", "Gir", "Sahiwal", "Jersey", "Red Sindhi", "Tharparkar", "Kankrej", "Rathi"];
 const RANGES = ["0–1.5 months", "1.5–4.5 months", "4.5–7 months", "7+ months"];
 
 function Stepper({ value, onChange }: { value: number | null; onChange: (n: number) => void }) {
@@ -485,9 +487,6 @@ function AddCow({ back, go }: ScreenProps) {
   const [photo, setPhoto] = useState(false);
   const [photoSheet, setPhotoSheet] = useState(false);
   const [name, setName] = useState("");
-  const [breed, setBreed] = useState("");
-  const [breedSheet, setBreedSheet] = useState(false);
-  const [search, setSearch] = useState("");
   const [calved, setCalved] = useState<number | null>(null);
   const [pregnant, setPregnant] = useState<boolean | null>(null);
   const [months, setMonths] = useState<number | null>(null);
@@ -495,7 +494,8 @@ function AddCow({ back, go }: ScreenProps) {
   const [milk, setMilk] = useState<number | null>(null);
   const [lastCalved, setLastCalved] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
-  const canSubmit = photo && name.trim() && breed && calved !== null && pregnant !== null && milking !== null;
+  // add-cow-screen.jsx (prod, Nov 2026): breed is no longer asked; every cow is saved as "Other" and the scan names it
+  const canSubmit = photo && name.trim() && calved !== null && pregnant !== null && milking !== null;
   const save = () => {
     setSaving(true);
     setTimeout(() => go("gs-herd"), 900);
@@ -537,13 +537,6 @@ function AddCow({ back, go }: ScreenProps) {
         <div className={s.fCard}>
           <span className={s.fieldLabel}>Name</span>
           <input className={s.input} value={name} onChange={(e) => setName(e.target.value)} placeholder="Gowri" aria-label="Name" />
-        </div>
-        <div className={s.fCard}>
-          <span className={s.fieldLabel}>Breed</span>
-          <button type="button" className={`${u.btnReset} ${s.select}`} onClick={() => setBreedSheet(true)}>
-            <span className={breed ? "" : s.placeholder}>{breed || "Select cow breed"}</span>
-            <ChevronDown size={20} color="#004691" />
-          </button>
         </div>
         <div className={s.fCard}>
           <span className={s.fieldLabel}>How many times did the cattle calve?</span>
@@ -622,38 +615,6 @@ function AddCow({ back, go }: ScreenProps) {
               {o}
             </button>
           ))}
-        </GauSheet>
-      )}
-
-      {breedSheet && (
-        <GauSheet label="Select Breed" onClose={() => setBreedSheet(false)}>
-          <div className={s.sheetHead}>
-            <b>Select Breed</b>
-            <button type="button" className={`${u.btnReset} ${s.closeBtn}`} onClick={() => setBreedSheet(false)} aria-label="Close">
-              <X size={18} />
-            </button>
-          </div>
-          <label className={s.searchBox}>
-            <Search size={18} color="#6B7280" />
-            <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search breed..." aria-label="Search breed" />
-          </label>
-          <div className={s.breedList}>
-            {["", ...BREEDS.filter((b) => b.toLowerCase().includes(search.toLowerCase()))].map((b) => (
-              <button
-                key={b || "none"}
-                type="button"
-                className={`${u.btnReset} ${s.breedItem} ${breed === b ? s.breedOn : ""}`}
-                onClick={() => {
-                  setBreed(b);
-                  setBreedSheet(false);
-                  setSearch("");
-                }}
-              >
-                {b || "Select cow breed"}
-                {breed === b && <Check size={18} color="#004691" />}
-              </button>
-            ))}
-          </div>
         </GauSheet>
       )}
     </div>

@@ -965,8 +965,7 @@
   color: #374151;
 }
 
-.input,
-.select {
+.input {
   height: 52px;
   padding: 0 16px;
   border-radius: 12px;
@@ -975,16 +974,6 @@
   font: inherit;
   font-size: 14px;
   color: #111827;
-}
-
-.select {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.placeholder {
-  color: rgba(0, 0, 0, 0.4);
 }
 
 .qtyTrack {
@@ -1181,47 +1170,6 @@
   font-size: 15px;
   font-weight: 600;
   color: #111827;
-}
-
-.searchBox {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  height: 46px;
-  padding: 0 14px;
-  border-radius: 12px;
-  background: #f3f4f6;
-}
-
-.searchBox input {
-  flex: 1;
-  border: 0;
-  background: none;
-  font: inherit;
-  font-size: 14px;
-  outline: none;
-}
-
-.breedList {
-  display: flex;
-  flex-direction: column;
-  margin-top: 8px;
-}
-
-.breedItem {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 12px;
-  border-radius: 10px;
-  font-size: 15px;
-  color: #111827;
-}
-
-.breedOn {
-  background: #eef4fb;
-  color: #004691;
-  font-weight: 700;
 }
 
 @media (prefers-reduced-motion: reduce) {

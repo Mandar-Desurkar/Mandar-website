@@ -35,7 +35,8 @@ import {
   Weight,
 } from "lucide-react";
 import r from "./gauReports.module.css";
-import { PRODUCTS, ProductCard, gimg, rupee, u } from "./GauShared";
+import { PRODUCTS, gimg, u } from "./GauShared";
+import { ProductRow } from "./GauHome";
 import type { ScreenProps } from "../kissan/KissanScreens";
 
 const GREEN = "#008026";
@@ -80,13 +81,19 @@ function VetAlert({ signs, label = "Free vet helpline · Call now" }: { signs: s
   );
 }
 
-function Recommended({ goToFlow }: { goToFlow: ScreenProps["goToFlow"] }) {
+// products/components/recommended-products-section.jsx (prod, Nov 2026): "Recommended Products" (or a title
+// the report passes), an optional green "For <condition>" pill, then 280-wide product cards without the cart
+// button that scroll sideways. No View All any more.
+function Recommended({ goToFlow, title, condition, products = PRODUCTS.slice(0, 3) }: { goToFlow: ScreenProps["goToFlow"]; title?: string; condition?: string; products?: typeof PRODUCTS }) {
   return (
     <section className={r.recSection}>
-      <span className={r.sectionTitle}>RECOMMENDED FOR YOU</span>
-      <div className={u.hScroll} style={{ padding: "0 0 4px" }}>
-        {PRODUCTS.slice(0, 3).map((p) => (
-          <ProductCard key={p.id} p={p} onOpen={() => goToFlow("gs-shop", "gs-product")} />
+      <span className={r.recHead}>
+        <b className={title ? r.recTitleCaps : undefined}>{title ?? "Recommended Products"}</b>
+        {condition && <i>For {condition.toLowerCase()}</i>}
+      </span>
+      <div className={r.recRow}>
+        {products.map((p) => (
+          <ProductRow key={p.id} p={p} hideCart className={r.recCard} onOpen={() => goToFlow("gs-shop", "gs-product")} />
         ))}
       </div>
     </section>
@@ -308,7 +315,7 @@ function Diagnosis({ back, go, goToFlow }: ScreenProps) {
             <b>A vet should see this cow</b>
             <small>Show them this report. Our helpline is free.</small>
           </span>
-          <a className={r.dxVetBtn} href="tel:18004197848" onClick={(e) => e.preventDefault()}>
+          <a className={r.dxVetBtn} href="tel:9686762626" onClick={(e) => e.preventDefault()}>
             <Phone size={16} /> Call
           </a>
         </div>
@@ -582,7 +589,7 @@ function StatusReport({ back, goToFlow, full }: ScreenProps & { full?: boolean }
             </span>
             <span>
               <small>Breeding Quality</small>
-              <b>Good</b>
+              <b style={{ color: "#2E7D32" }}>Good</b>
             </span>
           </div>
           <div className={r.marketRow}>
@@ -781,11 +788,12 @@ const SCORE_GUIDE = [
   { score: 5, desc: "Bleeding While Passing Dung", bg: "#FFF1F2", color: "#E11D48" },
 ];
 
+// Digestion: the complete feed supplement (rumen tonics, toxin binders) first
+const DUNG_PRODUCTS = [PRODUCTS[0], PRODUCTS[2], PRODUCTS[3]];
+
 function DungResults({ back, goToFlow }: ScreenProps) {
   const [guide, setGuide] = useState(true);
   const score = 2;
-  // Digestion: the complete feed supplement (rumen tonics, toxin binders)
-  const dung = PRODUCTS[0];
   return (
     <div className={u.screen}>
       <div className={r.header}>
@@ -876,27 +884,7 @@ function DungResults({ back, goToFlow }: ScreenProps) {
             </span>
           ))}
         </div>
-        <div className={r.contentCard}>
-          <span className={r.productHead}>
-            <b>RECOMMENDED FOR HER</b>
-            <i>For digestive imbalance</i>
-          </span>
-          <button type="button" className={`${u.btnReset} ${r.productRow}`} onClick={() => goToFlow("gs-shop", "gs-product")}>
-            <span className={r.productImg}>
-              <img src={gimg(dung.image)} alt="" />
-            </span>
-            <span>
-              <b>{dung.title}</b>
-              <small>{dung.desc}</small>
-              <span>
-                <strong>{rupee(dung.price)}</strong> <s>{rupee(dung.mrp)}</s>
-              </span>
-            </span>
-          </button>
-          <button type="button" className={`${u.btnReset} ${r.productCta}`} onClick={() => goToFlow("gs-shop", "gs-product")}>
-            Add to Cart
-          </button>
-        </div>
+        <Recommended goToFlow={goToFlow} title="RECOMMENDED FOR HER" condition="Digestive imbalance" products={DUNG_PRODUCTS} />
         <div className={r.dungVet}>
           <span className={r.dungVetHead}>
             <b>Call a vet immediately if</b>

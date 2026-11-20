@@ -1,68 +1,199 @@
 /* Gau Sampurna first run (prod): splash, language, login, OTP, register, onboarding. */
 
+/* splash-screen.jsx (prod, Nov 2026) */
 .splash {
   position: relative;
+  display: block;
   height: 100%;
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 22px;
-  background: #004691;
+  overflow: hidden;
+  background: #04489b;
   color: #fff;
+  text-align: center;
+}
+
+.splashPhotoBox {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+.splashPhoto {
+  position: absolute;
+  inset: 0;
+  animation: gsPhoto 2.3s 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.splashPhoto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+/* the phone in his hand: 64.4% from the left, 32% down, 11.5% × 16.3% of the photo */
+.splashScan {
+  position: absolute;
+  left: 64.4%;
+  top: 32%;
+  width: 11.5%;
+  height: 16.3%;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.splashPulse {
+  position: absolute;
+  inset: 0;
+  background: #cde12c;
+  opacity: 0;
+  animation: gsPulse 1.4s 2s linear both;
+}
+
+.splashLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 3px;
+  background: #e6f55a;
+  box-shadow: 0 0 5px #cde12c;
+  opacity: 0;
+  animation: gsSweep 1.4s 2s linear both;
+}
+
+.splashTopFade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+.splashBottomFade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 130px;
+  background: linear-gradient(180deg, rgba(4, 72, 155, 0) 0%, rgba(4, 72, 155, 0.85) 70%, #04489b 100%);
+  pointer-events: none;
 }
 
 .splashLogo {
-  width: 120px;
-  height: 120px;
-  border-radius: 28px;
-  background: #fff;
-  animation: pop 0.6s ease-out both;
+  position: absolute;
+  top: 52px;
+  left: 50%;
+  width: 128px;
+  height: 98px;
+  margin-left: -64px;
+  object-fit: contain;
+  animation: gsLogo 0.7s 0.2s ease-out both;
 }
 
-.splashText {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  animation: rise 0.6s 0.3s ease-out both;
-}
-
-.splashText b {
-  font-size: 28px;
+.splashTitle {
+  position: absolute;
+  top: 160px;
+  left: 0;
+  right: 0;
+  font-size: 26px;
   font-weight: 900;
-  letter-spacing: 3px;
+  line-height: 32px;
+  letter-spacing: 3.64px;
+  animation: gsRise14 0.6s 0.6s ease-out both;
 }
 
-.splashText i {
-  width: 44px;
-  height: 3px;
-  border-radius: 2px;
-  background: #d3d800;
+.splashTagline {
+  position: absolute;
+  top: 198px;
+  left: 0;
+  right: 0;
+  color: #cfd91f;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 18px;
+  letter-spacing: 2.08px;
+  animation: gsRise10 0.6s 0.85s ease-out both;
 }
 
-.splashText small {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  opacity: 0.85;
+.splashFeature {
+  position: absolute;
+  bottom: 92px;
+  left: 16px;
+  right: 16px;
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 28px;
+  animation: gsRise14 0.6s 2.3s ease-out both;
 }
 
 .splashFooter {
   position: absolute;
-  bottom: 32px;
-  font-size: 12px;
-  opacity: 0.7;
-  animation: rise 0.6s 0.6s ease-out both;
+  bottom: 56px;
+  left: 0;
+  right: 0;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+  opacity: 0.85;
+  animation: gsFooter 0.5s 2.7s ease-out both;
 }
 
-@keyframes pop {
-  from { opacity: 0; transform: scale(0.8); }
+.splashFooter i {
+  font-style: normal;
+  color: rgba(255, 255, 255, 0.7);
 }
 
-@keyframes rise {
-  from { opacity: 0; transform: translateY(12px); }
+@keyframes gsLogo {
+  from { opacity: 0; transform: scale(0.72); }
+}
+
+@keyframes gsRise14 {
+  from { opacity: 0; transform: translateY(14px); }
+}
+
+@keyframes gsRise10 {
+  from { opacity: 0; transform: translateY(10px); }
+}
+
+@keyframes gsFooter {
+  from { opacity: 0; }
+}
+
+/* slide up 70 and fade in over the first second, keep zooming to 1.045 */
+@keyframes gsPhoto {
+  0% { opacity: 0; transform: translateY(70px) scale(1); }
+  43% { opacity: 1; transform: translateY(0) scale(1.02); }
+  100% { opacity: 1; transform: translateY(0) scale(1.045); }
+}
+
+/* two sweeps down the phone: 0.5 s each, 0.3 s apart */
+@keyframes gsSweep {
+  0% { opacity: 1; top: 0; }
+  36% { opacity: 1; top: calc(100% - 3px); }
+  43% { opacity: 0; top: calc(100% - 3px); }
+  57% { opacity: 0; top: 0; }
+  58% { opacity: 1; top: 0; }
+  94% { opacity: 1; top: calc(100% - 3px); }
+  100% { opacity: 0; top: calc(100% - 3px); }
+}
+
+@keyframes gsPulse {
+  0% { opacity: 0; }
+  18% { opacity: 0.35; }
+  36% { opacity: 0; }
+  58% { opacity: 0; }
+  76% { opacity: 0.35; }
+  94%, 100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash * {
+    animation-duration: 0.01s !important;
+    animation-delay: 0s !important;
+  }
 }
 
 .topBar {
@@ -360,5 +491,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .splashLogo, .splashText, .splashFooter, .slide { animation: none; }
+  .splashLogo,
+.splashFooter,
+.slide { animation: none; }
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(12px); }
 }

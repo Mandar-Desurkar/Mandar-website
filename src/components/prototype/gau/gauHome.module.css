@@ -104,6 +104,94 @@
   text-align: left;
 }
 
+/* dairy-fortune-banner.jsx: 200 tall; the farm photo, a cream wash over the left 62%, the text column 47% */
+.df {
+  height: 200px;
+  border: 1px solid #e7dfd0;
+  background: #f3eee5;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.dfBg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dfWash {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 62%;
+  background: linear-gradient(90deg, rgba(250, 245, 237, 0.9) 0%, rgba(250, 245, 237, 0.7) 55%, rgba(250, 245, 237, 0) 100%);
+}
+
+.dfText {
+  position: absolute;
+  top: 16px;
+  bottom: 16px;
+  left: 16px;
+  width: 47%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.dfText > span:first-child {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.dfChip {
+  margin-bottom: 4px;
+  padding: 3px 9px;
+  border-radius: 14px;
+  background: #ffa400;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.dfHead {
+  margin-bottom: 4px;
+  color: #0a356a;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 18.5px;
+}
+
+.dfTrust {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #1e293b;
+  font-size: 14px;
+  line-height: 18.5px;
+}
+
+.dfTrust svg {
+  flex: none;
+}
+
+.dfCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 5.5px 12px;
+  border-radius: 20px;
+  background: #004691;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 3px 6px rgba(0, 70, 145, 0.2);
+}
+
 .quadrant {
   position: absolute;
   right: 0;

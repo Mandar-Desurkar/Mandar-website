@@ -394,6 +394,15 @@
   font-size: 16px;
   font-weight: 700;
   color: var(--blue-800) !important;
+  white-space: nowrap;
+}
+
+/* 320px phones: keep the name on one line next to search, cart and menu */
+@media (max-width: 340px) {
+  .brand {
+    gap: 6px;
+    font-size: 14px;
+  }
 }
 
 .brand img {

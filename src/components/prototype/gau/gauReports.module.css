@@ -49,7 +49,6 @@
   flex-shrink: 0;
 }
 
-.card,
 .section {
   display: flex;
   flex-direction: column;
@@ -85,224 +84,10 @@
   color: #333;
 }
 
-/* BlurOverlay */
-.locked {
-  position: relative;
-  min-height: 64px;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.blurred {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 10px;
-  filter: blur(4px);
-  user-select: none;
-  pointer-events: none;
-}
-
 .open {
   display: flex;
   flex-direction: column;
   gap: 8px;
-}
-
-.unlock {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  background: rgba(255, 255, 255, 0.35);
-  color: #004691;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-/* ViewFullReportBanner */
-.bannerRoot {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 20;
-}
-
-.bannerFade {
-  display: block;
-  height: 24px;
-  background: linear-gradient(rgba(247, 249, 252, 0), #f7f9fc);
-}
-
-.bannerCard {
-  padding: 4px 16px 16px;
-  border-radius: 20px 20px 0 0;
-  background: #fff;
-  box-shadow: 0 -6px 18px rgba(0, 0, 0, 0.08);
-}
-
-.handleRow {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 0;
-}
-
-.handleLeft {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #94a3b8;
-  font-size: 13px;
-}
-
-.handlePill {
-  width: 36px;
-  height: 4px;
-  border-radius: 2px;
-  background: #e2e8f0;
-}
-
-.handleChevron {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: #eef4fb;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.2s;
-}
-
-.compactBar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.compactLeft {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.compactLeft i {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: #eef4fb;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.compactLeft span {
-  display: flex;
-  flex-direction: column;
-}
-
-.compactLeft small {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  color: #94a3b8;
-}
-
-.compactLeft b {
-  font-size: 13px;
-  color: #0f172a;
-}
-
-.compactCta {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 8px 14px;
-  border-radius: 99px;
-  background: #d3d800;
-  color: #0f172a;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.bannerOpen {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.bannerOpen b {
-  font-size: 18px;
-  color: #0f172a;
-}
-
-.bannerOpen p {
-  margin: 0 0 4px;
-  font-size: 13px;
-  line-height: 18px;
-  color: #64748b;
-}
-
-.bannerTop {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 4px;
-}
-
-.premiumBadge {
-  padding: 3px 10px;
-  border-radius: 99px;
-  background: #d3d800;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 1px;
-}
-
-.lockChip {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 3px 10px;
-  border-radius: 99px;
-  background: #eef4fb;
-  color: #004691;
-  font-size: 11px;
-}
-
-.perks {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 6px;
-}
-
-.perks span {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 9px;
-  border-radius: 99px;
-  background: #eef4fb;
-  color: #004691;
-  font-size: 11px;
-}
-
-.plansCta {
-  height: 46px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  border-radius: 12px;
-  background: #d3d800;
-  color: #0f172a;
-  font-size: 15px;
-  font-weight: 700;
 }
 
 /* Vet alert (VetAlertCard / diagnosis call-vet) */
@@ -388,49 +173,18 @@
   gap: 12px;
 }
 
-/* Diagnosis */
-.heroImg {
-  height: 200px;
-  border-radius: 16px;
-  overflow: hidden;
-}
-
-.heroImg img,
-.cattleCard img,
 .cattleInfo img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.cattleCard {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px;
-  border-radius: 16px;
-  background: #fff;
-}
-
-.cattleCard img {
-  width: 56px;
-  height: 56px;
-  border-radius: 12px;
-}
-
-.cattleCard > span,
 .cattleInfo > span {
   display: flex;
   flex-direction: column;
   gap: 3px;
 }
 
-.cattleCard b {
-  font-size: 17px;
-  color: #222;
-}
-
-.cattleCard small,
 .cattleInfo small {
   display: flex;
   align-items: center;
@@ -438,20 +192,6 @@
   font-size: 12px;
   color: #666;
   font-weight: 500;
-}
-
-.dxStatus {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px;
-  border-radius: 16px;
-  background: #fff;
-}
-
-.dxStatus b {
-  font-size: 17px;
-  color: #222;
 }
 
 .sevBadge {
@@ -470,119 +210,6 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-}
-
-.dxTitle {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #333;
-}
-
-.countLabel {
-  font-size: 13px;
-  font-weight: 600;
-  color: #555;
-}
-
-.indicator {
-  display: flex;
-  gap: 8px;
-}
-
-.indicator i {
-  flex-shrink: 0;
-  width: 16px;
-  height: 16px;
-  margin-top: 1px;
-  border-radius: 50%;
-  color: #fff;
-  font-size: 10px;
-  font-style: normal;
-  font-weight: 900;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.dotClear {
-  background: #16a34a;
-}
-
-.dotFlag {
-  background: #dc2626;
-}
-
-.indicator span {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.indicator b {
-  font-size: 13px;
-  color: #222;
-}
-
-.indicator small {
-  font-size: 12px;
-  line-height: 18px;
-  color: #666;
-}
-
-.reasonBadge {
-  align-self: flex-start;
-  padding: 3px 10px;
-  border-radius: 8px;
-  background: #fff3f0;
-  color: #dc2626;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.warnCard {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 16px;
-  border-radius: 16px;
-  border: 1px solid #ffe082;
-  background: #fff8e1;
-}
-
-.warnHead {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #c79100;
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.4px;
-}
-
-.warnText {
-  margin: 0;
-  font-size: 13px;
-  color: #555;
-}
-
-.warnRow {
-  display: flex;
-  gap: 10px;
-  font-size: 14px;
-  line-height: 21px;
-  color: #333;
-}
-
-.warnRow i {
-  flex-shrink: 0;
-  width: 8px;
-  height: 8px;
-  margin-top: 6px;
-  border-radius: 50%;
-  background: #c79100;
 }
 
 /* Animal status */
@@ -844,35 +471,6 @@
   background: #ecfdf5;
   color: #008026;
   font-size: 13px;
-}
-
-.param {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 10px 0;
-  border-bottom: 1px solid #f1f5f1;
-}
-
-.param:last-child {
-  border-bottom: 0;
-}
-
-.param > span:first-child {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.param b {
-  font-size: 14px;
-  color: #1a1a1a;
-}
-
-.param small {
-  font-size: 12.5px;
-  color: #666;
 }
 
 .system {
@@ -1390,88 +988,6 @@
   background: #2563eb;
 }
 
-.productHead {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.productHead b {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  color: #006e2a;
-}
-
-.productHead i {
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: #dcfce7;
-  color: #15803d;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 500;
-}
-
-.productRow {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.productRow > span:last-child {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.productRow b {
-  font-size: 16px;
-  font-weight: 600;
-  color: #111827;
-}
-
-.productRow small {
-  font-size: 14px;
-  color: #6b7280;
-}
-
-.productRow strong {
-  font-size: 15px;
-  color: #111827;
-}
-
-.productRow s {
-  font-size: 13px;
-  color: #9ca3af;
-}
-
-.productImg {
-  width: 48px;
-  height: 66px;
-  border-radius: 6px;
-  background: #f3f4f6;
-  overflow: hidden;
-}
-
-.productImg img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.productCta {
-  height: 38px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 99px;
-  background: #004691;
-  color: #fff;
-  font-size: 14px;
-  font-weight: 600;
-}
-
 .dungVet {
   display: flex;
   flex-direction: column;
@@ -1562,10 +1078,6 @@
 .guideRow small {
   font-size: 13px;
   color: #4b5563;
-}
-
-.handleLeft small {
-  font-size: inherit;
 }
 
 .buyRec small {
@@ -1998,4 +1510,54 @@
 .dxNoted svg {
   flex-shrink: 0;
   margin-top: 2px;
+}
+
+/* recommended-products-section.jsx (prod, Nov 2026) */
+.recHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.recHead b {
+  color: #231f20;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.recHead b.recTitleCaps {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+}
+
+.recHead i {
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #dcfce7;
+  color: #15803d;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 500;
+}
+
+.recRow {
+  display: flex;
+  gap: 16px;
+  margin: 0 -16px;
+  padding: 0 16px 4px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.recRow::-webkit-scrollbar {
+  display: none;
+}
+
+.recCard {
+  flex: 0 0 280px;
+  margin: 0;
+  scroll-snap-align: start;
 }

@@ -1,7 +1,8 @@
 // Interactive prototype content for Gau Sampurna (dairy farming app), opened from the hero's
 // "Apps I've built" card. Screens are recreated from the `prod` branch of
-// silo-prod/gausampurna-react-app (code/screens/gau-swastha-tenant/* and shared screens; scan flow and
-// reports synced to 5b36102 on 2026-11-04): real colours, Lato,
+// silo-prod/gausampurna-react-app (code/screens/gau-swastha-tenant/* and shared screens; synced to prod
+// b040163 on 2026-11-20: new splash, Dairy Fortune home banner, scan landings, no Report ready step,
+// side-scrolling recommended products, add cow without breed, paywall ambassador, UPI app sheet): real colours, Lato,
 // English copy and artwork. Report values are illustrative sample values; PM notes are editable.
 import type { Prototype } from "./kissanSampurna";
 
@@ -48,7 +49,7 @@ export const gauSampurnaPrototype: Prototype = {
           id: "gs-capture",
           title: "Photo guide",
           note:
-            "Coach the photo before the model sees it. One side-profile photo powers disease screening and body analysis, so simple tips (full profile, level angle, daylight, nothing blocking) protect accuracy for everything downstream. Open Camera now opens the app's own camera; the gallery skips straight to review.",
+            "Sell the outcome, then show the three steps. Each scan type opens on its own landing: a real photo, the farmer's question in plain words (\"Is she unwell?\"), one line on what she gets, and HOW IT WORKS as three pictures (side photo → report → action) instead of a list of photo rules. Open Camera opens the app's own camera; the gallery skips straight to review. Since Nov 2026 the report opens straight after Analyzing; there is no separate Report ready step.",
         },
         {
           id: "gs-camera",
@@ -67,12 +68,6 @@ export const gauSampurnaPrototype: Prototype = {
           title: "Analyzing",
           note:
             "Show the pipeline. Named steps make 15–30 seconds of AI inference feel like progress rather than a frozen screen, and the tip asks farmers not to close the app.",
-        },
-        {
-          id: "gs-ready",
-          title: "Report ready",
-          note:
-            "What a farmer needs off the scan, in order: how many of the 31 were found, which one is most likely and how sure the model is, whether a vet has to see the cow, then detected and suspected findings and a tally of what was ruled out and what the photo could not show. Suspected is never shown as clear.",
         },
         {
           id: "gs-diagnosis",
@@ -102,7 +97,7 @@ export const gauSampurnaPrototype: Prototype = {
         {
           id: "gs-capture-status",
           title: "Photo guide",
-          note: "The same side-profile guide as the disease check: one photo habit serves every body scan.",
+          note: "The same landing, asked as \"How is she doing?\": one side photo gives her breed, health score and milk estimate.",
         },
         {
           id: "gs-camera-status",
@@ -126,11 +121,6 @@ export const gauSampurnaPrototype: Prototype = {
             "The only question that survived simplification. When the model can't name the breed, the farmer picks the closest match and the same scan re-runs with that breed, so grading and price aren't guesses. Earlier calving and symptom questionnaires were removed to cut drop-off.",
         },
         {
-          id: "gs-ready-status",
-          title: "Report ready",
-          note: "Breed and grade, then up to four figures, two to a row (weight, BCS, milk, value). A figure the model could not read is left out rather than shown as N/A.",
-        },
-        {
           id: "gs-status-report",
           title: "Status report",
           note:
@@ -151,7 +141,7 @@ export const gauSampurnaPrototype: Prototype = {
         {
           id: "gs-capture-market",
           title: "Photo guide",
-          note: "Adds an \"Udder clearly visible\" tip, because udder size drives the milk estimate and therefore the price.",
+          note: "\"What is she worth?\": the landing promises a fair price range from one photo, the question a seller actually has.",
         },
         {
           id: "gs-camera-market",
@@ -175,11 +165,6 @@ export const gauSampurnaPrototype: Prototype = {
             "If the model can't see the udder, the farmer chooses: re-upload for an accurate price, or continue with a partial report that clearly says why the price is missing. No made-up numbers.",
         },
         {
-          id: "gs-ready-market",
-          title: "Report ready",
-          note: "The estimated value leads the figures, ahead of milk, because price is the question this scan answers.",
-        },
-        {
           id: "gs-market-report",
           title: "Valuation report",
           note:
@@ -200,7 +185,7 @@ export const gauSampurnaPrototype: Prototype = {
         {
           id: "gs-capture-dung",
           title: "Photo guide",
-          note: "Dung-specific tips: fresh (under an hour), top-down, whole pile, good daylight.",
+          note: "\"Is she digesting well?\": its own hero and a dung photo as step 1, so the farmer knows this scan wants the pile, not the cow.",
         },
         {
           id: "gs-camera-dung",
@@ -216,11 +201,6 @@ export const gauSampurnaPrototype: Prototype = {
           id: "gs-analyzing-dung",
           title: "Analyzing",
           note: "The fastest scan (10–15 seconds), which suits a daily or weekly habit.",
-        },
-        {
-          id: "gs-ready-dung",
-          title: "Report ready",
-          note: "A 1–5 manure score with its status, what the sample looked like, the possible causes and when to scan again. A score of 1 or 5 also says a vet should see the cow, before the full report.",
         },
         {
           id: "gs-dung-results",
@@ -249,7 +229,7 @@ export const gauSampurnaPrototype: Prototype = {
         {
           id: "gs-capture-full",
           title: "Photo guide",
-          note: "As a Pro member: the same side-profile photo now powers body, disease and nutrition analysis at once.",
+          note: "\"How healthy is she?\": as a Pro member, one side photo gives health, disease risk and market value at once.",
         },
         {
           id: "gs-camera-full",
@@ -265,11 +245,6 @@ export const gauSampurnaPrototype: Prototype = {
           id: "gs-analyzing-full",
           title: "Analyzing",
           note: "Five steps and 1–2 minutes. The longer wait is explained up front because this scan checks every body system.",
-        },
-        {
-          id: "gs-ready-full",
-          title: "Report ready",
-          note: "Breed and grade with weight, BCS, milk and value, two to a row.",
         },
         {
           id: "gs-full-report",
