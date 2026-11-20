@@ -145,16 +145,15 @@ export default function MobileHome() {
             <AppIcon
               label="Amplitude"
               art={<AmplitudeArt />}
-              href="https://app.amplitude.com/analytics/silo-fortune"
-              external
-              ariaLabel="Open Amplitude Analytics"
-              onClick={() =>
+              ariaLabel="Amplitude Analytics"
+              onClick={() => {
+                haptic("selection");
                 trackEvent("Clicked External Link", {
                   link_type: "analytics",
                   label: "Amplitude",
                   placement: "mobile_home",
-                })
-              }
+                });
+              }}
             />
           </div>
         </section>

@@ -435,11 +435,11 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 ## Changelog
 
 - 2026-11-20: **Amplitude app icon added to phone home screen page 2** (owner's request: "add amplitude app icon
-  in mobile size screen in secondar page"). Rendered beside Gau Sampurna Website under ClockWidget in the 4-column
-  grid. Handcrafted vector artwork `AmplitudeArt` in `src/components/ios/IconArt.tsx` conforms to iOS 26 system
-  icon standards (continuous-corner squircle holding the official Amplitude "A" wave mark in layered paper
-  gradients on Amplitude Blue `#1e61f0` → `#0847d1` with tinted drop shadow). Tapping it opens the owner's Amplitude
-  analytics dashboard with external link analytics tracking (`Clicked External Link`, `link_type: analytics`, `placement: mobile_home`).
+  in mobile size screen in secondar page", "if anyone clikc on amplitude dont redirect to anywhere else").
+  Rendered beside Gau Sampurna Website under ClockWidget in the 4-column grid. Handcrafted vector artwork
+  `AmplitudeArt` in `src/components/ios/IconArt.tsx` conforms to iOS 26 system icon standards (continuous-corner
+  squircle holding the official Amplitude "A" wave mark in layered paper gradients on Amplitude Blue `#1e61f0` →
+  `#0847d1` with tinted drop shadow). Tapping it triggers tactile haptic feedback without redirecting anywhere.
 
 - 2026-11-20: **App prototypes checked against the apps' latest `prod`.** Kissan `prod` 2736b3b: only deep-link
   routing and analytics changed, no UI, so its prototype is unchanged. Gau `prod` 5b36102 → **b040163** (24
