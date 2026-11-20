@@ -3,9 +3,11 @@
 import type { ComponentType } from "react";
 import type { ScreenProps } from "../kissan/KissanScreens";
 import GsHome from "./GsHome";
-import { GsProduct, GsProducts } from "./GsShop";
+import { GsProducts } from "./GsShop";
+import { GsProduct } from "./GsPdp";
 import { GsCheckout, GsConfirmed } from "./GsCheckout";
 import { GsSwastha, GsTrading, GsVet } from "./GsServices";
+import { GsAddrDetails, GsAddrMap, GsAddrPincode } from "./GsAddress";
 
 export const gauWebScreenMap: Record<string, ComponentType<ScreenProps>> = {
   "gw-home": GsHome,
@@ -13,6 +15,9 @@ export const gauWebScreenMap: Record<string, ComponentType<ScreenProps>> = {
   "gw-product": GsProduct,
   "gw-checkout": GsCheckout,
   "gw-confirmed": GsConfirmed,
+  "gw-addr-pincode": GsAddrPincode,
+  "gw-addr-map": GsAddrMap,
+  "gw-addr-details": GsAddrDetails,
   "gw-swastha": GsSwastha,
   "gw-trading": GsTrading,
   "gw-vet": GsVet,

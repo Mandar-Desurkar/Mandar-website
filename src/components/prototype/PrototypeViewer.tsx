@@ -283,6 +283,9 @@ export default function PrototypeViewer({ prototype, screens, onClose, onSwitchP
         e.preventDefault(); // handled: the window behind must not close on the same key press
         close();
       }
+      // typing in a prototype's text field (an address, a search) must not move or restart the flow
+      const t = e.target as HTMLElement | null;
+      if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
       if (e.key === "ArrowRight") goTo(flowIndex, screenIndex + 1, "keyboard");
       if (e.key === "ArrowLeft") goTo(flowIndex, screenIndex - 1, "keyboard");
       if (e.key === "r" || e.key === "R") restart();

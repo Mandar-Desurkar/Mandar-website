@@ -4,11 +4,12 @@
 // optional pinned bottom bar), the phone and desktop headers, the menu, footer, product cards and
 // small pieces (stars, accordion, section titles). Each mirrors the site's component of the same
 // role (components/NewHomePageComponents, components/layout, components/products).
-import { createContext, useContext, useState, useSyncExternalStore, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, useSyncExternalStore, type ComponentType, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import {
   ArrowLeft,
   BadgeCheck,
+  Check,
   Banknote,
   ChevronDown,
   ChevronRight,
@@ -33,6 +34,24 @@ import {
   X,
 } from "lucide-react";
 import { FaFacebookF, FaGooglePlay, FaInstagram, FaLinkedinIn, FaWhatsapp, FaYoutube } from "react-icons/fa";
+import {
+  IoBagHandleOutline,
+  IoCallOutline,
+  IoChatbubblesOutline,
+  IoChevronForward,
+  IoClose,
+  IoHeartOutline,
+  IoHelpCircleOutline,
+  IoHomeOutline,
+  IoInformationCircleOutline,
+  IoLeafOutline,
+  IoLogIn,
+  IoMailOutline,
+  IoMedkitOutline,
+  IoNewspaperOutline,
+  IoPersonOutline,
+  IoReceiptOutline,
+} from "react-icons/io5";
 import type { ScreenProps } from "../kissan/KissanScreens";
 import s from "./gsWeb.module.css";
 import { roboto } from "../fonts";
@@ -46,12 +65,28 @@ const NavContext = createContext<ScreenProps | null>(null);
 // The page root, so menus and sheets can cover the whole page (pinned bars included), not just the
 // scrolling content they are declared in
 const OverlayRoot = createContext<HTMLElement | null>(null);
+// Opens the cart as a right-side drawer over the current page (the site's intercepted /cart route).
+// Null on the full-page checkout screen itself, where the cart is already the page.
+const CartDrawerCtx = createContext<(() => void) | null>(null);
+
+// The cart view lives in GsCart.tsx, which imports this file; it registers itself here so the page
+// shell can host it in the drawer without an import cycle
+export type CartViewProps = { inDrawer?: boolean; onClose?: () => void };
+let CartViewImpl: ComponentType<CartViewProps> | null = null;
+export function registerCartView(c: ComponentType<CartViewProps>) {
+  CartViewImpl = c;
+}
 
 // Inside a Page the screen's navigation comes from context; a screen component itself (which
 // renders the Page) passes its own props
 export function useNav(own?: ScreenProps) {
   const p = useContext(NavContext) ?? own ?? null;
+  const openDrawer = useContext(CartDrawerCtx);
   const goToFlow = p?.goToFlow ?? (() => {});
+  const checkoutPage = () => {
+    cartActions.buyNow(null);
+    goToFlow("web-shop", "gw-checkout");
+  };
   return {
     home: () => goToFlow("web-shop", "gw-home"),
     products: () => goToFlow("web-shop", "gw-products"),
@@ -59,7 +94,19 @@ export function useNav(own?: ScreenProps) {
       cartActions.view(id);
       goToFlow("web-shop", "gw-product");
     },
-    cart: () => goToFlow("web-shop", "gw-checkout"),
+    // In-app navigation to /cart opens the drawer; on the checkout page itself it is the page
+    cart: () => {
+      cartActions.buyNow(null);
+      if (openDrawer) openDrawer();
+      else checkoutPage();
+    },
+    checkoutPage,
+    // Buy Now checks out this item alone, in its own cart, as the site does
+    buyNow: (id: string) => {
+      cartActions.buyNow(id);
+      goToFlow("web-shop", "gw-checkout");
+    },
+    addAddress: () => goToFlow("web-address", "gw-addr-pincode"),
     confirmed: () => goToFlow("web-shop", "gw-confirmed"),
     swastha: () => goToFlow("web-swastha", "gw-swastha"),
     trading: () => goToFlow("web-trading", "gw-trading"),
@@ -78,21 +125,60 @@ type PageProps = {
   children: ReactNode;
 };
 
-export function Page({ nav, font = "inter", bottom, overlay, children }: PageProps) {
+export function Page({ nav, font = "inter", bottom, overlay, children, cartPage = false }: PageProps & { cartPage?: boolean }) {
   const desktop = useDesktop();
   const [root, setRoot] = useState<HTMLDivElement | null>(null);
+  const [drawer, setDrawer] = useState(false);
   return (
     <NavContext.Provider value={nav}>
       <OverlayRoot.Provider value={root}>
-        <div ref={setRoot} className={cx(s.page, desktop && s.desk, s[font], roboto.variable)} data-desktop={desktop || undefined}>
-          <div className={s.scroll} data-gs-scroll>
-            {children}
+        <CartDrawerCtx.Provider value={cartPage ? null : () => setDrawer(true)}>
+          <div ref={setRoot} className={cx(s.page, desktop && s.desk, s[font], roboto.variable)} data-desktop={desktop || undefined}>
+            <div className={s.scroll} data-gs-scroll>
+              {children}
+            </div>
+            {bottom}
+            {overlay}
+            {drawer && CartViewImpl && <CartDrawer View={CartViewImpl} onClosed={() => setDrawer(false)} />}
           </div>
-          {bottom}
-          {overlay}
-        </div>
+        </CartDrawerCtx.Provider>
       </OverlayRoot.Provider>
     </NavContext.Provider>
+  );
+}
+
+// components/cart/CartDrawer.jsx: the cart page in a right-side sheet, 95% wide, over the page it was
+// opened from; the dimmed strip, Esc and the cart's ✕ close it (280ms slide)
+const SLIDE_MS = 280;
+function CartDrawer({ View, onClosed }: { View: ComponentType<CartViewProps>; onClosed: () => void }) {
+  const [shown, setShown] = useState(false);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setShown(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+  const close = () => {
+    setShown(false);
+    window.setTimeout(onClosed, SLIDE_MS);
+  };
+  useEffect(() => {
+    // Esc closes the drawer only, not the prototype player behind it
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      e.stopImmediatePropagation();
+      close();
+    };
+    document.addEventListener("keydown", onKey, true);
+    return () => document.removeEventListener("keydown", onKey, true);
+  });
+  return (
+    <div className={s.cartDrawer} role="dialog" aria-modal="true" aria-label="Cart">
+      <button type="button" aria-label="Close cart" tabIndex={-1} className={s.cartDrawerDim} style={{ opacity: shown ? 1 : 0 }} onClick={close} />
+      <div className={s.cartDrawerPanel} style={{ transform: shown ? "none" : "translateX(100%)" }}>
+        <CartDrawerCtx.Provider value={null}>
+          <View inDrawer onClose={close} />
+        </CartDrawerCtx.Provider>
+      </div>
+    </div>
   );
 }
 
@@ -138,13 +224,32 @@ export function GooglePlayButton({ dark = false }: { dark?: boolean }) {
 
 // ---------- Strips ----------
 
+// TopMarketingBanner: ✕ on the left (as in Apple's Smart App Banner), the message, a compact "Get app"
+// pill with the Play Store mark. Dismissing hides it on every page (the site remembers for 14 days).
+let appBannerDismissed = false;
 export function AppStrip() {
+  const [hidden, setHidden] = useState(appBannerDismissed);
+  if (hidden) return null;
   return (
-    <div className={s.appStrip}>
+    <div className={s.appStrip} role="region" aria-label="Gau Sampurna app">
+      <button
+        type="button"
+        className={s.appStripClose}
+        aria-label="Dismiss"
+        onClick={() => {
+          appBannerDismissed = true;
+          setHidden(true);
+        }}
+      >
+        <X size={16} strokeWidth={2.4} />
+      </button>
       <p>
         Get vet advice on the <b>Gau Sampurna</b> app
       </p>
-      <GooglePlayButton />
+      <span className={s.getApp}>
+        <img src={img("google-play.webp")} alt="" />
+        Get app
+      </span>
     </div>
   );
 }
@@ -159,12 +264,33 @@ export function LimeStrip() {
   );
 }
 
+// LangToggle: fixed-width pill (globe + "EN"); the menu lists each language in its own script first.
+// The prototype is in English, so the menu shows the choice but the page stays English.
+const LANGUAGES = [
+  { id: "en", native: "English", english: "" },
+  { id: "kn", native: "ಕನ್ನಡ", english: "Kannada" },
+  { id: "te", native: "తెలుగు", english: "Telugu" },
+  { id: "pa", native: "ਪੰਜਾਬੀ", english: "Punjabi" },
+];
 function LangPill() {
+  const [open, setOpen] = useState(false);
   return (
-    <span className={s.langPill}>
-      <Globe size={16} strokeWidth={2} />
-      EN
-      <ChevronDown size={13} strokeWidth={2.4} />
+    <span className={s.langWrap}>
+      <button type="button" className={s.langPill} aria-haspopup="listbox" aria-expanded={open} aria-label="Language: English. Change language" onClick={() => setOpen((v) => !v)}>
+        <Globe size={16} strokeWidth={2.2} />
+        EN
+      </button>
+      {open && (
+        <span className={s.langMenu} role="listbox" aria-label="Choose language">
+          {LANGUAGES.map((l) => (
+            <button key={l.id} type="button" role="option" aria-selected={l.id === "en"} className={cx(s.langOpt, l.id === "en" && s.langOptOn)} onClick={() => setOpen(false)}>
+              <b>{l.native}</b>
+              {l.english && <small>{l.english}</small>}
+              <Check size={16} strokeWidth={2.6} className={l.id === "en" ? undefined : s.invisible} />
+            </button>
+          ))}
+        </span>
+      )}
     </span>
   );
 }
@@ -187,13 +313,13 @@ export function HomeNav() {
         </button>
         <LangPill />
       </nav>
-      {menu && <MenuDrawer onClose={() => setMenu(false)} />}
+      {menu && <MenuDrawer onClose={() => setMenu(false)} active="home" />}
     </>
   );
 }
 
 // Products and product pages: back arrow and a title
-export function PageNav({ title, eyebrow }: { title: string; eyebrow?: string }) {
+export function PageNav({ title, eyebrow, active }: { title: string; eyebrow?: string; active?: MenuActive }) {
   const nav = useNav();
   const [menu, setMenu] = useState(false);
   return (
@@ -216,13 +342,13 @@ export function PageNav({ title, eyebrow }: { title: string; eyebrow?: string })
         </button>
         <LangPill />
       </nav>
-      {menu && <MenuDrawer onClose={() => setMenu(false)} />}
+      {menu && <MenuDrawer onClose={() => setMenu(false)} active={active} />}
     </>
   );
 }
 
 // Service pages (Gau Swastha, Cattle Trading, Ask a Vet): the site-wide header
-export function SiteNav() {
+export function SiteNav({ active }: { active?: MenuActive } = {}) {
   const nav = useNav();
   const { count } = useCart();
   const [menu, setMenu] = useState(false);
@@ -245,53 +371,161 @@ export function SiteNav() {
           <Menu size={24} strokeWidth={2} />
         </button>
       </nav>
-      {menu && <MenuDrawer onClose={() => setMenu(false)} />}
+      {menu && <MenuDrawer onClose={() => setMenu(false)} active={active} />}
     </>
   );
 }
 
-function MenuDrawer({ onClose }: { onClose: () => void }) {
+export type MenuActive = "home" | "products" | "swastha" | "vet" | "trading";
+
+function MenuDrawer({ onClose, active }: { onClose: () => void; active?: MenuActive }) {
   const root = useContext(OverlayRoot);
-  return root ? createPortal(<MenuDrawerBody onClose={onClose} />, root) : null;
+  return root ? createPortal(<MenuDrawerBody onClose={onClose} active={active} />, root) : null;
 }
 
-function MenuDrawerBody({ onClose }: { onClose: () => void }) {
+// Staggered reveal shared by every block in the drawer (Navbar.jsx `reveal`)
+const reveal = (open: boolean, i: number, axis: "x" | "y" = "x") => ({
+  opacity: open ? 1 : 0,
+  transform: open ? "none" : axis === "x" ? "translateX(-12px)" : "translateY(8px)",
+  transitionDelay: open ? `${100 + i * 28}ms` : "0ms",
+});
+
+// Navbar.jsx SideDrawer: compact brand header with Login / Sign Up, quick tiles (Home · You · Orders ·
+// Cart), two lists of outline-icon rows, a "Reach a human" card, the language picker, then socials
+function MenuDrawerBody({ onClose, active }: { onClose: () => void; active?: MenuActive }) {
   const nav = useNav();
-  const go = (fn: () => void) => () => {
+  const { count } = useCart();
+  const [open, setOpen] = useState(false);
+  const [langOpen, setLangOpen] = useState(false);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setOpen(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+  const close = () => {
+    setOpen(false);
+    window.setTimeout(onClose, 300);
+  };
+  const go = (fn?: () => void) => () => {
+    if (!fn) return;
     onClose();
     fn();
   };
-  const shop = [
-    { label: "All Products", on: nav.products },
-    { label: "Gau Swastha", on: nav.swastha },
-    { label: "Ask a Vet", on: nav.vet },
-    { label: "Cattle Trading", on: nav.trading },
+  const tiles = [
+    { label: "Home", Icon: IoHomeOutline, on: nav.home, on2: active === "home" },
+    { label: "You", Icon: IoPersonOutline },
+    { label: "My Orders", Icon: IoReceiptOutline },
+    { label: "Cart", Icon: null, on: nav.cart, badge: count },
   ];
+  const shop = [
+    { label: "All Products", Icon: IoBagHandleOutline, on: nav.products, on2: active === "products" },
+    { label: "Gau Swastha", Icon: IoMedkitOutline, on: nav.swastha, on2: active === "swastha" },
+    { label: "Ask a Vet", Icon: IoChatbubblesOutline, on: nav.vet, on2: active === "vet" },
+    { label: "Cattle Trading", Icon: IoLeafOutline, on: nav.trading, on2: active === "trading" },
+    { label: "Farmer Stories & Tips", Icon: IoNewspaperOutline },
+  ];
+  const account = [
+    { label: "Wishlist", Icon: IoHeartOutline },
+    { label: "About Us", Icon: IoInformationCircleOutline },
+    { label: "Contact Us", Icon: IoHelpCircleOutline },
+  ];
+  let n = 0;
   return (
-    <div className={s.drawerWrap} onClick={onClose}>
-      <aside className={s.drawer} onClick={(e) => e.stopPropagation()} aria-label="Menu">
-        <header className={s.drawerHead}>
-          <img src={img("logo.webp")} alt="Gau Sampurna" />
-          <button type="button" className={s.iconBtn} onClick={onClose} aria-label="Close menu">
-            <X size={22} />
-          </button>
-        </header>
-        <div className={s.drawerAuth}>
-          <span>Login</span>
-          <span>Sign Up</span>
+    <div className={s.drawerWrap} onClick={close} style={{ opacity: open ? 1 : 0 }}>
+      <aside className={s.drawer} onClick={(e) => e.stopPropagation()} aria-label="Menu" style={{ transform: open ? "none" : "translateX(-101%)" }}>
+        <div className={s.drawerHead}>
+          <div className={s.drawerBrand}>
+            <span className={s.drawerLogo}>
+              <img src={img("logo.webp")} alt="Gau Sampurna" />
+            </span>
+            <span>
+              <b>Gau Sampurna</b>
+              <small>Healthier cows. Higher profits.</small>
+            </span>
+            <button type="button" className={s.drawerClose} onClick={close} aria-label="Close menu">
+              <IoClose size={24} />
+            </button>
+          </div>
+          <span className={s.drawerLogin} style={reveal(open, 0, "y")}>
+            <IoLogIn size={19} /> Login / Sign Up
+          </span>
         </div>
-        <p className={s.drawerLabel}>Shop &amp; Explore</p>
-        {shop.map((l) => (
-          <button key={l.label} type="button" className={s.drawerLink} onClick={go(l.on)}>
-            {l.label}
-            <ChevronRight size={16} />
-          </button>
-        ))}
-        <p className={s.drawerLabel}>Reach a Human</p>
-        <p className={s.drawerPhone}>
-          <Phone size={16} /> {PHONE}
-          <small>7 AM – 7 PM · All 7 days</small>
-        </p>
+        <nav className={s.drawerNav}>
+          <div className={s.drawerTiles} style={reveal(open, n++, "y")}>
+            {tiles.map((t) => (
+              <button key={t.label} type="button" className={cx(s.drawerTile, t.on2 && s.drawerTileOn)} onClick={go(t.on)} aria-current={t.on2 ? "page" : undefined}>
+                <span className={s.drawerTileIcon}>
+                  {t.Icon ? <t.Icon size={22} /> : <BikeIcon size={26} />}
+                  {!!t.badge && <i className={s.drawerBadge}>{t.badge > 99 ? "99+" : t.badge}</i>}
+                </span>
+                {t.label}
+              </button>
+            ))}
+          </div>
+          <p className={s.drawerLabel} style={reveal(open, n++)}>Shop &amp; Explore</p>
+          <ul>
+            {shop.map((l) => (
+              <li key={l.label} style={reveal(open, n++)}>
+                <button type="button" className={cx(s.drawerLink, l.on2 && s.drawerLinkOn)} onClick={go(l.on)} aria-current={l.on2 ? "page" : undefined}>
+                  <l.Icon size={22} className={s.drawerLinkIcon} />
+                  <span>{l.label}</span>
+                  <IoChevronForward size={16} className={s.drawerChev} />
+                </button>
+              </li>
+            ))}
+          </ul>
+          <p className={s.drawerLabel} style={reveal(open, n++)}>Account &amp; Support</p>
+          <ul>
+            {account.map((l) => (
+              <li key={l.label} style={reveal(open, n++)}>
+                <button type="button" className={s.drawerLink}>
+                  <l.Icon size={22} className={s.drawerLinkIcon} />
+                  <span>{l.label}</span>
+                  <IoChevronForward size={16} className={s.drawerChev} />
+                </button>
+              </li>
+            ))}
+          </ul>
+          <div className={s.drawerHuman} style={reveal(open, n++, "y")}>
+            <p>Reach a Human</p>
+            <span className={s.drawerHumanPhone}>
+              <i>
+                <IoCallOutline size={18} />
+              </i>
+              <span>
+                <b>{PHONE}</b>
+                <small>7 AM – 7 PM · All 7 days</small>
+              </span>
+            </span>
+            <span className={s.drawerHumanMail}>
+              <IoMailOutline size={16} />
+              {EMAIL}
+            </span>
+          </div>
+          <div className={s.drawerLang} style={reveal(open, n++, "y")}>
+            <button type="button" aria-expanded={langOpen} onClick={() => setLangOpen((v) => !v)}>
+              <Globe size={18} />
+              <span>Language</span>
+              <b>English</b>
+              <ChevronDown size={16} className={langOpen ? s.chevUp : undefined} />
+            </button>
+            {langOpen &&
+              LANGUAGES.map((l) => (
+                <span key={l.id} className={cx(s.drawerLangOpt, l.id === "en" && s.drawerLangOptOn)}>
+                  <b>{l.native}</b>
+                  <small>{l.english || "English"}</small>
+                  {l.id === "en" && <Check size={16} strokeWidth={3} />}
+                </span>
+              ))}
+          </div>
+        </nav>
+        <div className={s.drawerFoot}>
+          <span className={s.drawerSocials}>
+            <i><FaFacebookF size={14} /></i>
+            <i><FaInstagram size={14} /></i>
+            <i><FaYoutube size={14} /></i>
+          </span>
+          <small>© 2026 Silo Fortune Pvt. Ltd.</small>
+        </div>
       </aside>
     </div>
   );

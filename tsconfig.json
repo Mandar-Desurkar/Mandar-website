@@ -30,5 +30,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules", "_external"]
+  "exclude": ["node_modules", "_external", "featurekit", "featkit-server"]
 }

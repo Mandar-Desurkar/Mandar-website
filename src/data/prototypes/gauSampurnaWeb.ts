@@ -1,8 +1,10 @@
 // Interactive prototype of the Gau Sampurna website (gausampurna.com), the D2C store for the same
 // dairy farmers the Gau Sampurna app serves. Recreated from the site's own code (Next.js storefront,
 // read-only reference) and its live pages: layout, copy, catalogue, prices and images are the site's
-// own (prices as shown on the live site in November 2026; delivery dates use the site's rule, 5 business days). The cart, the address
-// and the order are samples: nothing is sent anywhere.
+// own (prices and product content as on the live site on 19 Nov 2026; product photos are the store's
+// originals; delivery dates use the site's rule, 5 business days). Synced on 19–20 Nov 2026 with the
+// site's redesigned product page, cart drawer, checkout and three-step add-address flow. The cart, the
+// addresses and the order are samples: nothing is sent anywhere.
 // Each screen renders the phone layout (mSite) or the desktop layout, switched in the viewer.
 import type { Prototype } from "./kissanSampurna";
 
@@ -17,7 +19,7 @@ export const gauSampurnaWebPrototype: Prototype = {
     {
       id: "web-shop",
       title: "Shop & checkout",
-      summary: "Home → products → product page → checkout → order confirmed",
+      summary: "Home → products → product page → cart / checkout → order confirmed",
       screens: [
         {
           id: "gw-home",
@@ -35,19 +37,44 @@ export const gauSampurnaWebPrototype: Prototype = {
           id: "gw-product",
           title: "Product page",
           path: "/products/dairy-fortune/10kg",
-          note: "The buy box makes paying online the better deal without hiding cash on delivery: \"Pay ₹1,755 only, 10% off with Online Payment\" sits next to the pack price. The delivery promise is a date (\"FREE delivery, all locations\" and the day it arrives), not \"3 to 5 days\". Trust comes before the description: 1,00,000+ farmers, KMF Certified, Vet Approved. Add to Cart turns the bottom bar into a mini cart with Checkout, so the buyer never loses the price.",
+          note: "Built so a first-time online buyer never has to scroll back up. The price panel leads with the pack (\"10 Kg\") and the price per kg, the farmer's real comparison. One lime strip carries the only highlighted message, \"Pay only ₹1,755 with Online Payment\", with a sheen and a wiggling % badge. Delivery is a date plus the farmer's own pincode check. Reviews come before the FAQ (proof, then the last doubts), show the previous challenge each farmer had, and always keep one critical review near the top, which makes the rating believable. Scroll past Add to Cart and a bottom bar takes over: price, pack and Add, which splits into Add and Checkout once the cart has something. Try it: add, then Checkout opens the cart as a drawer over the page",
         },
         {
           id: "gw-checkout",
           title: "Checkout",
           path: "/cart",
-          note: "One page, no steps: items, payment, bill, and an address that is already filled in. From the code: \"Say each thing once.\" Online is pre-selected and the saving is stated once (\"Save ₹X\"). Cash on Delivery stays one tap away, but choosing it surfaces a lime strip in the bottom bar (\"Pay only ₹X with Online Payment\") and, on Place Order, a check: \"You'll miss an online discount\". The return rule is shown before paying, not after.",
+          note: "From the code: \"Say each thing once.\" Pay Online is pre-selected and wears a \"Best price\" ribbon; the saving is stated once (\"Save ₹195\") and its logos are the UPI apps farmers already use (GPay, PhonePe, Paytm). Cash on Delivery stays one tap away, but choosing it surfaces a lime \"Pay only ₹X with Online Payment\" strip in the bottom bar and, on Place Order, a check: \"You'll miss an online discount\". Each item shows what it saves and its delivery date; \"Highly recommended for you\" adds with one tap without leaving checkout. The address is one line in the bottom bar; Change opens the saved addresses and Add Address starts the three-step flow. Opened from a page, this is a drawer; opened directly, it is the page",
         },
         {
           id: "gw-confirmed",
           title: "Order confirmed",
           path: "/order-confirmation",
           note: "Confirmation repeats what a cash buyer needs to trust the order: the order number, a delivery date, where it's going and the total to keep ready. Sample order; nothing was placed.",
+        },
+      ],
+    },
+    {
+      id: "web-address",
+      title: "Add a delivery address",
+      summary: "Pincode → pin on the map → details, then back to checkout",
+      screens: [
+        {
+          id: "gw-addr-pincode",
+          title: "Pincode",
+          path: "/add-new-address",
+          note: "Built for first-time, phone-only farmers. The first question is the one they actually have, \"Can you deliver to me?\", answered before anything else is typed: the check runs on its own at 6 digits and names the place back. If the answer is no, the screen offers a phone number and another try instead of a dead end. GPS can fill the pincode for anyone who doesn't know it. Try 571428 (delivers) or 110001 (doesn't).",
+        },
+        {
+          id: "gw-addr-map",
+          title: "Pin on the map",
+          path: "/add-new-address?step=map",
+          note: "The map opens on that pincode and the farmer moves the map under a fixed pin, which is easier on a phone than dragging a small pin. The sheet reads back the place in words, so a farmer who can't read a map can still check it. Many rural users don't read maps at all, so \"Skip map, type address\" is always there. The site uses Google Maps; this map is illustrated.",
+        },
+        {
+          id: "gw-addr-details",
+          title: "Address details",
+          path: "/add-new-address?step=details",
+          note: "Most of the form is already filled: the pincode gives taluk, district and state, and the name and phone come from the account, so usually only \"house no. & street\" is typed. The phone line says why it matters (\"Delivery partner will call this number\"). Each step is its own URL, so the phone's back button walks back through the steps instead of throwing the farmer out. Save address returns to checkout with it selected.",
         },
       ],
     },

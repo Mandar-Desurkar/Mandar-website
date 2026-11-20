@@ -14,6 +14,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Reference-only clones of other repos
     "_external/**",
+    "featurekit/**",
+    "featkit-server/**",
   ]),
 ]);
 

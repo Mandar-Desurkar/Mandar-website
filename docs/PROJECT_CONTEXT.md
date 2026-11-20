@@ -46,6 +46,16 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
   store, `GsShared.tsx` headers / footer / cards, one file per area). Checkout follows the site: Pay Online
   pre-selected (10% off), Cash on Delivery shows the lime nudge and the "You'll miss an online discount" check. Cart,
   address and orders are samples. Delivery dates use the site's rule (5 business days). Not in Mission Control.
+  **Synced 2026-11-20** to the site's newer (uncommitted, after 9 Nov) code: product page `GsPdp.tsx`
+  (+ `gsPdp.module.css`), cart/checkout `GsCheckout.tsx` (+ `gsCart.module.css`; `gsCheckout.module.css` now only
+  holds Order confirmed), add-address flow `GsAddress.tsx` (+ `gsAddress.module.css`, flow `web-address`),
+  product content `gsProducts.ts` (generated from the live pages' data: overview, USPs, benefits, dosage, how to
+  use, ingredients, FAQs, reviews) and real product photos from `~/Desktop/Codes/GS SITE/gs-products`
+  (`public/prototypes/gau-website/products/<id>/`, payment logos in `.../pay/`). In-app "cart" opens the cart
+  as a 95% right-side drawer over the page (`CartDrawerCtx` in `Page`; `registerCartView` avoids an import
+  cycle); the Checkout screen is the full page. The map step is an illustrated map (the site uses Google
+  Maps); pincode checks use a small sample table (56–59xxxx deliver). Buttons in the GS pages are reset with
+  `:where(.page) button` so module classes always win.
 - **Phone:** dawn wallpaper crop (`public/wallpaper-phone.webp`, moon placed in the gap between the two
   small widgets) and the Back button in `PhoneBack.tsx`. Keep in-app overlays in `depth` there.
 - Stack: Next.js 16.3 App Router, React 19.2, TypeScript, CSS Modules + tokens in
@@ -423,6 +433,21 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
   to a simple layout on mobile. No fake metrics.
 
 ## Changelog
+
+- 2026-11-20: **Gau Sampurna website prototype synced to the site's latest design** (owner: take the design
+  from `~/Desktop/Codes/GS SITE` and the real images from `gs-products`, "nothing missed"). New product page
+  (gallery with thumbs, USP icons, offer strip with shine, delivery/location sheet, Add to Cart → stepper + Go
+  to Cart, Buy Now, trust row, You may need this, accordions for benefits / dosage / how to use / additional
+  info / ingredients / description, reviews 3 + Load More, FAQ 4 + Load More, phone sticky action bar shown
+  once the in-page CTA scrolls away); new cart (drawer + page: items, saving, Highly recommended, Pay Online /
+  COD cards with UPI logos, Bill Summary, refund note, address row / card, address sheet with edit and delete,
+  COD check dialog, buy-now note); new add-address flow (pincode → map → details → back to checkout with the
+  new address selected); app download strip, language pill, redesigned menu drawer. 7 products' real photos
+  (WebP, none over 200 KB, 3.8 MB in all). One live FAQ question ends in a stray "Answer:" (CMS typo); the
+  prototype drops it. Old product-page/checkout CSS removed (-1,540 lines). Viewer fixes found while testing:
+  typing in a prototype text field no longer triggers the viewer's R (restart) / arrow keys, and Esc on the
+  cart drawer closes only the drawer. `featurekit/` and `featkit-server/` (owner's reference clones, git-ignored)
+  are excluded from tsconfig and ESLint.
 
 - 2026-11-19: **Site brought in line with the owner's new LaTeX resume.** `experiences`: new bullets word for
   word (DAU +10% and ₹20L+ saved, freemium + D2C merged, 3,000+ agent-hours, ~6% cancellations, CRM

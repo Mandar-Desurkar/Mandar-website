@@ -56,7 +56,8 @@
   font-family: var(--font-roboto), "Roboto", Arial, sans-serif !important;
 }
 
-.page button {
+/* Element-level reset at zero class specificity (:where), so any class on a button wins */
+:where(.page) button {
   font: inherit;
   color: inherit;
   background: none;
@@ -117,12 +118,13 @@
 
 /* ---------- Strips ---------- */
 
+/* TopMarketingBanner: ✕ · message · "Get app" pill, on the site's blue gradient */
 .appStrip {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 9px 12px 9px 12px;
-  background: var(--blue-800);
+  gap: 8px;
+  padding: 8px 12px 8px 6px;
+  background: linear-gradient(100deg, var(--blue-800) 0%, #003066 35%, #003066 65%, var(--blue-600) 100%);
   color: #ffffff;
 }
 
@@ -131,7 +133,52 @@
   min-width: 0;
   font-size: 13px;
   font-weight: 500;
-  line-height: 1.3;
+  line-height: 1.35;
+  text-wrap: balance;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.appStrip p b {
+  font-weight: 700;
+}
+
+.appStripClose {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.getApp {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 14px 0 12px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--blue-800);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.getApp img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+.desk .appStrip {
+  padding: 8px max(24px, calc((100% - 1152px) / 2));
 }
 
 .playBtn {
@@ -201,18 +248,80 @@
   background: var(--blue);
 }
 
+/* LangToggle: h40, min 56 wide, globe + "EN", no chevron; menu with native names and a ✓ */
+.langWrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
 .langPill {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  height: 34px;
-  padding: 0 9px;
-  border-radius: 9px;
+  justify-content: center;
+  gap: 6px;
+  height: 40px;
+  min-width: 56px;
+  padding: 0 10px;
+  border-radius: 12px;
   background: var(--blue-100);
   color: var(--blue);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
+  line-height: 1;
+}
+
+.langMenu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  z-index: 50;
+  width: 176px;
+  padding: 4px 0;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid var(--g100);
+  background: #ffffff;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+.langOpt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 12px;
+  text-align: left;
+}
+
+.langOpt b {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--g900);
+}
+
+.langOpt small {
+  font-size: 12px;
+  color: var(--g400);
+}
+
+.langOpt svg {
   flex-shrink: 0;
+  color: var(--blue);
+}
+
+.langOptOn {
+  background: var(--blue-50);
+}
+
+.langOptOn b {
+  font-weight: 700;
+  color: var(--blue);
+}
+
+.invisible {
+  visibility: hidden;
 }
 
 /* ---------- Phone headers ---------- */
@@ -317,13 +426,13 @@
   font-weight: 700;
 }
 
-/* Menu drawer */
+/* Menu drawer (Navbar.jsx SideDrawer): min(86vw, 360px) from the left, 380ms ease */
 .drawerWrap {
   position: absolute;
   inset: 0;
   z-index: 60;
-  background: rgba(0, 0, 0, 0.4);
-  animation: fade 0.18s ease-out;
+  background: rgba(0, 0, 0, 0.5);
+  transition: opacity 300ms ease;
 }
 
 .drawer {
@@ -331,52 +440,166 @@
   top: 0;
   bottom: 0;
   left: 0;
-  width: 82%;
-  max-width: 320px;
-  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  width: min(86%, 360px);
   background: #ffffff;
-  overflow-y: auto;
-  animation: slideIn 0.22s ease-out;
+  box-shadow: 0 0 48px rgba(0, 0, 0, 0.28);
+  transition: transform 380ms cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 .drawerHead {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  background: linear-gradient(135deg, #003066 0%, #0a5cb8 60%, var(--blue-600) 100%);
 }
 
-.drawerHead img {
-  width: 48px;
-  height: 48px;
-}
-
-.drawerAuth {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-bottom: 18px;
-}
-
-.drawerAuth span {
+.drawerBrand {
   display: flex;
   align-items: center;
-  justify-content: center;
-  height: 42px;
-  border-radius: 12px;
-  border: 1.5px solid var(--blue);
-  color: var(--blue);
-  font-size: 15px;
-  font-weight: 700;
+  gap: 12px;
 }
 
-.drawerAuth span:first-child {
-  background: var(--blue);
+.drawerLogo {
+  flex-shrink: 0;
+  display: flex;
+  width: 44px;
+  height: 44px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.drawerLogo img {
+  width: 100%;
+  height: 100%;
+  padding: 4px;
+  object-fit: contain;
+}
+
+.drawerBrand > span:nth-child(2) {
+  flex: 1;
+  min-width: 0;
   color: #ffffff;
 }
 
+.drawerBrand b {
+  display: block;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.drawerBrand small {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  line-height: 1.25;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.drawerClose {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-right: -4px;
+  border-radius: 999px;
+  color: #ffffff;
+}
+
+.drawerLogin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  border-radius: 12px;
+  background: #ffffff;
+  color: var(--blue);
+  font-size: 15px;
+  font-weight: 700;
+  transition: opacity 300ms ease-out, transform 300ms ease-out;
+}
+
+.drawerNav {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 8px 16px;
+  scrollbar-width: none;
+}
+
+.drawerNav li,
+.drawerNav > p,
+.drawerNav > div {
+  transition: opacity 300ms ease-out, transform 300ms ease-out;
+}
+
+.drawerTiles {
+  display: flex;
+  gap: 4px;
+  margin: 12px 4px 0;
+  padding: 4px;
+  border: 1px solid #e6e6e6;
+  border-radius: 16px;
+}
+
+.drawerTile {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 0;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--g700);
+}
+
+.drawerTileOn {
+  background: var(--blue-100);
+  color: var(--blue);
+  font-weight: 700;
+}
+
+.drawerTileIcon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 26px;
+}
+
+.drawerBadge {
+  position: absolute;
+  right: -10px;
+  top: -6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 17px;
+  min-width: 17px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--blue);
+  box-shadow: 0 0 0 2px #ffffff;
+  color: #ffffff;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1;
+}
+
 .drawerLabel {
-  margin: 14px 0 6px !important;
+  margin: 0 !important;
+  padding: 20px 12px 6px;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -387,29 +610,260 @@
 .drawerLink {
   display: flex !important;
   align-items: center;
-  justify-content: space-between;
+  gap: 14px;
   width: 100%;
-  padding: 12px 2px !important;
-  font-size: 16px !important;
-  font-weight: 600 !important;
-  border-bottom: 1px solid var(--g100) !important;
+  min-height: 48px;
+  padding: 0 12px !important;
+  border-radius: 12px;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  line-height: 1.35;
+  text-align: left;
+  color: #1f2937;
 }
 
-.drawerPhone {
+.drawerLink span {
+  flex: 1;
+}
+
+.drawerLinkIcon {
+  flex-shrink: 0;
+  color: var(--g500);
+}
+
+.drawerChev {
+  flex-shrink: 0;
+  color: var(--g300);
+}
+
+.drawerLinkOn {
+  background: var(--blue-100);
+  color: var(--blue);
+  font-weight: 700 !important;
+}
+
+.drawerLinkOn .drawerLinkIcon {
+  color: var(--blue);
+}
+
+.drawerHuman {
+  margin: 20px 4px 0;
+  padding: 14px;
+  border: 1px solid var(--blue-200);
+  border-radius: 16px;
+  background: var(--blue-50);
+}
+
+.drawerHuman > p {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+
+.drawerHumanPhone {
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.drawerHumanPhone i {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: var(--blue);
+  color: #ffffff;
+}
+
+.drawerHumanPhone b {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.25;
+  font-variant-numeric: tabular-nums;
+  color: var(--g900);
+}
+
+.drawerHumanPhone small {
+  display: block;
+  font-size: 12px;
+  line-height: 1.25;
+  color: var(--g500);
+}
+
+.drawerHumanMail {
+  display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 16px;
+  margin-top: 10px;
+  padding-left: 4px;
+  font-size: 13px;
+  color: var(--g600);
+}
+
+.drawerHumanMail svg {
+  flex-shrink: 0;
+  color: var(--blue);
+}
+
+.drawerLang {
+  margin: 12px 4px 0;
+  overflow: hidden;
+  border: 1px solid #e6e6e6;
+  border-radius: 16px;
+  background: #ffffff;
+}
+
+.drawerLang > button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 14px;
+}
+
+.drawerLang > button svg:first-child {
+  color: var(--blue);
+}
+
+.drawerLang > button span {
+  flex: 1;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--g700);
+}
+
+.drawerLang > button b {
+  font-size: 14px;
   font-weight: 700;
   color: var(--blue);
 }
 
-.drawerPhone small {
-  flex-basis: 100%;
-  font-size: 12px;
+.drawerLang > button svg:last-child {
+  color: var(--g400);
+  transition: transform 300ms ease;
+}
+
+.chevUp {
+  transform: rotate(180deg);
+}
+
+.drawerLangOpt {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+}
+
+.drawerLangOpt b {
+  flex: 1;
+  font-size: 15px;
   font-weight: 500;
-  color: var(--g500);
+  color: #1f2937;
+}
+
+.drawerLangOpt small {
+  font-size: 12px;
+  color: var(--g400);
+}
+
+.drawerLangOptOn {
+  background: var(--blue-100);
+}
+
+.drawerLangOptOn b {
+  font-weight: 700;
+  color: var(--blue);
+}
+
+.drawerLangOptOn svg {
+  color: var(--blue);
+}
+
+.drawerFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  border-top: 1px solid #e6e6e6;
+}
+
+.drawerSocials {
+  display: flex;
+  gap: 6px;
+}
+
+.drawerSocials i {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: var(--blue-100);
+  color: var(--blue);
+}
+
+.drawerFoot small {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11px;
+  line-height: 1.25;
+  color: var(--g400);
+}
+
+/* Cart drawer (components/cart/CartDrawer.jsx) */
+.cartDrawer {
+  position: absolute;
+  inset: 0;
+  z-index: 80;
+}
+
+.cartDrawerDim {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  transition: opacity 280ms ease-out;
+}
+
+.cartDrawerPanel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+  overflow: hidden;
+  border-radius: 16px 0 0 16px;
+  background: #f5f5f5;
+  box-shadow: -12px 0 32px rgba(0, 0, 0, 0.18);
+  transition: transform 280ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drawer,
+  .drawerWrap,
+  .cartDrawerDim,
+  .cartDrawerPanel,
+  .drawerNav li,
+  .drawerNav > p,
+  .drawerNav > div,
+  .drawerLogin {
+    transition: none;
+  }
 }
 
 @keyframes fade {
