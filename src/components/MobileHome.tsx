@@ -20,6 +20,7 @@ import AppIcon from "./ios/AppIcon";
 import ClockWidget from "./ios/ClockWidget";
 import dynamic from "next/dynamic";
 import { CONTACT_APPS } from "./ios/contactApps";
+import { AmplitudeArt } from "./ios/IconArt";
 import { SECTION_APPS } from "./ios/sections";
 import styles from "./MobileHome.module.css";
 
@@ -136,10 +137,26 @@ export default function MobileHome() {
           </div>
         </section>
 
-        {/* Page 2: clock + calendar, then the website, on the same grid as page 1 */}
+        {/* Page 2: clock + calendar, then the website & Amplitude, on the same grid as page 1 */}
         <section className={styles.page} aria-label={`Home screen page 2 of ${PAGES}`}>
           <ClockWidget />
-          <div className={styles.grid}>{websites.map(appIcon)}</div>
+          <div className={styles.grid}>
+            {websites.map(appIcon)}
+            <AppIcon
+              label="Amplitude"
+              art={<AmplitudeArt />}
+              href="https://app.amplitude.com/analytics/silo-fortune"
+              external
+              ariaLabel="Open Amplitude Analytics"
+              onClick={() =>
+                trackEvent("Clicked External Link", {
+                  link_type: "analytics",
+                  label: "Amplitude",
+                  placement: "mobile_home",
+                })
+              }
+            />
+          </div>
         </section>
       </div>
 

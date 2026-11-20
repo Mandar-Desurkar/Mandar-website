@@ -105,9 +105,9 @@ export type AnalyticsEvents = {
   // Beyond Work: the race video starts playing on the page
   "Played Video": { video: string };
   "Clicked External Link": {
-    link_type: "school_map" | "project" | "app_website" | "press";
+    link_type: "school_map" | "project" | "app_website" | "press" | "analytics";
     label: string;
-    placement?: "hero_icon" | "hero_chip";
+    placement?: "hero_icon" | "hero_chip" | "mobile_home";
   };
 
   // Music widget
