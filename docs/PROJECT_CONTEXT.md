@@ -16,8 +16,8 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
 
 ## Current state (2026-10-31)
 
-- **Desktop (redesigned 2026-10-31):** dawn wallpaper (`public/wallpaper-desktop.webp`,
-  static), sunrise loader, a slim menu bar (sections, battery, Wi-Fi, clock), and one icon column on the right (five
+- **Desktop (redesigned 2026-10-31):** green-hills valley wallpaper since 2026-11-21 (owner's photo,
+  `public/wallpaper-desktop.webp`, 2880×1920, static; was the dawn photo), sunrise loader, a slim menu bar (sections, battery, Wi-Fi, clock), and one icon column on the right (five
   sections, then Kissan and Gau, which open their prototypes). Every window is translucent dark glass,
   themed once in `globals.css` (`.os-window:not(.ios-app)`). About is `AboutCard.tsx`. Old About concepts
   remain at `/?about=live | showcase | store | native | classic` until the owner confirms the design;
@@ -71,8 +71,8 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
   ERP green) on the desktop icon column and phone home page 1 (`toolApps` in `resume.ts`, also in Spotlight), plus
   the viewer's tabs / dropdown / phone switcher and `?prototype=sales-crm`. Kept out of the hero and About app
   lists, which are the consumer apps. Desktop opens the Desktop layout; phones always get the mobile layout.
-- **Phone:** dawn wallpaper crop (`public/wallpaper-phone.webp`, moon placed in the gap between the two
-  small widgets) and the Back button in `PhoneBack.tsx`. Keep in-app overlays in `depth` there.
+- **Phone:** portrait crop of the same valley photo, centred on the valley's V (`public/wallpaper-phone.webp`,
+  1080×2340) and the Back button in `PhoneBack.tsx`. Keep in-app overlays in `depth` there.
 - Stack: Next.js 16.3 App Router, React 19.2, TypeScript, CSS Modules + tokens in
   `src/app/globals.css`, framer-motion, lucide-react, react-icons.
 - Sections (tab ids in `WindowContext.activeTab`): `about`, `experience`, `education`,
@@ -457,6 +457,15 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
   to a simple layout on mobile. No fake metrics.
 
 ## Changelog
+
+- 2026-11-21: **New wallpaper** (owner's green-hills valley photo) on desktop and phone. Its pale sky made the
+  white menu bar, desktop icon labels and phone widgets hard to read, so the tone layer in `globals.css` gained
+  a top-down shade (`--wallpaper-sky-shade: 0.4`, gone by mid-screen) and saturation went 0.7 → 0.85 so the
+  grass isn't dulled. Old dawn files are not kept in the repo (git history has them). Desktop WebP 292 KB
+  (q70), phone 148 KB (q66).
+- 2026-11-21: **About window tidied.** Removed the View prototype row and the LinkedIn / Email / copy links (the
+  Contact window has them); title under the name is now role + company; the second paragraph no longer repeats
+  the sales figure shown in the KPI row.
 
 - 2026-11-21: **Prototype analytics.** Three new events (`Used Prototype Feature`, `Hit Prototype Validation`,
   `Clicked Unbuilt Prototype Feature`) wired through the Sales CRM, and `Switched Prototype` added to the

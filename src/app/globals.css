@@ -19,8 +19,11 @@
   --accent-tint-hover: rgba(0, 122, 255, 0.16);
   --status-green: #34c759;
   /* How much the tone layer calms the wallpaper: 1 = full colour, 0 = no dimming */
-  --wallpaper-saturation: 0.7;
+  --wallpaper-saturation: 0.85;
   --wallpaper-dim: 0.3;
+  /* Extra shade over the wallpaper's pale sky, fading out by mid-screen, so the white menu bar, desktop
+     icon labels and phone widgets stay readable while the hills keep their colour */
+  --wallpaper-sky-shade: 0.4;
   /* The About text's coloured words and the matching dots on the desktop */
   --tag-build: #3b82f6;
   --tag-grow: #2ea44f;
@@ -355,7 +358,9 @@ html[data-mc] .os-window.absolute-window {
   position: fixed;
   inset: 0;
   z-index: -1;
-  background: rgba(6, 9, 18, var(--wallpaper-dim));
+  background:
+    linear-gradient(to bottom, rgba(6, 9, 18, var(--wallpaper-sky-shade)) 0%, rgba(6, 9, 18, calc(var(--wallpaper-sky-shade) * 0.45)) 30%, rgba(6, 9, 18, 0) 55%),
+    rgba(6, 9, 18, var(--wallpaper-dim));
   -webkit-backdrop-filter: saturate(var(--wallpaper-saturation));
   backdrop-filter: saturate(var(--wallpaper-saturation));
   pointer-events: none;
@@ -603,7 +608,7 @@ html[data-mc] .os-window.absolute-window {
     min-height: 100dvh;
     /* iOS ignores fixed backgrounds and repaints a stretched wallpaper on every scroll */
     background-attachment: scroll;
-    /* A portrait crop of the desktop wallpaper, keeping the moon and the horizon */
+    /* A portrait crop of the desktop wallpaper, centred on the valley */
     background-image: url('/wallpaper-phone.webp');
   }
 
