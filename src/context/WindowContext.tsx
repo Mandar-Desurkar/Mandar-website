@@ -4,12 +4,13 @@ import React, { createContext, useContext, useEffect, useRef, useState, ReactNod
 import { trackEvent, secondsSince } from '@/lib/analytics';
 
 // `projects` is shown as "Case Studies"; the id stays so analytics history stays comparable
-export type SectionId = 'about' | 'experience' | 'education' | 'projects' | 'contact';
-const SECTION_IDS: SectionId[] = ['about', 'experience', 'education', 'projects', 'contact'];
+// `notebook` is the Notebook window (principles, field notes, the site as a product)
+export type SectionId = 'about' | 'experience' | 'education' | 'projects' | 'contact' | 'notebook';
+const SECTION_IDS: SectionId[] = ['about', 'experience', 'education', 'projects', 'contact', 'notebook'];
 const isSectionId = (v: string | null): v is SectionId => SECTION_IDS.includes(v as SectionId);
 export type PrototypeId = 'kissan-sampurna' | 'gau-sampurna' | 'gau-sampurna-web' | 'sales-crm';
-export type PrototypePlacement = 'hero' | 'desktop' | 'experience' | 'projects' | 'home_screen' | 'deep_link' | 'spotlight' | 'mission_control' | 'desk_cat';
-export type OpenSource = 'desktop_icon' | 'menu_bar' | 'system_menu' | 'hero_cta' | 'notification' | 'mobile_dock' | 'home_widget' | 'spotlight' | 'deep_link' | 'mission_control' | 'desk_cat';
+export type PrototypePlacement = 'hero' | 'desktop' | 'experience' | 'projects' | 'home_screen' | 'deep_link' | 'spotlight' | 'mission_control' | 'desk_cat' | 'notebook';
+export type OpenSource = 'desktop_icon' | 'menu_bar' | 'system_menu' | 'hero_cta' | 'notification' | 'mobile_dock' | 'home_widget' | 'spotlight' | 'deep_link' | 'mission_control' | 'desk_cat' | 'sticky_note' | 'notebook';
 
 type WindowContextType = {
   isMinimized: boolean;

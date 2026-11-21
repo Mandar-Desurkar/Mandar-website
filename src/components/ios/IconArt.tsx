@@ -170,6 +170,23 @@ export const ResumeArt = () => (
 
 // ---------- Dock: ways to reach me ----------
 
+// Notebook: a notes pad with a gold header band and ruled lines, on the site's marigold
+export const NotebookArt = () => (
+  <Art look={{ top: "#ffd36b", bottom: "#f0a21c", shade: "#8a5200", accent: ["#ffcf4d", "#f5b83d"], paper: "#fff6e0" }}>
+    {(id) => (
+      <>
+        <rect x="27" y="21" width="46" height="58" rx="7" fill={url(id.paper)} />
+        <path d="M27 28a7 7 0 0 1 7-7h32a7 7 0 0 1 7 7v6H27z" fill={url(id.accent)} />
+        <g fill="#f3dcae">
+          <rect x="34" y="43" width="32" height="3" rx="1.5" />
+          <rect x="34" y="52" width="32" height="3" rx="1.5" />
+          <rect x="34" y="61" width="22" height="3" rx="1.5" />
+        </g>
+      </>
+    )}
+  </Art>
+);
+
 export const PhoneArt = () => (
   <Art look={{ top: "#6ff28a", bottom: "#13b93b", shade: "#05701f", paper: "#e6fbea" }}>
     {(id) => <Glyph Icon={IoCall} id={id} box={58} />}

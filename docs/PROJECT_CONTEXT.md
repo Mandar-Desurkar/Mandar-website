@@ -458,6 +458,21 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 
 ## Changelog
 
+- 2026-11-21: **The PM layer** (owner picked from a personality audit: principles, field notes, the site as a
+  product, signature details). New **Notebook** section (`notebook` SectionId; `Notebook.tsx`, macOS Notes in
+  dark mode): Product Principles (7, each linked to a real case-study decision; verified against the data),
+  Field Notes (one research finding per study and what it changed, plus "What I'd do differently" from each
+  study's learnings), This Site Is a Product (built-stats rounded down, a live **"Your visit, measured"**
+  funnel from `lib/journey.ts`, fed by trackEvent and kept in sessionStorage, roadmap, Request a feature,
+  release notes from the git history) and Now. Content lives in `src/data/notebook.ts` (owner to edit: `now`
+  monthly, `roadmap`). Entry points: desktop icon, menu bar, phone home page 2 (not the 5-tab bar), Spotlight,
+  and the **Now sticky** on the desktop (`NowSticky.tsx`, hidden on phones and short screens). Signature
+  details: one colour `--signature` (#f5b83d, Notes' gold), an **MD monogram** where the Apple logo sits, an
+  **"Open to PM roles"** status in the menu bar (opens Contact), and a handwritten sign-off under the About
+  text (Mrs Saint Delafield, the only non-system font; clip-path reveal). Personas in the case studies are
+  composites, so Field Notes leads with research findings, not persona quotes. New events: Opened Note,
+  Requested Site Feature, Clicked Journey Next Step. Principles also go into llms-full.txt and SiteIndex.
+
 - 2026-11-21: **Font and SEO / LLM pass.** Font: the site already forces `--font-system` on every element
   (`* { font-family … !important }` in globals.css), which is SF Pro on Apple devices (verified as `.SF NS` on a
   Mac) and Inter elsewhere (SF Pro's licence forbids serving it as a web font); stale per-component stacks now

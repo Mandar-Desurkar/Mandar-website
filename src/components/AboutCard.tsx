@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { Mrs_Saint_Delafield } from "next/font/google";
 import { FileText } from "lucide-react";
 import { experiences, kpis, profile } from "@/data/resume";
 import { useWindow } from "@/context/WindowContext";
@@ -15,6 +16,9 @@ import styles from "./AboutCard.module.css";
 type Tag = "build" | "grow" | "write";
 
 let isFirstMount = true;
+
+// The sign-off under the About text: a signature-style script, the one place the site leaves the system font
+const signatureFont = Mrs_Saint_Delafield({ weight: "400", subsets: ["latin"], display: "swap", variable: "--font-signature" });
 // Current employer, short form, as the phone home screen shows it ("Silo Fortune")
 const company = experiences.find((e) => !e.isFuture)?.company.replace(/ Private Limited$/, "");
 
@@ -99,6 +103,11 @@ export default function AboutCard() {
           <Line key={line} text={line} />
         ))}
       </motion.div>
+
+      {/* Signed, in the signature colour; it writes itself in once the text has risen */}
+      <p className={`${styles.signature} ${signatureFont.variable}`} style={{ animationDelay: `${delay + 0.55}s` }} aria-label={`Signed, ${profile.name.split(" ")[0]}`}>
+        {profile.name.split(" ")[0]}
+      </p>
 
       <motion.dl className={styles.stats} {...rise(2)}>
         {kpis.map((k, i) => (

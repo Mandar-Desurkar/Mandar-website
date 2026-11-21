@@ -21,7 +21,7 @@ import ClockWidget from "./ios/ClockWidget";
 import dynamic from "next/dynamic";
 import { CONTACT_APPS } from "./ios/contactApps";
 import { AmplitudeArt } from "./ios/IconArt";
-import { SECTION_APPS } from "./ios/sections";
+import { NOTEBOOK_APP, SECTION_APPS } from "./ios/sections";
 import styles from "./MobileHome.module.css";
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -138,10 +138,15 @@ export default function MobileHome() {
           </div>
         </section>
 
-        {/* Page 2: clock + calendar, then the website & Amplitude, on the same grid as page 1 */}
+        {/* Page 2: clock + calendar, then the Notebook, the website & Amplitude, on the same grid as page 1 */}
         <section className={styles.page} aria-label={`Home screen page 2 of ${PAGES}`}>
           <ClockWidget />
           <div className={styles.grid}>
+            <AppIcon
+              label={NOTEBOOK_APP.label}
+              art={<NOTEBOOK_APP.Art />}
+              onClick={() => openSection("notebook", "home_widget")}
+            />
             {websites.map(appIcon)}
             <AppIcon
               label="Amplitude"

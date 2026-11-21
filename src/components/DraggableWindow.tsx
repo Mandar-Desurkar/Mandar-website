@@ -133,6 +133,11 @@ export default function DraggableWindow({
         newWidth = '560px';
         newHeight = 'fit-content';
         break;
+      case 'notebook':
+        // Notes: the note list beside a readable note
+        newWidth = 'min(960px, 84vw)';
+        newHeight = 'min(720px, calc(100vh - 70px))';
+        break;
       default:
         newWidth = '60vw';
         newHeight = '70vh';

@@ -9,11 +9,12 @@ import { IoChevronForward, IoCloseCircle, IoSearch } from "react-icons/io5";
 import { useWindow } from "@/context/WindowContext";
 import { experiences, profile, shippedApps, skills, toolApps } from "@/data/resume";
 import { caseStudies } from "@/data/caseStudies";
+import { principles } from "@/data/notebook";
 import { trackEvent } from "@/lib/analytics";
 import { AppTile } from "./AppIcon";
 import { CONTACT_APPS } from "./contactApps";
 import { ResumeArt } from "./IconArt";
-import { SECTION_APPS } from "./sections";
+import { NOTEBOOK_APP, SECTION_APPS } from "./sections";
 import styles from "./Spotlight.module.css";
 
 type Kind = "app" | "case_study" | "section" | "contact";
@@ -44,11 +45,13 @@ const SECTION_SUBTITLES: Record<string, string> = {
   education: "B.E. ISE · Skills & toolkit",
   projects: caseStudies.map((c) => c.title.split(":")[0]).join(" · "),
   contact: "Email, phone, LinkedIn",
+  notebook: "Product principles · Field notes · Now",
 };
 const SECTION_KEYWORDS: Record<string, string> = {
   experience: experiences.map((e) => `${e.role} ${e.company} ${e.groups?.map((g) => g.title).join(" ") ?? ""}`).join(" "),
   education: skills.map((s) => s.items).join(" "),
   projects: caseStudies.map((c) => `${c.title} ${c.tags.join(" ")}`).join(" "),
+  notebook: principles.map((p) => p.title).join(" "),
 };
 
 export default function Spotlight({ onClose }: { onClose: () => void }) {
@@ -94,7 +97,7 @@ export default function Spotlight({ onClose }: { onClose: () => void }) {
         href: profile.resumeUrl,
         run: () => trackEvent("Opened Resume", { placement: "spotlight" }),
       },
-      ...SECTION_APPS.map((app) => ({
+      ...[...SECTION_APPS, NOTEBOOK_APP].map((app) => ({
         id: app.id,
         kind: "section" as const,
         title: app.title,

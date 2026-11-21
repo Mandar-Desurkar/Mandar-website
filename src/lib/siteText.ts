@@ -6,6 +6,7 @@ import { caseStudies } from "@/data/caseStudies";
 import { kpis, profile, shippedApps, toolApps } from "@/data/resume";
 import { resumeDocument } from "@/data/resumeDocument";
 import { SITE_URL } from "@/data/site";
+import { principles } from "@/data/notebook";
 
 const url = (path: string) => `${SITE_URL}${path}`;
 // "Crop Guide: the right crop..." → ["Crop Guide", "The right crop..."]
@@ -86,6 +87,10 @@ export function llmsFullTxt(): string {
   for (const ed of r.education) out.push(`- ${ed.school} (${ed.period}): ${ed.detail}`);
   out.push("", "## Skills", "");
   for (const s of r.skills) out.push(`- ${s.label}: ${s.items}`);
+  out.push("", "## Product principles", "");
+  principles.forEach((p, i) =>
+    out.push(`${i + 1}. **${p.title}** ${p.body} (Proof: ${p.proof.map((pr) => `${splitTitle(caseStudies.find((c) => c.slug === pr.slug)?.title ?? pr.slug).name}, "${pr.decision}"`).join("; ")}.)`),
+  );
   out.push("", "## Case studies", "");
   for (const cs of caseStudies) {
     const { name, line } = splitTitle(cs.title);

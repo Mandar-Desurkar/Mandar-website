@@ -45,6 +45,16 @@
   border-radius: 13px;
 }
 
+/* A drawn icon (IconArt), on the same rounded tile as the app icons */
+.artIcon {
+  display: block;
+  width: 58px;
+  height: 58px;
+  overflow: hidden;
+  border-radius: 13px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
 /* The photo as a print: white edge */
 .thumb {
   display: block;

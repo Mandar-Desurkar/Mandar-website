@@ -20,12 +20,15 @@ import dynamic from "next/dynamic";
 import { useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import SiteIndex from "@/components/SiteIndex";
+import NowSticky from "@/components/NowSticky";
+import { NotebookArt } from "@/components/ios/IconArt";
 
 // Each section's code loads when it is opened, so a phone landing on the home screen doesn't pay for them
 const Experience = dynamic(() => import("@/components/Experience"));
 const Education = dynamic(() => import("@/components/Education"));
 const Projects = dynamic(() => import("@/components/Projects"));
 const Contact = dynamic(() => import("@/components/Contact"));
+const Notebook = dynamic(() => import("@/components/Notebook"));
 
 function ActiveSection() {
   const { activeTab } = useWindow();
@@ -36,6 +39,7 @@ function ActiveSection() {
     case 'education': return <Education />;
     case 'projects': return <Projects />;
     case 'contact': return <Contact />;
+    case 'notebook': return <Notebook />;
     default: return <Hero />;
   }
 }
@@ -48,6 +52,7 @@ function WindowTitle() {
     case 'education': return 'Education';
     case 'projects': return 'Case Studies';
     case 'contact': return 'Contact';
+    case 'notebook': return 'Notebook';
     default: return 'Product Notebook';
   }
 }
@@ -58,6 +63,7 @@ const TAB_TITLES: Record<string, string> = {
   education: "Education",
   projects: "Case Studies",
   contact: "Contact",
+  notebook: "Notebook",
 };
 
 // The browser tab names the open window, so a recruiter with many tabs can find this one
@@ -76,11 +82,13 @@ function DesktopEnvironment() {
   
   return (
     <>
+      <NowSticky />
       <div className="desktop-grid">
         <DesktopIcon id="about" title="About Me" thumb="/profile-photo.jpg" />
         <DesktopIcon id="experience" title="Experience" icon={<Image src="/icons/folder2.webp" alt="" width={56} height={56} />} />
         <DesktopIcon id="education" title="Education" icon={<Image src="/icons/folder3.webp" alt="" width={56} height={56} />} />
         <DesktopIcon id="projects" title="Case Studies" icon={<Image src="/icons/folder4.webp" alt="" width={56} height={56} />} />
+        <DesktopIcon id="notebook" title="Notebook" icon={<span className={iconStyles.artIcon}><NotebookArt /></span>} />
         <DesktopIcon id="contact" title="Contact" icon={<Image src="/icons/folder5.webp" alt="" width={56} height={56} />} />
         {[...shippedApps, ...toolApps].map(
           (app) =>

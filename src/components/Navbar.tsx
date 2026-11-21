@@ -12,6 +12,7 @@ const SECTIONS: { id: SectionId; label: string }[] = [
   { id: "education", label: "Education" },
   { id: "projects", label: "Case Studies" },
   { id: "contact", label: "Contact" },
+  { id: "notebook", label: "Notebook" },
 ];
 
 type BatteryManager = EventTarget & { level: number };
@@ -56,6 +57,10 @@ export default function Navbar() {
   return (
     <header className={styles.menubar}>
       <div className={styles.left}>
+        {/* The monogram sits where the Apple logo would, in the site's signature colour */}
+        <span className={styles.mark} aria-hidden="true">
+          MD
+        </span>
         <span className={styles.name}>{profile.name}</span>
         <nav className={styles.menu} aria-label="Sections">
           {SECTIONS.map(({ id, label }) => {
@@ -76,6 +81,11 @@ export default function Navbar() {
       </div>
 
       <div className={styles.right}>
+        {/* Availability, always in view; opens Contact */}
+        <button type="button" className={styles.status} onClick={() => openSection("contact", "menu_bar")} title="Get in touch">
+          <span className={styles.statusDot} aria-hidden="true" />
+          {profile.availability}
+        </button>
         {/* Mission Control: every window at once (MissionControl listens for this event) */}
         <button
           type="button"

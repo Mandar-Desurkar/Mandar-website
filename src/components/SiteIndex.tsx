@@ -6,6 +6,7 @@ import { caseStudies } from "@/data/caseStudies";
 import { experiences, kpis, profile } from "@/data/resume";
 import { resumeDocument } from "@/data/resumeDocument";
 import { splitTitle } from "@/lib/siteText";
+import { principles } from "@/data/notebook";
 
 const plain = (s: string) => s.replace(/\*\*/g, "");
 
@@ -46,6 +47,15 @@ export default function SiteIndex() {
           </li>
         ))}
       </ul>
+
+      <h3>Product principles</h3>
+      <ol>
+        {principles.map((p) => (
+          <li key={p.title}>
+            {p.title} {p.body}
+          </li>
+        ))}
+      </ol>
 
       <h3>Case studies</h3>
       <ul>

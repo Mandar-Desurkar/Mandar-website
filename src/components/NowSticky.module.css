@@ -1,0 +1,86 @@
+/* A Stickies note in the site's marigold, tilted a little, behind the windows */
+.sticky {
+  position: absolute;
+  top: 48px;
+  left: 28px;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  width: 228px;
+  padding: 14px 16px 16px;
+  border: 0;
+  border-radius: 3px 3px 14px 3px;
+  background: linear-gradient(180deg, #ffe08a 0%, #f8cd5c 100%);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset, 0 14px 30px rgba(0, 0, 0, 0.45), 0 2px 6px rgba(0, 0, 0, 0.25);
+  color: #3a2c05;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transform: rotate(-2deg);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+}
+
+.sticky:hover {
+  transform: rotate(0deg) translateY(-2px);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset, 0 20px 40px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.sticky:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.updated {
+  font-size: 10.5px;
+  font-weight: 600;
+  opacity: 0.6;
+}
+
+.item {
+  display: block;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.label {
+  display: block;
+  margin-bottom: 1px;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+/* Phones get the home screen instead of the desktop */
+@media (max-width: 767.98px), (max-width: 1023.98px) and (pointer: coarse), (max-height: 500px) and (pointer: coarse) {
+  .sticky {
+    display: none;
+  }
+}
+
+/* Short screens: the sticky would sit under the window anyway */
+@media (max-height: 640px) {
+  .sticky {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sticky {
+    transition: none;
+  }
+}

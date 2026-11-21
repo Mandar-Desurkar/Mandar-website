@@ -8,6 +8,8 @@ import { PiHandshake, PiHandshakeFill } from "react-icons/pi";
 import {
   IoBriefcase,
   IoBriefcaseOutline,
+  IoJournal,
+  IoJournalOutline,
   IoReader,
   IoReaderOutline,
   IoPerson,
@@ -16,7 +18,7 @@ import {
   IoSchoolOutline,
 } from "react-icons/io5";
 import type { SectionId } from "@/context/WindowContext";
-import { AboutArt, CaseStudiesArt, ContactArt, EducationArt, ExperienceArt } from "./IconArt";
+import { AboutArt, CaseStudiesArt, ContactArt, EducationArt, ExperienceArt, NotebookArt } from "./IconArt";
 
 export type SectionApp = {
   id: SectionId;
@@ -37,4 +39,16 @@ export const SECTION_APPS: SectionApp[] = [
   { id: "contact", Art: ContactArt, label: "Contact", title: "Contact", Glyph: PiHandshakeFill, Outline: PiHandshake, keywords: "email phone linkedin hire reach" },
 ];
 
-export const sectionApp = (id: SectionId) => SECTION_APPS.find((s) => s.id === id) ?? SECTION_APPS[0];
+// The Notebook is an app on the home screen's second page and in Spotlight, but not in the tab bar
+// (five tabs is the iOS limit)
+export const NOTEBOOK_APP: SectionApp = {
+  id: "notebook",
+  Art: NotebookArt,
+  label: "Notebook",
+  title: "Notebook",
+  Glyph: IoJournal,
+  Outline: IoJournalOutline,
+  keywords: "notes principles product thinking field notes roadmap release notes now how i think",
+};
+
+export const sectionApp = (id: SectionId) => [...SECTION_APPS, NOTEBOOK_APP].find((s) => s.id === id) ?? SECTION_APPS[0];
