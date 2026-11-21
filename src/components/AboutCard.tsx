@@ -77,7 +77,8 @@ export default function AboutCard() {
     >
       <motion.header className={styles.header} {...rise(0)}>
         <span className={styles.portrait}>
-          <Image src="/profile-avatar.jpg" alt={`${profile.name}, ${profile.role}`} width={224} height={224} />
+          {/* The full head-and-shoulders photo: the tight avatar crop looks zoomed in at this size */}
+          <Image src="/profile-photo.jpg" alt={`${profile.name}, ${profile.role}`} width={224} height={224} />
         </span>
         <div>
           <h1>{profile.name}</h1>
