@@ -12,10 +12,11 @@ export const profile = {
   availability: "Open to PM roles",
   // The About window, desktop only. {tag:word} renders a coloured link to that work.
   // The owner's own About text (2026-11-16), word for word; same message as `intro`. ₹35L+ (was ₹27L+,
-  // owner's call 2026-11-19) = ₹20L+ push notifications + ₹15L+ CRM licences, per the resume.
+  // owner's call 2026-11-19) = ₹20L+ push notifications + ₹15L+ CRM licences, per the resume. The sales
+  // figure (₹12 Cr+ a year) was taken out on 2026-11-21: the KPI row right below shows it as ₹1 Cr+ a month.
   about: [
     "I’ve spent 3+ years building AI-powered {build:products} from 0→1. Most recently, I owned two consumer apps end to end, from discovery and the first {write:PRD} through launch, AI features, a {grow:freemium} subscription and a D2C store.",
-    "Alongside them, I shipped four more: an LLM chatbot and the CRM, rider app and ERP that now handle ₹12 Cr+ a year in sales, cutting tool costs by ₹35L+ a year by keeping them in‑house.",
+    "Alongside them, I shipped four more: an LLM chatbot and the CRM, rider app and ERP that run the company’s sales, cutting tool costs by ₹35L+ a year by keeping them in‑house.",
     "I’m now looking for APM or Product Manager roles in AI, consumer tech, growth or D2C.",
   ],
   // The PDF-style resume viewer (src/app/resume); its Download button serves the generated PDF
@@ -25,7 +26,7 @@ export const profile = {
   // splits). The KPI row right below carries installs, MAU and trial conversion. Supports **bold**.
   intro: [
     "I’ve spent 3+ years building AI-powered products from 0→1. Most recently, I owned **two consumer apps** end to end, from discovery and the first PRD through launch, AI features, a freemium subscription and a D2C store.",
-    "Alongside them, I shipped **four more**: an LLM chatbot and the CRM, rider app and ERP that now handle ₹12 Cr+ a year in sales, cutting tool costs by ₹35L+ a year by keeping them in‑house.",
+    "Alongside them, I shipped **four more**: an LLM chatbot and the CRM, rider app and ERP that run the company’s sales, cutting tool costs by ₹35L+ a year by keeping them in‑house.",
     "I’m now looking for APM or Product Manager roles in AI, consumer tech, growth or D2C.",
   ],
   // Full resume summary, for longer-form use (e.g. structured data).

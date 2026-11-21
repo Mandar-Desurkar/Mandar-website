@@ -5,8 +5,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Check, Copy, FileText } from "lucide-react";
-import { kpis, profile, shippedApps } from "@/data/resume";
+import { FileText } from "lucide-react";
+import { experiences, kpis, profile } from "@/data/resume";
 import { useWindow } from "@/context/WindowContext";
 import { trackEvent } from "@/lib/analytics";
 import CountUp from "./CountUp";
@@ -15,6 +15,8 @@ import styles from "./AboutCard.module.css";
 type Tag = "build" | "grow" | "write";
 
 let isFirstMount = true;
+// Current employer, short form, as the phone home screen shows it ("Silo Fortune")
+const company = experiences.find((e) => !e.isFuture)?.company.replace(/ Private Limited$/, "");
 
 // Each coloured word opens the work it describes
 function Pill({ tag, word }: { tag: Tag; word: string }) {
@@ -48,10 +50,9 @@ function Line({ text }: { text: string }) {
 }
 
 export default function AboutCard() {
-  const { openSection, openPrototype } = useWindow();
+  const { openSection } = useWindow();
   const card = useRef<HTMLElement>(null);
   const [delay] = useState(isFirstMount ? 1.8 : 0);
-  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     isFirstMount = false;
@@ -80,7 +81,11 @@ export default function AboutCard() {
         </span>
         <div>
           <h1>{profile.name}</h1>
-          <p>Product builder</p>
+          {/* The title a recruiter scans for, and where; matches the phone home screen */}
+          <p>
+            {profile.role}
+            {company && ` at ${company}`}
+          </p>
           <p className={styles.status}>
             <span className={styles.statusDot} aria-hidden="true" />
             {profile.availability}
@@ -110,20 +115,8 @@ export default function AboutCard() {
         ))}
       </motion.dl>
 
-      <motion.p className={styles.apps} {...rise(3)}>
-        <span>View prototype</span>
-        {shippedApps.map(
-          (app) =>
-            app.prototype && (
-              <button key={app.name} type="button" onClick={() => app.prototype && openPrototype(app.prototype, "hero")}>
-                {app.name}
-                <ArrowRight size={14} aria-hidden="true" />
-              </button>
-            ),
-        )}
-      </motion.p>
-
-      <motion.p className={styles.links} {...rise(4)}>
+      {/* Two actions only: the Contact window it opens already has email (with copy), phone and LinkedIn */}
+      <motion.p className={styles.links} {...rise(3)}>
         <button type="button" className={styles.contact} onClick={() => openSection("contact", "hero_cta")}>
           Get in touch
         </button>
@@ -137,30 +130,6 @@ export default function AboutCard() {
         >
           <FileText size={15} aria-hidden="true" /> View resume
         </a>
-        <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent("Clicked Contact Method", { method: "linkedin", placement: "hero" })}>
-          LinkedIn
-        </a>
-        <a href={`mailto:${profile.email}`} onClick={() => trackEvent("Clicked Contact Method", { method: "email", placement: "hero" })}>
-          Email
-        </a>
-        {/* Many recruiters paste the address into their own mail tool rather than open a mail app */}
-        <button
-          type="button"
-          className={styles.copy}
-          onClick={() => {
-            navigator.clipboard?.writeText(profile.email).then(() => {
-              setCopied(true);
-              window.setTimeout(() => setCopied(false), 1800);
-            });
-            trackEvent("Clicked Contact Method", { method: "copy_email", placement: "hero" });
-          }}
-          aria-label={`Copy email address ${profile.email}`}
-          title="Copy email address"
-        >
-          {/* An icon beside Email, so the row fits one line; it says Copied once used */}
-          {copied ? <Check size={14} aria-hidden="true" /> : <Copy size={14} aria-hidden="true" />}
-          {copied && <span>Copied</span>}
-        </button>
       </motion.p>
     </section>
   );
