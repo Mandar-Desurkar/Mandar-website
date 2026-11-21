@@ -108,8 +108,9 @@ export default function DraggableWindow({
 
     switch (activeTab) {
       case 'about':
-        // A short note. The concept comparison (?about=) still needs the wide window.
-        newWidth = new URLSearchParams(window.location.search).has('about') ? '65vw' : '540px';
+        // A short note, wide enough that each paragraph runs to three or four lines (owner's size,
+        // 2026-11-21; was 540px). The concept comparison (?about=) still needs the wide window.
+        newWidth = new URLSearchParams(window.location.search).has('about') ? '65vw' : '650px';
         newHeight = new URLSearchParams(window.location.search).has('about') ? 'max(64vh, 580px)' : 'fit-content';
         break;
       case 'experience':
