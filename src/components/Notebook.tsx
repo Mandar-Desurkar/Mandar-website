@@ -3,15 +3,18 @@
 // The Notebook window, in the style of macOS Notes: a list of notes on the left, the open note on the
 // right (on phones the list becomes a row of tabs). Three notes: Product Principles (pinned), Case
 // Studies and Now.
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState, type ReactNode } from "react";
-import { ArrowUpRight, Pin, TrendingUp } from "lucide-react";
+import { ArrowUpRight, Pin } from "lucide-react";
 import styles from "./Notebook.module.css";
 import { caseStudies } from "@/data/caseStudies";
 import { now, principles, type NoteId } from "@/data/notebook";
 import { NOTE_EVENT, takeRequestedNote } from "@/lib/notebookNav";
 import { trackEvent } from "@/lib/analytics";
+
+// Spelled-out count for the copy ("Seven case studies")
+const COUNT_WORDS = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"];
+const countWord = (n: number) => COUNT_WORDS[n] ?? String(n);
 
 const NOTES: {
   id: NoteId;
@@ -28,7 +31,7 @@ const NOTES: {
   {
     id: "case-studies",
     title: "Case Studies",
-    snippet: "Seven 0→1 features across AI, agritech and sales platforms",
+    snippet: `${countWord(caseStudies.length)} features, from problem to outcome`,
   },
   { id: "now", title: "Now", snippet: now.items[0].text },
 ];
@@ -83,63 +86,52 @@ function Principles() {
   );
 }
 
+// "Peak MAU" → "peak MAU", "Of 100+ crops" → "of 100+ crops": lower-case words, keep acronyms
+const inSentence = (label: string) => label.replace(/\b([A-Z])([a-z])/g, (_, a: string, b: string) => a.toLowerCase() + b);
+
+// The case studies as an index, not a second copy of the Case Studies window: no cover art, one row each
+// with the feature, the kind of problem, its promise and its three headline numbers
 function CaseStudiesNote() {
   return (
     <>
       <p className={styles.lede}>
-        Seven 0→1 features and AI systems shipped across consumer agritech,
-        computer vision, voice AI, and internal sales platforms. Each study
-        covers the user problem, architectural decisions, and measured outcomes.
+        {countWord(caseStudies.length)} features I took from a user problem to a measured outcome. Each study
+        shows the decisions behind it, and what they cost.
       </p>
-      <div className={styles.caseGrid}>
+      <ol className={styles.caseList}>
         {caseStudies.map((cs, i) => {
-          const [name, line] = cs.title.split(": ");
-          const year = cs.meta.find((m) => m.label === "Timeline")?.value;
+          const [name, line = ""] = cs.title.split(": ");
           return (
-            <Link
-              key={cs.slug}
-              href={`/case-studies/${cs.slug}`}
-              className={styles.caseCard}
-              onClick={() =>
-                trackEvent("Opened Case Study", {
-                  slug: cs.slug,
-                  placement: "notebook",
-                })
-              }
-            >
-              <span className={styles.caseArt}>
-                <Image
-                  src={cs.thumbDesk || cs.thumb}
-                  alt=""
-                  width={600}
-                  height={402}
-                  sizes="(max-width: 768px) 100vw, 360px"
-                />
-              </span>
-              <span className={styles.caseContent}>
-                <span className={styles.caseMeta}>
-                  <span className={styles.caseIndex}>
-                    {String(i + 1).padStart(2, "0")}
+            <li key={cs.slug}>
+              <Link
+                href={`/case-studies/${cs.slug}`}
+                className={styles.caseRow}
+                onClick={() => trackEvent("Opened Case Study", { slug: cs.slug, placement: "notebook" })}
+              >
+                <span className={styles.caseIndex}>{String(i + 1).padStart(2, "0")}</span>
+                <span className={styles.caseMain}>
+                  <span className={styles.caseHead}>
+                    <span className={styles.caseTitle}>{name}</span>
+                    <span className={styles.caseTheme}>{cs.card.theme}</span>
                   </span>
-                  <span className={styles.caseTag}>
-                    {cs.product} · {cs.card.theme}
+                  {line && <span className={styles.caseLine}>{line.charAt(0).toUpperCase() + line.slice(1)}</span>}
+                  <span className={styles.caseStats}>
+                    {cs.card.stats
+                      // A number the line already states isn't repeated ("One side photo, 31 conditions screened")
+                      .filter((s) => !line.toLowerCase().includes(s.label.toLowerCase()))
+                      .map((s) => (
+                        <span key={s.label} className={styles.caseStat}>
+                          <strong>{s.value}</strong> {inSentence(s.label)}
+                        </span>
+                      ))}
                   </span>
-                  {year && <span className={styles.caseYear}>{year}</span>}
                 </span>
-                <h3 className={styles.caseTitle}>{name}</h3>
-                {line && <p className={styles.caseLine}>{line}</p>}
-                <div className={styles.caseMetric}>
-                  <TrendingUp size={13} strokeWidth={2.2} aria-hidden="true" />
-                  <span>{cs.card.metric}</span>
-                </div>
-                <span className={styles.caseRead}>
-                  Read case study <ArrowUpRight size={13} aria-hidden="true" />
-                </span>
-              </span>
-            </Link>
+                <ArrowUpRight size={16} className={styles.caseGo} aria-hidden="true" />
+              </Link>
+            </li>
           );
         })}
-      </div>
+      </ol>
     </>
   );
 }
@@ -162,10 +154,19 @@ function Now() {
   );
 }
 
-export default function Notebook() {
+export default function Notebook({ initialNote }: { initialNote?: NoteId }) {
   const [note, setNote] = useState<NoteId>(
-    () => takeRequestedNote() ?? "principles",
+    () => takeRequestedNote() ?? initialNote ?? "principles",
   );
+
+  useEffect(() => {
+    const req = takeRequestedNote();
+    if (req) {
+      setNote(req);
+    } else if (initialNote) {
+      setNote(initialNote);
+    }
+  }, [initialNote]);
 
   // The desktop sticky can ask for a note while the window is already open
   useEffect(() => {
