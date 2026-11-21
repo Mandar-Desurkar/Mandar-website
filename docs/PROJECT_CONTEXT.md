@@ -67,8 +67,10 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
   orders): the real CRM holds customers' phone numbers, so nothing from it or from the owner's screenshots is
   used. Products/prices come from the website prototype's catalogue. Code: `src/components/prototype/crm/`
   (`crmData.ts` enums + a session store, `CrmShell.tsx` header / sidebar / draggable softphone / DispositionGate,
-  `CrmLeads.tsx`, `CrmLead.tsx`, `CrmDrawers.tsx`). Reachable from the viewer's tabs / dropdown / phone switcher
-  and `?prototype=sales-crm`; not yet on the hero or phone home screen.
+  `CrmLeads.tsx`, `CrmLead.tsx`, `CrmDrawers.tsx`). Icon `public/apps/sales-crm-icon.png` (lead card + call badge,
+  ERP green) on the desktop icon column and phone home page 1 (`toolApps` in `resume.ts`, also in Spotlight), plus
+  the viewer's tabs / dropdown / phone switcher and `?prototype=sales-crm`. Kept out of the hero and About app
+  lists, which are the consumer apps. Desktop opens the Desktop layout; phones always get the mobile layout.
 - **Phone:** dawn wallpaper crop (`public/wallpaper-phone.webp`, moon placed in the gap between the two
   small widgets) and the Back button in `PhoneBack.tsx`. Keep in-app overlays in `depth` there.
 - Stack: Next.js 16.3 App Router, React 19.2, TypeScript, CSS Modules + tokens in

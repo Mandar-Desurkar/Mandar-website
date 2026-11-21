@@ -55,7 +55,7 @@ export type ShippedApp = {
   isWebsite?: boolean;
   phoneIcon?: string;
   website: string;
-  prototype?: "kissan-sampurna" | "gau-sampurna" | "gau-sampurna-web";
+  prototype?: "kissan-sampurna" | "gau-sampurna" | "gau-sampurna-web" | "sales-crm";
 };
 
 export const shippedApps: ShippedApp[] = [
@@ -83,6 +83,19 @@ export const shippedApps: ShippedApp[] = [
     phoneIcon: "/apps/gau-sampurna-icon.png",
     website: "https://www.gausampurna.com/",
     prototype: "gau-sampurna-web",
+  },
+];
+
+// Internal tools with a prototype: an icon on the desktop and the phone home screen (and in Spotlight),
+// but not in the hero's or About's list of shipped consumer apps
+export const toolApps: ShippedApp[] = [
+  {
+    // The telecaller's CRM inside the Silo ERP, prototyped from the ERP frontend's code
+    name: "Sales CRM",
+    caption: "Telecaller CRM, lead to order",
+    icon: "/apps/sales-crm-icon.png",
+    website: "https://erp.silofortune.com/",
+    prototype: "sales-crm",
   },
 ];
 

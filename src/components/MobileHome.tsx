@@ -13,7 +13,7 @@ import Image from "next/image";
 import { useCallback, useRef, useState } from "react";
 import { IoSearch } from "react-icons/io5";
 import { useWindow } from "@/context/WindowContext";
-import { profile, kpis, shippedApps, experiences } from "@/data/resume";
+import { profile, kpis, shippedApps, toolApps, experiences } from "@/data/resume";
 import { trackEvent } from "@/lib/analytics";
 import { haptic } from "@/lib/haptics";
 import AppIcon from "./ios/AppIcon";
@@ -123,7 +123,7 @@ export default function MobileHome() {
             </button>
           </div>
 
-          {/* App grid: the sections, then the two apps I built */}
+          {/* App grid: the sections, then the two apps I built and the Sales CRM */}
           <div className={styles.grid}>
             {SECTION_APPS.map((app) => (
               <AppIcon
@@ -134,6 +134,7 @@ export default function MobileHome() {
               />
             ))}
             {apps.map(appIcon)}
+            {toolApps.map(appIcon)}
           </div>
         </section>
 

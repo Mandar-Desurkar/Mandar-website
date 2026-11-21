@@ -7,7 +7,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { IoChevronForward, IoCloseCircle, IoSearch } from "react-icons/io5";
 import { useWindow } from "@/context/WindowContext";
-import { experiences, profile, shippedApps, skills } from "@/data/resume";
+import { experiences, profile, shippedApps, skills, toolApps } from "@/data/resume";
 import { caseStudies } from "@/data/caseStudies";
 import { trackEvent } from "@/lib/analytics";
 import { AppTile } from "./AppIcon";
@@ -65,7 +65,7 @@ export default function Spotlight({ onClose }: { onClose: () => void }) {
 
   const all = useMemo<Result[]>(
     () => [
-      ...shippedApps.map((app) => ({
+      ...[...shippedApps, ...toolApps].map((app) => ({
         id: app.prototype ?? app.name,
         kind: "app" as const,
         title: app.name,

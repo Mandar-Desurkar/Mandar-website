@@ -6,7 +6,7 @@ import BootScreen from "@/components/BootScreen";
 import DraggableWindow from "@/components/DraggableWindow";
 import DesktopIcon from "@/components/DesktopIcon";
 import iconStyles from "@/components/DesktopIcon.module.css";
-import { shippedApps } from "@/data/resume";
+import { shippedApps, toolApps } from "@/data/resume";
 import HiringNotification from "@/components/HiringNotification";
 import MissionControl from "@/components/MissionControl";
 import DeskCat from "@/components/desk-cat/DeskCat";
@@ -81,7 +81,7 @@ function DesktopEnvironment() {
         <DesktopIcon id="education" title="Education" icon={<Image src="/icons/folder3.webp" alt="" width={56} height={56} />} />
         <DesktopIcon id="projects" title="Case Studies" icon={<Image src="/icons/folder4.webp" alt="" width={56} height={56} />} />
         <DesktopIcon id="contact" title="Contact" icon={<Image src="/icons/folder5.webp" alt="" width={56} height={56} />} />
-        {shippedApps.map(
+        {[...shippedApps, ...toolApps].map(
           (app) =>
             app.prototype && (
               <DesktopIcon
