@@ -16,8 +16,9 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
 
 ## Current state (2026-10-31)
 
-- **Desktop (redesigned 2026-10-31):** night city-skyline wallpaper since 2026-11-21 (owner's photo,
-  `public/wallpaper-desktop.webp`, 2880×1920, q55, static; was the dawn photo, briefly a green-hills one), sunrise loader, a slim menu bar (sections, battery, Wi-Fi, clock), and one icon column on the right (five
+- **Desktop (redesigned 2026-10-31):** dark dot-grid wallpaper since 2026-11-21, drawn in CSS on `body` in `globals.css` (`--wallpaper-base`
+  #18181b, `--wallpaper-dot`, `--wallpaper-dot-gap` 18px; no image; was the dawn photo, then briefly a hills and
+  a skyline photo, whose WebPs are still in `public/` unused), sunrise loader, a slim menu bar (sections, battery, Wi-Fi, clock), and one icon column on the right (five
   sections, then Kissan and Gau, which open their prototypes). Every window is translucent dark glass,
   themed once in `globals.css` (`.os-window:not(.ios-app)`). About is `AboutCard.tsx`. Old About concepts
   remain at `/?about=live | showcase | store | native | classic` until the owner confirms the design;
@@ -71,8 +72,7 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
   ERP green) on the desktop icon column and phone home page 1 (`toolApps` in `resume.ts`, also in Spotlight), plus
   the viewer's tabs / dropdown / phone switcher and `?prototype=sales-crm`. Kept out of the hero and About app
   lists, which are the consumer apps. Desktop opens the Desktop layout; phones always get the mobile layout.
-- **Phone:** portrait crop of the same skyline photo, centred on the lit X-braced tower and the harbour
-  (`public/wallpaper-phone.webp`, 1080×2340) and the Back button in `PhoneBack.tsx`. Keep in-app overlays in `depth` there.
+- **Phone:** the same dot grid (scrolls with the page on phones, as iOS ignores fixed backgrounds) and the Back button in `PhoneBack.tsx`. Keep in-app overlays in `depth` there.
 - Stack: Next.js 16.3 App Router, React 19.2, TypeScript, CSS Modules + tokens in
   `src/app/globals.css`, framer-motion, lucide-react, react-icons.
 - Sections (tab ids in `WindowContext.activeTab`): `about`, `experience`, `education`,
@@ -457,6 +457,10 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
   to a simple layout on mobile. No fake metrics.
 
 ## Changelog
+
+- 2026-11-21: **Wallpaper is a dark dot grid** (owner: "something similar to this [a light dot grid], but in
+  grey or black"). CSS only: faint white dots every 18px on #18181b, centred. The tone layer is neutral now
+  (`--wallpaper-dim` 0, saturation 1, sky shade 0); raise them again if a photo comes back.
 
 - 2026-11-21: **Wallpaper is now the owner's night city-skyline photo** (replacing the green-hills photo used
   for a few minutes before it). Desktop WebP 420 KB (q55; city lights are fine detail), phone 183 KB (q52).
