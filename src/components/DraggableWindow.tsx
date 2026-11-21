@@ -120,14 +120,14 @@ export default function DraggableWindow({
         newHeight = FULL_HEIGHT;
         break;
       case 'education':
-        // the same frame as Experience and Case Studies, so the three long windows match
         newWidth = CENTRED_WIDE;
         newHeight = FULL_HEIGHT;
         break;
       case 'projects':
-        // as large as Experience: three case study cards read better with room for their phone fans
-        newWidth = CENTRED_WIDE;
-        newHeight = FULL_HEIGHT;
+      case 'notebook':
+        // Notes / Notebook: the note list beside a readable note
+        newWidth = 'min(960px, 84vw)';
+        newHeight = 'min(720px, calc(100vh - 70px))';
         break;
       case 'contact':
         newWidth = '560px';

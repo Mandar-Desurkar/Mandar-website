@@ -36,9 +36,9 @@ function ActiveSection() {
     case 'about': return <Hero />;
     case 'experience': return <Experience />;
     case 'education': return <Education />;
-    case 'projects': return <Projects />;
+    case 'projects': return <Notebook initialNote="case-studies" />;
     case 'contact': return <Contact />;
-    case 'notebook': return <Notebook />;
+    case 'notebook': return <Notebook initialNote="principles" />;
     default: return <Hero />;
   }
 }
@@ -49,7 +49,7 @@ function WindowTitle() {
     case 'about': return 'About Me';
     case 'experience': return 'Experience';
     case 'education': return 'Education';
-    case 'projects': return 'Case Studies';
+    case 'projects': return 'Notebook';
     case 'contact': return 'Contact';
     case 'notebook': return 'Notebook';
     default: return 'Product Notebook';

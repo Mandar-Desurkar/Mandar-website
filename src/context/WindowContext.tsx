@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useRef, useState, ReactNode } from 'react';
 import { trackEvent, secondsSince } from '@/lib/analytics';
+import { openNote } from '@/lib/notebookNav';
 
 // `projects` is shown as "Case Studies"; the id stays so analytics history stays comparable
 // `notebook` is the Notebook window (principles, case studies, now)
@@ -90,6 +91,9 @@ export function WindowProvider({ children }: { children: ReactNode }) {
     if (isSectionId(sectionId)) {
       const raf = requestAnimationFrame(() => {
         trackEvent('Opened Section', { section: sectionId, source: 'deep_link', previous_section: 'about', window_was_open: false });
+        if (sectionId === 'projects') {
+          openNote('case-studies');
+        }
         setActiveTab(sectionId);
         setIsMinimized(false);
         setIsClosed(false);
@@ -116,6 +120,9 @@ export function WindowProvider({ children }: { children: ReactNode }) {
       previous_section: activeTab,
       window_was_open: !isClosed && !isMinimized,
     });
+    if (id === 'projects') {
+      openNote('case-studies');
+    }
     setActiveTab(id);
     setIsMinimized(false);
     setIsClosed(false);
