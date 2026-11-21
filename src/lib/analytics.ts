@@ -4,7 +4,6 @@
 // product moments autocapture can't: which section, from where, for how long, and why.
 // Naming: Title Case, past-tense action. Add new events here first so the plan stays complete.
 import { analyticsReady } from "@/lib/analyticsClient";
-import { recordJourney } from "@/lib/journey";
 import type { OpenSource, SectionId } from "@/context/WindowContext";
 
 export type MusicTrigger = "autoplay" | "first_interaction" | "play_button" | "unmute" | "media_key" | "track_change";
@@ -63,11 +62,8 @@ export type AnalyticsEvents = {
   "Opened Spotlight": Record<string, never>;
   // Case studies (the Case Studies window lists them; each is a page at /case-studies/<slug>)
   "Opened Case Study": { slug: string; placement: "case_studies" | "spotlight" | "desktop" | "desk_cat" | "notebook" };
-  // The Notebook window: which note, and how the visitor got there; the roadmap's feature request; and
-  // the "Your visit, measured" funnel's next-step button
+  // The Notebook window: which note, and how the visitor got there
   "Opened Note": { note: string; source: "sidebar" | "sticky_note" | "link" };
-  "Requested Site Feature": Record<string, never>;
-  "Clicked Journey Next Step": { step: string };
   "Filtered Case Studies": { product: "all" | "kissan-sampurna" | "gau-sampurna" | "gau-sampurna-web" | "sales-crm" };
   "Viewed Case Study": { slug: string };
   "Clicked Case Study CTA": { slug: string; cta: "prototype" | "back" | "source" | "next_case_study" | "contact" | "copy_link" };
@@ -166,8 +162,6 @@ export type AnalyticsEvents = {
 
 export function trackEvent<E extends keyof AnalyticsEvents>(event: E, properties: AnalyticsEvents[E]) {
   if (typeof window === "undefined") return; // client-only; analytics isn't initialized on the server
-  // This visit's journey, for the Notebook's live funnel (stays in the browser)
-  recordJourney(event, properties as Record<string, unknown>);
   analyticsReady().then(({ amplitude, logFirebaseEvent }) => {
     amplitude.track(event, properties);
 

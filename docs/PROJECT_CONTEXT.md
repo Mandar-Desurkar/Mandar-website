@@ -458,6 +458,11 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 
 ## Changelog
 
+- 2026-11-21: **Removed by the owner:** the Notebook's "This Site Is a Product" note (with its live visit
+  funnel `lib/journey.ts`, roadmap, release notes, built-stats and their two events), the handwritten About
+  sign-off (and its script font) and the MD monogram in the menu bar. The Notebook keeps Product Principles,
+  Field Notes and Now; the Now sticky and the "Open to PM roles" menu-bar status stay.
+
 - 2026-11-21: **The PM layer** (owner picked from a personality audit: principles, field notes, the site as a
   product, signature details). New **Notebook** section (`notebook` SectionId; `Notebook.tsx`, macOS Notes in
   dark mode): Product Principles (7, each linked to a real case-study decision; verified against the data),

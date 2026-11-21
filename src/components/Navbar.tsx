@@ -57,10 +57,6 @@ export default function Navbar() {
   return (
     <header className={styles.menubar}>
       <div className={styles.left}>
-        {/* The monogram sits where the Apple logo would, in the site's signature colour */}
-        <span className={styles.mark} aria-hidden="true">
-          MD
-        </span>
         <span className={styles.name}>{profile.name}</span>
         <nav className={styles.menu} aria-label="Sections">
           {SECTIONS.map(({ id, label }) => {

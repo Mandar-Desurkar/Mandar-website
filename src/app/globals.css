@@ -24,8 +24,8 @@
   --wallpaper-dim: 0;
   /* Extra shade from the top, for a photo with a pale sky; none needed for the night sky */
   --wallpaper-sky-shade: 0;
-  /* The site's one signature colour: marigold, the gold of macOS Notes (Notebook, the Now sticky, the
-     monogram, the About sign-off). Use sparingly. */
+  /* The site's one signature colour: marigold, the gold of macOS Notes (the Notebook and the Now
+     sticky). Use sparingly. */
   --signature: #f5b83d;
   /* The About text's coloured words and the matching dots on the desktop */
   --tag-build: #3b82f6;

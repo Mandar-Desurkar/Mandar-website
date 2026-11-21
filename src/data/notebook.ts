@@ -1,13 +1,13 @@
-// The Notebook window (macOS Notes): how I think, what I learned in the field, and this site run as a
-// product. Everything here comes from the case studies (their principles, decisions and learnings) and
-// the site's own history, written in first person for the owner to edit.
+// The Notebook window (macOS Notes): how I think, and what I learned in the field. Everything here comes
+// from the case studies (their principles, decisions and learnings), written in first person for the
+// owner to edit.
 // - principles: portfolio-level beliefs, each linked to the case study decision that proves it
 // - fieldNotes: one research finding per study and what it changed in the product
 // - differently: one "what I'd do differently" per study (the case studies' own learnings)
-// - now / roadmap / releases: the "Now" sticky and the "This site is a product" note
+// - now: the "Now" sticky on the desktop and the Now note
 import { caseStudies } from "./caseStudies";
 
-export type NoteId = "principles" | "field" | "product" | "now";
+export type NoteId = "principles" | "field" | "now";
 
 export type Proof = { slug: string; decision: string };
 export const principles: { title: string; body: string; proof: Proof[] }[] = [
@@ -120,40 +120,3 @@ export const now = {
     { label: "Looking for", text: "APM or Product Manager roles in AI, consumer tech, growth or D2C." },
   ],
 };
-
-// This site's roadmap. Owner: edit freely.
-export const roadmap = {
-  now: ["The Notebook: principles, field notes and this page"],
-  next: ["Real photos from farm visits in Field Notes", "A few words from people I’ve built with"],
-  later: ["The open-water story, on the desktop", "Bets I got wrong, and what changed"],
-};
-
-// Release notes: the site's history from its git log, grouped into versions
-export const releases: { version: string; date: string; title: string; notes: string[] }[] = [
-  {
-    version: "3.0",
-    date: "21 Nov 2026",
-    title: "The PM layer",
-    notes: [
-      "This Notebook: product principles, field notes and the site as a product",
-      "A Sales CRM prototype, from lead to order on one call",
-      "Case studies rewritten as case files: challenge, approach, impact",
-      "Plain-text summaries for search engines and AI assistants",
-    ],
-  },
-  { version: "2.5", date: "20 Nov 2026", title: "In sync", notes: ["Both app prototypes synced to the apps’ latest production code", "Content matched to the new résumé"] },
-  { version: "2.4", date: "16 Nov 2026", title: "Phone redesign", notes: ["Glass apps, new icons, case study covers and haptics"] },
-  { version: "2.3", date: "10 Nov 2026", title: "A store and a cat", notes: ["The Gau Sampurna website as a prototype", "Chai, the desk cat, who answers questions about me"] },
-  { version: "2.2", date: "4 Nov 2026", title: "Six case studies", notes: ["Three Gau Sampurna case studies, and the real product catalogue in the prototype"] },
-  { version: "2.1", date: "2 Nov 2026", title: "The thinking", notes: ["The first case studies", "Mission Control onboarding", "A PDF-style résumé"] },
-  { version: "2.0", date: "21 Oct 2026", title: "Try the apps", notes: ["Interactive prototypes of Kissan and Gau Sampurna", "A phone home screen", "Product analytics on every interaction"] },
-  { version: "1.0", date: "31 Aug 2026", title: "The desktop", notes: ["A macOS-style portfolio: windows, a dock and a menu bar"] },
-];
-
-// "Built like a product": rounded down so they stay true as the site grows
-export const builtStats = [
-  { value: "60+", label: "Tracked events" },
-  { value: "150+", label: "Prototype screens" },
-  { value: String(caseStudies.length), label: "Case studies" },
-  { value: String(releases.length), label: "Releases" },
-];

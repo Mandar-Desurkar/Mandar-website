@@ -235,28 +235,3 @@
   outline: 2px solid #fff;
   outline-offset: 2px;
 }
-
-/* The sign-off: a script signature in --signature, revealed left to right like a pen stroke. The doubled
-   class beats the global system-font rule. */
-.signature.signature {
-  margin: 10px 0 -6px;
-  font-family: var(--font-signature), cursive !important;
-  font-size: 2.75rem;
-  line-height: 1.25;
-  color: var(--signature);
-  clip-path: inset(0 100% 0 0);
-  animation: sign 1.6s cubic-bezier(0.65, 0, 0.35, 1) forwards;
-}
-
-@keyframes sign {
-  to {
-    clip-path: inset(0 0 0 0);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .signature.signature {
-    clip-path: none;
-    animation: none;
-  }
-}
