@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@amplitude/unified": "^1.1.43",
-    "@anthropic-ai/sdk": "^1.6.0",
     "firebase": "^13.0.0",
     "framer-motion": "^13.1.1",
     "lucide-react": "^1.37.0",

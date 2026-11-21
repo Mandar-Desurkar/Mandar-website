@@ -458,6 +458,11 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 
 ## Changelog
 
+- 2026-11-21: **Chai the desk cat removed** (owner's call) with everything only it used: `components/desk-cat`,
+  the `/api/agent` route, `lib/agent/knowledge.ts`, `data/agent.ts`, its five analytics events and `desk_cat`
+  placements, and the `@anthropic-ai/sdk` dependency (`ANTHROPIC_API_KEY` is no longer read). The **Now sticky**
+  moved from bright Stickies yellow to a muted paper tone (#e9e2d0 → #d9cfb8, text #37312a).
+
 - 2026-11-21: **Removed by the owner:** the Notebook's "This Site Is a Product" note (with its live visit
   funnel `lib/journey.ts`, roadmap, release notes, built-stats and their two events), the handwritten About
   sign-off (and its script font) and the MD monogram in the menu bar. The Notebook keeps Product Principles,

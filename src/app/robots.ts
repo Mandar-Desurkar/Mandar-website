@@ -1,8 +1,8 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/data/site";
 
-// Everyone may crawl the site, including the AI assistants' crawlers, named so it's explicit; only the
-// desk cat's chat endpoint is off limits. /llms.txt is the short guide for AI assistants.
+// Everyone may crawl the site, including the AI assistants' crawlers, named so it's explicit. /api/ is
+// kept off limits for any future endpoints. /llms.txt is the short guide for AI assistants.
 const AI_CRAWLERS = [
   "GPTBot",
   "OAI-SearchBot",

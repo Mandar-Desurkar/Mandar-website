@@ -41,7 +41,7 @@ export type AnalyticsEvents = {
   "Dismissed Hiring Notification": { method: "close_button" | "timeout" };
 
   // Interactive app prototypes (e.g. Kissan Sampurna)
-  "Opened Prototype": { prototype: string; placement: "hero" | "desktop" | "experience" | "projects" | "home_screen" | "deep_link" | "spotlight" | "mission_control" | "desk_cat" | "notebook" };
+  "Opened Prototype": { prototype: string; placement: "hero" | "desktop" | "experience" | "projects" | "home_screen" | "deep_link" | "spotlight" | "mission_control" | "notebook" };
   "Switched Prototype": { from_prototype: string; to_prototype: string };
   // Website prototypes: the viewer's mSite / Desktop switch
   "Switched Prototype Layout": { prototype: string; layout: "msite" | "desktop" };
@@ -61,7 +61,7 @@ export type AnalyticsEvents = {
   // Phone home screen: the iOS Search pill opens Spotlight over the sections, apps and contact actions
   "Opened Spotlight": Record<string, never>;
   // Case studies (the Case Studies window lists them; each is a page at /case-studies/<slug>)
-  "Opened Case Study": { slug: string; placement: "case_studies" | "spotlight" | "desktop" | "desk_cat" | "notebook" };
+  "Opened Case Study": { slug: string; placement: "case_studies" | "spotlight" | "desktop" | "notebook" };
   // The Notebook window: which note, and how the visitor got there
   "Opened Note": { note: string; source: "sidebar" | "sticky_note" | "link" };
   "Filtered Case Studies": { product: "all" | "kissan-sampurna" | "gau-sampurna" | "gau-sampurna-web" | "sales-crm" };
@@ -117,13 +117,7 @@ export type AnalyticsEvents = {
 
   // Conversion: the north star
   "Clicked Contact Method": { method: "email" | "linkedin" | "phone" | "sms" | "vcard" | "copy_email"; placement: "contact_window" | "hero" | "home_widget" | "home_dock" | "spotlight" | "menu_bar" };
-  "Opened Resume": { placement: "hero" | "spotlight" | "menu_bar" | "contact_card" | "desk_cat" };
-  // Chai, the desk cat (components/desk-cat): woken, asked, its action buttons, petted
-  "Woke Desk Cat": Record<string, never>;
-  "Asked Desk Cat": { source: "starter" | "typed"; mode: "ai" | "offline" | "error"; turn: number };
-  "Clicked Desk Cat Action": { action: string };
-  "Petted Desk Cat": Record<string, never>;
-  "Closed Desk Cat Chat": { questions: number };
+  "Opened Resume": { placement: "hero" | "spotlight" | "menu_bar" | "contact_card" };
   // The PDF-style resume page (/resume): opened, then downloaded as a file or printed
   "Viewed Resume": Record<string, never>;
   "Downloaded Resume": { method: "download" | "print" };

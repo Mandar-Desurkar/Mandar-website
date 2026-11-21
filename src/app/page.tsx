@@ -9,7 +9,6 @@ import iconStyles from "@/components/DesktopIcon.module.css";
 import { shippedApps, toolApps } from "@/data/resume";
 import HiringNotification from "@/components/HiringNotification";
 import MissionControl from "@/components/MissionControl";
-import DeskCat from "@/components/desk-cat/DeskCat";
 import MobileDock from "@/components/MobileDock";
 import MobileHome from "@/components/MobileHome";
 import PhoneBack from "@/components/PhoneBack";
@@ -129,7 +128,6 @@ export default function Home() {
         <DesktopEnvironment />
         <HiringNotification />
         <MissionControl />
-        <DeskCat />
         <PrototypeHost />
         <PhoneBack />
       </WindowProvider>
