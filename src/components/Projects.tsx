@@ -1,17 +1,15 @@
 "use client";
 
 // The "Case Studies" section (tab id `projects`): long-form case studies, each opening its own page
-// at /case-studies/<slug>. Grouped under the app they belong to. Every study is led by the same
+// at /case-studies/<slug>, as one list (not grouped by app). Every study is led by the same
 // illustrated cover: on desktop a "case file" card (see CaseCard) with the cover recomposed for that
 // shape (`thumbDesk`); on phones a card with the cover on top (`thumb`) and the
-// result as one line, and no "Try the app" links, since the page is about the case studies.
+// result as one line.
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ChevronRight, TrendingUp } from "lucide-react";
 import styles from "./Projects.module.css";
 import { caseStudies, type CaseStudy } from "@/data/caseStudies";
-import { shippedApps } from "@/data/resume";
-import { useWindow, type PrototypeId } from "@/context/WindowContext";
 import { trackEvent } from "@/lib/analytics";
 import RichText from "./RichText";
 
@@ -85,13 +83,6 @@ function CaseCard({ cs, index }: { cs: CaseStudy; index: number }) {
 }
 
 export default function Projects() {
-  const { openPrototype } = useWindow();
-
-  const groups = shippedApps
-    .filter((app): app is typeof app & { prototype: PrototypeId } => !!app.prototype)
-    .map((app) => ({ app, items: caseStudies.filter((c) => c.product === app.name) }))
-    .filter((g) => g.items.length > 0);
-
   return (
     <section id="projects" className={styles.projectsSection}>
       <div className={`container ${styles.container}`}>
@@ -102,22 +93,12 @@ export default function Projects() {
           </p>
         </header>
 
-        {groups.map(({ app, items }) => (
-          <section key={app.prototype} className={styles.group} aria-labelledby={`cs-${app.prototype}`}>
-            <header className={styles.groupHead}>
-              <Image src={app.icon} alt="" width={28} height={28} className={styles.groupIcon} />
-              <h3 id={`cs-${app.prototype}`}>{app.name}</h3>
-              <button type="button" className={styles.tryApp} onClick={() => openPrototype(app.prototype, "projects")}>
-                Try the app
-              </button>
-            </header>
-            <div className={styles.list}>
-              {items.map((cs) => (
-                <CaseCard key={cs.slug} cs={cs} index={caseStudies.indexOf(cs) + 1} />
-              ))}
-            </div>
-          </section>
-        ))}
+        {/* One list, in the order of src/data/caseStudies (no per-app groups) */}
+        <div className={styles.list}>
+          {caseStudies.map((cs, i) => (
+            <CaseCard key={cs.slug} cs={cs} index={i + 1} />
+          ))}
+        </div>
       </div>
     </section>
   );

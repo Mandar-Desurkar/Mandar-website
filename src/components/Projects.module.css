@@ -1,4 +1,4 @@
-/* Case Studies window: one group per app, the same card for every study.
+/* Case Studies window: one list of studies (not grouped by app), the same card for every study.
    Base rules are the phone (iOS) layout, a grouped list; the desktop window (dark glass) is styled at
    the end of the file: one "case file" card per study, in the Education window's card language. */
 
@@ -22,53 +22,12 @@
   color: #6e6e73;
 }
 
-/* ---------- Group ---------- */
-
-.group {
-  margin-top: 22px;
-}
-
-.groupHead {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-  padding: 0 4px;
-}
-
-.groupIcon {
-  width: 22px;
-  height: 22px;
-  border-radius: 6px;
-  flex-shrink: 0;
-}
-
-.groupHead h3 {
-  flex: 1;
-  min-width: 0;
-  margin: 0;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  color: #6e6e73;
-}
-
-.tryApp {
-  padding: 0;
-  border: 0;
-  background: none;
-  font: inherit;
-  font-size: 15px;
-  color: #007aff;
-  cursor: pointer;
-}
-
 /* ---------- Phone: an iOS grouped list ---------- */
 
 .list {
   display: flex;
   flex-direction: column;
+  margin-top: 22px;
   border-radius: 12px;
   background: #ffffff;
   overflow: hidden;
@@ -153,12 +112,16 @@
 /* ---------- Phone app (dark glass): one card per study, led by its cover art ----------
    The page exists to get a case study opened, so each study gets a full-width card: the illustrated
    cover (generated art, 2:1, subject centred), the kind of problem, the feature, one line, then the
-   result under a hairline. No "Try the app" here; the prototypes live on the home screen. */
+   result under a hairline. One list, not grouped by app. */
 
-/* Section header: iOS Footnote caps (13/18, 0.4px), the same as "Beyond Work" and "Skills & Toolkit" */
-:global(.ios-app) .groupHead h3 {
-  line-height: 18px;
-  letter-spacing: 0.4px;
+:global(.ios-app) .intro {
+  color: var(--glass-label-secondary);
+}
+
+:global(.ios-app) .chevron,
+:global(.ios-app) .read,
+:global(.ios-app) .card + .card::before {
+  display: none;
 }
 
 /* Cover art and the result icon exist only on the phone; the 3:2 desktop cover only on desktop */
@@ -168,27 +131,8 @@
   display: none;
 }
 
-:global(.ios-app) .intro,
-:global(.ios-app) .groupHead h3 {
-  color: var(--glass-label-secondary);
-}
-
-:global(.ios-app) .tryApp,
-:global(.ios-app) .chevron,
-:global(.ios-app) .read,
-:global(.ios-app) .card + .card::before {
-  display: none;
-}
-
-:global(.ios-app) .group {
-  margin-top: 26px;
-}
-
-:global(.ios-app) .groupHead {
-  margin-bottom: 10px;
-}
-
 :global(.ios-app) .list {
+  margin-top: 26px;
   gap: 14px;
   overflow: visible;
   border-radius: 0;
@@ -319,49 +263,11 @@
   color: rgba(255, 255, 255, 0.55);
 }
 
-:global(.os-window:not(.ios-app)) .group {
-  margin-top: 36px;
-}
-
-:global(.os-window:not(.ios-app)) .groupHead {
-  gap: 10px;
-  margin-bottom: 14px;
-  padding: 0;
-}
-
-:global(.os-window:not(.ios-app)) .groupIcon {
-  width: 24px;
-  height: 24px;
-}
-
-:global(.os-window:not(.ios-app)) .groupHead h3 {
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: 0;
-  text-transform: none;
-  color: rgba(255, 255, 255, 0.92);
-}
-
-:global(.os-window:not(.ios-app)) .tryApp {
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.55);
-  transition: color 0.15s ease;
-}
-
-:global(.os-window:not(.ios-app)) .tryApp:hover {
-  color: #ffffff;
-}
-
-:global(.os-window:not(.ios-app)) .tryApp:focus-visible {
-  outline: 2px solid #4da3ff;
-  outline-offset: 3px;
-  border-radius: 4px;
-}
-
 :global(.os-window:not(.ios-app)) .list {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  margin-top: 28px;
   border-radius: 0;
   background: none;
   overflow: visible;
