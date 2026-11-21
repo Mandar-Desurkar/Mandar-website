@@ -2,10 +2,10 @@
 
 // The "Case Studies" section (tab id `projects`): long-form case studies, each opening its own page
 // at /case-studies/<slug>. Grouped under the app they belong to. Every study is led by the same
-// illustrated cover: on desktop a wide brand-blue card (the theme, the feature, one line and one result
-// beside the cover recomposed for that shape, `thumbDesk`); on phones a card with the cover on top
-// (`thumb`), and no "Try the app" links, since the page is about the case studies. The thinking lives
-// on the case study page, not on the card.
+// illustrated cover: on desktop a dark glass card (the kind of problem, the feature, one line and its
+// three headline numbers beside the cover recomposed for that shape, `thumbDesk`, tinted by product);
+// on phones a card with the cover on top (`thumb`) and the result as one line, and no "Try the app"
+// links, since the page is about the case studies. The thinking lives on the case study page.
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ChevronRight, TrendingUp } from "lucide-react";
@@ -15,12 +15,16 @@ import { shippedApps } from "@/data/resume";
 import { useWindow, type PrototypeId } from "@/context/WindowContext";
 import { trackEvent } from "@/lib/analytics";
 
+// Each product's accent on the desktop card: its eyebrow, stat glow and link (Kissan green, Gau blue)
+const PRODUCT_TONE: Record<string, string> = { "Kissan Sampurna": "kissan", "Gau Sampurna": "gau" };
+
 function CaseCard({ cs }: { cs: CaseStudy }) {
   const [name, line] = cs.title.split(": ");
   return (
     <Link
       href={`/case-studies/${cs.slug}`}
       className={styles.card}
+      data-tone={PRODUCT_TONE[cs.product] ?? "kissan"}
       data-haptic="light"
       onClick={() => trackEvent("Opened Case Study", { slug: cs.slug, placement: "case_studies" })}
     >
@@ -36,6 +40,15 @@ function CaseCard({ cs }: { cs: CaseStudy }) {
         <span className={styles.theme}>{cs.card.theme}</span>
         <span className={styles.name}>{name}</span>
         {line && <span className={styles.line}>{line.charAt(0).toUpperCase() + line.slice(1)}</span>}
+        {/* Desktop: the proof as three numbers. Phones keep it as one line (below). */}
+        <span className={styles.stats}>
+          {cs.card.stats.map((s) => (
+            <span key={s.label} className={styles.stat}>
+              <span className={styles.statValue}>{s.value}</span>
+              <span className={styles.statLabel}>{s.label}</span>
+            </span>
+          ))}
+        </span>
         <span className={styles.result}>
           <TrendingUp size={14} strokeWidth={2.2} className={styles.resultIcon} aria-hidden="true" />
           {cs.card.metric}
