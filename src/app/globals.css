@@ -23,7 +23,7 @@
   --wallpaper-dim: 0.3;
   /* Extra shade over the wallpaper's pale sky, fading out by mid-screen, so the white menu bar, desktop
      icon labels and phone widgets stay readable while the hills keep their colour */
-  --wallpaper-sky-shade: 0.4;
+  --wallpaper-sky-shade: 0.15;
   /* The About text's coloured words and the matching dots on the desktop */
   --tag-build: #3b82f6;
   --tag-grow: #2ea44f;
