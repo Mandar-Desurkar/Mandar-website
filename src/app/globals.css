@@ -18,15 +18,11 @@
   --accent-tint: rgba(0, 122, 255, 0.1); /* Tinted secondary button */
   --accent-tint-hover: rgba(0, 122, 255, 0.16);
   --status-green: #34c759;
-  /* The wallpaper: a dot grid on a charcoal desktop, drawn in CSS (no image to load) */
-  --wallpaper-base: #18181b;
-  --wallpaper-dot: rgba(255, 255, 255, 0.13);
-  --wallpaper-dot-gap: 18px;
-  /* The tone layer over the wallpaper (it calmed the old photo wallpapers): 1 = full colour, 0 = no dimming.
-     A flat grid needs none, so it is neutral; raise these again for a photo. */
+  /* The tone layer over the wallpaper: 1 = full colour, 0 = no dimming. The star field is already dark,
+     so it is neutral; raise these for a brighter photo. */
   --wallpaper-saturation: 1;
   --wallpaper-dim: 0;
-  /* Extra shade from the top for a photo with a pale sky; none for the grid */
+  /* Extra shade from the top, for a photo with a pale sky; none needed for the night sky */
   --wallpaper-sky-shade: 0;
   /* The About text's coloured words and the matching dots on the desktop */
   --tag-build: #3b82f6;
@@ -90,11 +86,9 @@ body {
   /* clip, not hidden: hidden on both html and body makes body a scroll container that never
      scrolls, which silently breaks every position: sticky on long pages (case study contents) */
   overflow-x: clip;
-  /* OS Desktop Wallpaper: an even grid of faint dots, centred so it sits symmetrically on any screen */
-  background-color: var(--wallpaper-base);
-  background-image: radial-gradient(circle, var(--wallpaper-dot) 1px, transparent 1.6px);
-  background-size: var(--wallpaper-dot-gap) var(--wallpaper-dot-gap);
-  background-position: center;
+  /* OS Desktop Wallpaper: a star field (owner's photo) */
+  background: #050814 url('/wallpaper-desktop.webp') no-repeat center center fixed;
+  background-size: cover;
   background-attachment: fixed;
   min-height: 100vh;
   height: 100%;
@@ -614,6 +608,8 @@ html[data-mc] .os-window.absolute-window {
     min-height: 100dvh;
     /* iOS ignores fixed backgrounds and repaints a stretched wallpaper on every scroll */
     background-attachment: scroll;
+    /* A portrait crop of the desktop wallpaper, centred on its brightest star */
+    background-image: url('/wallpaper-phone.webp');
   }
 
   /* Phones have their own status bar, so the fake macOS menu bar and desktop icons give way to
