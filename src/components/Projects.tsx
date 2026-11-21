@@ -3,7 +3,7 @@
 // The "Case Studies" section (tab id `projects`): long-form case studies, each opening its own page
 // at /case-studies/<slug>. Grouped under the app they belong to. Every study is led by the same
 // illustrated cover: on desktop a "case file" card (see CaseCard) with the cover recomposed for that
-// shape (`thumbDesk`), tinted by product; on phones a card with the cover on top (`thumb`) and the
+// shape (`thumbDesk`); on phones a card with the cover on top (`thumb`) and the
 // result as one line, and no "Try the app" links, since the page is about the case studies.
 import Image from "next/image";
 import Link from "next/link";
@@ -15,15 +15,13 @@ import { useWindow, type PrototypeId } from "@/context/WindowContext";
 import { trackEvent } from "@/lib/analytics";
 import RichText from "./RichText";
 
-// Each product's accent on the desktop card: its index, eyebrow, Impact step and link (Kissan green, Gau blue)
-const PRODUCT_TONE: Record<string, string> = { "Kissan Sampurna": "kissan", "Gau Sampurna": "gau" };
 // The story track's three steps, named for the card (the case study pages call them "The challenge" etc.)
 const STEP_NAMES = ["Challenge", "Approach", "Impact"];
 
 // Desktop: a case file. Index, kind of problem and year; the feature and one line; then the study's own
 // at-a-glance story as a track (challenge → approach → impact, impact highlighted); then its three
-// numbers. The cover bleeds in from the top right and fades into the card. Phones keep the cover-on-top
-// card with the result as one line.
+// numbers, with the cover as a tile on the right. Styled like the Education window's cards. Phones keep
+// the cover-on-top card with the result as one line.
 function CaseCard({ cs, index }: { cs: CaseStudy; index: number }) {
   const [name, line] = cs.title.split(": ");
   const year = cs.meta.find((m) => m.label === "Timeline")?.value;
@@ -31,7 +29,6 @@ function CaseCard({ cs, index }: { cs: CaseStudy; index: number }) {
     <Link
       href={`/case-studies/${cs.slug}`}
       className={styles.card}
-      data-tone={PRODUCT_TONE[cs.product] ?? "kissan"}
       data-haptic="light"
       onClick={() => trackEvent("Opened Case Study", { slug: cs.slug, placement: "case_studies" })}
     >
@@ -41,7 +38,7 @@ function CaseCard({ cs, index }: { cs: CaseStudy; index: number }) {
         <Image src={cs.thumb} alt="" width={1200} height={670} sizes="(max-width: 767px) 100vw, 1px" />
       </span>
       <span className={styles.deskArt} aria-hidden="true">
-        <Image src={cs.thumbDesk} alt="" width={1200} height={805} sizes="(max-width: 767px) 1px, 520px" />
+        <Image src={cs.thumbDesk} alt="" width={1200} height={805} sizes="(max-width: 767px) 1px, 248px" />
       </span>
       <span className={styles.body}>
         <span className={styles.fileHead}>
