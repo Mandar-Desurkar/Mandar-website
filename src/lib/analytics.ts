@@ -80,6 +80,30 @@ export type AnalyticsEvents = {
     method: "tap" | "next_button" | "prev_button" | "list" | "keyboard" | "restart" | "cross_flow";
   };
   "Closed Prototype": { prototype: string; screens_viewed: number; seconds_open: number };
+  // Inside a prototype: the product moments screen views can't show, because they happen within one
+  // screen (Sales CRM: called the lead, booked the order, saved the disposition...). `detail` names the
+  // choice where it matters (payment mode, disposition, theme, filter).
+  "Used Prototype Feature": {
+    prototype: string;
+    feature:
+      | "called_lead"
+      | "opened_create_order"
+      | "added_order_item"
+      | "placed_order"
+      | "amended_order"
+      | "hung_up"
+      | "saved_disposition"
+      | "added_note"
+      | "played_recording"
+      | "filtered_leads"
+      | "switched_theme"
+      | "moved_softphone";
+    detail?: string;
+  };
+  // Friction: a prototype form refused to submit, and why (the product's own validation message)
+  "Hit Prototype Validation": { prototype: string; form: "create_order" | "add_item" | "disposition"; error: string };
+  // Demand signal: a visitor clicked something the prototype leaves out (it says "isn't part of this prototype")
+  "Clicked Unbuilt Prototype Feature": { prototype: string; feature: string };
 
   // Experience on phones: which achievements visitors unfold beyond each group's lead bullets
   "Expanded Experience Group": { company: string; group: string; hidden_bullets: number };

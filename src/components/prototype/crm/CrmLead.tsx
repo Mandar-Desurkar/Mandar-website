@@ -11,11 +11,11 @@ import {
 import styles from "./crm.module.css";
 import type { ScreenProps } from "../kissan/KissanScreens";
 import { useDesktop } from "../web/webMode";
-import CrmShell, { useToast } from "./CrmShell";
+import CrmShell, { useUnbuilt } from "./CrmShell";
 import { StageBadge } from "./CrmLeads";
 import { CreateOrderDrawer, CustomerOrders, DispositionDrawer } from "./CrmDrawers";
 import {
-  ACTIVITY_TYPES, AGENT, CAMPAIGN, FORM_ANSWERS, MAIN_LEAD, crm, displayName, fmtDate, fmtDateTime, isoDay, leadAge, money, useCrm,
+  ACTIVITY_TYPES, AGENT, CAMPAIGN, FORM_ANSWERS, MAIN_LEAD, crm, trackCrm, displayName, fmtDate, fmtDateTime, isoDay, leadAge, money, useCrm,
   type Activity,
 } from "./crmData";
 
@@ -50,7 +50,7 @@ type DetailProps = {
 };
 
 function LeadDetail({ tab, onTab, onBack, onCall, onCreateOrder, hintCreateOrder }: DetailProps) {
-  const toast = useToast();
+  const unbuilt = useUnbuilt();
   const notesRef = useRef<HTMLTextAreaElement>(null);
   const [logCall, setLogCall] = useState(false);
   const focusNotes = () => {
@@ -72,7 +72,7 @@ function LeadDetail({ tab, onTab, onBack, onCall, onCreateOrder, hintCreateOrder
                 key={id}
                 type="button"
                 className={`${styles.tab} ${tab === id ? styles.tabActive : ""}`}
-                onClick={() => (id === "whatsapp" ? toast("The WhatsApp chat isn't part of this prototype.") : onTab(id))}
+                onClick={() => (id === "whatsapp" ? unbuilt("WhatsApp chat", "The WhatsApp chat isn't part of this prototype.") : onTab(id))}
               >
                 {label}
               </button>
@@ -122,7 +122,7 @@ function Sidebar({
   onCall, onCreateOrder, onNote, onTasks, hintCreateOrder,
 }: { onCall: () => void; onCreateOrder: () => void; onNote: () => void; onTasks: () => void; hintCreateOrder?: boolean }) {
   const s = useCrm();
-  const toast = useToast();
+  const unbuilt = useUnbuilt();
   const [propsOpen, setPropsOpen] = useState(true);
   const [menu, setMenu] = useState(false);
   const msg = s.call === "connecting" ? "Connecting via softphone…" : s.call === "connected" ? "Connected — talk to the customer." : null;
@@ -150,7 +150,7 @@ function Sidebar({
                 type="button"
                 onClick={() => {
                   setMenu(false);
-                  toast("Update Lead isn't part of this prototype.");
+                  unbuilt("Update Lead");
                 }}
               >
                 Update Lead
@@ -243,6 +243,7 @@ function Recording({ seconds }: { seconds: number }) {
           onClick={() => {
             setOn(true);
             setPlaying(true);
+            trackCrm("played_recording");
           }}
         >
           ▶ Play recording
@@ -349,7 +350,7 @@ function Timeline({ onOrder }: { onOrder: () => void }) {
 // ---------- Lead Details ----------
 
 function Details() {
-  const toast = useToast();
+  const unbuilt = useUnbuilt();
   const [hide, setHide] = useState(false);
   const fields: [string, string][] = [
     ["First Name", MAIN_LEAD.first_name],
@@ -379,7 +380,7 @@ function Details() {
           <input type="checkbox" checked={hide} onChange={(e) => setHide(e.target.checked)} />
           Hide empty fields
         </label>
-        <button type="button" className={`${styles.btnOutline} ${styles.editBtn} ${styles.btnSm}`} onClick={() => toast("Update Lead isn't part of this prototype.")}>
+        <button type="button" className={`${styles.btnOutline} ${styles.editBtn} ${styles.btnSm}`} onClick={() => unbuilt("Update Lead")}>
           <Edit2 className={styles.ico} /> Edit
         </button>
       </div>
@@ -584,7 +585,7 @@ export function CrmDispositionScreen(sp: ScreenProps) {
   const s = useCrm();
   useEffect(() => {
     crm.ensureOrder();
-    if (s.call === "connected" || s.call === "connecting") crm.hangup();
+    if (s.call === "connected" || s.call === "connecting") crm.hangup(true);
     else if (s.call === "idle" && !s.disposed) crm.ensureEnded();
     // once on arrival
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -608,7 +609,7 @@ export function CrmLoggedScreen(sp: ScreenProps) {
     crm.ensureOrder();
     if (!crm.hasCallLog()) {
       crm.ensureEnded();
-      crm.dispose({ disposition: "Connected", sub: "Order Booked" });
+      crm.dispose({ disposition: "Connected", sub: "Order Booked" }, true);
     }
   }, []);
   return (

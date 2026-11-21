@@ -7,9 +7,9 @@ import { Calendar, ChevronDown, ChevronLeft, ChevronRight, ListFilter, Mail, Map
 import styles from "./crm.module.css";
 import type { ScreenProps } from "../kissan/KissanScreens";
 import { useDesktop } from "../web/webMode";
-import CrmShell, { useToast } from "./CrmShell";
+import CrmShell, { useToast, useUnbuilt } from "./CrmShell";
 import {
-  AGENT, LEAD_SOURCES, LEAD_STAGES, LEADS, MAIN_UID, STAGE_COLORS, STATES, displayName, fmtDateTime, isoDay, useCrm, type Lead,
+  AGENT, LEAD_SOURCES, LEAD_STAGES, LEADS, MAIN_UID, STAGE_COLORS, STATES, displayName, fmtDateTime, isoDay, trackCrm, useCrm, type Lead,
 } from "./crmData";
 
 export function StageBadge({ stage }: { stage: string }) {
@@ -24,7 +24,7 @@ export function StageBadge({ stage }: { stage: string }) {
 const TABS = ["Leads", "Queue", "Orders", "Activities", "WhatsApp"];
 
 export function CrmTabNav() {
-  const toast = useToast();
+  const unbuilt = useUnbuilt();
   return (
     <div className={`${styles.card} ${styles.tabNav}`}>
       {TABS.map((t) => (
@@ -32,7 +32,7 @@ export function CrmTabNav() {
           key={t}
           type="button"
           className={`${styles.tab} ${t === "Leads" ? styles.tabActive : ""}`}
-          onClick={() => t !== "Leads" && toast(`The ${t} tab isn't part of this prototype.`)}
+          onClick={() => t !== "Leads" && unbuilt(`${t} tab`, `The ${t} tab isn't part of this prototype.`)}
         >
           {t}
         </button>
@@ -136,6 +136,7 @@ export default function CrmLeadsScreen({ next, go }: ScreenProps) {
 function LeadsPage({ onOpen, onCall }: { onOpen: (l: Lead) => void; onCall: (l: Lead) => void }) {
   const desktop = useDesktop();
   const toast = useToast();
+  const unbuilt = useUnbuilt();
   const s = useCrm();
   const all = useLeads();
   const [q, setQ] = useState("");
@@ -145,11 +146,16 @@ function LeadsPage({ onOpen, onCall }: { onOpen: (l: Lead) => void; onCall: (l: 
   const [created, setCreated] = useState<Range>("");
   const [activity, setActivity] = useState<Range>("");
   const [ordered, setOrdered] = useState<Range>("");
+  // Count each filter a visitor applies (not clearing one), with which filter and value
+  const pick = <T extends string>(set: (v: T) => void, name: string) => (v: T) => {
+    set(v);
+    if (v) trackCrm("filtered_leads", `${name}: ${v}`);
+  };
   const [spinning, setSpinning] = useState(false);
 
   const only = (l: Lead, fn: (l: Lead) => void) => {
     if (l.uid === MAIN_UID) return fn(l);
-    toast(`This prototype follows ${displayName(LEADS[0])}. Open his profile to continue.`);
+    unbuilt("Other lead profiles", `This prototype follows ${displayName(LEADS[0])}. Open his profile to continue.`);
   };
 
   const leads = all.filter((l) => {
@@ -199,10 +205,10 @@ function LeadsPage({ onOpen, onCall }: { onOpen: (l: Lead) => void; onCall: (l: 
             </button>
           </div>
           <div className={styles.headBtns}>
-            <button type="button" className={styles.btnOutline} onClick={() => toast("The Advanced Filter (query builder) isn't part of this prototype.")}>
+            <button type="button" className={styles.btnOutline} onClick={() => unbuilt("Advanced Filter", "The Advanced Filter (query builder) isn't part of this prototype.")}>
               <SlidersHorizontal className={styles.ico} /> Advanced Filter
             </button>
-            <button type="button" className={styles.btnPrimary} onClick={() => toast("Add New Lead isn't part of this prototype.")}>
+            <button type="button" className={styles.btnPrimary} onClick={() => unbuilt("Add New Lead")}>
               <Plus className={styles.ico} /> Add New Lead
             </button>
           </div>
@@ -214,13 +220,13 @@ function LeadsPage({ onOpen, onCall }: { onOpen: (l: Lead) => void; onCall: (l: 
               <Search className={styles.ico} />
               <input className={styles.input} placeholder="Search by name, mobile, email..." value={q} onChange={(e) => setQ(e.target.value)} />
             </div>
-            <select className={`${styles.select} ${styles.filterSelect}`} value={stage} onChange={(e) => setStage(e.target.value)}>
+            <select className={`${styles.select} ${styles.filterSelect}`} value={stage} onChange={(e) => pick(setStage, "stage")(e.target.value)}>
               <option value="">Lead Stage</option>
               {LEAD_STAGES.map((x) => (
                 <option key={x}>{x}</option>
               ))}
             </select>
-            <select className={`${styles.select} ${styles.filterSelect}`} value={source} onChange={(e) => setSource(e.target.value)}>
+            <select className={`${styles.select} ${styles.filterSelect}`} value={source} onChange={(e) => pick(setSource, "source")(e.target.value)}>
               <option value="">Lead Source</option>
               {LEAD_SOURCES.map((x) => (
                 <option key={x}>{x}</option>
@@ -234,7 +240,7 @@ function LeadsPage({ onOpen, onCall }: { onOpen: (l: Lead) => void; onCall: (l: 
               <option value="">Agency</option>
               <option>In-house</option>
             </select>
-            <select className={`${styles.select} ${styles.filterSelect}`} value={stateF} onChange={(e) => setStateF(e.target.value)}>
+            <select className={`${styles.select} ${styles.filterSelect}`} value={stateF} onChange={(e) => pick(setStateF, "state")(e.target.value)}>
               <option value="">State</option>
               {STATES.map((x) => (
                 <option key={x}>{x}</option>
@@ -242,9 +248,9 @@ function LeadsPage({ onOpen, onCall }: { onOpen: (l: Lead) => void; onCall: (l: 
             </select>
           </div>
           <div className={styles.dateRow}>
-            <DateRange heading="Created" value={created} onChange={setCreated} />
-            <DateRange heading="Last Activity" value={activity} onChange={setActivity} />
-            <DateRange heading="Order Date" value={ordered} onChange={setOrdered} />
+            <DateRange heading="Created" value={created} onChange={pick<Range>(setCreated, "created")} />
+            <DateRange heading="Last Activity" value={activity} onChange={pick<Range>(setActivity, "last_activity")} />
+            <DateRange heading="Order Date" value={ordered} onChange={pick<Range>(setOrdered, "order_date")} />
             {(chips.length > 0 || q) && (
               <button type="button" className={styles.btnOutline} style={{ marginLeft: desktop ? "auto" : 0, padding: "8px 16px" }} onClick={clearAll}>
                 Clear

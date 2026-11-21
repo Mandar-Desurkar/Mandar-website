@@ -7,11 +7,20 @@ import { createContext, useContext, useEffect, useRef, useState, type PointerEve
 import { Bell, ChevronDown, MicOff, Moon, PhoneOff, RefreshCw, Search, Sun } from "lucide-react";
 import styles from "./crm.module.css";
 import { useDesktop } from "../web/webMode";
-import { crm, MAIN_LEAD, useCrm } from "./crmData";
+import { crm, MAIN_LEAD, trackCrm, useCrm } from "./crmData";
+import { trackEvent } from "@/lib/analytics";
 import { DispositionDrawer } from "./CrmDrawers";
 
 const ToastCtx = createContext<(msg: string) => void>(() => {});
 export const useToast = () => useContext(ToastCtx);
+// A click on something the prototype leaves out: say so, and count it (a demand signal)
+export function useUnbuilt() {
+  const toast = useToast();
+  return (feature: string, message?: string) => {
+    trackEvent("Clicked Unbuilt Prototype Feature", { prototype: "sales-crm", feature });
+    toast(message ?? `${feature} isn't part of this prototype.`);
+  };
+}
 
 type ShellProps = {
   children: ReactNode;
@@ -40,7 +49,10 @@ export default function CrmShell({ children, onHangup, onDisposed, hintHangup }:
     if (timer.current) clearTimeout(timer.current);
   }, []);
 
-  const outside = (what: string) => showToast(`${what} isn't part of this prototype.`);
+  const outside = (what: string) => {
+    trackEvent("Clicked Unbuilt Prototype Feature", { prototype: "sales-crm", feature: what });
+    showToast(`${what} isn't part of this prototype.`);
+  };
 
   return (
     <ToastCtx.Provider value={showToast}>
@@ -146,6 +158,7 @@ function Softphone({ onHangup, hint }: { onHangup: () => void; hint?: boolean })
   const ref = useRef<HTMLDivElement>(null);
   const drag = useRef<{ dx: number; dy: number; k: number } | null>(null);
   const [pos, setPos] = useState<{ x: number; y: number } | null>(null);
+  const moved = useRef(false);
 
   // The viewer scales the screen, so pointer pixels are converted to the screen's own pixels (k)
   const onPointerDown = (e: PointerEvent<HTMLDivElement>) => {
@@ -166,10 +179,13 @@ function Softphone({ onHangup, hint }: { onHangup: () => void; hint?: boolean })
     const { dx, dy, k } = drag.current;
     const x = Math.max(0, Math.min((e.clientX - rr.left) * k - dx, root.offsetWidth - el.offsetWidth));
     const y = Math.max(0, Math.min((e.clientY - rr.top) * k - dy, root.offsetHeight - el.offsetHeight));
+    moved.current = true;
     setPos({ x, y });
   };
   const onPointerUp = (e: PointerEvent<HTMLDivElement>) => {
+    if (drag.current && moved.current) trackCrm("moved_softphone");
     drag.current = null;
+    moved.current = false;
     e.currentTarget.releasePointerCapture?.(e.pointerId);
   };
 

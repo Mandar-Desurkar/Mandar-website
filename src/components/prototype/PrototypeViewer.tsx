@@ -503,7 +503,10 @@ export default function PrototypeViewer({ prototype, screens, onClose, onSwitchP
                     type="button"
                     className={`${styles.projectDropdownItem} ${isKissan ? styles.projectDropdownItemActive : ""}`}
                     onClick={() => {
-                      if (onSwitchPrototype) onSwitchPrototype("kissan-sampurna");
+                      if (onSwitchPrototype && prototype.id !== "kissan-sampurna") {
+                        trackEvent("Switched Prototype", { from_prototype: prototype.id, to_prototype: "kissan-sampurna" });
+                        onSwitchPrototype("kissan-sampurna");
+                      }
                       setTitleDropdownOpen(false);
                     }}
                   >
@@ -520,7 +523,10 @@ export default function PrototypeViewer({ prototype, screens, onClose, onSwitchP
                     type="button"
                     className={`${styles.projectDropdownItem} ${isGauApp ? styles.projectDropdownItemActive : ""}`}
                     onClick={() => {
-                      if (onSwitchPrototype) onSwitchPrototype("gau-sampurna");
+                      if (onSwitchPrototype && prototype.id !== "gau-sampurna") {
+                        trackEvent("Switched Prototype", { from_prototype: prototype.id, to_prototype: "gau-sampurna" });
+                        onSwitchPrototype("gau-sampurna");
+                      }
                       setTitleDropdownOpen(false);
                     }}
                   >
@@ -537,7 +543,10 @@ export default function PrototypeViewer({ prototype, screens, onClose, onSwitchP
                     type="button"
                     className={`${styles.projectDropdownItem} ${isGauWeb ? styles.projectDropdownItemActive : ""}`}
                     onClick={() => {
-                      if (onSwitchPrototype) onSwitchPrototype("gau-sampurna-web");
+                      if (onSwitchPrototype && prototype.id !== "gau-sampurna-web") {
+                        trackEvent("Switched Prototype", { from_prototype: prototype.id, to_prototype: "gau-sampurna-web" });
+                        onSwitchPrototype("gau-sampurna-web");
+                      }
                       setTitleDropdownOpen(false);
                     }}
                   >
@@ -554,7 +563,10 @@ export default function PrototypeViewer({ prototype, screens, onClose, onSwitchP
                     type="button"
                     className={`${styles.projectDropdownItem} ${isCrm ? styles.projectDropdownItemActive : ""}`}
                     onClick={() => {
-                      if (onSwitchPrototype) onSwitchPrototype("sales-crm");
+                      if (onSwitchPrototype && prototype.id !== "sales-crm") {
+                        trackEvent("Switched Prototype", { from_prototype: prototype.id, to_prototype: "sales-crm" });
+                        onSwitchPrototype("sales-crm");
+                      }
                       setTitleDropdownOpen(false);
                     }}
                   >

@@ -427,6 +427,15 @@ Measured from the apps' own source on 2026-10-22; follow this for any new protot
   muted/unmuted, skipped, restarted, seeked, finished, notes, load errors); hiring notification
   (viewed / clicked / dismissed); `Hit Content Protection` (evidence on whether `NoInspect`
   frustrates real visitors). `Dock.tsx` isn't rendered, so it isn't instrumented.
+- **Inside prototypes** (added 2026-11-21, first used by the Sales CRM): `Used Prototype Feature`
+  (prototype, feature, detail: called_lead, opened_create_order new/amend, added_order_item, placed_order
+  with payment mode, amended_order, hung_up, saved_disposition with the disposition, added_note,
+  played_recording, filtered_leads with filter: value, switched_theme, moved_softphone), `Hit Prototype
+  Validation` (form + the product's own error message: create_order / add_item / disposition) and `Clicked
+  Unbuilt Prototype Feature` (what visitors wanted that the prototype leaves out). Set-up the CRM does on its
+  own when a screen is opened directly is `silent` and sends nothing. The viewer's title dropdown now sends
+  `Switched Prototype` like the tabs. Testing tip: Amplitude also sends from dev, so block or fake
+  `api2.amplitude.com` (CDP Fetch, allow CORS preflight) in test browsers instead of polluting the project.
 - All section opens go through `openSection()` in `WindowContext`. This also fixed a bug where
   menu bar links didn't reopen a closed window.
 
@@ -448,6 +457,12 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
   to a simple layout on mobile. No fake metrics.
 
 ## Changelog
+
+- 2026-11-21: **Prototype analytics.** Three new events (`Used Prototype Feature`, `Hit Prototype Validation`,
+  `Clicked Unbuilt Prototype Feature`) wired through the Sales CRM, and `Switched Prototype` added to the
+  viewer's title dropdown. Checked by capturing the real Amplitude payloads during a scripted run (sent to a
+  fake endpoint, not the project). The Amplitude MCP wasn't connected, so the events aren't described in
+  Amplitude's own tracking plan yet; they appear there once ingested.
 
 - 2026-11-21: **Sales CRM prototype added** (owner: "pull prod branch of silo-ERP-frontend … add this in
   prototype of crm in both desktop and mobile … telecalling agent view … only the flow of lead to order booking

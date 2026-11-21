@@ -8,7 +8,7 @@ import styles from "./crm.module.css";
 import { useDesktop } from "../web/webMode";
 import {
   CALLBACK_SUBS, DISPOSITIONS, EXTRA_FIELDS, MAIN_LEAD, PRODUCTS, STATES, crm, displayName, extraDiscountCap, fmtDate,
-  isoDay, money, productByUid, serviceability, useCrm, type Order, type OrderItem,
+  isoDay, money, productByUid, serviceability, trackCrm, trackCrmValidation, useCrm, type Order, type OrderItem,
 } from "./crmData";
 
 // ---------- DrawerPanel ----------
@@ -66,9 +66,13 @@ export function DispositionDrawer({
 
   const submit = () => {
     setError(null);
-    if (!sub) return setError("Pick a disposition.");
-    if (needsCallback && !followUp) return setError("A callback needs a date & time.");
-    for (const f of extraFields) if (!extra[f.key]) return setError(`${f.label} is required.`);
+    const fail = (msg: string) => {
+      trackCrmValidation("disposition", msg);
+      setError(msg);
+    };
+    if (!sub) return fail("Pick a disposition.");
+    if (needsCallback && !followUp) return fail("A callback needs a date & time.");
+    for (const f of extraFields) if (!extra[f.key]) return fail(`${f.label} is required.`);
     setSaving(true);
     setTimeout(() => {
       const fu = followUp ? new Date(followUp) : null;
@@ -336,6 +340,14 @@ export function CreateOrderDrawer({ onClose, onPlaced }: { onClose: () => void; 
   useEffect(() => {
     if (error) errRef.current?.scrollIntoView({ block: "center", behavior: "smooth" });
   }, [error]);
+  // Once per opening; says whether it opened on a new order or straight into amending an open one
+  const tracked = useRef(false);
+  useEffect(() => {
+    if (tracked.current) return; // React's dev double-run of effects would count it twice
+    tracked.current = true;
+    trackCrm("opened_create_order", orders.length ? "amend" : "new");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const set = <K extends keyof Form>(k: K, v: Form[K]) => setForm((p) => ({ ...p, [k]: v }));
   const pin = serviceability(form.pincode);
@@ -358,17 +370,24 @@ export function CreateOrderDrawer({ onClose, onPlaced }: { onClose: () => void; 
   };
 
   const addItem = () => {
-    if (!cur.product_id) return setItemError({ field: "product", message: "Please select a product" });
-    if (cur.quantity < 1) return setItemError({ field: "quantity", message: "Quantity must be at least 1" });
-    if (cur.discount > cur.mrp) return setItemError({ field: "discount", message: "Discount cannot exceed the MRP" });
+    // Reported without the amounts, so the same rule groups as one error
+    const fail = (field: string, message: string, rule = message) => {
+      trackCrmValidation("add_item", rule);
+      setItemError({ field, message });
+    };
+    if (!cur.product_id) return fail("product", "Please select a product");
+    if (cur.quantity < 1) return fail("quantity", "Quantity must be at least 1");
+    if (cur.discount > cur.mrp) return fail("discount", "Discount cannot exceed the MRP");
     if (cur.discount > maxDiscount) {
-      return setItemError({
-        field: "discount",
-        message: `Cannot exceed ₹${maxDiscount.toFixed(2)} (₹${cur.base.toFixed(2)} baseline + 10% of selling price ₹${cur.selling.toFixed(2)})`,
-      });
+      return fail(
+        "discount",
+        `Cannot exceed ₹${maxDiscount.toFixed(2)} (₹${cur.base.toFixed(2)} baseline + 10% of selling price ₹${cur.selling.toFixed(2)})`,
+        "Discount above baseline + 10% of selling price",
+      );
     }
     const p = productByUid(cur.product_id)!;
     setItems((prev) => [...prev, { uid: p.uid, name: p.name, qty: cur.quantity, mrp: cur.mrp, sellingPrice: cur.selling, discount: cur.discount }]);
+    trackCrm("added_order_item", p.name);
     setCur(EMPTY_ITEM);
     setItemError(null);
   };
@@ -376,13 +395,17 @@ export function CreateOrderDrawer({ onClose, onPlaced }: { onClose: () => void; 
   const submit = () => {
     setError(null);
     if (pin.status === "idle") {
+      trackCrmValidation("create_order", "Enter a valid 6-digit pincode");
       setPinError("Enter a valid 6-digit pincode");
       return;
     }
     setPinError(null);
     if (amending) {
       const kept = amending.items.filter((i) => !removed.includes(i.uid));
-      if (!kept.length && !items.length) return setError("An order must have at least one item. Cancel the order directly instead of removing every item.");
+      if (!kept.length && !items.length) {
+        trackCrmValidation("create_order", "An order must have at least one item");
+        return setError("An order must have at least one item. Cancel the order directly instead of removing every item.");
+      }
       setSubmitting(true);
       setTimeout(() => {
         onPlaced(crm.amendOrder(amending.order_number, [...kept, ...items]));
@@ -400,8 +423,11 @@ export function CreateOrderDrawer({ onClose, onPlaced }: { onClose: () => void; 
       [form.mode_of_payment === "prepaid" && !form.cash_received_date, "Cash received date is required for prepaid orders"],
     ];
     const failed = checks.find(([bad]) => bad);
-    if (failed) return setError(failed[1]);
-    if (prepaidOver) return;
+    if (failed) {
+      trackCrmValidation("create_order", failed[1]);
+      return setError(failed[1]);
+    }
+    if (prepaidOver) return trackCrmValidation("create_order", "Prepaid amount above the order total");
     setSubmitting(true);
     setTimeout(() => {
       const order = crm.placeOrder({

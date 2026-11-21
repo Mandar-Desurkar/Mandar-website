@@ -6,6 +6,7 @@
 // when the prototype is opened again.
 import { useSyncExternalStore } from "react";
 import { PRODUCTS as GS_PRODUCTS } from "../web/gsData";
+import { trackEvent, type AnalyticsEvents } from "@/lib/analytics";
 
 export const AGENT = "Rekha M";
 export const DOMAIN = "erp.silofortune.com";
@@ -252,18 +253,29 @@ const set = (patch: Partial<State>) => {
 let seq = 10;
 const uid = () => `a${++seq}`;
 
+// Analytics for what the visitor does in the CRM (lib/analytics: "Used Prototype Feature"). Actions the
+// prototype takes on its own, to set up a screen opened directly, pass `silent` and send nothing.
+type Feature = AnalyticsEvents["Used Prototype Feature"]["feature"];
+export const trackCrm = (feature: Feature, detail?: string) =>
+  trackEvent("Used Prototype Feature", { prototype: "sales-crm", feature, ...(detail ? { detail } : {}) });
+export const trackCrmValidation = (form: AnalyticsEvents["Hit Prototype Validation"]["form"], error: string) =>
+  trackEvent("Hit Prototype Validation", { prototype: "sales-crm", form, error });
+
 export const crm = {
   reset() {
     state = { ...fresh(), theme: state.theme };
     emit();
   },
   toggleTheme() {
-    set({ theme: state.theme === "dark" ? "light" : "dark" });
+    const theme = state.theme === "dark" ? "light" : "dark";
+    set({ theme });
+    trackCrm("switched_theme", theme);
   },
   // Click-to-call: the softphone connects, then the customer answers
   dial() {
     if (state.call === "connecting" || state.call === "connected") return;
     set({ call: "connecting", outbound: state.outbound + 1, disposed: false });
+    trackCrm("called_lead");
     setTimeout(() => {
       if (state.call === "connecting") set({ call: "connected", callStarted: Date.now() });
     }, 1400);
@@ -273,7 +285,8 @@ export const crm = {
     if (state.call === "connected") return;
     set({ call: "connected", callStarted: Date.now() - 48_000, outbound: Math.max(1, state.outbound), disposed: false });
   },
-  hangup() {
+  hangup(silent = false) {
+    if (!silent && state.call === "connected") trackCrm("hung_up");
     const secs = state.call === "connected" ? Math.max(35, Math.round((Date.now() - state.callStarted) / 1000)) : 0;
     set({ call: "ended", callSeconds: secs });
   },
@@ -282,7 +295,8 @@ export const crm = {
     if (state.call === "ended") return;
     set({ call: "ended", callSeconds: 192, outbound: Math.max(1, state.outbound), disposed: false });
   },
-  dispose(d: { disposition: string; sub: string; note?: string; followUp?: string; extra?: Record<string, string> }) {
+  dispose(d: { disposition: string; sub: string; note?: string; followUp?: string; extra?: Record<string, string> }, silent = false) {
+    if (!silent) trackCrm("saved_disposition", `${d.disposition} / ${d.sub}`);
     const now = new Date();
     const connected = d.disposition === "Connected";
     const add: Activity[] = [];
@@ -306,9 +320,11 @@ export const crm = {
   },
   addNote(text: string) {
     const n: Activity = { uid: uid(), type: "note", at: new Date(), by: AGENT, body: text };
+    trackCrm("added_note");
     set({ notes: [n, ...state.notes], activities: [n, ...state.activities], fresh: [n.uid] });
   },
-  placeOrder(o: Omit<Order, "order_number" | "at" | "status">) {
+  placeOrder(o: Omit<Order, "order_number" | "at" | "status">, silent = false) {
+    if (!silent) trackCrm("placed_order", `${o.payment}, ${o.items.length} item${o.items.length === 1 ? "" : "s"}`);
     const now = new Date();
     const order_number = `ORD-CRM-${isoDay(now).replace(/-/g, "")}-${String(4100 + state.orders.length + 7)}`;
     const order: Order = { ...o, order_number, at: now, status: "pending" };
@@ -318,6 +334,7 @@ export const crm = {
   },
   // Amend: the open order keeps its number; its items and total change
   amendOrder(orderNo: string, items: OrderItem[]) {
+    trackCrm("amended_order");
     const now = new Date();
     const total = items.reduce((s, it) => s + (it.mrp - it.discount) * it.qty, 0);
     let updated = state.orders[0];
@@ -338,7 +355,7 @@ export const crm = {
       collection: "doorstep",
       outlet: MAIN_LEAD.outlet_name,
       address: `${MAIN_LEAD.address_line}, ${MAIN_LEAD.city}`,
-    });
+    }, true);
   },
 };
 
