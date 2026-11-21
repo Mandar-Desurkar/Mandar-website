@@ -135,11 +135,12 @@ export default function PrototypeViewer({ prototype, screens, onClose, onSwitchP
   const [direction, setDirection] = useState(1);
   const [scale, setScale] = useState(0.7);
   // Website prototypes (prototype.web) can be shown as the phone site (mSite) or the desktop site
-  const [webMode, setWebMode] = useState<WebMode>("msite");
+  const [webMode, setWebMode] = useState<WebMode>(prototype.web?.defaultMode ?? "msite");
 
   const isKissan = prototype.id === "kissan-sampurna";
   const isGauApp = prototype.id === "gau-sampurna";
   const isGauWeb = prototype.id === "gau-sampurna-web";
+  const isCrm = prototype.id === "sales-crm";
   const web = prototype.web;
   const isDesktop = !!web && webMode === "desktop";
 
@@ -412,6 +413,21 @@ export default function PrototypeViewer({ prototype, screens, onClose, onSwitchP
               <span className={styles.tabCloseBtn} onClick={(e) => { e.stopPropagation(); close(); }}>✕</span>
             </button>
 
+            <button
+              type="button"
+              className={`${styles.tabItem} ${isCrm ? styles.tabItemActive : ""}`}
+              onClick={() => {
+                if (!isCrm && onSwitchPrototype) {
+                  trackEvent("Switched Prototype", { from_prototype: prototype.id, to_prototype: "sales-crm" });
+                  onSwitchPrototype("sales-crm");
+                }
+              }}
+            >
+              <span className={styles.tabPlayIcon}>▶</span>
+              <span>Sales CRM - Prototype</span>
+              <span className={styles.tabCloseBtn} onClick={(e) => { e.stopPropagation(); close(); }}>✕</span>
+            </button>
+
             <span className={styles.addTabBtn}>+</span>
           </div>
 
@@ -531,6 +547,23 @@ export default function PrototypeViewer({ prototype, screens, onClose, onSwitchP
                         {isGauWeb && <span style={{ color: "#0d99ff", fontSize: 11 }}>✓</span>}
                       </span>
                       <span className={styles.dropdownItemSubtitle}>D2C store, on phone and desktop</span>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    className={`${styles.projectDropdownItem} ${isCrm ? styles.projectDropdownItemActive : ""}`}
+                    onClick={() => {
+                      if (onSwitchPrototype) onSwitchPrototype("sales-crm");
+                      setTitleDropdownOpen(false);
+                    }}
+                  >
+                    <div className={styles.dropdownItemContent}>
+                      <span className={styles.dropdownItemTitle}>
+                        <span>📞 Sales CRM</span>
+                        {isCrm && <span style={{ color: "#0d99ff", fontSize: 11 }}>✓</span>}
+                      </span>
+                      <span className={styles.dropdownItemSubtitle}>Telecaller view: lead to order on one call</span>
                     </div>
                   </button>
 

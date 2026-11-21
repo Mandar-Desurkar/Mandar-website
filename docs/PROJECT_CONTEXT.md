@@ -56,6 +56,19 @@ bar. Audience: recruiters and hiring managers, many arriving on mobile via Linke
   cycle); the Checkout screen is the full page. The map step is an illustrated map (the site uses Google
   Maps); pincode checks use a small sample table (56–59xxxx deliver). Buttons in the GS pages are reset with
   `:where(.page) button` so module classes always win.
+- **Sales CRM prototype** (`sales-crm`, added 2026-11-21): the telecaller's side of the Silo ERP's CRM, recreated
+  from the ERP frontend's code (`_external/silo-erp-frontend-prod`, `prod` branch 301bc9d, read-only; never read or
+  copy its `erp-frontend-prod.json`). Telecaller role only, by the owner's request: no super-admin pages, settings
+  or reports. Flows: **Lead to order** (Manage Leads → lead profile → click-to-call → Create Order during the call
+  → order placed → hang up → required disposition → call logged) and **Lead profile** (Activity History, Lead
+  Details, Tasks, Orders tabs). Opens in the **Desktop** layout (`web.defaultMode`), mSite shows the ERP's own
+  phone layout (lead cards, stacked profile, full-width drawers). ERP theme tokens as CSS variables; dark by
+  default, the header's Light/Dark toggle works. **All data is invented** (leads, numbers, agent "Rekha M",
+  orders): the real CRM holds customers' phone numbers, so nothing from it or from the owner's screenshots is
+  used. Products/prices come from the website prototype's catalogue. Code: `src/components/prototype/crm/`
+  (`crmData.ts` enums + a session store, `CrmShell.tsx` header / sidebar / draggable softphone / DispositionGate,
+  `CrmLeads.tsx`, `CrmLead.tsx`, `CrmDrawers.tsx`). Reachable from the viewer's tabs / dropdown / phone switcher
+  and `?prototype=sales-crm`; not yet on the hero or phone home screen.
 - **Phone:** dawn wallpaper crop (`public/wallpaper-phone.webp`, moon placed in the gap between the two
   small widgets) and the Back button in `PhoneBack.tsx`. Keep in-app overlays in `depth` there.
 - Stack: Next.js 16.3 App Router, React 19.2, TypeScript, CSS Modules + tokens in
@@ -433,6 +446,13 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
   to a simple layout on mobile. No fake metrics.
 
 ## Changelog
+
+- 2026-11-21: **Sales CRM prototype added** (owner: "pull prod branch of silo-ERP-frontend … add this in
+  prototype of crm in both desktop and mobile … telecalling agent view … only the flow of lead to order booking
+  and seeing lead profile"). Cloned the ERP `prod` (301bc9d) into `_external/`. 11 screens in two flows, desktop
+  and mSite layouts; walked end to end by clicking on dev and on a production build, and fits at 320–430 px in the
+  phone player. See the Sales CRM entry under Current state. The phone player's prototype switcher is now a 2×2
+  grid to fit four names.
 
 - 2026-11-20: **Amplitude app icon added to phone home screen page 2** (owner's request: "add amplitude app icon
   in mobile size screen in secondar page", "if anyone clikc on amplitude dont redirect to anywhere else").

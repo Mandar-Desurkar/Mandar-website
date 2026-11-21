@@ -21,7 +21,8 @@ export type Prototype = {
   device: PrototypeDevice;
   // Website prototypes: the desktop viewport, shown in a browser window when the viewer's
   // mSite / Desktop switch is on Desktop (the phone layout uses `device`)
-  web?: { domain: string; desktop: { width: number; height: number } };
+  // defaultMode: the layout the viewer opens in (mSite unless set)
+  web?: { domain: string; desktop: { width: number; height: number }; defaultMode?: "msite" | "desktop" };
   flows: PrototypeFlow[];
 };
 
