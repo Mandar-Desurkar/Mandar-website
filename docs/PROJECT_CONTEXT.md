@@ -458,6 +458,18 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 
 ## Changelog
 
+- 2026-11-21: **Font and SEO / LLM pass.** Font: the site already forces `--font-system` on every element
+  (`* { font-family … !important }` in globals.css), which is SF Pro on Apple devices (verified as `.SF NS` on a
+  Mac) and Inter elsewhere (SF Pro's licence forbids serving it as a web font); stale per-component stacks now
+  point at `var(--font-system)`. The resume page keeps its serif (mirrors the LaTeX PDF) and the prototypes keep
+  their apps' own fonts. SEO / LLM: `SiteIndex.tsx` puts a visually hidden index of the whole site in the home
+  page's HTML (summary, roles, education, skills, links to every case study, resume, contact; home HTML text
+  1.3K → 3.9K chars); `/llms.txt` and `/llms-full.txt` (static routes built from `src/lib/siteText.ts`, so they
+  follow the data); JSON-LD `@graph` of Person (description, email, knowsAbout) + WebSite + ProfilePage on every
+  page and an `Article` on each case study; fuller metadata (robots/googleBot, keywords, authors, OG/Twitter on
+  case studies); robots.txt names the AI crawlers (GPTBot, ClaudeBot, PerplexityBot, Google-Extended, …) and
+  blocks only `/api/`; the sitemap carries lastModified.
+
 - 2026-11-21: **Wallpaper is the owner's star-field photo** (replacing the dot grid). Desktop 99 KB, phone crop
   50 KB centred on the bright star. The tone layer stays neutral: the sky is dark enough for every label.
 

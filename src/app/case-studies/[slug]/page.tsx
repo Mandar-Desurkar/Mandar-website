@@ -46,6 +46,7 @@ import { CaseStudyView, CopyLinkButton, TrackedCite, TrackedLink } from "@/compo
 import { ReadingProgress, TableOfContents, type TocItem } from "@/components/case-study/ReadingNav";
 import { caseStudies, getCaseStudy, type CaseStudy, type CaseStudyFeature } from "@/data/caseStudies";
 import { profile } from "@/data/resume";
+import { SITE_URL } from "@/data/site";
 import styles from "./CaseStudy.module.css";
 
 export const dynamicParams = false;
@@ -61,8 +62,19 @@ export async function generateMetadata({ params }: PageProps<"/case-studies/[slu
   return {
     title: `${cs.title} | ${profile.name}`,
     description: cs.subtitle,
+    keywords: [...cs.tags, cs.product, cs.card.theme, "case study", "product management"],
+    authors: [{ name: profile.name, url: SITE_URL }],
     alternates: { canonical: `/case-studies/${cs.slug}` },
-    openGraph: { title: cs.title, description: cs.subtitle, type: "article", images: [{ url: cs.cover, alt: cs.title }] },
+    openGraph: {
+      title: cs.title,
+      description: cs.subtitle,
+      type: "article",
+      url: `/case-studies/${cs.slug}`,
+      authors: [profile.name],
+      tags: cs.tags,
+      images: [{ url: cs.cover, alt: cs.title }],
+    },
+    twitter: { card: "summary_large_image", title: cs.title, description: cs.subtitle, images: [cs.cover] },
   };
 }
 
@@ -237,8 +249,26 @@ export default async function CaseStudyPage({ params }: PageProps<"/case-studies
   // The sidebar suggests the next case study, wrapping round to the first
   const next = caseStudies.length > 1 ? caseStudies[(caseStudies.indexOf(cs) + 1) % caseStudies.length] : undefined;
 
+  // Article structured data: what the study is, who wrote it, and the product it's about
+  const articleJsonLd = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "@id": `${SITE_URL}/case-studies/${cs.slug}#article`,
+    headline: cs.title,
+    description: cs.subtitle,
+    image: `${SITE_URL}${cs.cover}`,
+    url: `${SITE_URL}/case-studies/${cs.slug}`,
+    mainEntityOfPage: `${SITE_URL}/case-studies/${cs.slug}`,
+    inLanguage: "en",
+    keywords: cs.tags.join(", "),
+    author: { "@id": `${SITE_URL}/#person`, "@type": "Person", name: profile.name, url: SITE_URL },
+    about: { "@type": "SoftwareApplication", name: cs.product, applicationCategory: "MobileApplication" },
+    isPartOf: { "@id": `${SITE_URL}/#website` },
+  });
+
   return (
     <div className={styles.page}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: articleJsonLd.replace(/</g, "\\u003c") }} />
       <CaseStudyView slug={cs.slug} />
 
       <header className={styles.topBar}>

@@ -6,7 +6,7 @@
   flex-direction: column;
   gap: 20px;
   padding: 4px 16px 32px;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  font-family: var(--font-system);
   -webkit-font-smoothing: antialiased;
 }
 

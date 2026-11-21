@@ -19,6 +19,7 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
+import SiteIndex from "@/components/SiteIndex";
 
 // Each section's code loads when it is opened, so a phone landing on the home screen doesn't pay for them
 const Experience = dynamic(() => import("@/components/Experience"));
@@ -112,6 +113,7 @@ function DesktopEnvironment() {
 export default function Home() {
   return (
     <main className="desktop-scene">
+      <SiteIndex />
       <BootScreen />
       
       <WindowProvider>

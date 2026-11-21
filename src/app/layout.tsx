@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import NoInspect from "@/components/NoInspect";
 import Haptics from "@/components/Haptics";
-import { profile } from "@/data/resume";
+import { profile, skills } from "@/data/resume";
 import { SITE_URL } from "@/data/site";
 
 // Typography: Apple devices render Apple's own system font, SF Pro (its licence doesn't allow
@@ -21,7 +21,24 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: `${profile.name} | ${profile.role}`,
   description: profile.metaDescription,
-  alternates: { canonical: "/" },
+  applicationName: `${profile.name} Portfolio`,
+  authors: [{ name: profile.name, url: SITE_URL }],
+  creator: profile.name,
+  keywords: [
+    profile.name,
+    profile.role,
+    "Product Manager",
+    "AI product manager",
+    "0→1 products",
+    "consumer apps",
+    "growth",
+    "portfolio",
+    "case studies",
+    "Bangalore",
+  ],
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 } },
+  // The plain-text summary for AI assistants (llms.txt) and the full text (llms-full.txt)
+  alternates: { canonical: "/", types: { "text/plain": [{ url: "/llms.txt", title: "llms.txt" }, { url: "/llms-full.txt", title: "llms-full.txt" }] } },
   // Link previews on LinkedIn, WhatsApp and Slack; the images come from opengraph-image.tsx
   openGraph: {
     type: "profile",
@@ -33,18 +50,44 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", title: `${profile.name} | ${profile.role}`, description: profile.metaDescription },
 };
 
-// Structured data, so search engines show the name, role and profiles
+// Structured data: the person (name, role, employer, school, skills, profiles), the site, and the home
+// page as their profile page, so search engines and AI assistants can tell who this site is about
+const PERSON_ID = `${SITE_URL}/#person`;
 const PERSON_JSON_LD = JSON.stringify({
   "@context": "https://schema.org",
-  "@type": "Person",
-  name: profile.name,
-  jobTitle: profile.role,
-  url: SITE_URL,
-  image: `${SITE_URL}/profile-photo.jpg`,
-  worksFor: { "@type": "Organization", name: "Silo Fortune" },
-  alumniOf: { "@type": "CollegeOrUniversity", name: "M. S. Ramaiah Institute of Technology" },
-  address: { "@type": "PostalAddress", addressLocality: "Bangalore", addressCountry: "IN" },
-  sameAs: [profile.linkedin],
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": PERSON_ID,
+      name: profile.name,
+      jobTitle: profile.role,
+      description: profile.summary,
+      url: SITE_URL,
+      image: `${SITE_URL}/profile-photo.jpg`,
+      email: `mailto:${profile.email}`,
+      worksFor: { "@type": "Organization", name: "Silo Fortune" },
+      alumniOf: { "@type": "CollegeOrUniversity", name: "M. S. Ramaiah Institute of Technology" },
+      address: { "@type": "PostalAddress", addressLocality: "Bangalore", addressCountry: "IN" },
+      knowsAbout: skills.flatMap((s) => s.items.split(", ")),
+      sameAs: [profile.linkedin],
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: `${profile.name} Portfolio`,
+      inLanguage: "en",
+      author: { "@id": PERSON_ID },
+    },
+    {
+      "@type": "ProfilePage",
+      "@id": `${SITE_URL}/#profile`,
+      url: SITE_URL,
+      name: `${profile.name} | ${profile.role}`,
+      isPartOf: { "@id": `${SITE_URL}/#website` },
+      mainEntity: { "@id": PERSON_ID },
+    },
+  ],
 });
 
 // viewport-fit=cover lets the mobile dock and prototype bars respect the iPhone safe areas
