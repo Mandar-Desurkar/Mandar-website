@@ -4,7 +4,7 @@ import React, { createContext, useContext, useEffect, useRef, useState, ReactNod
 import { trackEvent, secondsSince } from '@/lib/analytics';
 
 // `projects` is shown as "Case Studies"; the id stays so analytics history stays comparable
-// `notebook` is the Notebook window (principles, field notes, the site as a product)
+// `notebook` is the Notebook window (principles, case studies, now)
 export type SectionId = 'about' | 'experience' | 'education' | 'projects' | 'contact' | 'notebook';
 const SECTION_IDS: SectionId[] = ['about', 'experience', 'education', 'projects', 'contact', 'notebook'];
 const isSectionId = (v: string | null): v is SectionId => SECTION_IDS.includes(v as SectionId);

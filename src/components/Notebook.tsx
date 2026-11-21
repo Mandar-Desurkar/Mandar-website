@@ -1,16 +1,16 @@
 "use client";
 
 // The Notebook window, in the style of macOS Notes: a list of notes on the left, the open note on the
-// right (on phones the list becomes a row of tabs). Three notes: Product Principles (pinned), Field
-// Notes and Now.
+// right (on phones the list becomes a row of tabs). Three notes: Product Principles (pinned), Case
+// Studies and Now.
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState, type ReactNode } from "react";
-import { ArrowRight, ArrowUpRight, Pin } from "lucide-react";
+import { ArrowUpRight, Pin, TrendingUp } from "lucide-react";
 import styles from "./Notebook.module.css";
 import RichText from "./RichText";
 import { caseStudies } from "@/data/caseStudies";
-import { differently, fieldNotes, now, principles, type NoteId } from "@/data/notebook";
+import { differently, now, principles, type NoteId } from "@/data/notebook";
 import { NOTE_EVENT, takeRequestedNote } from "@/lib/notebookNav";
 import { trackEvent } from "@/lib/analytics";
 
@@ -27,9 +27,9 @@ const NOTES: {
     pinned: true,
   },
   {
-    id: "field",
-    title: "Field Notes",
-    snippet: "What farmers taught me, and what it changed",
+    id: "case-studies",
+    title: "Case Studies",
+    snippet: "Seven 0→1 features across AI, agritech and sales platforms",
   },
   { id: "now", title: "Now", snippet: now.items[0].text },
 ];
@@ -84,44 +84,57 @@ function Principles() {
   );
 }
 
-function FieldNotes() {
+function CaseStudiesNote() {
   return (
     <>
       <p className={styles.lede}>
-        Six things farmers and field research taught me, and what each one
-        changed in the product.
+        Seven 0→1 features and AI systems shipped across consumer agritech,
+        computer vision, voice AI, and internal sales platforms. Each study
+        covers the user problem, architectural decisions, and measured outcomes.
       </p>
-      <div className={styles.field}>
-        {fieldNotes.map((f) => {
-          const cs = study(f.slug);
+      <div className={styles.caseGrid}>
+        {caseStudies.map((cs, i) => {
+          const [name, line] = cs.title.split(": ");
+          const year = cs.meta.find((m) => m.label === "Timeline")?.value;
           return (
             <Link
-              key={f.slug}
-              href={`/case-studies/${f.slug}`}
-              className={styles.fieldCard}
+              key={cs.slug}
+              href={`/case-studies/${cs.slug}`}
+              className={styles.caseCard}
               onClick={() =>
                 trackEvent("Opened Case Study", {
-                  slug: f.slug,
+                  slug: cs.slug,
                   placement: "notebook",
                 })
               }
             >
-              {cs && (
-                <span className={styles.fieldArt}>
-                  <Image
-                    src={cs.thumb}
-                    alt=""
-                    width={240}
-                    height={134}
-                    sizes="120px"
-                  />
+              <span className={styles.caseArt}>
+                <Image
+                  src={cs.thumbDesk || cs.thumb}
+                  alt=""
+                  width={600}
+                  height={402}
+                  sizes="(max-width: 768px) 100vw, 360px"
+                />
+              </span>
+              <span className={styles.caseContent}>
+                <span className={styles.caseMeta}>
+                  <span className={styles.caseIndex}>
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className={styles.caseTag}>
+                    {cs.product} · {cs.card.theme}
+                  </span>
+                  {year && <span className={styles.caseYear}>{year}</span>}
                 </span>
-              )}
-              <span className={styles.fieldText}>
-                <span className={styles.fieldTag}>{studyName(f.slug)}</span>
-                <span className={styles.found}>{f.finding}</span>
-                <span className={styles.changed}>
-                  <ArrowRight size={13} aria-hidden="true" /> {f.change}
+                <h3 className={styles.caseTitle}>{name}</h3>
+                {line && <p className={styles.caseLine}>{line}</p>}
+                <div className={styles.caseMetric}>
+                  <TrendingUp size={13} strokeWidth={2.2} aria-hidden="true" />
+                  <span>{cs.card.metric}</span>
+                </div>
+                <span className={styles.caseRead}>
+                  Read case study <ArrowUpRight size={13} aria-hidden="true" />
                 </span>
               </span>
             </Link>
@@ -183,7 +196,7 @@ export default function Notebook() {
     setNote(id);
     trackEvent("Opened Note", { note: id, source: "sidebar" });
   };
-  const current = NOTES.find((n) => n.id === note)!;
+  const current = NOTES.find((n) => n.id === note) ?? NOTES[1];
 
   return (
     <div className={styles.app}>
@@ -195,8 +208,8 @@ export default function Notebook() {
               <li key={n.id}>
                 <button
                   type="button"
-                  className={`${styles.item} ${n.id === note ? styles.itemOn : ""}`}
-                  aria-current={n.id === note ? "page" : undefined}
+                  className={`${styles.item} ${n.id === note || (note === "field" && n.id === "case-studies") ? styles.itemOn : ""}`}
+                  aria-current={n.id === note || (note === "field" && n.id === "case-studies") ? "page" : undefined}
                   onClick={() => pick(n.id)}
                 >
                   <span className={styles.itemTitle}>
@@ -221,7 +234,7 @@ export default function Notebook() {
         <p className={styles.date}>Mandar Desurkar · {now.updated}</p>
         <h2 className={styles.title}>{current.title}</h2>
         {note === "principles" && <Principles />}
-        {note === "field" && <FieldNotes />}
+        {(note === "case-studies" || note === "field") && <CaseStudiesNote />}
         {note === "now" && <Now />}
       </article>
     </div>

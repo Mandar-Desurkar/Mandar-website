@@ -48,7 +48,7 @@ export const NOTEBOOK_APP: SectionApp = {
   title: "Notebook",
   Glyph: IoJournal,
   Outline: IoJournalOutline,
-  keywords: "notes principles product thinking field notes now how i think",
+  keywords: "notes principles product thinking case studies now how i think",
 };
 
 export const sectionApp = (id: SectionId) => [...SECTION_APPS, NOTEBOOK_APP].find((s) => s.id === id) ?? SECTION_APPS[0];

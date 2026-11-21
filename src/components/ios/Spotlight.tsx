@@ -45,7 +45,7 @@ const SECTION_SUBTITLES: Record<string, string> = {
   education: "B.E. ISE · Skills & toolkit",
   projects: caseStudies.map((c) => c.title.split(":")[0]).join(" · "),
   contact: "Email, phone, LinkedIn",
-  notebook: "Product principles · Field notes · Now",
+  notebook: "Product principles · Case studies · Now",
 };
 const SECTION_KEYWORDS: Record<string, string> = {
   experience: experiences.map((e) => `${e.role} ${e.company} ${e.groups?.map((g) => g.title).join(" ") ?? ""}`).join(" "),

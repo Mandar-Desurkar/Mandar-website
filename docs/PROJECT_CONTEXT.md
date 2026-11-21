@@ -458,6 +458,11 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 
 ## Changelog
 
+- 2026-11-21: **Notebook: Replaced Field Notes with Case Studies.** In `Notebook.tsx`, the second note is
+  now `Case Studies` (replacing `Field Notes`). The note displays all 7 case studies in a responsive 2-column grid
+  with cover art, tags, titles, one-liners, metric pills and direct case-study links, followed by "What I'd do
+  differently" retrospectives including the new Telecaller QA Agent.
+
 - 2026-11-21: **Telecaller QA Agent case study added** (`/case-studies/telecaller-qa`): deep dive into building
   a 0→1 voice AI QA agent for Silo Fortune's 150+ telecaller sales floor. Transcribes dual-channel audio via Exotel PBX,
   maps conversational intent with confidence scoring to 18 CRM dispositions, flags discrepancies (e.g. false RNR masking

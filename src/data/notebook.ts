@@ -7,7 +7,7 @@
 // - now: the "Now" sticky on the desktop and the Now note
 import { caseStudies } from "./caseStudies";
 
-export type NoteId = "principles" | "field" | "now";
+export type NoteId = "principles" | "case-studies" | "now" | "field";
 
 export type Proof = { slug: string; decision: string };
 export const principles: { title: string; body: string; proof: Proof[] }[] = [
@@ -104,6 +104,7 @@ const DIFFERENTLY: [string, number][] = [
   ["cattle-health", 0],
   ["market-value", 0],
   ["dung-check", 0],
+  ["telecaller-qa", 0],
 ];
 export const differently = DIFFERENTLY.flatMap(([slug, i]) => {
   const cs = caseStudies.find((c) => c.slug === slug);

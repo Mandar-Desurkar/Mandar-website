@@ -227,6 +227,140 @@
   white-space: nowrap;
 }
 
+/* Case Studies Note */
+.caseGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 22px;
+}
+
+.caseCard {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.045);
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.1);
+  color: inherit;
+  text-decoration: none;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.caseCard:hover {
+  background: rgba(255, 255, 255, 0.075);
+  transform: translateY(-2px);
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.18), 0 8px 20px rgba(0, 0, 0, 0.28);
+}
+
+.caseArt {
+  display: block;
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--paper-bg, #1a1a1f);
+}
+
+.caseArt img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.caseCard:hover .caseArt img {
+  transform: scale(1.03);
+}
+
+.caseContent {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 13px 15px 15px;
+  flex: 1;
+}
+
+.caseMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(235, 235, 245, 0.5);
+}
+
+.caseIndex {
+  color: var(--signature);
+  font-weight: 700;
+}
+
+.caseTag {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.caseYear {
+  margin-left: auto;
+  opacity: 0.7;
+}
+
+.caseTitle {
+  margin: 1px 0 0;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+  color: #fff;
+}
+
+.caseLine {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: rgba(235, 235, 245, 0.72);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.caseMetric {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 4px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--signature);
+}
+
+.caseMetric svg {
+  flex-shrink: 0;
+}
+
+.caseRead {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: auto;
+  padding-top: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(235, 235, 245, 0.6);
+  transition: color 0.15s ease;
+}
+
+.caseCard:hover .caseRead {
+  color: #fff;
+}
+
 /* Field notes: what we found, and what it changed */
 .field {
   display: grid;
@@ -412,6 +546,10 @@
 
   .date {
     text-align: left;
+  }
+
+  .caseGrid {
+    grid-template-columns: 1fr;
   }
 
   .field {
