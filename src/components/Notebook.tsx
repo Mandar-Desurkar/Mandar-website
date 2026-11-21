@@ -8,9 +8,8 @@ import Link from "next/link";
 import { useEffect, useState, type ReactNode } from "react";
 import { ArrowUpRight, Pin, TrendingUp } from "lucide-react";
 import styles from "./Notebook.module.css";
-import RichText from "./RichText";
 import { caseStudies } from "@/data/caseStudies";
-import { differently, now, principles, type NoteId } from "@/data/notebook";
+import { now, principles, type NoteId } from "@/data/notebook";
 import { NOTE_EVENT, takeRequestedNote } from "@/lib/notebookNav";
 import { trackEvent } from "@/lib/analytics";
 
@@ -141,18 +140,6 @@ function CaseStudiesNote() {
           );
         })}
       </div>
-
-      <h3 className={styles.subhead}>What I’d do differently</h3>
-      <ul className={styles.differently}>
-        {differently.map((d) => (
-          <li key={d.slug}>
-            <span className={styles.fieldTag}>{d.name}</span>
-            <p>
-              <RichText text={d.text} />
-            </p>
-          </li>
-        ))}
-      </ul>
     </>
   );
 }

@@ -3,9 +3,7 @@
 // owner to edit.
 // - principles: portfolio-level beliefs, each linked to the case study decision that proves it
 // - fieldNotes: one research finding per study and what it changed in the product
-// - differently: one "what I'd do differently" per study (the case studies' own learnings)
 // - now: the "Now" sticky on the desktop and the Now note
-import { caseStudies } from "./caseStudies";
 
 export type NoteId = "principles" | "case-studies" | "now" | "field";
 
@@ -95,22 +93,6 @@ export const fieldNotes: { slug: string; finding: string; change: string }[] = [
     change: "Feed fix first, product second: one matched product, and only where we can deliver.",
   },
 ];
-
-// One learning per study, by index into that study's `learnings`
-const DIFFERENTLY: [string, number][] = [
-  ["crop-guide", 1],
-  ["farm-monitoring", 0],
-  ["crop-doctor", 1],
-  ["cattle-health", 0],
-  ["market-value", 0],
-  ["dung-check", 0],
-  ["telecaller-qa", 0],
-];
-export const differently = DIFFERENTLY.flatMap(([slug, i]) => {
-  const cs = caseStudies.find((c) => c.slug === slug);
-  const text = cs?.learnings[i];
-  return cs && text ? [{ slug, name: cs.title.split(":")[0], text }] : [];
-});
 
 // The "Now" sticky on the desktop and the Now note. Owner: update monthly.
 export const now = {
