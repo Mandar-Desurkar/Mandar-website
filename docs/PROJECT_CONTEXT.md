@@ -458,6 +458,12 @@ Goal: turn visits into interviews. North star = resume downloads + "Send a memo"
 
 ## Changelog
 
+- 2026-11-21: **Telecaller QA Agent case study added** (`/case-studies/telecaller-qa`): deep dive into building
+  a 0→1 voice AI QA agent for Silo Fortune's 150+ telecaller sales floor. Transcribes dual-channel audio via Exotel PBX,
+  maps conversational intent with confidence scoring to 18 CRM dispositions, flags discrepancies (e.g. false RNR masking
+  price objections), and auto-salvages high-intent leads into retention queues within 15 minutes. Results: 100% audit
+  coverage in < 3 mins (up from 1.2% manual sampling), 14,200+ leads salvaged/month (₹18.4L/mo recovered sales), and 4.2% RTO cut.
+
 - 2026-11-21: **Chai the desk cat removed** (owner's call) with everything only it used: `components/desk-cat`,
   the `/api/agent` route, `lib/agent/knowledge.ts`, `data/agent.ts`, its five analytics events and `desk_cat`
   placements, and the `@anthropic-ai/sdk` dependency (`ANTHROPIC_API_KEY` is no longer read). The **Now sticky**

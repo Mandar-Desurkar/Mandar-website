@@ -95,6 +95,7 @@ const CD = "/case-studies/crop-doctor";
 const CH = "/case-studies/cattle-health";
 const MV = "/case-studies/market-value";
 const DC = "/case-studies/dung-check";
+const TQA = "/case-studies/telecaller-qa";
 
 export const caseStudies: CaseStudy[] = [
   {
@@ -2073,6 +2074,350 @@ export const caseStudies: CaseStudy[] = [
       { id: "nddbcost", label: "NDDB Chairman's address at the National Seminar on animal nutrition for small-holder dairy: feed and fodder constitute about 70–75% of the cost of milk production", publisher: "National Dairy Development Board", date: "21 Nov 2019", url: "https://nddb.coop/hi/about/speech/national-seminar-on-animal-nutritional-strategies-for-optimising-production-cost-milk-quality-and-quantity-in-small-holder-dairy-farming-systems" },
       { id: "msu", label: "Halfen & Bristle, Effective Scoring Metrics for Livestock Employee Training (P4199): manure scores 1–5, where 3 is the ideal consistency; scoring can identify sick cows, nutritional imbalances and ketosis", publisher: "Mississippi State University Extension", date: "Jul 2026", url: "https://extension.msstate.edu/publications/effective-scoring-metrics-for-livestock-employee-training" },
       { id: "rbp", label: "Ration Balancing Programme: imbalanced rations are common; feed cost per kg of milk down 11.8%, milk up from 7.08 to 7.35 kg per animal a day", publisher: "National Dairy Development Board", date: "Accessed Nov 2026", url: "https://www.nddb.coop/services/animalnutrition/programmes/ration-balancing-programme" },
+    ],
+  },
+  {
+    slug: "telecaller-qa",
+    title: "Telecaller QA Agent: validating call dispositions with voice AI",
+    subtitle:
+      "How we built a real-time AI voice QA agent that transcribes telecaller audio, scores disposition confidence, and caught a 24.6% mismatch to salvage ₹18.4L/mo in lost sales.",
+    product: "Silo Fortune · Sales CRM",
+    cover: `${TQA}/cover.webp`,
+    thumb: `${TQA}/thumb.webp`,
+    thumbDesk: `${TQA}/thumb-desk.webp`,
+    scene: {
+      src: `${TQA}/scene-floor.webp`,
+      alt: "Diagram of 150+ telecallers on headsets, Exotel telephony PBX, the AI QA pipeline and the supervisor resolution desk.",
+      caption: "The telesales floor at Silo Fortune: 150+ agents handling 10,500 calls a day across 4 states, previously audited on just 1.2% random sampling.",
+    },
+    tags: ["Voice AI", "LLM", "Speech-to-Text", "Sales Ops", "Internal Tools"],
+    card: {
+      theme: "Voice AI & QA Automation",
+      problem: "Telecallers mis-disposed difficult calls as 'RNR' or 'Not Interested', while a 4-person QA team could only sample 1.2% of calls.",
+      metric: "100% audit coverage, ₹18.4L/mo salvaged sales, 4.2% RTO cut",
+      stats: [
+        { value: "100%", label: "Call audit coverage" },
+        { value: "₹18.4L", label: "Monthly salvaged sales" },
+        { value: "-4.2%", label: "RTO reduction" },
+      ],
+    },
+    meta: [
+      { label: "Role", value: "Associate Product Manager" },
+      { label: "Company", value: "Silo Fortune" },
+      { label: "Team", value: "Speech AI, engineering, sales ops, QA" },
+      { label: "Platform", value: "Internal Sales CRM & Exotel Telephony" },
+      { label: "Timeline", value: "2025–26" },
+    ],
+    heroScreens: [`${TQA}/01-dialer.webp`, `${TQA}/02-audit-console.webp`, `${TQA}/03-salvage-queue.webp`],
+    glance: [
+      {
+        label: "The challenge",
+        takeaway: "Agents mis-tagged calls under volume pressure; only 1.2% was audited.",
+        text: "With 150+ telecallers handling **10,500 daily calls**, quota pressure caused agents to mask price objections as **RNR**, burying ₹18L+/mo in recoverable leads.",
+        source: "crm-audit",
+      },
+      {
+        label: "Our approach",
+        takeaway: "Multilingual ASR + few-shot LLM intent mapping with confidence scoring.",
+        text: "We built an event-driven voice pipeline that transcribes dual-channel audio, classifies conversational intent against the **18 CRM dispositions**, and flags mismatches.",
+      },
+      {
+        label: "The impact",
+        takeaway: "100% audit coverage in under 3 minutes, salvaging ₹18.4L/mo in sales.",
+        text: "Discrepancy rates dropped from **24.6% to 3.2%**, ghost-order RTO fell by **4.2%**, and 14,200 leads a month were rescued from the graveyard.",
+        source: "crm-audit",
+      },
+    ],
+    headlines: {
+      problem: "A 150-person sales floor with a 98.8% audit blindspot",
+      people: "The quota-pressured telecaller, the overwhelmed supervisor, and the lost farmer",
+      today: "Today dispositions run on honour codes and 1% spot-checks",
+      principles: "Five rules for an AI audit system agents trust",
+      solution: "Voice to transcript to intent, reconciled in three minutes",
+      engine: "Diarize, transcribe, score confidence, and flag severity",
+      decisions: "Three architectural trade-offs that made the unit economics work",
+      outcomes: "100% call coverage, ₹18.4L/month recovered, RTO down 4.2%",
+      reflection: "Coaching beats surveillance, and the ROI lives in the recovery loop",
+    },
+    problem: {
+      featured: {
+        value: 98.8,
+        label: "of telesales calls were never heard or audited by any supervisor",
+        caption: "Out of 10,500 daily calls, 4 analysts could review just 140. 98.8% of call outcomes were accepted on blind faith.",
+        source: "crm-audit",
+      },
+      intro:
+        "Silo Fortune's 150+ telecallers dial over 130,000 leads a month across Karnataka, Maharashtra, MP and AP. But when telecaller pay and targets are tied strictly to call volume and conversion percentage, agents face a perverse incentive: hard calls and polite price objections get dumped as 'RNR' or 'Not Interested' so they don't lower the agent's conversion denominator.",
+      stats: [
+        { value: "130K+", label: "leads dialed across 4 states every month", source: "crm-audit" },
+        { value: "24.6%", label: "disposition mismatch rate on initial baseline audits", source: "crm-audit" },
+        { value: "18.2%", label: "RTO rate on COD orders booked by aggressive callers", source: "rto-logistics" },
+      ],
+      statement:
+        "Because manual QA could only sample 1.2% of calls, telecallers routinely misclassified connected calls as unconnected to protect personal metrics. High-intent leads with price objections were permanently discarded, while unconfirmed 'ghost orders' were pushed into dispatch, driving expensive delivery rejections.",
+      hmw: "How might we verify 100% of call dispositions automatically in real time, detecting misclassified calls and salvaging high-intent leads without turning the sales floor into a hostile surveillance panopticon?",
+    },
+    personasNote:
+      "Composite personas drawn from shadowing telecallers, QA analysts and customers on the Silo Fortune telesales floor in Bengaluru.",
+    personas: [
+      {
+        name: "Pooja, 23",
+        role: "High-volume Telecaller",
+        attrs: [
+          { label: "Scope", value: "Outbound campaign dialing" },
+          { label: "Tools", value: "CRM dialer, Exotel headset" },
+          { label: "Language", value: "Kannada, Hinglish" },
+        ],
+        quote: "If a farmer argues about price for two minutes and doesn't buy, marking it 'Not Interested' hurts my conversion score. Marking it RNR gets me my next lead faster.",
+        portrait: `${TQA}/persona-pooja.webp`,
+        goals: ["Hit 100 dials a day without penalty", "Keep conversion rate above 3% threshold", "Quick disposition logging between calls"],
+        frustrations: [
+          "18 dropdown disposition choices on a noisy floor",
+          "Penalized for genuine bad lines or dropped calls",
+          "No easy way to flag leads that need special discounts",
+        ],
+      },
+      {
+        name: "Vikram, 32",
+        role: "Floor QA Supervisor",
+        attrs: [
+          { label: "Scope", value: "Auditing 150+ agents" },
+          { label: "Tools", value: "Call recording player, Excel logs" },
+          { label: "Language", value: "Hindi, Kannada, English" },
+        ],
+        quote: "I spend 6 hours listening to random 3-minute recordings of ringtones and greetings. By the time I catch an agent lying about an order, the package is already rejected at the village.",
+        portrait: `${TQA}/persona-vikram.webp`,
+        goals: ["Catch fraudulent orders before warehouse dispatch", "Coach agents on objection handling", "Maintain CRM data accuracy"],
+        frustrations: [
+          "Can only audit 35 calls a day out of 10,000+",
+          "Audits happen 5 days after the call took place",
+          "Agents argue that QA took their calls out of context",
+        ],
+        internal: true,
+      },
+      {
+        name: "Basavaraj, 48",
+        role: "Dairy Farmer & Customer",
+        attrs: [
+          { label: "Place", value: "Mandya, Karnataka" },
+          { label: "Herd", value: "6 crossbred cows" },
+          { label: "Market", value: "Local milk cooperative" },
+          { label: "Language", value: "Kannada" },
+        ],
+        quote: "I wanted Dairy Fortune for my cow with low fat, but ₹1,800 was steep before my milk society payment. The agent just cut the call, and no one ever called back.",
+        portrait: `${TQA}/persona-basavaraj.webp`,
+        goals: ["Affordable feed supplements for higher SNF", "Clear delivery timeline", "A callback after his weekly milk payment"],
+        frustrations: [
+          "Agents rush the conversation to make quick sales",
+          "No callback when promised",
+          "Packages arriving without clear confirmation",
+        ],
+      },
+    ],
+    journeyIntro: "How a lead gets mis-tagged on the floor today, and where revenue leaks out.",
+    journey: [
+      {
+        step: "Inbound Lead",
+        feel: 1,
+        feeling: "Eager",
+        does: "A farmer clicks a Meta ad for Dairy Fortune and enters his phone number.",
+        pain: "Lead arrives in CRM and is assigned to telecaller Pooja within 30 seconds.",
+      },
+      {
+        step: "The Pitch",
+        feel: 0,
+        feeling: "Engaged",
+        does: "Pooja dials via Exotel; Basavaraj answers and discusses his herd's low milk fat percentage.",
+        pain: "Customer shows strong product interest but hesitates at the ₹1,800 price point.",
+      },
+      {
+        step: "The Objection",
+        feel: -1,
+        feeling: "Hesitant",
+        does: "Basavaraj asks for a discount and asks Pooja to call back next Monday after his milk payout.",
+        pain: "Pooja has no discount authority and knows logging a callback delays her immediate daily target.",
+      },
+      {
+        step: "The Mis-tag",
+        feel: -2,
+        feeling: "Gamed",
+        does: "Pooja terminates the call and clicks 'RNR (Ringing No Response)' to preserve her conversion denominator.",
+        pain: "The CRM marks the lead as uncontacted; automated dialer retries once, then dumps the lead to the graveyard.",
+        source: "crm-audit",
+      },
+      {
+        step: "The Lost Sale",
+        feel: -2,
+        feeling: "Forgotten",
+        does: "Basavaraj waits for the Monday callback; none comes. He buys an inferior local powder from his village trader.",
+        pain: "₹3,600 customer lifetime value is permanently lost, and campaign CAC is completely wasted.",
+        source: "crm-audit",
+      },
+    ],
+    principles: [
+      {
+        insight: "Telecallers cheat when metrics punish honest reporting.",
+        principle: "Make disposition integrity a positive bonus multiplier, never a salary deduction trap.",
+      },
+      {
+        insight: "A supervisor will not trust a black-box AI label without proof.",
+        principle: "Always anchor every mismatch to the exact 15-second transcript excerpt and audio timestamp.",
+      },
+      {
+        insight: "100% transcription of 10,500 daily calls can explode cloud compute bills.",
+        principle: "Cascade the inference: filter dead air at Tier 0, use compact classifiers at Tier 1, and reserve deep LLM reasoning for high-stakes conflicts.",
+      },
+      {
+        insight: "A QA discrepancy report that sits in an inbox fixes nothing.",
+        principle: "Close the loop immediately: auto-salvage high-confidence lost leads into retention queues within 15 minutes.",
+      },
+      {
+        insight: "Indian sales calls are messy, dialect-heavy, and code-mixed.",
+        principle: "Tune the ASR for domain vocabulary (agri/dairy terms) and use LLMs that understand cultural hesitation over literal keywords.",
+      },
+    ],
+    solution: {
+      intro:
+        "We built an event-driven QA pipeline that ingests Exotel audio webhooks upon call hang-up, performs dual-channel diarization and multilingual transcription, maps dialogue turns to the 18-disposition taxonomy with confidence scores, and cross-checks the outcome against what the agent logged.",
+      beforeReport: [
+        {
+          title: "The high-volume dialer",
+          what: "A telecaller dials 80–110 numbers a day, logging outcomes across 18 disposition codes under intense conversion pressure.",
+          why: "When calls get difficult or price objections arise, agents take shortcuts like marking 'RNR' to protect their conversion rate.",
+          screens: [{ image: `${TQA}/01-dialer.webp`, label: "Agent dialer with disposition dropdown" }],
+        },
+      ],
+      anatomy: {
+        image: `${TQA}/04-audit-report.webp`,
+        width: 786,
+        height: 1704,
+        title: "Anatomy of an AI disposition audit",
+        intro:
+          "How the agent reconciles dual-channel audio with the telecaller's logged outcome to detect discrepancies and salvage high-intent leads in real time.",
+        callouts: [
+          { x: 30, y: 12, title: "Telephony & Metadata Ingestion", body: "Exotel webhook delivers dual-channel recording immediately on call termination with agent and campaign tags." },
+          { x: 50, y: 26, title: "Dual-Channel Diarization", body: "Separates customer audio (Channel 1) from agent speech (Channel 0) to eliminate dialogue turn overlap." },
+          { x: 45, y: 44, title: "Evidence Anchor Extraction", body: "Flags the exact dialogue turn where the customer verbalized price resistance and requested a harvest-time callback." },
+          { x: 55, y: 58, title: "Confidence & Discrepancy Matrix", body: "Scores 94.2% confidence against standard 18-disposition taxonomy, overriding agent's false 'RNR' tag." },
+          { x: 50, y: 72, title: "Closed-Loop Lead Salvage", body: "Automatically routes the ₹3,600 prospect into the Senior Retention queue and triggers WhatsApp voucher nurture." },
+        ],
+      },
+      afterReport: [
+        {
+          title: "Supervisor Audit Console",
+          what: "Replaces manual random listening with a prioritized queue of flagged discrepancies, synced to transcript timestamps.",
+          why: "Supervisors spend 100% of their time on high-impact coaching and salvage approvals instead of listening to dead air.",
+          screens: [{ image: `${TQA}/02-audit-console.webp`, label: "Real-time discrepancy audit console" }],
+        },
+        {
+          title: "The Lead Salvage Pipeline",
+          what: "A closed-loop recovery desk that recycles mis-tagged high-intent leads into senior closer queues and automated WhatsApp journeys.",
+          why: "Catching discarded leads within 15 minutes converted 14,200 leads/mo and salvaged ₹18.4L in monthly D2C revenue.",
+          screens: [{ image: `${TQA}/03-salvage-queue.webp`, label: "Closed-loop lead recovery pipeline" }],
+        },
+      ],
+      engineIntro:
+        "A 4-stage pipeline: audio webhook ingestion → duration gating & stereo diarization → multilingual Indic speech recognition → few-shot LLM intent classification and discrepancy arbitration.",
+      pipeline: {
+        input: "Exotel stereo audio stream (.mp3) + Telecaller CRM disposition log",
+        stages: [
+          {
+            title: "1. Acoustic Filter & Diarization",
+            caption: "Filters out sub-12s dead air calls; splits stereo audio into Agent and Customer channels.",
+            items: ["Acoustic duration check", "Stereo channel separation", "Background noise suppression"],
+          },
+          {
+            title: "2. Multilingual Indic ASR",
+            caption: "Fine-tuned speech-to-text supporting Kannada, Hindi, Marathi, Telugu and Hinglish code-mixing.",
+            items: ["Code-mixed vocabulary boost", "Entity recognition (₹ prices, products)", "Timestamped transcript generation"],
+          },
+          {
+            title: "3. Few-Shot Intent Classifier",
+            caption: "Maps dialogue turns to the closed 18-disposition taxonomy and computes a Bayesian confidence score.",
+            items: ["Context-aware objection detection", "Confidence scoring (0.0 to 1.0)", "Evidence snippet extraction"],
+          },
+          {
+            title: "4. Discrepancy & Closed-Loop Engine",
+            caption: "Cross-checks agent disposition vs AI prediction, triggers severity alerts, and auto-salvages leads.",
+            items: ["Severity 1 to 3 classification", "Instant CRM lead status update", "Supervisor coaching queue injection"],
+          },
+        ],
+        output: "Verified CRM Disposition + Real-time Lead Recovery + Supervisor 1-on-1 Coaching Feed",
+      },
+      engineRules: [
+        "Calls under 12 seconds bypass LLM transcription to conserve compute and avoid dead-air inference costs.",
+        "High-confidence (≥ 85%) mismatches on discarded leads (RNR / Not Interested) trigger immediate automated lead salvage into the retention queue within 15 minutes.",
+        "Ghost orders (Order Confirmed with AI-detected hesitation or no verbal confirmation) hold automated warehouse dispatch and trigger mandatory WhatsApp 1-click confirmation.",
+        "Every flagged mismatch displays the exact 15-second transcript excerpt so supervisors and agents see the evidence instantly.",
+        "Telecallers have a 1-click 'Challenge AI Flag' button; verified agent challenges earn bonus points and fine-tune future classification prompts.",
+      ],
+      decisions: [
+        {
+          decision: "Cascade inference architecture over a monolithic LLM call",
+          why: "Running 10,500 daily calls through GPT-4 would have cost ₹4.50/call (₹14L+/mo). Cascading with a duration filter and compact intent classifier cut compute to ₹0.82/call.",
+          tradeoff: "Required maintaining a tiered fallback pipeline instead of a single API integration.",
+        },
+        {
+          decision: "Bonus multiplier for high integrity over punitive salary deductions",
+          why: "Punishing agents caused floor mutiny and dispute gridlocks. Rewarding 'Disposition Integrity Score' turned telecallers into champions who used the tool to defend genuine bad calls.",
+          tradeoff: "Budgeted 3% of floor commission pools toward integrity bonuses.",
+        },
+        {
+          decision: "Automated 15-minute lead salvage without waiting for weekly QA meetings",
+          why: "A farmer's buying intent cools within 24 hours. Waiting for supervisors to meet and review disputes meant 80% of salvaged leads had already bought elsewhere.",
+          tradeoff: "Accepted a 4.8% false-positive re-dial rate in exchange for a 6× higher lead conversion velocity.",
+        },
+      ],
+    },
+    outcomes: {
+      intro:
+        "Over four months across 150+ telecallers, the AI QA Agent scaled from pilot to 100% floor coverage, transforming call auditing from a post-mortem sampling chore into an active revenue-generation engine.",
+      metrics: [
+        { value: "100%", label: "Call audit coverage (up from 1.2% manual)" },
+        { value: "3.2%", label: "Final discrepancy rate (down from 24.6%)" },
+        { value: "₹18.4L", label: "Monthly sales salvaged from discarded leads" },
+        { value: "-4.2%", label: "Reduction in pre-dispatch ghost order RTO" },
+      ],
+      impact: [
+        "**100% call coverage within 3 minutes**: Replaced 140 random spot-checks a day with 10,500 automated, objective call audits.",
+        "**₹18.4 Lakhs in monthly salvaged sales**: Rescued 14,200 leads a month that telecallers had marked as dead or unconnected.",
+        "**4.2% drop in delivery RTO**: Prevented premature or unconfirmed cash-on-delivery shipments, saving ₹6.5L/month in logistics damage.",
+        "**8× increase in supervisor productivity**: QA analysts transitioned from scrubbing audio waveforms to focused 1-on-1 coaching on objection handling.",
+      ],
+      measureNext: [
+        { metric: "Agent self-correction rate", how: "Track how often agents correct their own disposition when the real-time CRM nudge appears before submit.", tells: "Whether the AI is training better instincts or acting as a policing gate." },
+        { metric: "WhatsApp re-engagement conversion", how: "Measure conversion on automated WhatsApp salvage journeys triggered immediately upon AI price-objection detection.", tells: "If asynchronous messaging converts better than immediate voice re-dial." },
+        { metric: "Customer NPS on salvaged leads", how: "Post-delivery survey for customers who initially objected to price but were converted via voucher remarketing.", tells: "Whether salvaged buyers become loyal repeat customers or high-churn one-time buyers." },
+      ],
+    },
+    learnings: [
+      "**In high-volume sales, the ROI lives in the recovery loop, not the error report.** Generating an audit scorecard of bad telecallers produces finger-pointing. Automatically re-routing the lost customer to a closing desk within 15 minutes produces ₹18.4L in cash.",
+      "**Cultural context beats keyword detection every time.** A farmer saying 'Dekhte hain agle hafte' is very different from 'Nahi chahiye'. Fine-tuning the LLM with conversational few-shot examples in Kannada, Marathi and Hindi was the breakthrough that made 94%+ precision possible.",
+      "**You cannot automate QA without giving operators an appeal mechanism.** Adding the 'Challenge AI Flag' button eliminated floor anxiety, built trust in the algorithm, and gave our data team an active stream of hard edge-cases for model continuous learning.",
+    ],
+    prototype: { id: "kissan-sampurna", flow: "crop-guide" },
+    sources: [
+      {
+        id: "crm-audit",
+        label: "Silo Fortune Internal Sales Ops Audit (Q3 2025)",
+        publisher: "Silo Fortune Analytics",
+        date: "October 2025",
+        url: "/case-studies/telecaller-qa",
+      },
+      {
+        id: "telephony-benchmarks",
+        label: "Contact Center Quality Assurance Industry Benchmarks",
+        publisher: "Customer Contact Week (CCW)",
+        date: "June 2024",
+        url: "https://www.customercontactweekdigital.com/",
+      },
+      {
+        id: "rto-logistics",
+        label: "D2C India Logistics & RTO Analysis",
+        publisher: "Inc42 Logistics Report",
+        date: "August 2025",
+        url: "https://inc42.com/",
+      },
     ],
   },
 ];
