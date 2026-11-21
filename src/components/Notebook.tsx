@@ -3,6 +3,7 @@
 // The Notebook window, in the style of macOS Notes: a list of notes on the left, the open note on the
 // right (on phones the list becomes a row of tabs). Three notes: Product Principles (pinned), Case
 // Studies and Now.
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState, type ReactNode } from "react";
 import { ArrowUpRight, Pin } from "lucide-react";
@@ -89,8 +90,8 @@ function Principles() {
 // "Peak MAU" → "peak MAU", "Of 100+ crops" → "of 100+ crops": lower-case words, keep acronyms
 const inSentence = (label: string) => label.replace(/\b([A-Z])([a-z])/g, (_, a: string, b: string) => a.toLowerCase() + b);
 
-// The case studies as an index, not a second copy of the Case Studies window: no cover art, one row each
-// with the feature, the kind of problem, its promise and its three headline numbers
+// The case studies as an index: one row each with its cover as a small tile, the feature, the kind of
+// problem, its promise and its headline numbers
 function CaseStudiesNote() {
   return (
     <>
@@ -108,7 +109,10 @@ function CaseStudiesNote() {
                 className={styles.caseRow}
                 onClick={() => trackEvent("Opened Case Study", { slug: cs.slug, placement: "notebook" })}
               >
-                <span className={styles.caseIndex}>{String(i + 1).padStart(2, "0")}</span>
+                <span className={styles.caseThumb}>
+                  <Image src={cs.thumbDesk || cs.thumb} alt="" width={240} height={161} sizes="(max-width: 767px) 96px, 132px" />
+                  <span className={styles.caseIndex}>{String(i + 1).padStart(2, "0")}</span>
+                </span>
                 <span className={styles.caseMain}>
                   <span className={styles.caseHead}>
                     <span className={styles.caseTitle}>{name}</span>
