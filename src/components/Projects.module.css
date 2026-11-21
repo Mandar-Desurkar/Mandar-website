@@ -1,6 +1,6 @@
 /* Case Studies window: one group per app, the same card for every study.
    Base rules are the phone (iOS) layout, a grouped list; the desktop window (dark glass) is styled at
-   the end of the file: one glass card per study, text and numbers left, the cover as a plate right. */
+   the end of the file: one "case file" card per study (story track and numbers, the cover as a corner wash). */
 
 .projectsSection {
   padding: 8px 0 28px;
@@ -108,7 +108,16 @@
 .theme,
 .result,
 .read,
-.stats {
+.stats,
+.fileHead,
+.story,
+.foot {
+  display: none;
+}
+
+/* The eyebrow lives in the file head on desktop; on phones it stands alone above the name */
+.index,
+.year {
   display: none;
 }
 
@@ -228,6 +237,11 @@
   padding: 12px 14px 14px;
 }
 
+/* The file head holds the eyebrow; on phones only the eyebrow shows (index and year are desktop) */
+:global(.ios-app) .fileHead {
+  display: block;
+}
+
 /* Caption caps: the kind of problem, in the tint so it reads as a category */
 :global(.ios-app) .theme {
   display: block;
@@ -278,7 +292,7 @@
 }
 
 /* ==================== Desktop window ====================
-   On the shared dark glass (globals.css): one glass card per case study, tinted by product. */
+   On the shared dark glass (globals.css): one case-file card per study, tinted by product. */
 
 :global(.os-window:not(.ios-app)) .projectsSection {
   padding: 34px 0 44px;
@@ -352,34 +366,31 @@
   overflow: visible;
 }
 
-/* One dark glass card per study, in the windows' own material: the text on the left, the cover as a
-   framed plate on the right. Each product tints it (eyebrow, glow, link): Kissan green, Gau blue. */
+/* A case file per study, on the windows' own dark glass. The cover bleeds in from the top right and
+   fades into the card, so art and text share one surface; each product tints it: Kissan green, Gau blue. */
 :global(.os-window:not(.ios-app)) .card {
   --tone: #5fd38d;
-  --tone-soft: rgba(95, 211, 141, 0.14);
+  --tone-rgb: 95, 211, 141;
   position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 42%);
-  align-items: stretch;
-  gap: 0;
-  min-height: 290px;
-  padding: 12px;
+  isolation: isolate;
+  display: block;
+  padding: 0;
   overflow: hidden;
   border-radius: 22px;
   background:
-    radial-gradient(560px 320px at 0% 0%, var(--tone-soft), transparent 70%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.065), rgba(255, 255, 255, 0.025));
+    radial-gradient(700px 380px at 100% 0%, rgba(var(--tone-rgb), 0.1), transparent 65%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.09),
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 10px 30px rgba(0, 0, 0, 0.22);
+    0 12px 32px rgba(0, 0, 0, 0.25);
   color: #ffffff;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
 }
 
 :global(.os-window:not(.ios-app)) .card[data-tone="gau"] {
   --tone: #6cb2ff;
-  --tone-soft: rgba(108, 178, 255, 0.15);
+  --tone-rgb: 108, 178, 255;
 }
 
 :global(.os-window:not(.ios-app)) .card + .card::before {
@@ -387,18 +398,15 @@
 }
 
 :global(.os-window:not(.ios-app)) .card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.18),
+    inset 0 0 0 1px rgba(var(--tone-rgb), 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    0 18px 44px rgba(0, 0, 0, 0.34);
+    0 22px 48px rgba(0, 0, 0, 0.38);
 }
 
 :global(.os-window:not(.ios-app)) .card:active {
-  transform: translateY(0) scale(0.995);
-  background:
-    radial-gradient(560px 320px at 0% 0%, var(--tone-soft), transparent 70%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.065), rgba(255, 255, 255, 0.025));
+  transform: translateY(-1px) scale(0.997);
 }
 
 :global(.os-window:not(.ios-app)) .card:focus-visible {
@@ -406,46 +414,93 @@
   outline-offset: 3px;
 }
 
-:global(.os-window:not(.ios-app)) .body {
-  order: 1;
-  justify-content: center;
-  padding: 22px 28px 22px 22px;
+/* The cover: the full height of the card on the right, fading in from its left edge, so it meets the
+   text without a seam; the text keeps to the left so it never sits on the bright art */
+:global(.os-window:not(.ios-app)) .deskArt {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  display: block;
+  width: 50%;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.6) 22%, #000 46%);
+  mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.6) 22%, #000 46%);
 }
 
-/* Eyebrow: the kind of problem, in small caps with a tone dot */
-:global(.os-window:not(.ios-app)) .theme {
-  display: inline-flex;
+:global(.os-window:not(.ios-app)) .deskArt img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:global(.os-window:not(.ios-app)) .card:hover .deskArt img {
+  transform: scale(1.04);
+}
+
+:global(.os-window:not(.ios-app)) .body {
+  display: flex;
+  flex-direction: column;
+  width: 58%;
+  padding: 26px 30px 24px;
+}
+
+/* File head: big index, then the kind of problem and the year */
+:global(.os-window:not(.ios-app)) .fileHead {
+  display: flex;
   align-items: center;
-  gap: 8px;
-  align-self: flex-start;
+  gap: 12px;
+}
+
+:global(.os-window:not(.ios-app)) .index {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  color: var(--tone);
+  padding: 3px 8px;
+  border-radius: 7px;
+  background: rgba(var(--tone-rgb), 0.12);
+  box-shadow: inset 0 0 0 1px rgba(var(--tone-rgb), 0.28);
+}
+
+:global(.os-window:not(.ios-app)) .theme {
+  display: block;
   font-size: 11.5px;
   font-weight: 650;
-  letter-spacing: 0.09em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--tone);
+  color: rgba(255, 255, 255, 0.7);
 }
 
-:global(.os-window:not(.ios-app)) .theme::before {
-  content: "";
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: currentColor;
-  box-shadow: 0 0 10px currentColor;
+:global(.os-window:not(.ios-app)) .year {
+  display: block;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+:global(.os-window:not(.ios-app)) .year::before {
+  content: "·";
+  margin-right: 12px;
+  color: rgba(255, 255, 255, 0.3);
 }
 
 :global(.os-window:not(.ios-app)) .name {
-  margin-top: 12px;
-  font-size: 30px;
+  margin-top: 22px;
+  font-size: 34px;
   font-weight: 700;
-  line-height: 1.1;
-  letter-spacing: -0.025em;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
   color: #ffffff;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.35);
 }
 
 :global(.os-window:not(.ios-app)) .line {
-  margin-top: 8px;
-  max-width: 46ch;
+  margin-top: 10px;
   font-size: 15.5px;
   font-weight: 450;
   line-height: 1.45;
@@ -453,11 +508,101 @@
   -webkit-line-clamp: 2;
 }
 
-/* The proof: three numbers in a row, hairlines between */
+/* The story: challenge → approach → impact down a rail; Impact carries the tone */
+:global(.os-window:not(.ios-app)) .story {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 24px;
+  padding-left: 24px;
+}
+
+:global(.os-window:not(.ios-app)) .story::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  bottom: 8px;
+  left: 4px;
+  width: 1px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.18) 60%, rgba(var(--tone-rgb), 0.7) 100%);
+}
+
+:global(.os-window:not(.ios-app)) .step {
+  position: relative;
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  align-items: baseline;
+  gap: 12px;
+  min-width: 0;
+}
+
+:global(.os-window:not(.ios-app)) .stepName {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Each step's dot sits on the rail */
+:global(.os-window:not(.ios-app)) .stepDot {
+  position: absolute;
+  top: 4px;
+  left: -24px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #1b2130;
+  box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.4);
+}
+
+:global(.os-window:not(.ios-app)) .stepText {
+  font-size: 14.5px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+:global(.os-window:not(.ios-app)) .stepText strong {
+  font-weight: 700;
+  color: #ffffff;
+}
+
+:global(.os-window:not(.ios-app)) .step:last-child .stepName {
+  color: var(--tone);
+}
+
+:global(.os-window:not(.ios-app)) .step:last-child .stepDot {
+  background: var(--tone);
+  box-shadow: 0 0 0 4px rgba(var(--tone-rgb), 0.18), 0 0 14px rgba(var(--tone-rgb), 0.6);
+}
+
+:global(.os-window:not(.ios-app)) .step:last-child .stepText {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+:global(.os-window:not(.ios-app)) .step:last-child .stepText strong {
+  color: var(--tone);
+}
+
+/* Foot: the three numbers, then where the card goes */
+:global(.os-window:not(.ios-app)) .foot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
 :global(.os-window:not(.ios-app)) .stats {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, max-content));
-  margin-top: 22px;
 }
 
 :global(.os-window:not(.ios-app)) .stat {
@@ -487,23 +632,30 @@
 :global(.os-window:not(.ios-app)) .statLabel {
   font-size: 12px;
   line-height: 1.3;
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 :global(.os-window:not(.ios-app)) .result {
   display: none;
 }
 
-/* The whole card is the link; this just says where it goes */
 :global(.os-window:not(.ios-app)) .read {
   display: inline-flex;
+  flex-shrink: 0;
   align-items: center;
   gap: 6px;
-  align-self: flex-start;
-  margin-top: 24px;
-  font-size: 14px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 13.5px;
   font-weight: 600;
   color: var(--tone);
+  background: rgba(var(--tone-rgb), 0.1);
+  box-shadow: inset 0 0 0 1px rgba(var(--tone-rgb), 0.25);
+  transition: background-color 0.2s ease;
+}
+
+:global(.os-window:not(.ios-app)) .card:hover .read {
+  background: rgba(var(--tone-rgb), 0.18);
 }
 
 :global(.os-window:not(.ios-app)) .read svg {
@@ -511,71 +663,52 @@
 }
 
 :global(.os-window:not(.ios-app)) .card:hover .read svg {
-  transform: translateX(4px);
-}
-
-/* The cover as a framed plate (3:2 art, subject centred, so the crop stays on the subject); it eases in
-   a touch on hover */
-:global(.os-window:not(.ios-app)) .deskArt {
-  order: 2;
-  position: relative;
-  display: block;
-  overflow: hidden;
-  border-radius: 14px;
-  background: var(--paper-bg);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
-}
-
-:global(.os-window:not(.ios-app)) .deskArt img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-:global(.os-window:not(.ios-app)) .card:hover .deskArt img {
-  transform: scale(1.04);
+  transform: translateX(3px);
 }
 
 :global(.os-window:not(.ios-app)) .chevron {
   display: none;
 }
 
-/* Narrower windows: a square cover column (wide subjects such as the cow still fit), then the cover
-   above the text */
+/* Narrower windows (under 900px): the cover becomes a banner across the top, fading down into the text */
 @container window (max-width: 899.98px) {
-  :global(.os-window:not(.ios-app)) .card {
-    grid-template-columns: minmax(0, 1fr) 280px;
+  :global(.os-window:not(.ios-app)) .deskArt {
+    position: relative;
+    z-index: auto;
+    width: 100%;
+    height: 230px;
+    -webkit-mask-image: linear-gradient(to bottom, #000 50%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 50%, transparent 100%);
+  }
+
+  :global(.os-window:not(.ios-app)) .body {
+    width: auto;
+    margin-top: -40px;
+    padding: 0 26px 24px;
   }
 
   :global(.os-window:not(.ios-app)) .name {
-    font-size: 26px;
-  }
-
-  :global(.os-window:not(.ios-app)) .stat {
-    padding: 0 16px;
-  }
-
-  :global(.os-window:not(.ios-app)) .statValue {
-    font-size: 19px;
+    font-size: 28px;
   }
 }
 
 @container window (max-width: 599.98px) {
-  :global(.os-window:not(.ios-app)) .card {
+  :global(.os-window:not(.ios-app)) .step {
     grid-template-columns: 1fr;
-    min-height: 0;
+    gap: 4px;
   }
 
-  :global(.os-window:not(.ios-app)) .deskArt {
-    order: 0;
-    aspect-ratio: 16 / 9;
+  :global(.os-window:not(.ios-app)) .foot {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
-  :global(.os-window:not(.ios-app)) .body {
-    padding: 20px 10px 14px;
+  :global(.os-window:not(.ios-app)) .stat {
+    padding: 0 14px;
+  }
+
+  :global(.os-window:not(.ios-app)) .statValue {
+    font-size: 19px;
   }
 
   :global(.os-window:not(.ios-app)) .container {

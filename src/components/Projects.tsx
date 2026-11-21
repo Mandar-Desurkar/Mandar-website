@@ -2,10 +2,9 @@
 
 // The "Case Studies" section (tab id `projects`): long-form case studies, each opening its own page
 // at /case-studies/<slug>. Grouped under the app they belong to. Every study is led by the same
-// illustrated cover: on desktop a dark glass card (the kind of problem, the feature, one line and its
-// three headline numbers beside the cover recomposed for that shape, `thumbDesk`, tinted by product);
-// on phones a card with the cover on top (`thumb`) and the result as one line, and no "Try the app"
-// links, since the page is about the case studies. The thinking lives on the case study page.
+// illustrated cover: on desktop a "case file" card (see CaseCard) with the cover recomposed for that
+// shape (`thumbDesk`), tinted by product; on phones a card with the cover on top (`thumb`) and the
+// result as one line, and no "Try the app" links, since the page is about the case studies.
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ChevronRight, TrendingUp } from "lucide-react";
@@ -14,12 +13,20 @@ import { caseStudies, type CaseStudy } from "@/data/caseStudies";
 import { shippedApps } from "@/data/resume";
 import { useWindow, type PrototypeId } from "@/context/WindowContext";
 import { trackEvent } from "@/lib/analytics";
+import RichText from "./RichText";
 
-// Each product's accent on the desktop card: its eyebrow, stat glow and link (Kissan green, Gau blue)
+// Each product's accent on the desktop card: its index, eyebrow, Impact step and link (Kissan green, Gau blue)
 const PRODUCT_TONE: Record<string, string> = { "Kissan Sampurna": "kissan", "Gau Sampurna": "gau" };
+// The story track's three steps, named for the card (the case study pages call them "The challenge" etc.)
+const STEP_NAMES = ["Challenge", "Approach", "Impact"];
 
-function CaseCard({ cs }: { cs: CaseStudy }) {
+// Desktop: a case file. Index, kind of problem and year; the feature and one line; then the study's own
+// at-a-glance story as a track (challenge → approach → impact, impact highlighted); then its three
+// numbers. The cover bleeds in from the top right and fades into the card. Phones keep the cover-on-top
+// card with the result as one line.
+function CaseCard({ cs, index }: { cs: CaseStudy; index: number }) {
   const [name, line] = cs.title.split(": ");
+  const year = cs.meta.find((m) => m.label === "Timeline")?.value;
   return (
     <Link
       href={`/case-studies/${cs.slug}`}
@@ -34,27 +41,45 @@ function CaseCard({ cs }: { cs: CaseStudy }) {
         <Image src={cs.thumb} alt="" width={1200} height={670} sizes="(max-width: 767px) 100vw, 1px" />
       </span>
       <span className={styles.deskArt} aria-hidden="true">
-        <Image src={cs.thumbDesk} alt="" width={1200} height={805} sizes="(max-width: 767px) 1px, 500px" />
+        <Image src={cs.thumbDesk} alt="" width={1200} height={805} sizes="(max-width: 767px) 1px, 520px" />
       </span>
       <span className={styles.body}>
-        <span className={styles.theme}>{cs.card.theme}</span>
+        <span className={styles.fileHead}>
+          <span className={styles.index}>{String(index).padStart(2, "0")}</span>
+          <span className={styles.theme}>{cs.card.theme}</span>
+          {year && <span className={styles.year}>{year}</span>}
+        </span>
         <span className={styles.name}>{name}</span>
         {line && <span className={styles.line}>{line.charAt(0).toUpperCase() + line.slice(1)}</span>}
-        {/* Desktop: the proof as three numbers. Phones keep it as one line (below). */}
-        <span className={styles.stats}>
-          {cs.card.stats.map((s) => (
-            <span key={s.label} className={styles.stat}>
-              <span className={styles.statValue}>{s.value}</span>
-              <span className={styles.statLabel}>{s.label}</span>
+        <span className={styles.story}>
+          {cs.glance.slice(0, 3).map((g, i) => (
+            <span key={g.label} className={styles.step}>
+              <span className={styles.stepName}>
+                <span className={styles.stepDot} aria-hidden="true" />
+                {STEP_NAMES[i] ?? g.label}
+              </span>
+              <span className={styles.stepText}>
+                <RichText text={g.takeaway} />
+              </span>
             </span>
           ))}
+        </span>
+        <span className={styles.foot}>
+          <span className={styles.stats}>
+            {cs.card.stats.map((s) => (
+              <span key={s.label} className={styles.stat}>
+                <span className={styles.statValue}>{s.value}</span>
+                <span className={styles.statLabel}>{s.label}</span>
+              </span>
+            ))}
+          </span>
+          <span className={styles.read}>
+            Read case study <ArrowRight size={14} aria-hidden="true" />
+          </span>
         </span>
         <span className={styles.result}>
           <TrendingUp size={14} strokeWidth={2.2} className={styles.resultIcon} aria-hidden="true" />
           {cs.card.metric}
-        </span>
-        <span className={styles.read}>
-          Read case study <ArrowRight size={14} aria-hidden="true" />
         </span>
       </span>
       <ChevronRight size={18} className={styles.chevron} aria-hidden="true" />
@@ -91,7 +116,7 @@ export default function Projects() {
             </header>
             <div className={styles.list}>
               {items.map((cs) => (
-                <CaseCard key={cs.slug} cs={cs} />
+                <CaseCard key={cs.slug} cs={cs} index={caseStudies.indexOf(cs) + 1} />
               ))}
             </div>
           </section>
